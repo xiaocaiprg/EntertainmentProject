@@ -15,25 +15,20 @@ export const GameRule: React.FC<GameRuleProps> = React.memo(
   ({ bankerValue, playerValue, handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose }) => {
     return (
       <View style={styles.ruleContainer}>
-        <Text style={styles.ruleTitle}>比赛规则</Text>
-
+        <Text style={styles.ruleTitle}>规则</Text>
         <View style={styles.betOptionsColumn}>
           <View style={[styles.betOption, styles.bankerOption, bankerValue === 1 ? styles.selectedOption : {}]}>
             <Text style={[styles.betLabel, styles.bankerLabel]}>庄</Text>
-
             <View style={styles.buttonsContainer}>
               <View style={styles.buttonWithLabel}>
-                <TouchableOpacity style={styles.button} onPress={handleBankerLose}>
-                  <Icon name="remove" size={24} color="#333" />
-                </TouchableOpacity>
-                <Text style={styles.buttonLabel}>庄输</Text>
-              </View>
-
-              <View style={styles.buttonWithLabel}>
                 <TouchableOpacity style={styles.button} onPress={handleBankerWin}>
-                  <Icon name="add" size={24} color="#333" />
+                  <Icon name="add" size={30} color="#333" />
                 </TouchableOpacity>
-                <Text style={styles.buttonLabel}>庄赢</Text>
+              </View>
+              <View style={styles.buttonWithLabel}>
+                <TouchableOpacity style={styles.button} onPress={handleBankerLose}>
+                  <Icon name="remove" size={30} color="#333" />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -43,17 +38,14 @@ export const GameRule: React.FC<GameRuleProps> = React.memo(
 
             <View style={styles.buttonsContainer}>
               <View style={styles.buttonWithLabel}>
-                <TouchableOpacity style={styles.button} onPress={handlePlayerLose}>
-                  <Icon name="remove" size={24} color="#333" />
-                </TouchableOpacity>
-                <Text style={styles.buttonLabel}>闲输</Text>
-              </View>
-
-              <View style={styles.buttonWithLabel}>
                 <TouchableOpacity style={styles.button} onPress={handlePlayerWin}>
-                  <Icon name="add" size={24} color="#333" />
+                  <Icon name="add" size={30} color="#333" />
                 </TouchableOpacity>
-                <Text style={styles.buttonLabel}>闲赢</Text>
+              </View>
+              <View style={styles.buttonWithLabel}>
+                <TouchableOpacity style={styles.button} onPress={handlePlayerLose}>
+                  <Icon name="remove" size={30} color="#333" />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -83,7 +75,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 12,
     color: '#333',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   betOptionsColumn: {
     flexDirection: 'column',
@@ -136,23 +128,17 @@ const styles = StyleSheet.create({
   },
   buttonWithLabel: {
     alignItems: 'center',
-    marginHorizontal: 5,
+    marginHorizontal: 10,
   },
   button: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 25,
+    borderRadius: 50,
     borderWidth: 2,
     borderColor: '#333',
-  },
-  buttonLabel: {
-    fontSize: 12,
-    marginTop: 5,
-    color: '#555',
-    fontWeight: 'bold',
   },
   ruleDescription: {
     fontSize: 14,
