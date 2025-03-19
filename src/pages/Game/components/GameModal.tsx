@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { BetChoice } from '../types';
 
 interface GameModalProps {
   visible: boolean;
   title: string;
-  message: React.ReactNode;
+  currentChoice: BetChoice;
   onCancel?: () => void;
   onConfirm: () => void;
   cancelText?: string;
@@ -13,58 +14,99 @@ interface GameModalProps {
   isFullWidthButton?: boolean;
 }
 
-export const GameModal: React.FC<GameModalProps> = React.memo(
-  ({
+export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
+  const {
     visible,
     title,
-    message,
+    currentChoice,
     onCancel,
     onConfirm,
     cancelText = '取消',
     confirmText,
     showCancelButton = true,
     isFullWidthButton = false,
-  }) => {
-    const handleCancel = useCallback(() => {
-      if (onCancel) {
-        onCancel();
-      }
-    }, [onCancel]);
+  } = props;
+  const handleCancel = useCallback(() => {
+    if (onCancel) {
+      onCancel();
+    }
+  }, [onCancel]);
 
-    const handleConfirm = useCallback(() => {
-      onConfirm();
-    }, [onConfirm]);
-
-    return (
-      <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={handleCancel}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{title}</Text>
-            {typeof message === 'string' ? <Text style={styles.modalMessage}>{message}</Text> : message}
-            <View style={styles.modalButtons}>
-              {isFullWidthButton ? (
-                <TouchableOpacity style={styles.fullWidthButton} onPress={handleConfirm}>
+  const handleConfirm = useCallback(() => {
+    onConfirm();
+  }, [onConfirm]);
+  // 获取弹窗显示消息
+  const getModalMessage = useCallback(() => {
+    switch (currentChoice) {
+      case 'banker_win':
+        return (
+          <React.Fragment>
+            <Text>
+              您选择了<Text style={styles.bankerText}>庄赢</Text>，确认提交吗？
+            </Text>
+          </React.Fragment>
+        );
+      case 'banker_lose':
+        return (
+          <React.Fragment>
+            <Text>
+              您选择了<Text style={styles.bankerText}>庄输</Text>，确认提交吗？
+            </Text>
+          </React.Fragment>
+        );
+      case 'player_win':
+        return (
+          <React.Fragment>
+            <Text>
+              您选择了<Text style={styles.playerText}>闲赢</Text>，确认提交吗？
+            </Text>
+          </React.Fragment>
+        );
+      case 'player_lose':
+        return (
+          <React.Fragment>
+            <Text>
+              您选择了<Text style={styles.playerText}>闲输</Text>，确认提交吗？
+            </Text>
+          </React.Fragment>
+        );
+      default:
+        return (
+          <React.Fragment>
+            <Text>请确认您的选择</Text>
+          </React.Fragment>
+        );
+    }
+  }, [currentChoice]);
+  return (
+    <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={handleCancel}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>{title}</Text>
+          {getModalMessage()}
+          <View style={styles.modalButtons}>
+            {isFullWidthButton ? (
+              <TouchableOpacity style={styles.fullWidthButton} onPress={handleConfirm}>
+                <Text style={styles.confirmModalButtonText}>{confirmText}</Text>
+              </TouchableOpacity>
+            ) : (
+              <>
+                {showCancelButton && (
+                  <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={handleCancel}>
+                    <Text style={styles.cancelButtonText}>{cancelText}</Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity style={[styles.modalButton, styles.confirmModalButton]} onPress={handleConfirm}>
                   <Text style={styles.confirmModalButtonText}>{confirmText}</Text>
                 </TouchableOpacity>
-              ) : (
-                <>
-                  {showCancelButton && (
-                    <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={handleCancel}>
-                      <Text style={styles.cancelButtonText}>{cancelText}</Text>
-                    </TouchableOpacity>
-                  )}
-                  <TouchableOpacity style={[styles.modalButton, styles.confirmModalButton]} onPress={handleConfirm}>
-                    <Text style={styles.confirmModalButtonText}>{confirmText}</Text>
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
+              </>
+            )}
           </View>
         </View>
-      </Modal>
-    );
-  },
-);
+      </View>
+    </Modal>
+  );
+});
 
 const styles = StyleSheet.create({
   modalOverlay: {
@@ -104,6 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '45%',
     alignItems: 'center',
+    marginTop: 10,
   },
   fullWidthButton: {
     paddingVertical: 12,
@@ -127,5 +170,15 @@ const styles = StyleSheet.create({
   confirmModalButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  playerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#3498db',
+  },
+  bankerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e74c3c',
   },
 });
