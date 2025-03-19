@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Login } from './Login';
 import { Register } from './Register';
@@ -10,9 +10,9 @@ interface AuthScreenProps {
 export const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
   const [isLogin, setIsLogin] = useState(true);
 
-  const toggleMode = () => {
+  const toggleMode = useCallback(() => {
     setIsLogin(!isLogin);
-  };
+  }, [isLogin]);
 
   return (
     <View style={styles.container}>

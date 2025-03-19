@@ -18,7 +18,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         <FontAwesome name="user-circle" size={100} color="#bdc3c7" />
         <Text style={styles.loginText}>请登录以查看个人信息</Text>
         <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-          <Text style={styles.loginButtonText}>登录 / 注册</Text>
+          <Text style={styles.loginButtonText}>登录</Text>
         </TouchableOpacity>
       </View>
     ),

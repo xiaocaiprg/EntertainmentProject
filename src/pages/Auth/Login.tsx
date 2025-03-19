@@ -19,10 +19,11 @@ import { isIOS } from '../../utils/platform';
 
 interface LoginProps {
   navigation: any;
-  onToggleMode: () => void;
+  onToggleMode?: () => void;
 }
 
-export const Login: React.FC<LoginProps> = React.memo(({ navigation, onToggleMode }) => {
+export const Login: React.FC<LoginProps> = React.memo((props) => {
+  const { navigation } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -103,13 +104,13 @@ export const Login: React.FC<LoginProps> = React.memo(({ navigation, onToggleMod
               <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
                 {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>登录</Text>}
               </TouchableOpacity>
-
+              {/*
               <View style={styles.footer}>
                 <Text style={styles.footerText}>没有账号？</Text>
                 <TouchableOpacity onPress={onToggleMode}>
                   <Text style={styles.footerLink}>立即注册</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           </View>
         </TouchableWithoutFeedback>

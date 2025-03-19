@@ -44,7 +44,7 @@ function MainTabs() {
           headerShown: false,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Tournament"
         component={TournamentScreen}
         options={{
@@ -52,7 +52,7 @@ function MainTabs() {
           tabBarIcon: ({ color, size }) => <Icon name="emoji-events" color={color} size={size} />,
           headerShown: false,
         }}
-      />
+      /> */}
       <Tab.Screen
         name="My"
         component={MyScreen}

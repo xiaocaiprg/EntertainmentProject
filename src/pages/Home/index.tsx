@@ -24,10 +24,10 @@ export const HomeScreen = React.memo(() => {
   // 轮播图数据
   const banners = useMemo(
     () => [
-      {
-        id: 1,
-        image: 'https://fastly.picsum.photos/id/866/400/300.jpg?hmac=JMubLT0llOloTrCSJIptm4kmT13cmWrNcdbpI9vJwmw',
-      },
+      // {
+      //   id: 1,
+      //   image: 'https://fastly.picsum.photos/id/866/400/300.jpg?hmac=JMubLT0llOloTrCSJIptm4kmT13cmWrNcdbpI9vJwmw',
+      // },
       {
         id: 2,
         image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1S-CBJvZ_gXUEZCsWL0arWx0now6CcFs8Yg&s',
@@ -75,15 +75,16 @@ export const HomeScreen = React.memo(() => {
           ))}
         </ScrollView>
         <View style={styles.paginationContainer}>
-          {banners.map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.paginationDot,
-                { backgroundColor: index === currentBanner ? '#6c5ce7' : 'rgba(255, 255, 255, 0.5)' },
-              ]}
-            />
-          ))}
+          {Boolean(banners.length > 1) &&
+            banners.map((_, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.paginationDot,
+                  { backgroundColor: index === currentBanner ? '#6c5ce7' : 'rgba(255, 255, 255, 0.5)' },
+                ]}
+              />
+            ))}
         </View>
       </View>
     ),
@@ -126,10 +127,10 @@ export const HomeScreen = React.memo(() => {
 
         <View style={styles.contentContainer}>
           {quickStartSection()}
-          <View style={styles.section}>
+          {/* <View style={styles.section}>
             <Text style={styles.sectionTitle}>推荐内容</Text>
             <View style={styles.cardContainer}>{recommendedItems}</View>
-          </View>
+          </View> */}
         </View>
       </Animated.ScrollView>
     </View>
