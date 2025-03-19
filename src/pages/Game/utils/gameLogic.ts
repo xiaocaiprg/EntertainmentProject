@@ -16,7 +16,7 @@ export const getInitialRoundStats = (): RoundStats => {
     gamesPlayed: 0, // 已玩局数
     maxGames: Infinity, // 初始轮无限制游戏次数
     isFirstRound: true, // 是否是第一轮
-    isFirstRoundAgain: false, // 是否是第二次进入3k轮
+    isFirstRoundAgain: false, // 是否是再次进入3k轮
     consecutiveLosses: 0, // 连续负局计数
   };
 };
@@ -32,8 +32,8 @@ export const shouldAdvanceToNextRound = (stats: RoundStats): boolean => {
     // 初始轮：净胜2局进入下一轮
     return netWins === 2;
   } else if (stats.isFirstRoundAgain) {
-    // 第二次进入初始轮：必须玩满3局 && 净胜 才能进入下一轮
-    return stats.gamesPlayed <= 3 && netWins > 0;
+    // 再次进入初始轮：净胜1局或净胜3局进入下一轮
+    return stats.gamesPlayed >= 2 && stats.gamesPlayed <= 3 && (netWins === 1 || netWins === 3);
   } else {
     // 非初始轮（第二轮及以后）：必须玩满3局 && 至少赢一次 才能进入下一轮
     return stats.gamesPlayed === 3 && netWins !== -3;
@@ -51,8 +51,8 @@ export const isGameOver = (stats: RoundStats): boolean => {
     // 初始轮：净负5局本盘结束
     return netLosses === 5;
   } else if (stats.isFirstRoundAgain) {
-    // 第二次进入初始轮：最少2局 ,最多3局 (净负1局 或者 连续负2局) 则结束
-    return stats.gamesPlayed >= 2 && stats.gamesPlayed <= 3 && (netLosses === 1 || stats.consecutiveLosses === 2);
+    // 再次进入初始轮：净负1局或连续负2局则结束
+    return (netLosses === 1 || stats.consecutiveLosses === 2) && stats.gamesPlayed >= 2 && stats.gamesPlayed <= 3;
   } else {
     // 非初始轮（第二轮及以后）：必须玩满3局，全输 才结束
     return stats.gamesPlayed === 3 && netLosses === 3;
@@ -67,6 +67,17 @@ export const isGameOver = (stats: RoundStats): boolean => {
 export const calculateNextRoundBetAmount = (stats: RoundStats): number => {
   if (stats.isFirstRound) {
     return INITIAL_BET_AMOUNT + 2000;
+  } else if (stats.isFirstRoundAgain) {
+    // 再次进入初始轮的押注规则
+    const netWins = stats.wins - stats.losses;
+    if (netWins === 3) {
+      // 净胜3局，押注增加2000
+      return stats.betAmount + 2000;
+    } else if (netWins === 1) {
+      // 净胜1局，押注增加1000
+      return stats.betAmount + 1000;
+    }
+    return stats.betAmount;
   } else {
     const netWins = stats.wins - stats.losses;
     const netLosses = stats.losses - stats.wins;
@@ -88,24 +99,23 @@ export const calculateNextRoundBetAmount = (stats: RoundStats): number => {
 };
 
 /**
- * 检查是否是第二次进入初始轮
+ * 检查是否是再次进入初始轮
  * @param {number} betAmount 当前轮次的押注金额
  * @param {number} nextBetAmount 下一轮的押注金额
  * @param {boolean} isFirstRound 是否是第一轮
  * @param {number} round 当前轮次
- * @returns {boolean} 是否是第二次进入3k轮
+ * @returns {boolean} 是否再次进入初始轮
  */
-export const isSecondInitRound = (
+export const isAgainInitRound = (
   betAmount: number,
   nextBetAmount: number,
   isFirstRound: boolean,
   round: number,
 ): boolean => {
-  // 如果是从初始轮过来的，肯定不是第二次进入3k轮
   if (isFirstRound) {
     return false;
   }
-  return nextBetAmount === 3000 && round > 1 && betAmount !== 3000;
+  return nextBetAmount === INITIAL_BET_AMOUNT && round > 1;
 };
 
 /**
@@ -118,9 +128,17 @@ export const canSettleRound = (stats: RoundStats): boolean => {
   if (stats.isFirstRound) {
     return true;
   }
-  // 第二次进入初始轮：最多3局
+  // 再次进入初始轮：最少2局，最多3局
   if (stats.isFirstRoundAgain) {
-    return stats.gamesPlayed <= 3;
+    const netWins = stats.wins - stats.losses;
+    const netLosses = stats.losses - stats.wins;
+
+    // 已经玩了2-3局，并且符合结算条件之一：净胜1局/净胜3局/净负1局/连续负2局
+    return (
+      stats.gamesPlayed >= 2 &&
+      stats.gamesPlayed <= 3 &&
+      (netWins === 1 || netWins === 3 || netLosses === 1 || stats.consecutiveLosses === 2)
+    );
   }
   // 非初始轮：必须玩满3局才能结算
   return stats.gamesPlayed === 3;

@@ -18,6 +18,27 @@ export const BetChoiceMap = {
   [BetChoice.PLAYER_WIN]: '闲赢',
   [BetChoice.PLAYER_LOSE]: '闲输',
 };
+
+/**
+ * 下一轮信息类型
+ */
+export interface NextRoundInfo {
+  currentRound: number;
+  nextRound: number;
+  nextBetAmount: number;
+}
+
+/**
+ * 游戏状态弹窗信息类型
+ */
+export interface GameStatusModalInfo {
+  visible: boolean;
+  isGameOver: boolean;
+  title: string;
+  confirmText: string;
+  nextRoundInfo: NextRoundInfo | null;
+}
+
 /**
  * 历史记录项类型
  */
@@ -28,6 +49,7 @@ export interface HistoryRecord {
   round: number;
   gameNumber: number;
   isWin: boolean;
+  betAmount: number;
   choice?: 'banker_win' | 'banker_lose' | 'player_win' | 'player_lose' | null;
 }
 

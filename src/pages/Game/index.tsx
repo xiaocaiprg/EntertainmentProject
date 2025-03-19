@@ -4,7 +4,8 @@ import { GameHeader } from './components/GameHeader';
 import { GameInfo } from './components/GameInfo';
 import { GameRule } from './components/GameRule';
 import { GameModal } from './components/GameModal';
-import { GameOverModal } from './components/GameOverModal';
+import { GameStatusModal } from './components/GameStatusModal';
+import { GameHistory } from './components/GameHistory';
 import { useGameLogic } from './hooks/useGameLogic';
 import { GameProps, BetChoice } from './types';
 
@@ -18,8 +19,9 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
     continueGame,
     confirmModalVisible,
     setConfirmModalVisible,
-    gameOverModalVisible,
-    setGameOverModalVisible,
+    historyRecords,
+    gameStatusModalInfo,
+    confirmGameStatus,
   } = useGameLogic();
 
   // 处理庄赢
@@ -50,12 +52,6 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
     handlePlayerChange(-1);
   }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
 
-  // 处理返回首页
-  const handleBackToHome = useCallback(() => {
-    setGameOverModalVisible(false);
-    navigation?.goBack();
-  }, [navigation, setGameOverModalVisible]);
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="default" />
@@ -72,7 +68,9 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
           handlePlayerLose={handlePlayerLose}
         />
 
-        <View style={styles.historyWrapper} />
+        <View style={styles.historyWrapper}>
+          <GameHistory historyRecords={historyRecords} />
+        </View>
       </View>
 
       {/* 确认下注弹窗 */}
@@ -85,8 +83,8 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
         confirmText="确认"
       />
 
-      {/* 游戏结束弹窗 */}
-      <GameOverModal visible={gameOverModalVisible} onConfirm={handleBackToHome} confirmText="返回首页" />
+      {/* 游戏状态弹窗（包含轮次结束和游戏结束） */}
+      <GameStatusModal modalInfo={gameStatusModalInfo} onConfirm={confirmGameStatus} navigation={navigation} />
     </SafeAreaView>
   );
 });
