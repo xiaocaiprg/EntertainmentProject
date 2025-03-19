@@ -1,25 +1,13 @@
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-  Animated,
-  StatusBar,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Animated, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { getStatusBarHeight } from '../../utils/platform';
+import { STATUS_BAR_HEIGHT, SCREEN_WIDTH } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 
-const { width } = Dimensions.get('window');
 const BANNER_HEIGHT = 300; // 增加banner高度
 const HEADER_HEIGHT = 60;
-const STATUS_BAR_HEIGHT = getStatusBarHeight();
 
 export const HomeScreen = React.memo(() => {
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -76,9 +64,9 @@ export const HomeScreen = React.memo(() => {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
-          contentOffset={{ x: currentBanner * width, y: 0 }}
+          contentOffset={{ x: currentBanner * SCREEN_WIDTH, y: 0 }}
           onMomentumScrollEnd={(event) => {
-            const newIndex = Math.floor(event.nativeEvent.contentOffset.x / width);
+            const newIndex = Math.floor(event.nativeEvent.contentOffset.x / SCREEN_WIDTH);
             setCurrentBanner(newIndex);
           }}
         >
@@ -196,7 +184,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   bannerImage: {
-    width,
+    width: SCREEN_WIDTH,
     height: BANNER_HEIGHT,
   },
   paginationContainer: {
