@@ -1,13 +1,12 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, StatusBar, View } from 'react-native';
 import { GameHeader } from './components/GameHeader';
 import { GameInfo } from './components/GameInfo';
 import { GameRule } from './components/GameRule';
 import { HistoryList } from './components/HistoryList';
 import { GameModal } from './components/GameModal';
 import { useGameLogic } from './hooks/useGameLogic';
-import { GameProps } from './components/types';
-import { BetChoice } from './hooks/useGameLogic';
+import { BetChoice, GameProps } from './types';
 
 export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
   const {
@@ -16,14 +15,11 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
     roundStats,
     groupedHistory,
     isConfirmModalVisible: modalVisible,
-    isResultModalVisible: resultModalVisible,
-    gameResultMessage,
     handleBankerChange,
     handlePlayerChange,
-    addHistory,
-    restartGame,
-    setIsConfirmModalVisible: setModalVisible,
-    setIsResultModalVisible: setResultModalVisible,
+    confirmBet,
+    continueGame,
+    setIsConfirmModalVisible,
   } = useGameLogic();
 
   // 当前选择
@@ -32,101 +28,30 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
   // 处理庄赢
   const handleBankerWin = React.useCallback(() => {
     setCurrentChoice('banker_win'); // 庄家赢
-    // 直接设置押注金额为roundStats.betAmount
     handleBankerChange(roundStats.betAmount);
-    // 直接显示确认对话框，无需等待检查
-    setTimeout(() => {
-      setModalVisible(true);
-    }, 50);
-  }, [handleBankerChange, roundStats.betAmount, setModalVisible]);
+    confirmBet();
+  }, [handleBankerChange, roundStats.betAmount, confirmBet]);
 
   // 处理庄输
   const handleBankerLose = React.useCallback(() => {
     setCurrentChoice('banker_lose'); // 庄家输
-    // 对于庄输，不设置押注金额
-    handleBankerChange(0);
-    // 直接显示确认对话框，无需等待检查
-    setTimeout(() => {
-      setModalVisible(true);
-    }, 50);
-  }, [handleBankerChange, setModalVisible]);
+    handleBankerChange(-roundStats.betAmount);
+    confirmBet();
+  }, [handleBankerChange, roundStats.betAmount, confirmBet]);
 
   // 处理闲赢
   const handlePlayerWin = React.useCallback(() => {
     setCurrentChoice('player_win'); // 闲家赢
-    // 直接设置押注金额为roundStats.betAmount
     handlePlayerChange(roundStats.betAmount);
-    // 直接显示确认对话框，无需等待检查
-    setTimeout(() => {
-      setModalVisible(true);
-    }, 50);
-  }, [handlePlayerChange, roundStats.betAmount, setModalVisible]);
+    confirmBet();
+  }, [handlePlayerChange, roundStats.betAmount, confirmBet]);
 
   // 处理闲输
   const handlePlayerLose = React.useCallback(() => {
     setCurrentChoice('player_lose'); // 闲家输
-    // 对于闲输，不设置押注金额
-    handlePlayerChange(0);
-    // 直接显示确认对话框，无需等待检查
-    setTimeout(() => {
-      setModalVisible(true);
-    }, 50);
-  }, [handlePlayerChange, setModalVisible]);
-
-  // 获取当前轮游戏规则文本
-  const getRoundRuleText = () => {
-    if (roundStats.isFirstRound) {
-      return '第一轮：不限局数，净负5局结束，净胜2局升级';
-    } else if (roundStats.is3kRoundAgain) {
-      return '第二次3K轮：最多3局，净负1局或连续负2局结束，净胜1局升级';
-    } else {
-      return '常规轮：每轮3局，净负3局结束，净胜1局升押注';
-    }
-  };
-
-  // 获取弹窗显示消息
-  const getModalMessage = () => {
-    switch (currentChoice) {
-      case 'banker_win':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.bankerText}>庄赢</Text>，确认提交吗？
-            </Text>
-            <Text style={styles.ruleText}>{getRoundRuleText()}</Text>
-          </React.Fragment>
-        );
-      case 'banker_lose':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.bankerText}>庄输</Text>，确认提交吗？
-            </Text>
-            <Text style={styles.ruleText}>{getRoundRuleText()}</Text>
-          </React.Fragment>
-        );
-      case 'player_win':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.playerText}>闲赢</Text>，确认提交吗？
-            </Text>
-            <Text style={styles.ruleText}>{getRoundRuleText()}</Text>
-          </React.Fragment>
-        );
-      case 'player_lose':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.playerText}>闲输</Text>，确认提交吗？
-            </Text>
-            <Text style={styles.ruleText}>{getRoundRuleText()}</Text>
-          </React.Fragment>
-        );
-      default:
-        return <Text>请选择结果</Text>;
-    }
-  };
+    handlePlayerChange(-roundStats.betAmount);
+    confirmBet();
+  }, [handlePlayerChange, roundStats.betAmount, confirmBet]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -135,18 +60,7 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
       <GameHeader title="游戏详情" navigation={navigation} />
 
       <View style={styles.content}>
-        <GameInfo
-          gameName={'gameName'}
-          operator={'operator'}
-          betAmount={roundStats.betAmount}
-          round={roundStats.round}
-          wins={roundStats.wins}
-          losses={roundStats.losses}
-          gamesPlayed={roundStats.gamesPlayed}
-          maxGames={roundStats.maxGames}
-          isFirstRound={roundStats.isFirstRound}
-          is3kRoundAgain={roundStats.is3kRoundAgain}
-        />
+        <GameInfo gameName={'gameName'} operator={'operator'} roundStats={roundStats} />
 
         <GameRule
           bankerValue={bankerValue}
@@ -166,21 +80,10 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
       <GameModal
         visible={modalVisible}
         title="确认结果"
-        message={getModalMessage()}
-        onCancel={() => setModalVisible(false)}
-        onConfirm={() => addHistory(currentChoice)}
+        currentChoice={currentChoice}
+        onCancel={() => setIsConfirmModalVisible(false)}
+        onConfirm={() => continueGame()}
         confirmText="确认"
-      />
-
-      {/* 游戏结果弹窗 */}
-      <GameModal
-        visible={resultModalVisible}
-        title="游戏提示"
-        message={gameResultMessage}
-        showCancelButton={false}
-        isFullWidthButton={true}
-        onConfirm={gameResultMessage.includes('游戏结束') ? restartGame : () => setResultModalVisible(false)}
-        confirmText={gameResultMessage.includes('游戏结束') ? '重新开始' : '继续游戏'}
       />
     </SafeAreaView>
   );
@@ -198,20 +101,5 @@ const styles = StyleSheet.create({
   historyWrapper: {
     flex: 1,
     marginTop: 10,
-  },
-  bankerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#e74c3c',
-  },
-  playerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#3498db',
-  },
-  ruleText: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 8,
   },
 });
