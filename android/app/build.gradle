@@ -117,3 +117,10 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// 添加Vector Icons的字体资源配置
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'FontAwesome.ttf', 'Ionicons.ttf', 'AntDesign.ttf' ]
+]
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
