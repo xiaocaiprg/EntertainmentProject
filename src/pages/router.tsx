@@ -4,9 +4,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from './Home/index';
 import { MyScreen } from './My/index';
-import { TournamentScreen } from './Tournament/index';
+// import { TournamentScreen } from './Tournament/index';
 import { AuthScreen } from './Auth/AuthScreen';
 import { Game } from './Game/index';
+import { ChallengeSelectScreen } from './ChallengeSelect/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -76,6 +77,7 @@ function AppNavigator() {
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen name="Auth" component={AuthScreen} />
             <Stack.Screen name="Game" component={Game} />
+            <Stack.Screen name="ChallengeSelect" component={ChallengeSelectScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

@@ -44,18 +44,6 @@ export const HomeScreen = React.memo(() => {
     return () => clearInterval(interval);
   }, [banners.length]);
 
-  const recommendedItems = useMemo(() => {
-    return [1, 2, 3, 4].map((item) => (
-      <TouchableOpacity key={item} style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Icon name="article" size={20} color="#6c5ce7" />
-          <Text style={styles.cardTitle}>内容 {item}</Text>
-        </View>
-        <Text style={styles.cardDesc}>这是一段内容描述</Text>
-      </TouchableOpacity>
-    ));
-  }, []);
-
   // 轮播Banner渲染
   const bannerContent = useMemo(
     () => (
@@ -91,17 +79,27 @@ export const HomeScreen = React.memo(() => {
     [banners, currentBanner],
   );
 
-  // 一键开局模块
-  const quickStartSection = useCallback(
+  // 挑战选择模块
+  const challengeSection = useCallback(
     () => (
-      <View style={styles.quickStartContainer}>
-        <Text style={styles.quickStartTitle}>快速开始</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Game')}>
-          <View style={styles.quickStartButton}>
-            <Icon name="play-arrow" size={24} color="#fff" />
-            <Text style={styles.quickStartButtonText}>一键开局</Text>
-          </View>
-        </TouchableOpacity>
+      <View style={styles.challengeContainer}>
+        <Text style={styles.challengeTitle}>选择挑战</Text>
+
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('ChallengeSelect', { type: 'new' })}>
+            <View style={[styles.challengeButton, { backgroundColor: '#6c5ce7' }]}>
+              <Icon name="add-circle" size={24} color="#fff" />
+              <Text style={styles.challengeButtonText}>新增挑战</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate('ChallengeSelect', { type: 'existing' })}>
+            <View style={[styles.challengeButton, { backgroundColor: '#00b894' }]}>
+              <Icon name="history" size={24} color="#fff" />
+              <Text style={styles.challengeButtonText}>已有挑战</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     ),
     [navigation],
@@ -125,13 +123,7 @@ export const HomeScreen = React.memo(() => {
         {/* Banner作为背景 */}
         {bannerContent}
 
-        <View style={styles.contentContainer}>
-          {quickStartSection()}
-          {/* <View style={styles.section}>
-            <Text style={styles.sectionTitle}>推荐内容</Text>
-            <View style={styles.cardContainer}>{recommendedItems}</View>
-          </View> */}
-        </View>
+        <View style={styles.contentContainer}>{challengeSection()}</View>
       </Animated.ScrollView>
     </View>
   );
@@ -200,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginHorizontal: 4,
   },
-  quickStartContainer: {
+  challengeContainer: {
     backgroundColor: '#fff',
     margin: 15,
     padding: 15,
@@ -210,17 +202,22 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    height: 150,
     elevation: 5,
   },
-  quickStartTitle: {
+  challengeTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#333',
     marginBottom: 20,
   },
-  quickStartButton: {
-    backgroundColor: '#6c5ce7',
+  buttonsContainer: {
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 15,
+  },
+  challengeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -228,52 +225,10 @@ const styles = StyleSheet.create({
     width: 300,
     height: 60,
   },
-  quickStartButtonText: {
+  challengeButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  section: {
-    padding: 15,
-    marginTop: 10,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#333',
-  },
-  cardContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  card: {
-    backgroundColor: '#fff',
-    width: '48%',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-    alignItems: 'center',
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-  },
-  cardDesc: {
-    fontSize: 12,
-    color: '#666',
-    textAlign: 'center',
+    marginLeft: 10,
   },
 });
