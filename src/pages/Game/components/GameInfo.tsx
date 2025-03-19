@@ -1,88 +1,67 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { RoundStats } from '../types';
 
 interface GameInfoProps {
   gameName: string;
   operator: string;
-  betAmount: number;
-  round: number;
-  wins: number;
-  losses: number;
-  gamesPlayed: number;
-  maxGames: number;
-  isFirstRound?: boolean;
-  is3kRoundAgain?: boolean;
+  roundStats: RoundStats;
 }
 
-export const GameInfo: React.FC<GameInfoProps> = React.memo(
-  ({ gameName, operator, betAmount, round, wins, losses, gamesPlayed, maxGames, isFirstRound, is3kRoundAgain }) => {
-    // 获取轮次描述
-    const getRoundDescription = () => {
-      if (isFirstRound) {
-        return '初始轮';
-      } else if (is3kRoundAgain) {
-        return `第${round}轮 (第二次3K)`;
-      } else {
-        return `第${round}轮`;
-      }
-    };
+export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
+  const { gameName, operator, roundStats } = props;
+  const { round, wins, losses, gamesPlayed, maxGames, isFirstRound, isFirstRoundAgain, betAmount } = roundStats;
+  // 获取轮次描述
+  const getRoundDescription = () => {
+    if (isFirstRound) {
+      return '初始轮';
+    } else if (isFirstRoundAgain) {
+      return `第${round}轮 (第二次3K)`;
+    } else {
+      return `第${round}轮`;
+    }
+  };
 
-    // 获取游戏规则描述
-    const getGameRuleDescription = () => {
-      if (isFirstRound) {
-        return '不限局数 / 净负5局结束 / 净胜2局升级';
-      } else if (is3kRoundAgain) {
-        return '最多3局 / 净负1局或连续负2局结束';
-      } else {
-        return '每轮3局 / 净负3局结束 / 净胜1局升级';
-      }
-    };
+  return (
+    <View style={styles.infoContainer}>
+      <View style={styles.infoHeader}>
+        <Text style={styles.gameName}>{gameName}</Text>
+        <Text style={styles.operator}>操作者: {operator}</Text>
+      </View>
 
-    return (
-      <View style={styles.infoContainer}>
-        <View style={styles.infoHeader}>
-          <Text style={styles.gameName}>{gameName}</Text>
-          <Text style={styles.operator}>操作者: {operator}</Text>
+      <View style={styles.statsContainer}>
+        <View style={styles.statItem}>
+          <Text style={styles.statLabel}>当前轮次</Text>
+          <Text style={styles.statValue}>{getRoundDescription()}</Text>
         </View>
 
-        <View style={styles.statsContainer}>
-          <View style={styles.statItem}>
-            <Text style={styles.statLabel}>当前轮次</Text>
-            <Text style={styles.statValue}>{getRoundDescription()}</Text>
+        <View style={styles.statItem}>
+          <Text style={styles.statLabel}>押注金额</Text>
+          <Text style={styles.statValue}>{betAmount}元</Text>
+        </View>
+
+        <View style={styles.flexRow}>
+          <View style={styles.statItemHalf}>
+            <Text style={styles.statLabel}>赢</Text>
+            <Text style={[styles.statValue, styles.winValue]}>{wins}</Text>
           </View>
 
-          <View style={styles.statItem}>
-            <Text style={styles.statLabel}>押注金额</Text>
-            <Text style={styles.statValue}>{betAmount}元</Text>
-          </View>
-
-          <View style={styles.flexRow}>
-            <View style={styles.statItemHalf}>
-              <Text style={styles.statLabel}>赢</Text>
-              <Text style={[styles.statValue, styles.winValue]}>{wins}</Text>
-            </View>
-
-            <View style={styles.statItemHalf}>
-              <Text style={styles.statLabel}>输</Text>
-              <Text style={[styles.statValue, styles.loseValue]}>{losses}</Text>
-            </View>
-          </View>
-
-          <View style={styles.statItem}>
-            <Text style={styles.statLabel}>游戏进度</Text>
-            <Text style={styles.statValue}>
-              {gamesPlayed} / {maxGames === Infinity ? '∞' : maxGames}
-            </Text>
+          <View style={styles.statItemHalf}>
+            <Text style={styles.statLabel}>输</Text>
+            <Text style={[styles.statValue, styles.loseValue]}>{losses}</Text>
           </View>
         </View>
 
-        <View style={styles.ruleContainer}>
-          <Text style={styles.ruleText}>{getGameRuleDescription()}</Text>
+        <View style={styles.statItem}>
+          <Text style={styles.statLabel}>游戏进度</Text>
+          <Text style={styles.statValue}>
+            {gamesPlayed} / {maxGames === Infinity ? '∞' : maxGames}
+          </Text>
         </View>
       </View>
-    );
-  },
-);
+    </View>
+  );
+});
 
 const styles = StyleSheet.create({
   infoContainer: {
@@ -154,18 +133,5 @@ const styles = StyleSheet.create({
   },
   loseValue: {
     color: '#e74c3c',
-  },
-  ruleContainer: {
-    marginTop: 5,
-    padding: 8,
-    backgroundColor: '#f7f9ff',
-    borderRadius: 6,
-    borderLeftWidth: 3,
-    borderLeftColor: '#3498db',
-  },
-  ruleText: {
-    fontSize: 12,
-    color: '#555',
-    lineHeight: 18,
   },
 });
