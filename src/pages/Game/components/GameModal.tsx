@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { BetChoice } from '../types';
+import { BetChoice, BetChoiceMap } from '../types';
 
 interface GameModalProps {
   visible: boolean;
   title: string;
-  currentChoice: BetChoice;
+  currentChoice: BetChoice | null;
   onCancel?: () => void;
   onConfirm: () => void;
   cancelText?: string;
@@ -37,46 +37,16 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
   }, [onConfirm]);
   // 获取弹窗显示消息
   const getModalMessage = useCallback(() => {
-    switch (currentChoice) {
-      case 'banker_win':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.bankerText}>庄赢</Text>，确认提交吗？
-            </Text>
-          </React.Fragment>
-        );
-      case 'banker_lose':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.bankerText}>庄输</Text>，确认提交吗？
-            </Text>
-          </React.Fragment>
-        );
-      case 'player_win':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.playerText}>闲赢</Text>，确认提交吗？
-            </Text>
-          </React.Fragment>
-        );
-      case 'player_lose':
-        return (
-          <React.Fragment>
-            <Text>
-              您选择了<Text style={styles.playerText}>闲输</Text>，确认提交吗？
-            </Text>
-          </React.Fragment>
-        );
-      default:
-        return (
-          <React.Fragment>
-            <Text>请确认您的选择</Text>
-          </React.Fragment>
-        );
+    if (!currentChoice) {
+      return <Text>未知错误</Text>;
     }
+    return (
+      <React.Fragment>
+        <Text>
+          您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>，确认提交吗？
+        </Text>
+      </React.Fragment>
+    );
   }, [currentChoice]);
   return (
     <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={handleCancel}>

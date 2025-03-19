@@ -3,59 +3,56 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface GameRuleProps {
-  bankerValue: number;
-  playerValue: number;
   handleBankerWin: () => void;
   handleBankerLose: () => void;
   handlePlayerWin: () => void;
   handlePlayerLose: () => void;
 }
 
-export const GameRule: React.FC<GameRuleProps> = React.memo(
-  ({ bankerValue, playerValue, handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose }) => {
-    return (
-      <View style={styles.ruleContainer}>
-        <Text style={styles.ruleTitle}>规则</Text>
-        <View style={styles.betOptionsColumn}>
-          <View style={[styles.betOption, styles.bankerOption, bankerValue === 1 ? styles.selectedOption : {}]}>
-            <Text style={[styles.betLabel, styles.bankerLabel]}>庄</Text>
-            <View style={styles.buttonsContainer}>
-              <View style={styles.buttonWithLabel}>
-                <TouchableOpacity style={styles.button} onPress={handleBankerWin}>
-                  <Icon name="add" size={30} color="#333" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.buttonWithLabel}>
-                <TouchableOpacity style={styles.button} onPress={handleBankerLose}>
-                  <Icon name="remove" size={30} color="#333" />
-                </TouchableOpacity>
-              </View>
+export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProps) => {
+  const { handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose } = props;
+  return (
+    <View style={styles.ruleContainer}>
+      <Text style={styles.ruleTitle}>规则</Text>
+      <View style={styles.betOptionsColumn}>
+        <View style={[styles.betOption, styles.bankerOption]}>
+          <Text style={[styles.betLabel, styles.bankerLabel]}>庄</Text>
+          <View style={styles.buttonsContainer}>
+            <View style={styles.buttonWithLabel}>
+              <TouchableOpacity style={styles.button} onPress={handleBankerWin}>
+                <Icon name="add" size={30} color="#333" />
+              </TouchableOpacity>
             </View>
-          </View>
-
-          <View style={[styles.betOption, styles.playerOption, playerValue === 1 ? styles.selectedOption : {}]}>
-            <Text style={[styles.betLabel, styles.playerLabel]}>闲</Text>
-
-            <View style={styles.buttonsContainer}>
-              <View style={styles.buttonWithLabel}>
-                <TouchableOpacity style={styles.button} onPress={handlePlayerWin}>
-                  <Icon name="add" size={30} color="#333" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.buttonWithLabel}>
-                <TouchableOpacity style={styles.button} onPress={handlePlayerLose}>
-                  <Icon name="remove" size={30} color="#333" />
-                </TouchableOpacity>
-              </View>
+            <View style={styles.buttonWithLabel}>
+              <TouchableOpacity style={styles.button} onPress={handleBankerLose}>
+                <Icon name="remove" size={30} color="#333" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
 
-        <Text style={styles.ruleDescription}>点击"+"表示赢，点击"-"表示输</Text>
+        <View style={[styles.betOption, styles.playerOption]}>
+          <Text style={[styles.betLabel, styles.playerLabel]}>闲</Text>
+
+          <View style={styles.buttonsContainer}>
+            <View style={styles.buttonWithLabel}>
+              <TouchableOpacity style={styles.button} onPress={handlePlayerWin}>
+                <Icon name="add" size={30} color="#333" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonWithLabel}>
+              <TouchableOpacity style={styles.button} onPress={handlePlayerLose}>
+                <Icon name="remove" size={30} color="#333" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </View>
-    );
-  },
-);
+
+      <Text style={styles.ruleDescription}>点击"+"表示赢，点击"-"表示输</Text>
+    </View>
+  );
+});
 
 const styles = StyleSheet.create({
   ruleContainer: {

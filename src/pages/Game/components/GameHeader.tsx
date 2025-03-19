@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { getStatusBarHeight } from '../../../utils/platform';
+import { STATUS_BAR_HEIGHT } from '../../../utils/platform';
 
 interface GameHeaderProps {
   title: string;
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
-    height: 20 + getStatusBarHeight(),
+    height: 20 + STATUS_BAR_HEIGHT,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#DDDDDD',

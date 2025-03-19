@@ -33,7 +33,7 @@ export const shouldAdvanceToNextRound = (stats: RoundStats): boolean => {
     return netWins === 2;
   } else if (stats.isFirstRoundAgain) {
     // 第二次进入初始轮：必须玩满3局 && 净胜 才能进入下一轮
-    return stats.gamesPlayed >= 3 && netWins > 0;
+    return stats.gamesPlayed <= 3 && netWins > 0;
   } else {
     // 非初始轮（第二轮及以后）：必须玩满3局 && 至少赢一次 才能进入下一轮
     return stats.gamesPlayed === 3 && netWins !== -3;
@@ -51,8 +51,8 @@ export const isGameOver = (stats: RoundStats): boolean => {
     // 初始轮：净负5局本盘结束
     return netLosses === 5;
   } else if (stats.isFirstRoundAgain) {
-    // 第二次进入3k轮：必须玩满3局，净负则结束
-    return stats.gamesPlayed >= 3 && netLosses > 0;
+    // 第二次进入初始轮：最少2局 ,最多3局 (净负1局 或者 连续负2局) 则结束
+    return stats.gamesPlayed >= 2 && stats.gamesPlayed <= 3 && (netLosses === 1 || stats.consecutiveLosses === 2);
   } else {
     // 非初始轮（第二轮及以后）：必须玩满3局，全输 才结束
     return stats.gamesPlayed === 3 && netLosses === 3;
@@ -66,7 +66,7 @@ export const isGameOver = (stats: RoundStats): boolean => {
  */
 export const calculateNextRoundBetAmount = (stats: RoundStats): number => {
   if (stats.isFirstRound) {
-    return INITIAL_BET_AMOUNT;
+    return INITIAL_BET_AMOUNT + 2000;
   } else {
     const netWins = stats.wins - stats.losses;
     const netLosses = stats.losses - stats.wins;
@@ -88,14 +88,14 @@ export const calculateNextRoundBetAmount = (stats: RoundStats): number => {
 };
 
 /**
- * 检查是否是第二次进入3k轮
+ * 检查是否是第二次进入初始轮
  * @param {number} betAmount 当前轮次的押注金额
  * @param {number} nextBetAmount 下一轮的押注金额
  * @param {boolean} isFirstRound 是否是第一轮
  * @param {number} round 当前轮次
  * @returns {boolean} 是否是第二次进入3k轮
  */
-export const isSecond3kRound = (
+export const isSecondInitRound = (
   betAmount: number,
   nextBetAmount: number,
   isFirstRound: boolean,
@@ -118,6 +118,10 @@ export const canSettleRound = (stats: RoundStats): boolean => {
   if (stats.isFirstRound) {
     return true;
   }
+  // 第二次进入初始轮：最多3局
+  if (stats.isFirstRoundAgain) {
+    return stats.gamesPlayed <= 3;
+  }
   // 非初始轮：必须玩满3局才能结算
-  return stats.gamesPlayed >= 3;
+  return stats.gamesPlayed === 3;
 };

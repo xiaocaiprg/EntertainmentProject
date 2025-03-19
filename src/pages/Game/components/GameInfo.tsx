@@ -10,13 +10,11 @@ interface GameInfoProps {
 
 export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
   const { gameName, operator, roundStats } = props;
-  const { round, wins, losses, gamesPlayed, maxGames, isFirstRound, isFirstRoundAgain, betAmount } = roundStats;
+  const { round, wins, losses, gamesPlayed, maxGames, isFirstRound, betAmount } = roundStats;
   // 获取轮次描述
   const getRoundDescription = () => {
     if (isFirstRound) {
       return '初始轮';
-    } else if (isFirstRoundAgain) {
-      return `第${round}轮 (第二次3K)`;
     } else {
       return `第${round}轮`;
     }
