@@ -36,8 +36,8 @@ export const ChallengeSelectScreen = React.memo(() => {
 
   // 判断确认按钮是否可点击
   const isConfirmDisabled = useMemo(
-    () => (type === 'existing' ? !selectedChallenge : !selectedOperator || !challengeName.trim()),
-    [type, selectedChallenge, selectedOperator, challengeName],
+    () => (type === 'existing' ? !selectedChallenge : !selectedOperator),
+    [type, selectedChallenge, selectedOperator],
   );
 
   // 处理确认按钮点击
@@ -149,7 +149,7 @@ export const ChallengeSelectScreen = React.memo(() => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={THEME_COLORS.background} />
+      <StatusBar barStyle="default" backgroundColor={THEME_COLORS.background} />
 
       {/* 头部 */}
       <View style={styles.header}>

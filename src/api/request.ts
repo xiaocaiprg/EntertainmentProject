@@ -1,13 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
 
 // API基础URL，实际项目中应该根据环境变量配置
 const BASE_URL = 'https://api.example.com';
 
-// 内存中存储token，用于模拟
-let memoryToken: string | null = null;
-
 // 创建axios实例
-const apiClient = axios.create({
+const request = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
   headers: {
@@ -15,23 +12,10 @@ const apiClient = axios.create({
   },
 });
 
-// 设置token的函数
-export const setToken = (token: string) => {
-  memoryToken = token;
-};
-
-// 清除token的函数
-export const clearToken = () => {
-  memoryToken = null;
-};
-
 // 请求拦截器
-apiClient.interceptors.request.use(
+request.interceptors.request.use(
   (config) => {
-    // 从内存中获取token
-    if (memoryToken && config.headers) {
-      config.headers.Authorization = `Bearer ${memoryToken}`;
-    }
+    // 可以在这里添加通用请求处理逻辑
     return config;
   },
   (error) => {
@@ -40,23 +24,15 @@ apiClient.interceptors.request.use(
 );
 
 // 响应拦截器
-apiClient.interceptors.response.use(
-  (response) => {
+request.interceptors.response.use(
+  (response: AxiosResponse) => {
     // 直接返回响应数据
     return response.data;
   },
   (error: AxiosError) => {
     if (error.response) {
       // 服务器返回错误状态码
-      const { status, data } = error.response;
-
-      // 处理401未授权错误
-      if (status === 401) {
-        // 清除内存中的token
-        clearToken();
-        // 可以在这里添加重定向到登录页面的逻辑
-      }
-
+      const { data } = error.response;
       return Promise.reject(data);
     } else if (error.request) {
       // 请求已发出但没有收到响应
@@ -70,22 +46,22 @@ apiClient.interceptors.response.use(
 
 // 通用GET请求
 export const get = <T>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> => {
-  return apiClient.get(url, { params, ...config });
+  return request.get(url, { params, ...config });
 };
 
 // 通用POST请求
 export const post = <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
-  return apiClient.post(url, data, config);
+  return request.post(url, data, config);
 };
 
 // 通用PUT请求
 export const put = <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
-  return apiClient.put(url, data, config);
+  return request.put(url, data, config);
 };
 
 // 通用DELETE请求
 export const del = <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
-  return apiClient.delete(url, config);
+  return request.delete(url, config);
 };
 
-export default apiClient;
+export default request;

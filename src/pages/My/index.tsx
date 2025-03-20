@@ -1,15 +1,37 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, logout } = useAuth();
 
   const handleLoginPress = useCallback(() => {
     navigation.navigate('Auth');
   }, [navigation]);
+
+  const handleHistoryPress = useCallback(() => {
+    navigation.navigate('GameHistory');
+  }, [navigation]);
+
+  const handleLogoutPress = useCallback(async () => {
+    await logout();
+  }, [logout]);
+
+  // 列表项组件
+  const MenuItem = useCallback(
+    ({ icon, title, onPress }: { icon: string; title: string; onPress: () => void }) => (
+      <TouchableOpacity style={styles.menuItem} onPress={onPress}>
+        <View style={styles.menuIconContainer}>
+          <Icon name={icon} size={24} color="#6c5ce7" />
+        </View>
+        <Text style={styles.menuItemText}>{title}</Text>
+        <Icon name="chevron-right" size={24} color="#bdc3c7" />
+      </TouchableOpacity>
+    ),
+    [],
+  );
 
   // 未登录状态的UI
   const renderNotLoggedIn = useCallback(
@@ -25,134 +47,40 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     [handleLoginPress],
   );
 
-  // 快捷功能项
-  const quickActions = useMemo(
-    () => [
-      { icon: 'send', title: '转账' },
-      { icon: 'payment', title: '支付' },
-      { icon: 'trending-up', title: '充值' },
-      { icon: 'call-received', title: '收款' },
-    ],
-    [],
-  );
-
-  // 渲染快捷功能项
-  const quickActionsRendered = useMemo(
-    () =>
-      quickActions.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.quickActionItem}>
-          <View style={styles.quickActionIconContainer}>
-            <Icon name={item.icon} size={24} color="#6c5ce7" />
-          </View>
-          <Text style={styles.quickActionText}>{item.title}</Text>
-        </TouchableOpacity>
-      )),
-    [quickActions],
-  );
-
-  // 菜单项数据
-  const menuItems = useMemo(
-    () => [
-      { icon: 'shopping-bag', title: '电子购物' },
-      { icon: 'file-text', title: '账单支付' },
-      { icon: 'heart', title: '慈善' },
-      { icon: 'gift', title: '发送礼物' },
-      { icon: 'users', title: '账单分摊' },
-      { icon: 'money', title: '返现' },
-    ],
-    [],
-  );
-
-  // 菜单项渲染 - 每行两个
-  const menuItemsRendered = useMemo(() => {
-    const rows = [];
-    for (let i = 0; i < menuItems.length; i += 2) {
-      rows.push(
-        <View key={i} style={styles.menuRow}>
-          <TouchableOpacity style={styles.menuItem}>
-            <View style={styles.menuIconContainer}>
-              <FontAwesome name={menuItems[i].icon} size={20} color="#6c5ce7" />
-            </View>
-            <Text style={styles.menuTitle}>{menuItems[i].title}</Text>
-          </TouchableOpacity>
-          {i + 1 < menuItems.length && (
-            <TouchableOpacity style={styles.menuItem}>
-              <View style={styles.menuIconContainer}>
-                <FontAwesome name={menuItems[i + 1].icon} size={20} color="#6c5ce7" />
-              </View>
-              <Text style={styles.menuTitle}>{menuItems[i + 1].title}</Text>
-            </TouchableOpacity>
-          )}
-        </View>,
-      );
-    }
-    return rows;
-  }, [menuItems]);
-
   // 已登录状态的UI
   const renderLoggedIn = useCallback(
     () => (
       <>
         <View style={styles.userInfoContainer}>
           <View style={styles.avatarContainer}>
-            <Image source={{ uri: 'https://randomuser.me/api/portraits/women/44.jpg' }} style={styles.avatar} />
+            <Image
+              source={{
+                uri: user?.avatar || 'https://i.postimg.cc/s2033pJG/user.jpg',
+              }}
+              style={styles.avatar}
+            />
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{user?.username || 'Ika Puspita Sari'}</Text>
-            <Text style={styles.userHandle}>@ikapuspitasari8</Text>
+            <Text style={styles.userHandle}>@{user?.username || 'ikapuspitasari8'}</Text>
           </View>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress}>
+            <Icon name="exit-to-app" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
-
+        {/*
         <View style={styles.membershipCardWrapper}>
           <View style={styles.membershipCard}>
-            <View style={styles.membershipHeader}>
-              <Text style={styles.membershipLabel}>会员权益</Text>
-              <View style={styles.membershipBadge}>
-                <Text style={styles.membershipLevel}>黄金会员</Text>
-              </View>
-            </View>
-            <View style={styles.quickActionsContainer}>{quickActionsRendered}</View>
+            <Text style={styles.membershipLabel}>会员权益</Text>
           </View>
-        </View>
+        </View> */}
 
-        <View style={styles.menuContainer}>{menuItemsRendered}</View>
-
-        <View style={styles.promoSection}>
-          <View style={styles.promoHeader}>
-            <Text style={styles.promoTitle}>优惠活动</Text>
-            <Icon name="chevron-right" size={24} color="#666" />
-          </View>
-
-          <View style={styles.savingAccountCard}>
-            <View style={styles.savingIconContainer}>
-              <Icon name="account-balance-wallet" size={24} color="#fff" />
-            </View>
-            <View style={styles.savingInfo}>
-              <Text style={styles.savingTitle}>储蓄账户</Text>
-              <Text style={styles.savingDesc}>每月最高可获得10%利息！</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.bottomTabBar}>
-          <TouchableOpacity style={styles.bottomTabItem}>
-            <Icon name="account-balance-wallet" size={24} color="#6c5ce7" />
-            <Text style={[styles.bottomTabText, styles.bottomTabActive]}>我的钱包</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.bottomTabItem}>
-            <Icon name="insights" size={24} color="#999" />
-            <Text style={styles.bottomTabText}>洞察</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.bottomTabItem}>
-            <Icon name="settings" size={24} color="#999" />
-            <Text style={styles.bottomTabText}>工具</Text>
-          </TouchableOpacity>
+        <View style={styles.menuContainer}>
+          <MenuItem icon="history" title="历史记录" onPress={handleHistoryPress} />
         </View>
       </>
     ),
-    [user, quickActionsRendered, menuItemsRendered],
+    [user, handleLogoutPress, handleHistoryPress, MenuItem],
   );
 
   return (
@@ -163,9 +91,9 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
           <TouchableOpacity>
             <Icon name="menu" size={24} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Icon name="notifications" size={24} color="#fff" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -187,8 +115,8 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#6c5ce7',
-    paddingVertical: 15,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -224,10 +152,10 @@ const styles = StyleSheet.create({
   // 已登录状态的样式
   userInfoContainer: {
     backgroundColor: '#6c5ce7',
-    padding: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 50,
   },
   avatarContainer: {
     marginRight: 15,
@@ -252,153 +180,64 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(255, 255, 255, 0.8)',
   },
-  membershipCardWrapper: {
-    marginTop: -40,
-    marginHorizontal: 15,
-    zIndex: 1,
+  // membershipCardWrapper: {
+  //   marginTop: -40,
+  //   marginHorizontal: 15,
+  //   zIndex: 1,
+  // },
+  // membershipCard: {
+  //   backgroundColor: '#fff',
+  //   borderRadius: 15,
+  //   padding: 20,
+  //   shadowColor: '#000',
+  //   shadowOffset: { width: 0, height: 2 },
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 8,
+  //   elevation: 5,
+  // },
+
+  // membershipLabel: {
+  //   fontSize: 16,
+  //   fontWeight: 'bold',
+  //   color: '#333',
+  // },
+  logoutButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
   },
-  membershipCard: {
+  // 列表模块样式
+  menuContainer: {
+    marginTop: 20,
     backgroundColor: '#fff',
     borderRadius: 15,
-    padding: 20,
+    marginHorizontal: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
   },
-  membershipHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  membershipLabel: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  membershipBadge: {
-    backgroundColor: '#6c5ce7',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 10,
-  },
-  membershipLevel: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  quickActionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  quickActionItem: {
-    alignItems: 'center',
-    width: '23%',
-  },
-  quickActionIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'rgba(108, 92, 231, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  quickActionText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  menuContainer: {
-    padding: 15,
-  },
-  menuRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 15,
-  },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '48%',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f5f5f5',
   },
   menuIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(108, 92, 231, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  menuTitle: {
-    fontSize: 14,
-    color: '#333',
-  },
-  promoSection: {
-    padding: 15,
-  },
-  promoHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  promoTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  savingAccountCard: {
-    backgroundColor: '#6c5ce7',
-    borderRadius: 15,
-    padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  savingIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#f5f3fe',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 15,
   },
-  savingInfo: {
+  menuItemText: {
     flex: 1,
-  },
-  savingTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 5,
-  },
-  savingDesc: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
-  },
-  bottomTabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#fff',
-    paddingVertical: 15,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    marginTop: 20,
-  },
-  bottomTabItem: {
-    alignItems: 'center',
-  },
-  bottomTabText: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 5,
-  },
-  bottomTabActive: {
-    color: '#6c5ce7',
-    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#333',
   },
 });

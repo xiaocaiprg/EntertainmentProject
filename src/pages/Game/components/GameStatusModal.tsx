@@ -13,12 +13,21 @@ export const GameStatusModal: React.FC<GameStatusModalProps> = React.memo((props
   const { visible, title, confirmText, isGameOver, nextRoundInfo } = modalInfo;
 
   const handleConfirm = useCallback(() => {
-    // 如果是游戏结束状态，则返回首页
+    onConfirm();
+    // 如果是游戏结束状态,返回首页并清空导航栈
     if (isGameOver && navigation) {
-      navigation.goBack();
-    } else {
-      // 否则调用onConfirm关闭弹窗
-      onConfirm();
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'Main',
+            state: {
+              routes: [{ name: 'Home' }],
+              index: 0,
+            },
+          },
+        ],
+      });
     }
   }, [onConfirm, isGameOver, navigation]);
 

@@ -10,7 +10,7 @@ export const THEME_COLORS = {
   primary: '#6c5ce7',
   primaryDark: '#5b4ddb',
   secondary: '#3498db',
-  background: '#f5f3fe',
+  background: '#fff',
   cardBackground: '#ffffff',
   success: '#2ecc71',
   danger: '#e74c3c',

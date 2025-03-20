@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { STATUS_BAR_HEIGHT, SCREEN_WIDTH } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
+import { useAuth } from '../../hooks/useAuth';
 
 const BANNER_HEIGHT = 300; // 增加banner高度
 const HEADER_HEIGHT = 60;
@@ -13,6 +14,7 @@ export const HomeScreen = React.memo(() => {
   const [currentBanner, setCurrentBanner] = useState(0);
   const scrollY = useRef(new Animated.Value(0)).current; // 用于监听滚动位置
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const { isLoggedIn } = useAuth();
 
   // 计算背景色透明度
   const headerBgOpacity = scrollY.interpolate({
@@ -79,6 +81,23 @@ export const HomeScreen = React.memo(() => {
     [banners, currentBanner],
   );
 
+  // 检查登录态并跳转
+  const handleChallengePress = useCallback(
+    (type: 'new' | 'existing') => {
+      if (isLoggedIn) {
+        // 已登录，直接跳转
+        navigation.navigate('ChallengeSelect', { type });
+      } else {
+        // 未登录，跳转到登录页面，并设置返回参数
+        navigation.navigate('Auth', {
+          returnScreen: 'ChallengeSelect',
+          params: { type },
+        });
+      }
+    },
+    [navigation, isLoggedIn],
+  );
+
   // 挑战选择模块
   const challengeSection = useCallback(
     () => (
@@ -86,14 +105,14 @@ export const HomeScreen = React.memo(() => {
         <Text style={styles.challengeTitle}>选择挑战</Text>
 
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('ChallengeSelect', { type: 'new' })}>
+          <TouchableOpacity onPress={() => handleChallengePress('new')}>
             <View style={[styles.challengeButton, { backgroundColor: '#6c5ce7' }]}>
               <Icon name="add-circle" size={24} color="#fff" />
               <Text style={styles.challengeButtonText}>新增挑战</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('ChallengeSelect', { type: 'existing' })}>
+          <TouchableOpacity onPress={() => handleChallengePress('existing')}>
             <View style={[styles.challengeButton, { backgroundColor: '#00b894' }]}>
               <Icon name="history" size={24} color="#fff" />
               <Text style={styles.challengeButtonText}>已有挑战</Text>
@@ -102,7 +121,7 @@ export const HomeScreen = React.memo(() => {
         </View>
       </View>
     ),
-    [navigation],
+    [handleChallengePress],
   );
 
   return (
@@ -164,6 +183,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    backgroundColor: '#f5f3fe',
   },
   contentContainer: {
     backgroundColor: '#f5f3fe',

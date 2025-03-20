@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { isIOS } from '../../utils/platform';
 

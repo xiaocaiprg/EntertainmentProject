@@ -1,17 +1,12 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { User, login as apiLogin, register as apiRegister, logout as apiLogout } from '../api';
-
-// 定义认证上下文类型
-interface AuthContextType {
-  user: User | null;
-  isLoggedIn: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
-  logout: () => void;
-  register: (username: string, password: string) => Promise<boolean>;
-}
-
-// 创建认证上下文
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import React, { useState, ReactNode, useEffect } from 'react';
+import {
+  login as apiLogin,
+  register as apiRegister,
+  logout as apiLogout,
+  checkLoginStatus,
+} from '../api/services/authService';
+import { AuthContext } from './AuthContext';
+import { User } from '../interface/IModuleProps';
 
 // 认证提供者组件属性
 interface AuthProviderProps {
@@ -21,6 +16,24 @@ interface AuthProviderProps {
 // 认证提供者组件
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  // 初始化时检查登录状态
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const userData = await checkLoginStatus();
+        if (userData) {
+          setUser(userData);
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        console.error('检查登录状态失败:', error);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   // 登录函数
   const login = async (username: string, password: string): Promise<boolean> => {
@@ -28,6 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // 调用登录API
       const userData = await apiLogin(username, password);
       setUser(userData);
+      setIsLoggedIn(true);
       return true;
     } catch (error) {
       console.error('登录失败:', error);
@@ -41,6 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // 调用注册API
       const userData = await apiRegister(username, password);
       setUser(userData);
+      setIsLoggedIn(true);
       return true;
     } catch (error) {
       console.error('注册失败:', error);
@@ -54,6 +69,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // 调用登出API
       await apiLogout();
       setUser(null);
+      setIsLoggedIn(false);
     } catch (error) {
       console.error('登出失败:', error);
     }
@@ -61,20 +77,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const value = {
     user,
-    isLoggedIn: !!user,
+    isLoggedIn,
     login,
     logout,
     register,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-// 自定义Hook，用于在组件中使用认证上下文
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth必须在AuthProvider内部使用');
-  }
-  return context;
 };

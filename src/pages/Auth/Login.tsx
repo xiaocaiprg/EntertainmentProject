@@ -13,21 +13,26 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { isIOS } from '../../utils/platform';
 
 interface LoginProps {
   navigation: any;
   onToggleMode?: () => void;
+  route?: any;
 }
 
 export const Login: React.FC<LoginProps> = React.memo((props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+
+  // 获取返回参数
+  const returnScreen = route?.params?.returnScreen;
+  const returnParams = route?.params?.params;
 
   const handleLogin = useCallback(async () => {
     if (!username || !password) {
@@ -38,7 +43,15 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
     setLoading(true);
     try {
       const success = await login(username, password);
-      if (!success) {
+      if (success) {
+        // 如果登录成功且有返回页面参数，导航到该页面
+        if (returnScreen) {
+          navigation.navigate(returnScreen, returnParams);
+        } else {
+          // 否则返回上一页
+          navigation.goBack();
+        }
+      } else {
         Alert.alert('登录失败', '用户名或密码错误');
       }
     } catch (error) {
@@ -47,7 +60,7 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
     } finally {
       setLoading(false);
     }
-  }, [username, password, login]);
+  }, [username, password, login, navigation, returnScreen, returnParams]);
 
   const handleUsernameChange = useCallback((text: string) => {
     setUsername(text);
@@ -104,13 +117,13 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
               <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
                 {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>登录</Text>}
               </TouchableOpacity>
-              {/*
+
               <View style={styles.footer}>
                 <Text style={styles.footerText}>没有账号？</Text>
-                <TouchableOpacity onPress={onToggleMode}>
+                <TouchableOpacity onPress={props.onToggleMode}>
                   <Text style={styles.footerLink}>立即注册</Text>
                 </TouchableOpacity>
-              </View> */}
+              </View>
             </View>
           </View>
         </TouchableWithoutFeedback>
