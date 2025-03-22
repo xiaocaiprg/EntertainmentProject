@@ -31,8 +31,8 @@ export const HomeScreen = React.memo(() => {
       //   image: 'https://fastly.picsum.photos/id/866/400/300.jpg?hmac=JMubLT0llOloTrCSJIptm4kmT13cmWrNcdbpI9vJwmw',
       // },
       {
-        id: 2,
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1S-CBJvZ_gXUEZCsWL0arWx0now6CcFs8Yg&s',
+        id: 1,
+        image: 'http://85.31.225.25/image/head.png',
       },
     ],
     [],
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#fff',
+    color: '#111',
     zIndex: 1,
   },
   content: {
@@ -218,11 +218,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 20,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   challengeTitle: {
     fontSize: 18,

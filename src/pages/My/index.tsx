@@ -214,11 +214,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 15,
     marginHorizontal: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   menuItem: {
     flexDirection: 'row',

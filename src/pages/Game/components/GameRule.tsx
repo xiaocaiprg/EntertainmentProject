@@ -61,11 +61,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 15,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   ruleTitle: {
     fontSize: 18,
@@ -99,11 +96,8 @@ const styles = StyleSheet.create({
     borderColor: '#ddddff',
   },
   selectedOption: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
+    borderWidth: 2,
+    borderColor: '#666',
     transform: [{ translateY: -2 }],
   },
   betLabel: {
