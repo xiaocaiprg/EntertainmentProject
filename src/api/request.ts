@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
+import { getTokenSync, setTokenSync } from '../utils/storage';
 
-// API基础URL，实际项目中应该根据环境变量配置
-const BASE_URL = 'https://api.example.com';
+const BASE_URL = 'http://85.31.225.25:8888/';
 
 // 创建axios实例
 const request = axios.create({
@@ -15,7 +15,10 @@ const request = axios.create({
 // 请求拦截器
 request.interceptors.request.use(
   (config) => {
-    // 可以在这里添加通用请求处理逻辑
+    const token = getTokenSync();
+    if (token && config.url !== 'haiyang/user/login') {
+      config.headers.Authorization = token;
+    }
     return config;
   },
   (error) => {
@@ -26,7 +29,13 @@ request.interceptors.request.use(
 // 响应拦截器
 request.interceptors.response.use(
   (response: AxiosResponse) => {
-    // 直接返回响应数据
+    console.log('response', response.data);
+    if (response.config.url === 'haiyang/user/login') {
+      const auth = response.headers?.authorization;
+      if (auth) {
+        setTokenSync(auth);
+      }
+    }
     return response.data;
   },
   (error: AxiosError) => {

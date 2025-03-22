@@ -1,12 +1,8 @@
 import React, { useState, ReactNode, useEffect } from 'react';
-import {
-  login as apiLogin,
-  register as apiRegister,
-  logout as apiLogout,
-  checkLoginStatus,
-} from '../api/services/authService';
+import { userlogin } from '../api/services/authService';
 import { AuthContext } from './AuthContext';
-import { User } from '../interface/IModuleProps';
+import { UserResult, UserParams } from '../interface/User';
+import { clearTokenSync } from '../utils/storage';
 
 // 认证提供者组件属性
 interface AuthProviderProps {
@@ -15,31 +11,16 @@ interface AuthProviderProps {
 
 // 认证提供者组件
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserResult | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   // 初始化时检查登录状态
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const userData = await checkLoginStatus();
-        if (userData) {
-          setUser(userData);
-          setIsLoggedIn(true);
-        }
-      } catch (error) {
-        console.error('检查登录状态失败:', error);
-      }
-    };
-
-    checkAuth();
-  }, []);
+  useEffect(() => {}, []);
 
   // 登录函数
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = async (params: UserParams): Promise<boolean> => {
     try {
-      // 调用登录API
-      const userData = await apiLogin(username, password);
+      const userData = await userlogin(params);
       setUser(userData);
       setIsLoggedIn(true);
       return true;
@@ -49,29 +30,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  // 注册函数
-  const register = async (username: string, password: string): Promise<boolean> => {
+  // 退出登录函数
+  const logout = async (): Promise<void> => {
     try {
-      // 调用注册API
-      const userData = await apiRegister(username, password);
-      setUser(userData);
-      setIsLoggedIn(true);
-      return true;
-    } catch (error) {
-      console.error('注册失败:', error);
-      return false;
-    }
-  };
-
-  // 登出函数
-  const logout = async () => {
-    try {
-      // 调用登出API
-      await apiLogout();
+      // 清空本地token
+      clearTokenSync();
+      // 清除用户信息并更新登录状态
       setUser(null);
       setIsLoggedIn(false);
     } catch (error) {
-      console.error('登出失败:', error);
+      console.error('退出登录失败:', error);
     }
   };
 
@@ -80,7 +48,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoggedIn,
     login,
     logout,
-    register,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

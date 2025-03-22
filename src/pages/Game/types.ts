@@ -5,6 +5,17 @@ export interface GameProps {
   route?: any;
   navigation?: any;
 }
+
+/**
+ * 游戏路由参数类型
+ */
+export interface GameRouteParams {
+  challengeName: string; // 挑战名称（必填）
+  operator: string; // 操作员（必填）
+  challengeId?: string; // 挑战ID（可选，仅在现有挑战时存在）
+  isNewChallenge?: boolean; // 是否新挑战（可选）
+}
+
 // 定义选择类型
 export enum BetChoice {
   BANKER_WIN = 'banker_win',
