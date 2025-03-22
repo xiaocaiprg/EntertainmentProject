@@ -5,11 +5,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 interface DropdownSelectProps {
   title: string;
   options: any[];
-  selectedValue: string;
+  selectedValue: string | number;
   placeholder?: string;
   valueKey: string;
   labelKey: string;
-  onSelect: (value: string) => void;
+  onSelect: (value: number | string) => void;
   keyExtractor?: (item: any) => string;
 }
 

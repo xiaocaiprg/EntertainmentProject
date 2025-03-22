@@ -14,7 +14,7 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
   // 获取轮次描述
   const getRoundDescription = () => {
     if (isFirstRound) {
-      return '初始轮';
+      return '第一轮';
     } else {
       return `第${round}轮`;
     }

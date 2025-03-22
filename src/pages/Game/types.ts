@@ -10,9 +10,10 @@ export interface GameProps {
  * 游戏路由参数类型
  */
 export interface GameRouteParams {
-  challengeName: string; // 挑战名称（必填）
-  operator: string; // 操作员（必填）
-  challengeId?: string; // 挑战ID（可选，仅在现有挑战时存在）
+  challengeName: string; // 挑战名称
+  operator: string; // 操作员
+  roundId: number; //场Id
+  challengeId?: number; // 挑战ID（可选，仅在现有挑战时存在）
   isNewChallenge?: boolean; // 是否新挑战（可选）
 }
 
@@ -28,6 +29,12 @@ export const BetChoiceMap = {
   [BetChoice.BANKER_LOSE]: '庄输',
   [BetChoice.PLAYER_WIN]: '闲赢',
   [BetChoice.PLAYER_LOSE]: '闲输',
+};
+export const BankerOrPlayerMap = {
+  [BetChoice.BANKER_WIN]: 1, // 庄
+  [BetChoice.BANKER_LOSE]: 1, // 庄
+  [BetChoice.PLAYER_WIN]: 2, // 闲
+  [BetChoice.PLAYER_LOSE]: 2, // 闲
 };
 
 /**
@@ -68,13 +75,13 @@ export interface HistoryRecord {
  * 轮次统计数据类型
  */
 export interface RoundStats {
-  round: number;
-  wins: number;
-  losses: number;
-  betAmount: number;
-  gamesPlayed: number;
-  maxGames: number;
-  isFirstRound: boolean;
-  isFirstRoundAgain: boolean;
-  consecutiveLosses: number;
+  round: number; // 当前轮次
+  wins: number; // 赢局数
+  losses: number; // 输局数
+  betAmount: number; // 当前押注金额
+  gamesPlayed: number; // 已玩局数
+  maxGames: number; // 初始轮无限制游戏次数
+  isFirstRound: boolean; // 是否是第一轮
+  isFirstRoundAgain: boolean; // 是否是再次进入初始轮
+  consecutiveLosses: number; // 连续负局计数
 }

@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, StatusBar, ScrollView, View, TouchableOpacity, Text } from 'react-native';
+import { Alert, StyleSheet, SafeAreaView, StatusBar, ScrollView, View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { THEME_COLORS } from '../../utils/styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ExistingChallengeForm from './components/ExistingChallengeForm';
 import NewChallengeForm from './components/NewChallengeForm';
-import { getOperatorList, getChallengeList } from '../../api/services/gameService';
+import { getOperatorList, getChallengeList, createChallenge, roundCreate } from '../../api/services/gameService';
 import { UserRecorder, GameMatchDto } from '../../interface/Game';
 
 type RouteParams = {
@@ -20,8 +20,8 @@ export const ChallengeSelectScreen = React.memo(() => {
 
   const [operatorList, setOperatorList] = useState<UserRecorder[]>([]);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
-  const [selectedChallengeId, setSelectedChallengeId] = useState(''); // 选择挑战
-  const [selectedOperatorId, setSelectedOperatorId] = useState(''); // 选择投手
+  const [selectedChallengeId, setSelectedChallengeId] = useState(-1); // 选择挑战
+  const [selectedOperatorId, setSelectedOperatorId] = useState(-1); // 选择投手
   const [challengeName, setChallengeName] = useState(''); // 挑战名称
 
   // 处理确认按钮点击
@@ -31,19 +31,45 @@ export const ChallengeSelectScreen = React.memo(() => {
       if (!challenge) {
         return;
       }
-      navigation.navigate('Game', {
-        challengeId: selectedChallengeId,
-        challengeName: challenge.name,
-        operator: challenge.playPersonName,
-      });
+      roundCreate({
+        matchId: selectedChallengeId,
+      })
+        .then((res) => {
+          if (res) {
+            navigation.navigate('Game', {
+              challengeId: selectedChallengeId,
+              challengeName: challenge.name,
+              operator: challenge.playPersonName,
+              roundId: res,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log('新增场次失败', err.message);
+          Alert.alert('提示', err.message);
+        });
     } else {
       // 新增挑战
       const operator = operatorList.find((o) => o.userId === selectedOperatorId)?.username;
-      navigation.navigate('Game', {
-        challengeName: challengeName || '默认挑战',
-        operator,
-        isNewChallenge: true,
-      });
+      createChallenge({
+        name: challengeName || '默认挑战',
+        playPersonId: selectedOperatorId,
+        isEnabled: 1,
+      })
+        .then((res) => {
+          if (res) {
+            navigation.navigate('Game', {
+              challengeName: challengeName || '默认挑战',
+              operator,
+              roundId: res,
+              isNewChallenge: true,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log('新增挑战失败', err.message);
+          Alert.alert('提示', err.message);
+        });
     }
   }, [type, operatorList, challengeList, selectedChallengeId, selectedOperatorId, challengeName, navigation]);
 
@@ -52,17 +78,15 @@ export const ChallengeSelectScreen = React.memo(() => {
 
   useEffect(() => {
     getOperatorList({ pageNum: '1', pageSize: '100', type: 2 }).then((res) => {
-      setOperatorList(res.records);
+      setOperatorList(res?.records || []);
     });
     getChallengeList({ pageNum: '1', pageSize: '100' }).then((res) => {
-      res?.records?.length && setChallengeList(res.records);
+      setChallengeList(res?.records || []);
     });
   }, []);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="default" backgroundColor={THEME_COLORS.background} />
-
-      {/* 头部 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
@@ -70,14 +94,13 @@ export const ChallengeSelectScreen = React.memo(() => {
         <Text style={styles.headerTitle}>{type === 'new' ? '新增挑战' : '已有挑战'}</Text>
         <View style={styles.placeholder} />
       </View>
-
       <ScrollView contentContainerStyle={styles.content}>
         {type === 'existing' ? (
           <ExistingChallengeForm
             challenges={challengeList}
-            selectedChallengeId={String(selectedChallengeId)}
+            selectedChallengeId={selectedChallengeId}
             onSelectChallengeId={(id) => {
-              setSelectedChallengeId(id);
+              setSelectedChallengeId(Number(id));
             }}
             onConfirm={handleConfirm}
           />
@@ -87,7 +110,7 @@ export const ChallengeSelectScreen = React.memo(() => {
             selectedOperatorId={selectedOperatorId}
             challengeName={challengeName}
             onSelectOperatorId={(userId) => {
-              setSelectedOperatorId(userId);
+              setSelectedOperatorId(Number(userId));
             }}
             onChangeName={(text) => {
               setChallengeName(text);

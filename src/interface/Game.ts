@@ -8,7 +8,7 @@ export interface UserRecordParams extends QueryParams {
 export interface UserRecorder {
   inviteCode: string;
   id: number;
-  userId: string;
+  userId: number;
   username: string;
   password: string;
   phone: string;
@@ -39,7 +39,7 @@ export interface GameMatchDto {
   docPersonName?: string;
   docPersonProfit?: number;
   docPersonProfitStr?: string;
-  id?: string;
+  id?: number;
   investPersonId?: number;
   investPersonName?: string;
   investPersonProfit?: number;
@@ -96,6 +96,33 @@ export interface GamePointDto {
 }
 
 export interface GameInningDto {
+  betNumber?: number;
+  eventNum?: number;
+  id?: number;
+  isDealer?: number;
+  orderNumber?: number;
+  result?: number;
+  roundId?: number;
+}
+
+export interface ChallengeCreateParams {
+  address?: string;
+  docPersonId?: number;
+  id?: number;
+  investPersonId?: number;
+  isEnabled: number; //1开启 0结束
+  name: string;
+  operationPersonId?: number;
+  orderNumber?: number;
+  playPersonId: number;
+  tableNumber?: string;
+}
+
+export interface RoundCreateParams {
+  matchId: number;
+}
+
+export interface InningCreateParams {
   betNumber?: number;
   eventNum?: number;
   id?: number;

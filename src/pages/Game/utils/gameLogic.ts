@@ -9,15 +9,15 @@ export const INITIAL_BET_AMOUNT = 3000;
  */
 export const getInitialRoundStats = (): RoundStats => {
   return {
-    round: 1, // 当前轮次
+    round: 1,
     wins: 0,
     losses: 0,
-    betAmount: INITIAL_BET_AMOUNT, // 当前押注金额
-    gamesPlayed: 0, // 已玩局数
-    maxGames: Infinity, // 初始轮无限制游戏次数
-    isFirstRound: true, // 是否是第一轮
-    isFirstRoundAgain: false, // 是否是再次进入3k轮
-    consecutiveLosses: 0, // 连续负局计数
+    betAmount: INITIAL_BET_AMOUNT,
+    gamesPlayed: 0,
+    maxGames: Infinity,
+    isFirstRound: true,
+    isFirstRoundAgain: false,
+    consecutiveLosses: 0,
   };
 };
 

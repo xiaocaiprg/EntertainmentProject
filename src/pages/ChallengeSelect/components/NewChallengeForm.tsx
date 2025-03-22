@@ -6,9 +6,9 @@ import { UserRecorder } from '../../../interface/Game';
 
 interface NewChallengeFormProps {
   operators: UserRecorder[];
-  selectedOperatorId: string;
+  selectedOperatorId: number;
   challengeName: string;
-  onSelectOperatorId: (userId: string) => void;
+  onSelectOperatorId: (userId: number | string) => void;
   onChangeName: (text: string) => void;
   onConfirm: () => void;
 }
@@ -16,7 +16,7 @@ interface NewChallengeFormProps {
 export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((props: NewChallengeFormProps) => {
   const { operators, selectedOperatorId, challengeName, onSelectOperatorId, onChangeName, onConfirm } = props;
 
-  const isConfirmDisabled = useMemo(() => !selectedOperatorId, [selectedOperatorId]);
+  const disable = useMemo(() => selectedOperatorId <= 0, [selectedOperatorId]);
 
   // 渲染挑战名称输入框
   const renderChallengeNameInput = useCallback(() => {
@@ -51,9 +51,9 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
       <View style={styles.spacer} />
 
       <TouchableOpacity
-        style={[styles.confirmButton, isConfirmDisabled && styles.confirmButtonDisabled]}
+        style={[styles.confirmButton, disable && styles.confirmButtonDisabled]}
         onPress={onConfirm}
-        disabled={isConfirmDisabled}
+        disabled={disable}
       >
         <Text style={styles.confirmButtonText}>确认</Text>
       </TouchableOpacity>

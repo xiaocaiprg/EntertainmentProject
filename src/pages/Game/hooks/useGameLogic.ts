@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { RoundStats, BetChoice, HistoryRecord, GameStatusModalInfo } from '../types';
+import { RoundStats, BetChoice, HistoryRecord, GameStatusModalInfo, BankerOrPlayerMap } from '../types';
 import {
   getInitialRoundStats,
   shouldAdvanceToNextRound,
@@ -8,6 +8,7 @@ import {
   canSettleRound,
   isGameOver,
 } from '../utils/gameLogic';
+import { inningCreate } from '../../../api/services/gameService';
 import { createHistoryRecord } from '../utils/historyHelper';
 
 export const useGameLogic = () => {
@@ -19,6 +20,7 @@ export const useGameLogic = () => {
   const [winAmount, setWinAmount] = useState(0); // 赢取金额
   const [confirmModalVisible, setConfirmModalVisible] = useState(false); // 弹窗状态
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]); // 历史记录
+  const [roundId, setRoundId] = useState(0); // 场Id
 
   // 合并游戏状态弹窗相关状态
   const [gameStatusModalInfo, setGameStatusModalInfo] = useState<GameStatusModalInfo>({
@@ -52,7 +54,20 @@ export const useGameLogic = () => {
     [gameStatus],
   );
   // 继续游戏（用户点击确认弹窗后）
-  const continueGame = useCallback(() => {
+  const continueGame = useCallback(async () => {
+    if (!currentChoice) {
+      return;
+    }
+    const isWin = banker > 0 || player > 0;
+    const params = {
+      betNumber: roundStats.betAmount,
+      eventNum: roundStats.round,
+      isDealer: BankerOrPlayerMap[currentChoice],
+      result: isWin ? 1 : 2,
+      roundId: roundId,
+    };
+    const result = await inningCreate(params);
+    console.log('本局', result);
     // 关闭确认对话框
     setConfirmModalVisible(false);
     // 设置游戏状态为进行中
@@ -60,8 +75,6 @@ export const useGameLogic = () => {
     // 确定游戏结果
     let winningAmount = 0;
     setWinAmount(winningAmount);
-
-    const isWin = banker > 0 || player > 0;
 
     // 创建并添加历史记录
     if (currentChoice) {
@@ -91,7 +104,7 @@ export const useGameLogic = () => {
     setRoundStats(newStats);
     // 设置游戏状态为已完成
     setGameStatus('finished');
-  }, [banker, player, roundStats, currentChoice, gameNumber]);
+  }, [banker, player, roundStats, currentChoice, gameNumber, roundId]);
 
   // 确认游戏状态弹窗
   const confirmGameStatus = useCallback(() => {
@@ -193,6 +206,7 @@ export const useGameLogic = () => {
     setCurrentChoice,
     winAmount,
     roundStats,
+    setRoundId,
     confirmModalVisible,
     setConfirmModalVisible,
     handleBankerChange,

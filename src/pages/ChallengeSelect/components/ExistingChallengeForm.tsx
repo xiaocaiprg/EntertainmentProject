@@ -6,8 +6,8 @@ import { GameMatchDto } from '../../../interface/Game';
 
 interface ExistingChallengeFormProps {
   challenges: GameMatchDto[];
-  selectedChallengeId: string;
-  onSelectChallengeId: (id: string) => void;
+  selectedChallengeId: number;
+  onSelectChallengeId: (id: number | string) => void;
   onConfirm: () => void;
 }
 
@@ -15,7 +15,7 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
   (props: ExistingChallengeFormProps) => {
     const { challenges, selectedChallengeId, onSelectChallengeId, onConfirm } = props;
 
-    const isConfirmDisabled = useMemo(() => !selectedChallengeId, [selectedChallengeId]);
+    const isConfirmDisabled = useMemo(() => selectedChallengeId <= 0, [selectedChallengeId]);
 
     return (
       <View style={styles.formContainer}>

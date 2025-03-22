@@ -18,13 +18,7 @@ type GameScreenProps = {
 
 export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }) => {
   // 从路由参数中获取挑战相关信息
-  const {
-    challengeName,
-    operator,
-    // 以下参数暂时未使用，保留以便将来扩展
-    // challengeId,
-    // isNewChallenge
-  } = route.params;
+  const { challengeName, operator, challengeId, roundId } = route.params;
 
   const {
     currentChoice,
@@ -38,41 +32,46 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     historyRecords,
     gameStatusModalInfo,
     confirmGameStatus,
+    setRoundId,
   } = useGameLogic();
 
   // 处理庄赢
   const handleBankerWin = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.BANKER_WIN); // 庄家赢
     handleBankerChange(1);
-  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   // 处理庄输
   const handleBankerLose = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.BANKER_LOSE); // 庄家输
     handleBankerChange(-1);
-  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   // 处理闲赢
   const handlePlayerWin = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.PLAYER_WIN); // 闲家赢
     handlePlayerChange(1);
-  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   // 处理闲输
   const handlePlayerLose = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.PLAYER_LOSE); // 闲家输
     handlePlayerChange(-1);
-  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="default" />
 
-      <GameHeader title="游戏详情" navigation={navigation} />
+      <GameHeader title="挑战详情" navigation={navigation} />
 
       <View style={styles.content}>
         <GameInfo gameName={challengeName} operator={operator} roundStats={roundStats} />

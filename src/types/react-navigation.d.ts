@@ -6,7 +6,8 @@ declare global {
       Game: {
         challengeName: string; // 挑战名称（必填）
         operator: string; // 操作员（必填）
-        challengeId?: string; // 挑战ID（可选，仅在现有挑战时存在）
+        challengeId?: number; // 挑战ID（可选，仅在现有挑战时存在）
+        roundId?: number; //场Id
         isNewChallenge?: boolean; // 是否新挑战（可选）
       };
     }

@@ -14,6 +14,6 @@ export interface UserResult {
   phone: string;
   role: string;
   updateTime: string;
-  userId: string;
+  userId: number;
   username: string;
 }
