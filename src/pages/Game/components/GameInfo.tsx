@@ -14,7 +14,7 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
   // 获取轮次描述
   const getRoundDescription = () => {
     if (isFirstRound) {
-      return '初始轮';
+      return '第一轮';
     } else {
       return `第${round}轮`;
     }
@@ -68,11 +68,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 10,
     padding: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   infoHeader: {
     flexDirection: 'row',

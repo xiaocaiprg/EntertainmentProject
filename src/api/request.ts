@@ -29,7 +29,7 @@ request.interceptors.request.use(
 // 响应拦截器
 request.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log('response', response.data);
+    console.log('response', response.config.url, response.config.data, response.data);
     if (response.config.url === 'haiyang/user/login') {
       const auth = response.headers?.authorization;
       if (auth) {

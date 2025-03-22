@@ -27,14 +27,18 @@ export const THEME_COLORS = {
 };
 
 /**
- * 通用阴影样式
+ * 通用阴影样式 - 修改为纯边框样式，解决Android阴影问题
  */
 export const SHADOW_STYLE = {
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 3,
-  elevation: 2,
+  borderWidth: 1,
+  borderColor: '#e0e0e0',
+  borderRadius: 8,
+  // 移除所有阴影相关属性
+  // shadowColor: '#000',
+  // shadowOffset: { width: 0, height: 2 },
+  // shadowOpacity: 0.1,
+  // shadowRadius: 3,
+  // elevation: 2,
 };
 
 /**

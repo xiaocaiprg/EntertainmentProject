@@ -1,203 +1,202 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { getGameHistory, GameHistory } from '../../api/services/gameService';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { getChallengeList } from '../../api/services/gameService';
+import { GameMatchDto } from '../../interface/Game';
+import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 
-interface GameHistoryProps {
-  navigation: any;
-}
+export const GameHistory = React.memo(() => {
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [historyList, setHistoryList] = useState<GameMatchDto[]>([]);
+  const [pageNum, setPageNum] = useState<string>('1');
+  const pageSize = useRef<string>('20').current;
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
-export const GameHistoryScreen: React.FC<GameHistoryProps> = ({ navigation }) => {
-  const [history, setHistory] = useState<GameHistory[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const loadHistory = useCallback(async () => {
-    try {
-      const historyData = await getGameHistory();
-      setLoading(false);
-      setHistory(historyData);
-    } catch (err) {
-      console.error('获取历史记录失败:', err);
+  const fetchHistoryList = useCallback(async () => {
+    const res = await getChallengeList({
+      pageNum: pageNum,
+      pageSize: pageSize,
+    });
+    setLoading(false);
+    if (res) {
+      const isHasMore = res.current < res.pages;
+      setHasMore(isHasMore);
+      setHistoryList((prev) => [...prev, ...(res.records || [])]);
     }
-  }, []);
-  const isEmpty = useMemo(() => history.length === 0, [history]);
+  }, [pageNum, pageSize]);
 
-  const handleGoBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+  const handleLoadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      setPageNum(String(Number(pageNum) + 1));
+      fetchHistoryList();
+    }
+  }, [loading, hasMore, pageNum, fetchHistoryList]);
+
   useEffect(() => {
-    loadHistory();
+    fetchHistoryList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderHistoryItem = useCallback(({ item }: { item: GameHistory }) => {
+  const renderItem = useCallback(({ item }: { item: GameMatchDto }) => {
     return (
-      <View style={styles.historyItem}>
-        <View style={styles.gameInfoContainer}>
-          <Text style={styles.gameName}>{item.gameName}</Text>
-          <Text style={styles.gameDate}>{item.date}</Text>
+      <View style={styles.itemContainer}>
+        <View style={styles.itemRow}>
+          <Text style={styles.label}>挑战上下水:</Text>
+          <Text style={styles.value}>{item.profitStr || '-'}</Text>
         </View>
-        <View style={styles.resultContainer}>
-          <Text style={[styles.gameResult, item.amount > 0 ? styles.winResult : styles.loseResult]}>{item.result}</Text>
-          <Text style={[styles.amount, item.amount > 0 ? styles.win : styles.lose]}>
-            {item.amount > 0 ? '+' : ''}
-            {item.amount}
-          </Text>
+        <View style={styles.itemRow}>
+          <Text style={styles.label}>挑战转码:</Text>
+          <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+        </View>
+        <View style={styles.itemRow}>
+          <Text style={styles.label}>打手名字:</Text>
+          <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+        </View>
+        <View style={styles.itemRow}>
+          <Text style={styles.label}>投资人:</Text>
+          <Text style={styles.value}>{item.investPersonName || '-'}</Text>
         </View>
       </View>
     );
   }, []);
-  const renderContent = useCallback(() => {
-    if (loading) {
-      return (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#6c5ce7" />
-        </View>
-      );
-    }
-    if (isEmpty) {
-      return (
-        <View style={styles.emptyContainer}>
-          <Icon name="history" size={60} color="#ccc" />
-          <Text style={styles.emptyText}>暂无游戏记录</Text>
-        </View>
-      );
+
+  const renderFooter = useCallback(() => {
+    if (!loading) {
+      return null;
     }
     return (
-      <FlatList
-        data={history}
-        renderItem={renderHistoryItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-      />
+      <View style={styles.footerContainer}>
+        <ActivityIndicator size="small" color="#0000ff" />
+        <Text style={styles.footerText}>加载中...</Text>
+      </View>
     );
-  }, [history, isEmpty, loading, renderHistoryItem]);
+  }, [loading]);
+
+  const handleBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#111" />
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+          <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>历史记录</Text>
-        <View style={{ width: 24 }} />
+        <View style={styles.headerRight} />
       </View>
-      {renderContent()}
+      <View style={styles.container}>
+        <FlatList
+          data={historyList}
+          renderItem={renderItem}
+          keyExtractor={(item) => String(item.id)}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.1}
+          refreshing={loading}
+          ListFooterComponent={renderFooter}
+          contentContainerStyle={styles.listContent}
+        />
+        {historyList.length === 0 && !loading && (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>暂无历史记录</Text>
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
-};
+});
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
-  header: {
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 15,
+    height: 44,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
     backgroundColor: '#fff',
   },
   backButton: {
-    padding: 8,
+    padding: 6,
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#111',
+    fontWeight: '600',
+    color: '#333',
   },
-  loaderContainer: {
+  headerRight: {
+    width: 36,
+  },
+  container: {
     flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  listContent: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  itemContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  itemRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  label: {
+    fontSize: 14,
+    color: '#666',
+    width: 80,
+  },
+  value: {
+    fontSize: 14,
+    color: '#333',
+    flex: 1,
+  },
+  footerContainer: {
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 16,
-    color: '#e74c3c',
-    marginBottom: 20,
-  },
-  loginButton: {
-    backgroundColor: '#6c5ce7',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-  },
-  loginButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  footerText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#666',
   },
   emptyContainer: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
   emptyText: {
     fontSize: 16,
-    color: '#95a5a6',
-    marginTop: 10,
-  },
-  listContainer: {
-    padding: 15,
-  },
-  historyItem: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  gameInfoContainer: {
-    flex: 1,
-  },
-  gameName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 5,
-  },
-  gameDate: {
-    fontSize: 14,
-    color: '#95a5a6',
-  },
-  resultContainer: {
-    alignItems: 'flex-end',
-  },
-  gameResult: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 5,
-  },
-  amount: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  win: {
-    color: '#2ecc71',
-  },
-  lose: {
-    color: '#e74c3c',
-  },
-  winResult: {
-    color: '#2ecc71',
-  },
-  loseResult: {
-    color: '#e74c3c',
+    color: '#999',
   },
 });
-
-export default GameHistoryScreen;

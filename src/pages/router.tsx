@@ -1,23 +1,36 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
 import { HomeScreen } from './Home/index';
 import { MyScreen } from './My/index';
 // import { TournamentScreen } from './Tournament/index';
 import { AuthScreen } from './Auth/AuthScreen';
 import { Game } from './Game/index';
 import { ChallengeSelectScreen } from './ChallengeSelect/index';
-import { GameHistoryScreen } from './GameHistory/index';
+import { GameHistory } from './GameHistory/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '../context/AuthProvider';
 import { isIOS } from '../utils/platform';
 import { THEME_COLORS } from '../utils/styles';
+import { GameRouteParams } from './Game/types';
+
+// 定义导航参数类型
+type RootStackParamList = {
+  Main: undefined;
+  Auth: undefined;
+  Game: GameRouteParams;
+  ChallengeSelect: undefined;
+  GameHistory: undefined;
+};
+
+// 通用导航类型
+export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<RootStackParamList, T>;
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 // 主页面底部Tab导航
 function MainTabs() {
@@ -79,7 +92,7 @@ function AppNavigator() {
             <Stack.Screen name="Auth" component={AuthScreen} />
             <Stack.Screen name="Game" component={Game} />
             <Stack.Screen name="ChallengeSelect" component={ChallengeSelectScreen} />
-            <Stack.Screen name="GameHistory" component={GameHistoryScreen} />
+            <Stack.Screen name="GameHistory" component={GameHistory} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

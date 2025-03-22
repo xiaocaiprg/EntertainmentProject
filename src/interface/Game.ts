@@ -5,10 +5,13 @@ export interface QueryParams {
 export interface UserRecordParams extends QueryParams {
   type: number;
 }
+export interface ChallengeListParams extends QueryParams {
+  isEnabled?: number;
+}
 export interface UserRecorder {
   inviteCode: string;
   id: number;
-  userId: string;
+  userId: number;
   username: string;
   password: string;
   phone: string;
@@ -25,11 +28,11 @@ export interface RecorderList {
   current: number;
 }
 export interface ChallengeList {
-  current?: number;
-  pages?: number;
+  current: number;
+  pages: number;
   records?: GameMatchDto[];
-  size?: number;
-  total?: number;
+  size: number;
+  total: number;
 }
 
 export interface GameMatchDto {
@@ -39,7 +42,7 @@ export interface GameMatchDto {
   docPersonName?: string;
   docPersonProfit?: number;
   docPersonProfitStr?: string;
-  id?: string;
+  id?: number;
   investPersonId?: number;
   investPersonName?: string;
   investPersonProfit?: number;
@@ -103,4 +106,36 @@ export interface GameInningDto {
   orderNumber?: number;
   result?: number;
   roundId?: number;
+}
+
+export interface ChallengeCreateParams {
+  address?: string;
+  docPersonId?: number;
+  id?: number;
+  investPersonId?: number;
+  isEnabled: number; //1开启 0结束
+  name: string;
+  operationPersonId?: number;
+  orderNumber?: number;
+  playPersonId: number;
+  tableNumber?: string;
+}
+
+export interface RoundCreateParams {
+  matchId: number;
+}
+
+export interface InningCreateParams {
+  betNumber?: number;
+  eventNum?: number;
+  id?: number;
+  isDealer?: number;
+  orderNumber?: number;
+  result?: number;
+  roundId?: number;
+}
+
+export interface UpdateRoundStatusParams {
+  id: number;
+  isEnabled: number;
 }

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 
 interface Tournament {
   id: number;
@@ -151,6 +152,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#6c5ce7',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   container: {
     flex: 1,
@@ -163,11 +165,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#6c5ce7',
     paddingVertical: 15,
     paddingHorizontal: 20,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: '#5b4ddb',
   },
   headerTitle: {
     fontSize: 18,
@@ -193,14 +192,12 @@ const styles = StyleSheet.create({
   tournamentCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
-    marginBottom: 15,
+    marginBottom: 16,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
     flexDirection: 'row',
     overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
   tournamentImage: {
     width: 100,
@@ -245,11 +242,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   leaderboardHeader: {
     flexDirection: 'row',

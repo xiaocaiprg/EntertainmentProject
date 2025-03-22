@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { RoundStats, BetChoice, HistoryRecord, GameStatusModalInfo } from '../types';
+import { RoundStats, BetChoice, HistoryRecord, GameStatusModalInfo, BankerOrPlayerMap } from '../types';
 import {
   getInitialRoundStats,
   shouldAdvanceToNextRound,
@@ -8,6 +8,7 @@ import {
   canSettleRound,
   isGameOver,
 } from '../utils/gameLogic';
+import { inningCreate, updateRoundStatus } from '../../../api/services/gameService';
 import { createHistoryRecord } from '../utils/historyHelper';
 
 export const useGameLogic = () => {
@@ -19,7 +20,7 @@ export const useGameLogic = () => {
   const [winAmount, setWinAmount] = useState(0); // 赢取金额
   const [confirmModalVisible, setConfirmModalVisible] = useState(false); // 弹窗状态
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]); // 历史记录
-
+  const [roundId, setRoundId] = useState(0); // 场Id
   // 合并游戏状态弹窗相关状态
   const [gameStatusModalInfo, setGameStatusModalInfo] = useState<GameStatusModalInfo>({
     visible: false,
@@ -28,7 +29,6 @@ export const useGameLogic = () => {
     confirmText: '',
     nextRoundInfo: null,
   });
-
   const [roundStats, setRoundStats] = useState<RoundStats>(getInitialRoundStats()); // 游戏状态
 
   // 处理庄押注结果
@@ -52,7 +52,20 @@ export const useGameLogic = () => {
     [gameStatus],
   );
   // 继续游戏（用户点击确认弹窗后）
-  const continueGame = useCallback(() => {
+  const continueGame = useCallback(async () => {
+    if (!currentChoice) {
+      return;
+    }
+    const isWin = banker > 0 || player > 0;
+    const params = {
+      betNumber: roundStats.betAmount,
+      eventNum: roundStats.round,
+      isDealer: BankerOrPlayerMap[currentChoice],
+      result: isWin ? 1 : 2,
+      roundId: roundId,
+    };
+    const result = await inningCreate(params);
+    console.log('本局', result);
     // 关闭确认对话框
     setConfirmModalVisible(false);
     // 设置游戏状态为进行中
@@ -60,8 +73,6 @@ export const useGameLogic = () => {
     // 确定游戏结果
     let winningAmount = 0;
     setWinAmount(winningAmount);
-
-    const isWin = banker > 0 || player > 0;
 
     // 创建并添加历史记录
     if (currentChoice) {
@@ -91,7 +102,7 @@ export const useGameLogic = () => {
     setRoundStats(newStats);
     // 设置游戏状态为已完成
     setGameStatus('finished');
-  }, [banker, player, roundStats, currentChoice, gameNumber]);
+  }, [banker, player, roundStats, currentChoice, gameNumber, roundId]);
 
   // 确认游戏状态弹窗
   const confirmGameStatus = useCallback(() => {
@@ -104,6 +115,7 @@ export const useGameLogic = () => {
   // 处理游戏规则逻辑
   useEffect(() => {
     if (gameStatus === 'finished') {
+      console.log('游戏状态为finished');
       // 检查当前轮次是否可以结算（非初始轮必须满3局）
       if (canSettleRound(roundStats)) {
         // 进入下一轮
@@ -164,18 +176,22 @@ export const useGameLogic = () => {
         }
         // 检查是否游戏结束
         if (isGameOver(roundStats)) {
-          // 显示游戏结束弹窗
-          setGameStatusModalInfo({
-            visible: true,
-            isGameOver: true,
-            title: '游戏结束',
-            confirmText: '返回首页',
-            nextRoundInfo: null,
+          updateRoundStatus({
+            id: roundId,
+            isEnabled: 0,
+          }).then(() => {
+            // 显示游戏结束弹窗
+            setGameStatusModalInfo({
+              visible: true,
+              isGameOver: true,
+              title: '本场已结束',
+              confirmText: '返回首页',
+              nextRoundInfo: null,
+            });
           });
           return; // 游戏结束，不再继续
         }
       }
-
       // 重置押注
       setBanker(0);
       setPlayer(0);
@@ -184,21 +200,27 @@ export const useGameLogic = () => {
       // 重置游戏状态为等待押注
       setGameStatus('waiting');
     }
-  }, [gameStatus, roundStats]);
+  }, [gameStatus, roundId, roundStats]);
 
   return {
     gameStatus,
+    setGameStatus,
     gameNumber,
+    setGameNumber,
     currentChoice,
     setCurrentChoice,
     winAmount,
     roundStats,
+    setRoundStats,
+    roundId,
+    setRoundId,
     confirmModalVisible,
     setConfirmModalVisible,
     handleBankerChange,
     handlePlayerChange,
     continueGame,
     historyRecords,
+    setHistoryRecords,
     gameStatusModalInfo,
     confirmGameStatus,
   };

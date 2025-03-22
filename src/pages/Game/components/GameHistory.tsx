@@ -12,16 +12,16 @@ export const GameHistory: React.FC<GameHistoryProps> = React.memo(({ historyReco
   const groupedRecords = useMemo(() => {
     return groupRecordsByRound(historyRecords);
   }, [historyRecords]);
-
-  // 轮次列表
+  console.log('groupedRecords', groupedRecords);
+  // 轮次列表，从大到小排序
   const rounds = useMemo(() => {
     return Object.keys(groupedRecords)
       .map(Number)
-      .sort((a, b) => b - a);
+      .sort((a, b) => b - a); // 降序排列，最新的轮次在前面
   }, [groupedRecords]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.historyContainer}>
       <Text style={styles.title}>历史记录</Text>
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
         {rounds.length === 0 ? (
@@ -53,17 +53,14 @@ export const GameHistory: React.FC<GameHistoryProps> = React.memo(({ historyReco
 });
 
 const styles = StyleSheet.create({
-  container: {
+  historyContainer: {
     flex: 1,
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,
     marginHorizontal: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   title: {
     fontSize: 18,

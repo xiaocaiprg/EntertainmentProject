@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { isIOS } from '../../utils/platform';
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 
 interface LoginProps {
   navigation: any;
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#6c5ce7',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   container: {
     flex: 1,
@@ -156,11 +157,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 15,
     padding: 25,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 8,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -185,11 +183,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
-    shadowColor: '#6c5ce7',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#5b4ddb',
   },
   buttonText: {
     color: '#fff',

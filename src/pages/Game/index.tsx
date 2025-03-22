@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, StatusBar, View } from 'react-native';
 import { GameHeader } from './components/GameHeader';
 import { GameInfo } from './components/GameInfo';
@@ -7,29 +7,22 @@ import { GameModal } from './components/GameModal';
 import { GameStatusModal } from './components/GameStatusModal';
 import { GameHistory } from './components/GameHistory';
 import { useGameLogic } from './hooks/useGameLogic';
-import { BetChoice, GameRouteParams } from './types';
-import { RouteProp } from '@react-navigation/native';
-
-// 扩展GameProps类型，提供更具体的route类型
-type GameScreenProps = {
-  route: RouteProp<{ params: GameRouteParams }, 'params'>;
-  navigation: any;
-};
+import { BetChoice } from './types';
+import { getRoundDetail } from '../../api/services/gameService';
+import { convertToHistoryRecords } from './utils/historyHelper';
+import { updateGameStats } from './utils/gameLogic';
+import { RootStackScreenProps } from '../router';
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
+// 使用导航栈中定义的类型
+type GameScreenProps = RootStackScreenProps<'Game'>;
 
 export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }) => {
-  // 从路由参数中获取挑战相关信息
-  const {
-    challengeName,
-    operator,
-    // 以下参数暂时未使用，保留以便将来扩展
-    // challengeId,
-    // isNewChallenge
-  } = route.params;
-
+  const { challengeName, operator, roundId } = route.params;
   const {
     currentChoice,
     setCurrentChoice,
     roundStats,
+    setRoundStats,
     handleBankerChange,
     handlePlayerChange,
     continueGame,
@@ -38,41 +31,71 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     historyRecords,
     gameStatusModalInfo,
     confirmGameStatus,
+    setRoundId,
+    setHistoryRecords,
+    setGameStatus,
+    setGameNumber,
   } = useGameLogic();
+
+  useEffect(() => {
+    setRoundId(roundId);
+    if (roundId) {
+      // 加载场次详情数据
+      getRoundDetail(roundId)
+        .then((roundData) => {
+          if (roundData) {
+            const records = convertToHistoryRecords(roundData);
+            setHistoryRecords(records);
+            const updatedStats = updateGameStats(roundData);
+            setRoundStats(updatedStats);
+            setGameStatus('finished');
+            setGameNumber(records.length + 1);
+            console.log('加载历史数据完成，游戏统计:', updatedStats);
+          }
+        })
+        .catch((error) => {
+          console.error('加载场次详情失败:', error);
+        });
+    }
+  }, [roundId, setRoundId, setHistoryRecords, setRoundStats, setGameStatus, setGameNumber]);
 
   // 处理庄赢
   const handleBankerWin = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.BANKER_WIN); // 庄家赢
     handleBankerChange(1);
-  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   // 处理庄输
   const handleBankerLose = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.BANKER_LOSE); // 庄家输
     handleBankerChange(-1);
-  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   // 处理闲赢
   const handlePlayerWin = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.PLAYER_WIN); // 闲家赢
     handlePlayerChange(1);
-  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   // 处理闲输
   const handlePlayerLose = useCallback(() => {
-    setConfirmModalVisible(true);
     setCurrentChoice(BetChoice.PLAYER_LOSE); // 闲家输
     handlePlayerChange(-1);
-  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
+    setRoundId(roundId);
+    setConfirmModalVisible(true);
+  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="default" />
 
-      <GameHeader title="游戏详情" navigation={navigation} />
+      <GameHeader title="挑战详情" navigation={navigation} />
 
       <View style={styles.content}>
         <GameInfo gameName={challengeName} operator={operator} roundStats={roundStats} />
@@ -109,6 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   content: {
     flex: 1,
