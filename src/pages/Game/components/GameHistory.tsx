@@ -12,12 +12,12 @@ export const GameHistory: React.FC<GameHistoryProps> = React.memo(({ historyReco
   const groupedRecords = useMemo(() => {
     return groupRecordsByRound(historyRecords);
   }, [historyRecords]);
-
-  // 轮次列表
+  console.log('groupedRecords', groupedRecords);
+  // 轮次列表，从大到小排序
   const rounds = useMemo(() => {
     return Object.keys(groupedRecords)
       .map(Number)
-      .sort((a, b) => b - a);
+      .sort((a, b) => b - a); // 降序排列，最新的轮次在前面
   }, [groupedRecords]);
 
   return (

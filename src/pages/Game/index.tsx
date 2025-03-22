@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, StatusBar, View } from 'react-native';
 import { GameHeader } from './components/GameHeader';
 import { GameInfo } from './components/GameInfo';
@@ -7,23 +7,22 @@ import { GameModal } from './components/GameModal';
 import { GameStatusModal } from './components/GameStatusModal';
 import { GameHistory } from './components/GameHistory';
 import { useGameLogic } from './hooks/useGameLogic';
-import { BetChoice, GameRouteParams } from './types';
-import { RouteProp } from '@react-navigation/native';
-
-// 扩展GameProps类型，提供更具体的route类型
-type GameScreenProps = {
-  route: RouteProp<{ params: GameRouteParams }, 'params'>;
-  navigation: any;
-};
+import { BetChoice } from './types';
+import { getRoundDetail } from '../../api/services/gameService';
+import { convertToHistoryRecords } from './utils/historyHelper';
+import { updateGameStats } from './utils/gameLogic';
+import { RootStackScreenProps } from '../router';
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
+// 使用导航栈中定义的类型
+type GameScreenProps = RootStackScreenProps<'Game'>;
 
 export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }) => {
-  // 从路由参数中获取挑战相关信息
-  const { challengeName, operator, challengeId, roundId } = route.params;
-
+  const { challengeName, operator, roundId } = route.params;
   const {
     currentChoice,
     setCurrentChoice,
     roundStats,
+    setRoundStats,
     handleBankerChange,
     handlePlayerChange,
     continueGame,
@@ -33,7 +32,32 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     gameStatusModalInfo,
     confirmGameStatus,
     setRoundId,
+    setHistoryRecords,
+    setGameStatus,
+    setGameNumber,
   } = useGameLogic();
+
+  useEffect(() => {
+    setRoundId(roundId);
+    if (roundId) {
+      // 加载场次详情数据
+      getRoundDetail(roundId)
+        .then((roundData) => {
+          if (roundData) {
+            const records = convertToHistoryRecords(roundData);
+            setHistoryRecords(records);
+            const updatedStats = updateGameStats(roundData);
+            setRoundStats(updatedStats);
+            setGameStatus('finished');
+            setGameNumber(records.length + 1);
+            console.log('加载历史数据完成，游戏统计:', updatedStats);
+          }
+        })
+        .catch((error) => {
+          console.error('加载场次详情失败:', error);
+        });
+    }
+  }, [roundId, setRoundId, setHistoryRecords, setRoundStats, setGameStatus, setGameNumber]);
 
   // 处理庄赢
   const handleBankerWin = useCallback(() => {
@@ -108,6 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   content: {
     flex: 1,

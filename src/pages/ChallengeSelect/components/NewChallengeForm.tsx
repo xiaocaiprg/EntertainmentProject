@@ -8,7 +8,7 @@ interface NewChallengeFormProps {
   operators: UserRecorder[];
   selectedOperatorId: number;
   challengeName: string;
-  onSelectOperatorId: (userId: number | string) => void;
+  onSelectOperatorId: (userId: number) => void;
   onChangeName: (text: string) => void;
   onConfirm: () => void;
 }

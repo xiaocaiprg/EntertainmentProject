@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { isIOS } from '../../utils/platform';
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 
 interface RegisterProps {
   navigation: any;
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#6c5ce7',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   container: {
     flex: 1,

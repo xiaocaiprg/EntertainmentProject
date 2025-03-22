@@ -5,6 +5,9 @@ export interface QueryParams {
 export interface UserRecordParams extends QueryParams {
   type: number;
 }
+export interface ChallengeListParams extends QueryParams {
+  isEnabled?: number;
+}
 export interface UserRecorder {
   inviteCode: string;
   id: number;
@@ -25,11 +28,11 @@ export interface RecorderList {
   current: number;
 }
 export interface ChallengeList {
-  current?: number;
-  pages?: number;
+  current: number;
+  pages: number;
   records?: GameMatchDto[];
-  size?: number;
-  total?: number;
+  size: number;
+  total: number;
 }
 
 export interface GameMatchDto {
@@ -130,4 +133,9 @@ export interface InningCreateParams {
   orderNumber?: number;
   result?: number;
   roundId?: number;
+}
+
+export interface UpdateRoundStatusParams {
+  id: number;
+  isEnabled: number;
 }

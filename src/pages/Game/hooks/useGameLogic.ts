@@ -8,7 +8,7 @@ import {
   canSettleRound,
   isGameOver,
 } from '../utils/gameLogic';
-import { inningCreate } from '../../../api/services/gameService';
+import { inningCreate, updateRoundStatus } from '../../../api/services/gameService';
 import { createHistoryRecord } from '../utils/historyHelper';
 
 export const useGameLogic = () => {
@@ -21,7 +21,6 @@ export const useGameLogic = () => {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false); // 弹窗状态
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]); // 历史记录
   const [roundId, setRoundId] = useState(0); // 场Id
-
   // 合并游戏状态弹窗相关状态
   const [gameStatusModalInfo, setGameStatusModalInfo] = useState<GameStatusModalInfo>({
     visible: false,
@@ -30,7 +29,6 @@ export const useGameLogic = () => {
     confirmText: '',
     nextRoundInfo: null,
   });
-
   const [roundStats, setRoundStats] = useState<RoundStats>(getInitialRoundStats()); // 游戏状态
 
   // 处理庄押注结果
@@ -117,6 +115,7 @@ export const useGameLogic = () => {
   // 处理游戏规则逻辑
   useEffect(() => {
     if (gameStatus === 'finished') {
+      console.log('游戏状态为finished');
       // 检查当前轮次是否可以结算（非初始轮必须满3局）
       if (canSettleRound(roundStats)) {
         // 进入下一轮
@@ -177,18 +176,22 @@ export const useGameLogic = () => {
         }
         // 检查是否游戏结束
         if (isGameOver(roundStats)) {
-          // 显示游戏结束弹窗
-          setGameStatusModalInfo({
-            visible: true,
-            isGameOver: true,
-            title: '游戏结束',
-            confirmText: '返回首页',
-            nextRoundInfo: null,
+          updateRoundStatus({
+            id: roundId,
+            isEnabled: 0,
+          }).then(() => {
+            // 显示游戏结束弹窗
+            setGameStatusModalInfo({
+              visible: true,
+              isGameOver: true,
+              title: '本场已结束',
+              confirmText: '返回首页',
+              nextRoundInfo: null,
+            });
           });
           return; // 游戏结束，不再继续
         }
       }
-
       // 重置押注
       setBanker(0);
       setPlayer(0);
@@ -197,15 +200,19 @@ export const useGameLogic = () => {
       // 重置游戏状态为等待押注
       setGameStatus('waiting');
     }
-  }, [gameStatus, roundStats]);
+  }, [gameStatus, roundId, roundStats]);
 
   return {
     gameStatus,
+    setGameStatus,
     gameNumber,
+    setGameNumber,
     currentChoice,
     setCurrentChoice,
     winAmount,
     roundStats,
+    setRoundStats,
+    roundId,
     setRoundId,
     confirmModalVisible,
     setConfirmModalVisible,
@@ -213,6 +220,7 @@ export const useGameLogic = () => {
     handlePlayerChange,
     continueGame,
     historyRecords,
+    setHistoryRecords,
     gameStatusModalInfo,
     confirmGameStatus,
   };

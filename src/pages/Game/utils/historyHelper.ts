@@ -1,5 +1,6 @@
 import { HistoryRecord, BetChoice, BetChoiceMap } from '../types';
-
+import { GameInningDto, GamePointDto, GameRoundDto } from '../../../interface/Game';
+import { formatDate } from '../../../utils/date';
 /**
  * 生成当前时间字符串
  * @returns {string} 格式化的时间字符串
@@ -56,6 +57,58 @@ export const groupRecordsByRound = (records: HistoryRecord[]): Record<number, Hi
     groups[round].push(record);
     return groups;
   }, {} as Record<number, HistoryRecord[]>);
+};
+
+/**
+ * 将GamePointDto转换为HistoryRecord的函数
+ * @param roundData 游戏轮次数据
+ * @returns 转换后的历史记录列表
+ */
+export const convertToHistoryRecords = (roundData: GameRoundDto): HistoryRecord[] => {
+  const allRecords: HistoryRecord[] = [];
+  if (!roundData?.gamePointDtoList?.length) {
+    return allRecords;
+  }
+  // 遍历每个游戏点数据（每个点代表一轮）
+  roundData.gamePointDtoList.forEach((pointDto: GamePointDto, roundIndex: number) => {
+    const round = pointDto.eventNum || roundIndex + 1;
+    // 如果有局数据，则遍历每一局创建记录
+    if (pointDto.gameInningDtoList?.length) {
+      pointDto.gameInningDtoList.forEach((inning: GameInningDto, inningIndex: number) => {
+        let choice: BetChoice | null = null;
+        let isWin = false;
+        // 判断庄闲和输赢情况
+        // isDealer: 1-庄家，2-闲家
+        // result: 1-赢，2-输
+        if (inning.isDealer === 1 && inning.result === 1) {
+          choice = BetChoice.BANKER_WIN;
+          isWin = true;
+        } else if (inning.isDealer === 1 && inning.result === 2) {
+          choice = BetChoice.BANKER_LOSE;
+          isWin = false;
+        } else if (inning.isDealer === 2 && inning.result === 1) {
+          choice = BetChoice.PLAYER_WIN;
+          isWin = true;
+        } else if (inning.isDealer === 2 && inning.result === 2) {
+          choice = BetChoice.PLAYER_LOSE;
+          isWin = false;
+        }
+        // 创建历史记录对象
+        allRecords.push({
+          id: inning.id || roundIndex * 100 + inningIndex,
+          time: formatDate(new Date(), 'HH:mm:ss'), // 只显示时间部分
+          result: isWin ? '赢' : '输',
+          round: round, // 使用计算出的轮次
+          gameNumber: inningIndex + 1, // 游戏局数，从1开始
+          isWin,
+          betAmount: pointDto.betNumber || 0, // 使用投注金额
+          choice,
+        });
+      });
+    }
+  });
+
+  return allRecords;
 };
 
 /**

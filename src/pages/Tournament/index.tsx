@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 
 interface Tournament {
   id: number;
@@ -151,6 +152,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#6c5ce7',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   container: {
     flex: 1,

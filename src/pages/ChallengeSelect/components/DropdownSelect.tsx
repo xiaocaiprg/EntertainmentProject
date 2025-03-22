@@ -5,11 +5,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 interface DropdownSelectProps {
   title: string;
   options: any[];
-  selectedValue: string | number;
   placeholder?: string;
   valueKey: string;
   labelKey: string;
-  onSelect: (value: number | string) => void;
+  selectedValue: any;
+  onSelect: (value: any) => void;
   keyExtractor?: (item: any) => string;
 }
 
@@ -33,7 +33,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
   );
 
   const handleSelect = useCallback(
-    (value: string) => {
+    (value: any) => {
       onSelect(value);
       setShowOptions(false);
     },
@@ -73,7 +73,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
 
 const styles = StyleSheet.create({
   selectContainer: {
-    marginBottom: 16,
+    marginBottom: 10,
     position: 'relative',
     zIndex: 10,
   },

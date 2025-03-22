@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Sta
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../../hooks/useAuth';
+import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 
 export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
   const { user, isLoggedIn, logout } = useAuth();
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#6c5ce7',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   container: {
     flex: 1,

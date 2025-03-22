@@ -1,4 +1,5 @@
 import { RoundStats } from '../types';
+import { GameRoundDto } from '../../../interface/Game';
 
 // 初始押注金额
 export const INITIAL_BET_AMOUNT = 3000;
@@ -142,4 +143,72 @@ export const canSettleRound = (stats: RoundStats): boolean => {
   }
   // 非初始轮：必须玩满3局才能结算
   return stats.gamesPlayed === 3;
+};
+
+/**
+ * 根据历史记录计算并更新游戏统计数据
+ * @param roundData 游戏轮次数据
+ * @returns 更新后的游戏统计数据
+ */
+export const updateGameStats = (roundData: GameRoundDto): RoundStats => {
+  // 初始化游戏统计数据
+  const stats: RoundStats = getInitialRoundStats();
+
+  if (!roundData?.gamePointDtoList?.length) {
+    return stats;
+  }
+
+  // 记录最后一轮的数据
+  let wins = 0;
+  let losses = 0;
+  let consecutiveLosses = 0;
+  let lastIsWin = true; // 用于跟踪连续输
+
+  // 找出最后一轮的数据
+  const lastRound = roundData.gamePointDtoList[roundData.gamePointDtoList.length - 1]?.eventNum || 1;
+
+  // 统计最后一轮的胜负情况
+  roundData.gamePointDtoList.forEach((pointDto) => {
+    const round = pointDto.eventNum || 0;
+    if (round === lastRound && pointDto.gameInningDtoList?.length) {
+      pointDto.gameInningDtoList.forEach((inning) => {
+        // 判断是否赢
+        const isWin = inning.result === 1;
+        if (isWin) {
+          wins++;
+          lastIsWin = true;
+          consecutiveLosses = 0;
+        } else {
+          losses++;
+          if (!lastIsWin) {
+            consecutiveLosses++;
+          }
+          lastIsWin = false;
+        }
+      });
+    }
+  });
+  // 更新游戏统计数据
+  stats.round = lastRound;
+  stats.wins = wins;
+  stats.losses = losses;
+  stats.gamesPlayed = wins + losses;
+  stats.consecutiveLosses = consecutiveLosses;
+
+  // 获取当前轮次的押注金额
+  const currentRoundData = roundData.gamePointDtoList.find((p) => p.eventNum === lastRound);
+  stats.betAmount = currentRoundData?.betNumber;
+
+  // 根据轮次判断是否为初始轮
+  stats.isFirstRound = lastRound === 1;
+  stats.isFirstRoundAgain = stats.betAmount === 3000 && lastRound > 1;
+
+  // 设置最大游戏次数
+  if (stats.isFirstRound) {
+    stats.maxGames = Infinity; // 初始轮无限制
+  } else {
+    stats.maxGames = 3; // 非初始轮最多3局
+  }
+
+  return stats;
 };

@@ -8,7 +8,7 @@ import ExistingChallengeForm from './components/ExistingChallengeForm';
 import NewChallengeForm from './components/NewChallengeForm';
 import { getOperatorList, getChallengeList, createChallenge, roundCreate } from '../../api/services/gameService';
 import { UserRecorder, GameMatchDto } from '../../interface/Game';
-
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 type RouteParams = {
   type: 'new' | 'existing';
 };
@@ -23,6 +23,7 @@ export const ChallengeSelectScreen = React.memo(() => {
   const [selectedChallengeId, setSelectedChallengeId] = useState(-1); // 选择挑战
   const [selectedOperatorId, setSelectedOperatorId] = useState(-1); // 选择投手
   const [challengeName, setChallengeName] = useState(''); // 挑战名称
+  const [activeRoundId, setActiveRoundId] = useState(0); // 进行中的场次ID
 
   // 处理确认按钮点击
   const handleConfirm = useCallback(() => {
@@ -31,23 +32,34 @@ export const ChallengeSelectScreen = React.memo(() => {
       if (!challenge) {
         return;
       }
-      roundCreate({
-        matchId: selectedChallengeId,
-      })
-        .then((res) => {
-          if (res) {
-            navigation.navigate('Game', {
-              challengeId: selectedChallengeId,
-              challengeName: challenge.name,
-              operator: challenge.playPersonName,
-              roundId: res,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log('新增场次失败', err.message);
-          Alert.alert('提示', err.message);
+      if (activeRoundId > 0) {
+        // 如果有进行中的场次，直接导航到游戏页面
+        navigation.navigate('Game', {
+          challengeId: selectedChallengeId,
+          challengeName: challenge.name,
+          operator: challenge.playPersonName,
+          roundId: activeRoundId,
         });
+      } else {
+        // 如果没有进行中的场次，则创建新场次
+        roundCreate({
+          matchId: selectedChallengeId,
+        })
+          .then((res) => {
+            if (res) {
+              navigation.navigate('Game', {
+                challengeId: selectedChallengeId,
+                challengeName: challenge.name,
+                operator: challenge.playPersonName,
+                roundId: res,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log('新增场次失败', err.message);
+            Alert.alert('提示', err.message);
+          });
+      }
     } else {
       // 新增挑战
       const operator = operatorList.find((o) => o.userId === selectedOperatorId)?.username;
@@ -71,16 +83,25 @@ export const ChallengeSelectScreen = React.memo(() => {
           Alert.alert('提示', err.message);
         });
     }
-  }, [type, operatorList, challengeList, selectedChallengeId, selectedOperatorId, challengeName, navigation]);
+  }, [
+    type,
+    operatorList,
+    challengeList,
+    selectedChallengeId,
+    selectedOperatorId,
+    challengeName,
+    navigation,
+    activeRoundId,
+  ]);
 
   // 处理返回按钮点击
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
 
   useEffect(() => {
-    getOperatorList({ pageNum: '1', pageSize: '100', type: 2 }).then((res) => {
+    getOperatorList({ pageNum: '1', pageSize: '999', type: 2 }).then((res) => {
       setOperatorList(res?.records || []);
     });
-    getChallengeList({ pageNum: '1', pageSize: '100' }).then((res) => {
+    getChallengeList({ pageNum: '1', pageSize: '999', isEnabled: 1 }).then((res) => {
       setChallengeList(res?.records || []);
     });
   }, []);
@@ -103,6 +124,7 @@ export const ChallengeSelectScreen = React.memo(() => {
               setSelectedChallengeId(Number(id));
             }}
             onConfirm={handleConfirm}
+            setActiveRoundId={setActiveRoundId}
           />
         ) : (
           <NewChallengeForm
@@ -110,7 +132,7 @@ export const ChallengeSelectScreen = React.memo(() => {
             selectedOperatorId={selectedOperatorId}
             challengeName={challengeName}
             onSelectOperatorId={(userId) => {
-              setSelectedOperatorId(Number(userId));
+              setSelectedOperatorId(userId);
             }}
             onChangeName={(text) => {
               setChallengeName(text);
@@ -127,6 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: THEME_COLORS.background,
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   header: {
     flexDirection: 'row',
