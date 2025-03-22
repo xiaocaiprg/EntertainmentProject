@@ -1,6 +1,5 @@
-// 用户类型
-export interface User {
-  id: string;
-  username: string;
-  avatar?: string;
+export interface ApiResponse<T> {
+  code: number;
+  msg: string;
+  data: T;
 }

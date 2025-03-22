@@ -7,9 +7,25 @@ import { GameModal } from './components/GameModal';
 import { GameStatusModal } from './components/GameStatusModal';
 import { GameHistory } from './components/GameHistory';
 import { useGameLogic } from './hooks/useGameLogic';
-import { GameProps, BetChoice } from './types';
+import { BetChoice, GameRouteParams } from './types';
+import { RouteProp } from '@react-navigation/native';
 
-export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
+// 扩展GameProps类型，提供更具体的route类型
+type GameScreenProps = {
+  route: RouteProp<{ params: GameRouteParams }, 'params'>;
+  navigation: any;
+};
+
+export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }) => {
+  // 从路由参数中获取挑战相关信息
+  const {
+    challengeName,
+    operator,
+    // 以下参数暂时未使用，保留以便将来扩展
+    // challengeId,
+    // isNewChallenge
+  } = route.params;
+
   const {
     currentChoice,
     setCurrentChoice,
@@ -59,7 +75,7 @@ export const Game: React.FC<GameProps> = React.memo(({ navigation }) => {
       <GameHeader title="游戏详情" navigation={navigation} />
 
       <View style={styles.content}>
-        <GameInfo gameName={'gameName'} operator={'operator'} roundStats={roundStats} />
+        <GameInfo gameName={challengeName} operator={operator} roundStats={roundStats} />
 
         <GameRule
           handleBankerWin={handleBankerWin}

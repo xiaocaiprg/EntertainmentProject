@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { useAuth } from '../../hooks/useAuth';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { isIOS } from '../../utils/platform';
 
@@ -27,7 +27,6 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
 
   const handleRegister = useCallback(async () => {
     if (!username || !password || !confirmPassword) {
@@ -41,18 +40,18 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
     }
 
     setLoading(true);
-    try {
-      const success = await register(username, password);
-      if (!success) {
-        Alert.alert('注册失败', '用户名可能已被占用');
-      }
-    } catch (error) {
-      Alert.alert('错误', '注册过程中发生错误');
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [username, password, confirmPassword, register]);
+    // try {
+    //   const success = await register(username, password);
+    //   if (!success) {
+    //     Alert.alert('注册失败', '用户名可能已被占用');
+    //   }
+    // } catch (error) {
+    //   Alert.alert('错误', '注册过程中发生错误');
+    //   console.error(error);
+    // } finally {
+    //   setLoading(false);
+    // }
+  }, [username, password, confirmPassword]);
 
   const handleUsernameChange = useCallback((text: string) => {
     setUsername(text);

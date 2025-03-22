@@ -55,7 +55,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
           <View style={styles.avatarContainer}>
             <Image
               source={{
-                uri: user?.avatar || 'https://i.postimg.cc/s2033pJG/user.jpg',
+                uri: 'https://i.postimg.cc/s2033pJG/user.jpg',
               }}
               style={styles.avatar}
             />
@@ -80,7 +80,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         </View>
       </>
     ),
-    [user, handleLogoutPress, handleHistoryPress, MenuItem],
+    [user, handleHistoryPress, handleLogoutPress, MenuItem],
   );
 
   return (

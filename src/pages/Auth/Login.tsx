@@ -39,27 +39,18 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
       Alert.alert('提示', '请输入用户名和密码');
       return;
     }
-
     setLoading(true);
-    try {
-      const success = await login(username, password);
-      if (success) {
-        // 如果登录成功且有返回页面参数，导航到该页面
-        if (returnScreen) {
-          navigation.navigate(returnScreen, returnParams);
-        } else {
-          // 否则返回上一页
-          navigation.goBack();
-        }
+    const success = await login({ username, password });
+    if (success) {
+      if (returnScreen) {
+        navigation.navigate(returnScreen, returnParams);
       } else {
-        Alert.alert('登录失败', '用户名或密码错误');
+        navigation.goBack();
       }
-    } catch (error) {
-      Alert.alert('错误', '登录过程中发生错误');
-      console.error(error);
-    } finally {
-      setLoading(false);
+    } else {
+      Alert.alert('登录失败', '用户名或密码错误');
     }
+    setLoading(false);
   }, [username, password, login, navigation, returnScreen, returnParams]);
 
   const handleUsernameChange = useCallback((text: string) => {
@@ -117,13 +108,12 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
               <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
                 {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>登录</Text>}
               </TouchableOpacity>
-
-              <View style={styles.footer}>
+              {/* <View style={styles.footer}>
                 <Text style={styles.footerText}>没有账号？</Text>
                 <TouchableOpacity onPress={props.onToggleMode}>
                   <Text style={styles.footerLink}>立即注册</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           </View>
         </TouchableWithoutFeedback>
