@@ -62,6 +62,10 @@ export const GameHistory = React.memo(() => {
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemRow}>
+            <Text style={styles.label}>创建时间:</Text>
+            <Text style={styles.value}>{item.createTime || '-'}</Text>
+          </View>
+          <View style={styles.itemRow}>
             <Text style={styles.label}>挑战上下水:</Text>
             <Text style={styles.value}>{item.profitStr || '-'}</Text>
           </View>
@@ -177,7 +181,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     color: '#666',
-    width: 80,
   },
   value: {
     fontSize: 14,

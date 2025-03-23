@@ -33,12 +33,27 @@ export const ChallengeSelectScreen = React.memo(() => {
         return;
       }
       if (activeRoundId > 0) {
-        // 如果有进行中的场次，直接导航到游戏页面
-        navigation.navigate('Game', {
-          challengeId: selectedChallengeId,
-          challengeName: challenge.name,
-          operator: challenge.playPersonName,
-          roundId: activeRoundId,
+        // 如果有进行中的场次，直接导航到游戏页面，使用reset方法替代navigate
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Main',
+              state: {
+                routes: [{ name: 'Home' }],
+                index: 0,
+              },
+            },
+            {
+              name: 'Game',
+              params: {
+                challengeId: selectedChallengeId,
+                challengeName: challenge.name,
+                operator: challenge.playPersonName,
+                roundId: activeRoundId,
+              },
+            },
+          ],
         });
       } else {
         // 如果没有进行中的场次，则创建新场次
@@ -47,11 +62,27 @@ export const ChallengeSelectScreen = React.memo(() => {
         })
           .then((res) => {
             if (res) {
-              navigation.navigate('Game', {
-                challengeId: selectedChallengeId,
-                challengeName: challenge.name,
-                operator: challenge.playPersonName,
-                roundId: res,
+              // 使用reset方法替代navigate
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'Main',
+                    state: {
+                      routes: [{ name: 'Home' }],
+                      index: 0,
+                    },
+                  },
+                  {
+                    name: 'Game',
+                    params: {
+                      challengeId: selectedChallengeId,
+                      challengeName: challenge.name,
+                      operator: challenge.playPersonName,
+                      roundId: res,
+                    },
+                  },
+                ],
               });
             }
           })
@@ -70,11 +101,27 @@ export const ChallengeSelectScreen = React.memo(() => {
       })
         .then((res) => {
           if (res) {
-            navigation.navigate('Game', {
-              challengeName: challengeName || '默认挑战',
-              operator,
-              roundId: res,
-              isNewChallenge: true,
+            // 使用reset方法替代navigate
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Main',
+                  state: {
+                    routes: [{ name: 'Home' }],
+                    index: 0,
+                  },
+                },
+                {
+                  name: 'Game',
+                  params: {
+                    challengeName: challengeName || '',
+                    operator,
+                    roundId: res,
+                    isNewChallenge: true,
+                  },
+                },
+              ],
             });
           }
         })
