@@ -41,21 +41,17 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     setRoundId(roundId);
     if (roundId) {
       // 加载场次详情数据
-      getRoundDetail(roundId)
-        .then((roundData) => {
-          if (roundData) {
-            const records = convertToHistoryRecords(roundData);
-            setHistoryRecords(records);
-            const updatedStats = updateGameStats(roundData);
-            setRoundStats(updatedStats);
-            setGameStatus('finished');
-            setGameNumber(records.length + 1);
-            console.log('加载历史数据完成，游戏统计:', updatedStats);
-          }
-        })
-        .catch((error) => {
-          console.error('加载场次详情失败:', error);
-        });
+      getRoundDetail(roundId).then((roundData) => {
+        if (roundData) {
+          const records = convertToHistoryRecords(roundData);
+          setHistoryRecords(records);
+          const updatedStats = updateGameStats(roundData);
+          setRoundStats(updatedStats);
+          setGameStatus('finished');
+          setGameNumber(records.length + 1);
+          console.log('加载历史数据完成，游戏统计:', updatedStats);
+        }
+      });
     }
   }, [roundId, setRoundId, setHistoryRecords, setRoundStats, setGameStatus, setGameNumber]);
 

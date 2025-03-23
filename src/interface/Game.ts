@@ -49,6 +49,7 @@ export interface GameMatchDto {
   investPersonProfitStr?: string;
   isEnabled: number;
   name?: string;
+  createTime?: string;
   operationPersonId?: number;
   operationPersonName?: string;
   operationPersonProfit?: number;
@@ -82,13 +83,13 @@ export interface GameRoundDto {
   playPersonId?: number;
   playPersonName?: string;
   profit?: number;
-  profitStr?: string;
+  profitStr?: string; // 上下水
   tableNumber?: string;
   totalProfit?: number;
   totalProfitStr?: string;
   totalTurnOver?: number;
   totalTurnOverStr?: string;
-  turnOver?: number;
+  turnOver?: number; // 转码
   turnOverStr?: string;
 }
 
@@ -102,9 +103,9 @@ export interface GameInningDto {
   betNumber?: number;
   eventNum?: number;
   id?: number;
-  isDealer?: number;
+  isDealer?: number; // 是否庄家：1庄2闲
   orderNumber?: number;
-  result?: number;
+  result?: number; // 结果：1赢2输
   roundId?: number;
 }
 

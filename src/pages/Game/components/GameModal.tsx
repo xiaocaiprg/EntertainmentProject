@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { BetChoice, BetChoiceMap } from '../types';
+import { BetChoice } from '../types';
 
 interface GameModalProps {
   visible: boolean;
@@ -43,7 +43,8 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
     return (
       <React.Fragment>
         <Text>
-          您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>，确认提交吗？
+          确认提交吗？
+          {/* 您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>， */}
         </Text>
       </React.Fragment>
     );

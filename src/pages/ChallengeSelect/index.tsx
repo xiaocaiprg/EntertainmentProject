@@ -64,7 +64,7 @@ export const ChallengeSelectScreen = React.memo(() => {
       // 新增挑战
       const operator = operatorList.find((o) => o.userId === selectedOperatorId)?.username;
       createChallenge({
-        name: challengeName || '默认挑战',
+        name: challengeName || '',
         playPersonId: selectedOperatorId,
         isEnabled: 1,
       })
