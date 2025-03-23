@@ -73,6 +73,7 @@ export interface GameRoundDto {
   docPersonName?: string;
   gamePointDtoList?: GamePointDto[];
   id?: number;
+  createTime?: string;
   investPersonId?: number;
   investPersonName?: string;
   isEnabled: number;
