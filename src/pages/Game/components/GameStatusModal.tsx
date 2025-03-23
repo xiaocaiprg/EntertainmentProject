@@ -36,7 +36,7 @@ export const GameStatusModal: React.FC<GameStatusModalProps> = React.memo((props
     if (isGameOver) {
       return (
         <View style={styles.messageContainer}>
-          <Text style={styles.modalMessage}>游戏已结束！</Text>
+          <Text style={styles.modalMessage}>已结束本场！</Text>
         </View>
       );
     } else if (nextRoundInfo) {
