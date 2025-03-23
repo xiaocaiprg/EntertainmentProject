@@ -10,6 +10,9 @@ declare global {
         roundId?: number; //场Id
         isNewChallenge?: boolean; // 是否新挑战（可选）
       };
+      ChallengeDetail: {
+        matchId: number; // 挑战ID
+      };
     }
   }
 }

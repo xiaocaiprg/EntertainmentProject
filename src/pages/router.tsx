@@ -9,6 +9,7 @@ import { AuthScreen } from './Auth/AuthScreen';
 import { Game } from './Game/index';
 import { ChallengeSelectScreen } from './ChallengeSelect/index';
 import { GameHistory } from './GameHistory/index';
+import { ChallengeDetail } from './ChallengeDetail/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -24,6 +25,7 @@ type RootStackParamList = {
   Game: GameRouteParams;
   ChallengeSelect: undefined;
   GameHistory: undefined;
+  ChallengeDetail: { matchId: number };
 };
 
 // 通用导航类型
@@ -93,6 +95,7 @@ function AppNavigator() {
             <Stack.Screen name="Game" component={Game} />
             <Stack.Screen name="ChallengeSelect" component={ChallengeSelectScreen} />
             <Stack.Screen name="GameHistory" component={GameHistory} />
+            <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

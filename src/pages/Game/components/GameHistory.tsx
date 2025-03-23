@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { HistoryRecord, BetChoice } from '../types';
-import { groupRecordsByRound, getChoiceDisplayText } from '../utils/historyHelper';
+import { HistoryRecord } from '../types';
+import { groupRecordsByRound } from '../utils/historyHelper';
 
 interface GameHistoryProps {
   historyRecords: HistoryRecord[];
@@ -12,7 +12,6 @@ export const GameHistory: React.FC<GameHistoryProps> = React.memo(({ historyReco
   const groupedRecords = useMemo(() => {
     return groupRecordsByRound(historyRecords);
   }, [historyRecords]);
-  console.log('groupedRecords', groupedRecords);
   // 轮次列表，从大到小排序
   const rounds = useMemo(() => {
     return Object.keys(groupedRecords)
@@ -36,11 +35,11 @@ export const GameHistory: React.FC<GameHistoryProps> = React.memo(({ historyReco
               </View>
               {groupedRecords[round].map((record) => (
                 <View key={`record-${record.id}`} style={styles.recordItem}>
+                  <Text style={styles.betAmountText}>押注：{record.betAmount}</Text>
                   <Text style={[styles.resultText, record.isWin ? styles.winText : styles.loseText]}>
                     {record.result}
                   </Text>
-                  <Text style={styles.betAmountText}>押注：{record.betAmount}</Text>
-                  <Text style={styles.choiceText}>{getChoiceDisplayText(record.choice as BetChoice)}</Text>
+                  {/* <Text style={styles.choiceText}>{getChoiceDisplayText(record.choice as BetChoice)}</Text> */}
                   <Text style={styles.timeText}>{record.time}</Text>
                 </View>
               ))}

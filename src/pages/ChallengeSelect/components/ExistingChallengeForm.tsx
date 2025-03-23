@@ -65,27 +65,12 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
       return selectedChallengeId <= 0 || loading;
     }, [selectedChallengeId, loading]);
 
-    // 获取挑战的状态描述
-    const getChallengeStatus = useMemo(() => {
-      if (loading) {
-        return '加载中...';
-      }
-
-      if (selectedChallengeId <= 0) {
-        return '请选择挑战';
-      }
-
-      if (rounds.length === 0) {
-        return '该挑战暂无场次记录';
-      }
-
+    const getConfirmButtonText = useMemo(() => {
       if (hasActiveRound) {
-        return '该挑战有进行中的场次';
-      } else {
-        return '该挑战的所有场次已结束';
+        return '进入进行中场次';
       }
-    }, [loading, selectedChallengeId, rounds.length, hasActiveRound]);
-
+      return '新开场次';
+    }, [hasActiveRound]);
     // 对场次数据进行排序处理
     const sortedRounds = useMemo(() => {
       return [...rounds].sort((a, b) => {
@@ -142,8 +127,6 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
           valueKey="id"
           labelKey="name"
         />
-        {selectedChallengeId > 0 && <Text style={styles.statusText}>场次状态: {getChallengeStatus}</Text>}
-
         {selectedChallengeId > 0 && (
           <View style={styles.roundsContainer}>
             <Text style={styles.roundsTitle}>场次列表</Text>
@@ -158,7 +141,7 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
           onPress={onConfirm}
           disabled={isConfirmDisabled}
         >
-          <Text style={styles.confirmButtonText}>确认</Text>
+          <Text style={styles.confirmButtonText}>{getConfirmButtonText}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -182,8 +165,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: THEME_COLORS.primaryDark,
   },
   confirmButtonDisabled: {
     backgroundColor: '#ccc',
@@ -192,15 +173,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-
-  statusText: {
-    fontSize: 14,
-    color: '#666',
-    backgroundColor: '#f5f5f5',
-    padding: 12,
-    borderRadius: 6,
-    overflow: 'hidden',
   },
   roundsContainer: {
     marginTop: 16,

@@ -48,28 +48,36 @@ export const GameHistory = React.memo(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderItem = useCallback(({ item }: { item: GameMatchDto }) => {
-    return (
-      <View style={styles.itemContainer}>
-        <View style={styles.itemRow}>
-          <Text style={styles.label}>挑战上下水:</Text>
-          <Text style={styles.value}>{item.profitStr || '-'}</Text>
-        </View>
-        <View style={styles.itemRow}>
-          <Text style={styles.label}>挑战转码:</Text>
-          <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
-        </View>
-        <View style={styles.itemRow}>
-          <Text style={styles.label}>打手名字:</Text>
-          <Text style={styles.value}>{item.playPersonName || '-'}</Text>
-        </View>
-        <View style={styles.itemRow}>
-          <Text style={styles.label}>投资人:</Text>
-          <Text style={styles.value}>{item.investPersonName || '-'}</Text>
-        </View>
-      </View>
-    );
-  }, []);
+  const handleItemPress = useCallback(
+    (matchId: number | undefined) => {
+      if (matchId) {
+        navigation.navigate('ChallengeDetail', { matchId });
+      }
+    },
+    [navigation],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: GameMatchDto }) => {
+      return (
+        <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
+          <View style={styles.itemRow}>
+            <Text style={styles.label}>挑战上下水:</Text>
+            <Text style={styles.value}>{item.profitStr || '-'}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.label}>挑战转码:</Text>
+            <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.label}>打手名字:</Text>
+            <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    },
+    [handleItemPress],
+  );
 
   const renderFooter = useCallback(() => {
     if (!loading) {
@@ -101,7 +109,7 @@ export const GameHistory = React.memo(() => {
         <FlatList
           data={historyList}
           renderItem={renderItem}
-          keyExtractor={(item) => String(item.id)}
+          keyExtractor={(item) => `${String(item.id)} + ${item.createTime}`}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           refreshing={loading}
@@ -156,7 +164,8 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: '#ffffff',
     borderRadius: 8,
-    padding: 16,
+    paddingHorizontal: 10,
+    paddingTop: 8,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#e0e0e0',

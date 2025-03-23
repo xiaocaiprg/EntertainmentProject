@@ -51,7 +51,7 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
         </View>
 
         <View style={styles.statItem}>
-          <Text style={styles.statLabel}>游戏进度</Text>
+          <Text style={styles.statLabel}>进度</Text>
           <Text style={styles.statValue}>
             {gamesPlayed} / {maxGames === Infinity ? '∞' : maxGames}
           </Text>
