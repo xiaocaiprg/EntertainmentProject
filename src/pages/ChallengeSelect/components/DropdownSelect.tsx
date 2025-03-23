@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   optionsContainer: {
-    position: 'absolute',
-    top: 76,
-    left: 0,
-    right: 0,
+    // position: 'absolute',
+    // top: 76,
+    // left: 0,
+    // right: 0,
     zIndex: 100,
     borderWidth: 1,
     borderColor: '#e0e0e0',
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    maxHeight: 300,
+    maxHeight: 200,
   },
   optionItem: {
     paddingVertical: 10,

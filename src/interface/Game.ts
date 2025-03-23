@@ -73,6 +73,7 @@ export interface GameRoundDto {
   docPersonName?: string;
   gamePointDtoList?: GamePointDto[];
   id?: number;
+  createTime?: string;
   investPersonId?: number;
   investPersonName?: string;
   isEnabled: number;
@@ -102,6 +103,7 @@ export interface GamePointDto {
 export interface GameInningDto {
   betNumber?: number;
   eventNum?: number;
+  createTime?: string;
   id?: number;
   isDealer?: number; // 是否庄家：1庄2闲
   orderNumber?: number;
