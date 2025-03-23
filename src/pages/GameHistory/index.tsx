@@ -70,7 +70,7 @@ export const GameHistory = React.memo(() => {
             <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>打手名字:</Text>
+            <Text style={styles.label}>投手名字:</Text>
             <Text style={styles.value}>{item.playPersonName || '-'}</Text>
           </View>
         </TouchableOpacity>
