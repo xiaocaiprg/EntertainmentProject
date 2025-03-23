@@ -68,16 +68,15 @@ export const ChallengeDetail = React.memo(() => {
                   <Text style={styles.value}>{matchDetail.name || '-'}</Text>
                 </View>
                 <View style={styles.itemRow}>
-                  <Text style={styles.label}>上下水:</Text>
-                  <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
+                  <Text style={styles.label}>打手名字:</Text>
+                  <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
                 </View>
               </View>
               <View style={styles.infoColumn}>
                 <View style={styles.itemRow}>
-                  <Text style={styles.label}>打手名字:</Text>
-                  <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
+                  <Text style={styles.label}>上下水:</Text>
+                  <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
                 </View>
-
                 <View style={styles.itemRow}>
                   <Text style={styles.label}>转码:</Text>
                   <Text style={styles.value}>{matchDetail.turnOverStr || '-'}</Text>
@@ -156,15 +155,16 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
   },
   infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
   infoColumn: {
-    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 6,
   },
   itemRow: {
     flexDirection: 'row',
-    marginBottom: 6,
+    flex: 1,
+    flexWrap: 'wrap',
   },
   label: {
     fontSize: 14,
