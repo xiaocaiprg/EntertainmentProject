@@ -21,7 +21,8 @@ const PATH = {
   INNING_CREATE: 'haiyang/inning/create',
   ROUND_LIST: 'haiyang/round/list',
   ROUND_DETAIL: 'haiyang/round/',
-  ROUND_UPDATE: '/haiyang/round/updateStatus',
+  ROUND_UPDATE: 'haiyang/round/updateStatus',
+  MATCH_DETAIL: 'haiyang/match/',
 };
 
 export const getOperatorList = (params: UserRecordParams): Promise<RecorderList | null> => {
@@ -109,6 +110,19 @@ export const getRoundDetail = (roundId: number): Promise<GameRoundDto | null> =>
 };
 export const updateRoundStatus = (params: UpdateRoundStatusParams): Promise<GameMatchDto | null> => {
   return post<ApiResponse<GameMatchDto>>(PATH.ROUND_UPDATE, params)
+    .then((res) => {
+      if (res.code === 200) {
+        return res.data;
+      } else {
+        throw new Error(res.msg);
+      }
+    })
+    .catch(() => {
+      return null;
+    });
+};
+export const getMatchDetail = (matchId: number): Promise<GameMatchDto | null> => {
+  return get<ApiResponse<GameMatchDto>>(`${PATH.MATCH_DETAIL}${matchId}`)
     .then((res) => {
       if (res.code === 200) {
         return res.data;
