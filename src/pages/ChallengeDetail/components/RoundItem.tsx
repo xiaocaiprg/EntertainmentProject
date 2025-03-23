@@ -31,7 +31,13 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
       </View>
       {round.gamePointDtoList && round.gamePointDtoList.length > 0 && (
         <>
-          <Text style={styles.pointsTitle}>详细信息</Text>
+          <View style={styles.pointsContainer}>
+            <Text style={styles.pointsTitle}>详细信息</Text>
+            <View style={styles.itemRow}>
+              <Text style={styles.label}>创建时间:</Text>
+              <Text style={styles.value}>{round.createTime || '-'}</Text>
+            </View>
+          </View>
           {round.gamePointDtoList.map(renderPoint)}
         </>
       )}
@@ -66,6 +72,8 @@ const styles = StyleSheet.create({
   },
   itemRow: {
     flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   label: {
     fontSize: 13,
@@ -75,7 +83,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#333',
   },
-
+  pointsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   pointsTitle: {
     fontSize: 14,
     fontWeight: '500',

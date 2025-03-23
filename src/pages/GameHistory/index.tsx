@@ -66,6 +66,10 @@ export const GameHistory = React.memo(() => {
             <Text style={styles.value}>{item.createTime || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
+            <Text style={styles.label}>挑战名称:</Text>
+            <Text style={styles.value}>{item.name || '-'}</Text>
+          </View>
+          <View style={styles.itemRow}>
             <Text style={styles.label}>挑战上下水:</Text>
             <Text style={styles.value}>{item.profitStr || '-'}</Text>
           </View>

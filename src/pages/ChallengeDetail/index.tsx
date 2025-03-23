@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     flexWrap: 'wrap',
+    alignItems: 'center',
   },
   label: {
     fontSize: 14,
