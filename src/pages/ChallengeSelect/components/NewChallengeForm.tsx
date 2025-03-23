@@ -96,8 +96,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: THEME_COLORS.primaryDark,
   },
   confirmButtonDisabled: {
     backgroundColor: '#ccc',
