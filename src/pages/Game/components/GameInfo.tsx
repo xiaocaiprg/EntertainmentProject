@@ -23,7 +23,9 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
   return (
     <View style={styles.infoContainer}>
       <View style={styles.infoHeader}>
-        <Text style={styles.gameName}>{gameName}</Text>
+        <Text style={styles.gameName} numberOfLines={1}>
+          {gameName}
+        </Text>
         <Text style={styles.operator}>操作者: {operator}</Text>
       </View>
 
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
+    maxWidth: '65%',
   },
   operator: {
     fontSize: 14,

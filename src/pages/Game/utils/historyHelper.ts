@@ -96,7 +96,7 @@ export const convertToHistoryRecords = (roundData: GameRoundDto): HistoryRecord[
         // 创建历史记录对象
         allRecords.push({
           id: inning.id || roundIndex * 100 + inningIndex,
-          time: formatDate(new Date(), 'HH:mm:ss'), // 只显示时间部分
+          time: inning.createTime || '', // 只显示时间部分
           result: isWin ? '赢' : '输',
           round: round, // 使用计算出的轮次
           gameNumber: inningIndex + 1, // 游戏局数，从1开始

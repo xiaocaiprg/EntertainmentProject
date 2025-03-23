@@ -197,7 +197,7 @@ export const updateGameStats = (roundData: GameRoundDto): RoundStats => {
 
   // 获取当前轮次的押注金额
   const currentRoundData = roundData.gamePointDtoList.find((p) => p.eventNum === lastRound);
-  stats.betAmount = currentRoundData?.betNumber;
+  stats.betAmount = currentRoundData?.betNumber || -1;
 
   // 根据轮次判断是否为初始轮
   stats.isFirstRound = lastRound === 1;

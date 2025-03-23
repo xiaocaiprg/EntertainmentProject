@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME_COLORS.primary,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '800',
     color: '#111',
     zIndex: 1,
