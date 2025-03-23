@@ -68,7 +68,7 @@ export const ChallengeDetail = React.memo(() => {
                   <Text style={styles.value}>{matchDetail.name || '-'}</Text>
                 </View>
                 <View style={styles.itemRow}>
-                  <Text style={styles.label}>打手名字:</Text>
+                  <Text style={styles.label}>投手名字:</Text>
                   <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
                 </View>
               </View>
