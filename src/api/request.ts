@@ -1,7 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
-import { getTokenSync, setTokenSync } from '../utils/storage';
+import { getToken, setTokenSync, clearTokenSync } from '../utils/storage';
+import { DeviceEventEmitter } from 'react-native';
 
 const BASE_URL = 'http://85.31.225.25:8888/';
+
+// 定义事件名称
+export const TOKEN_EXPIRED_EVENT = 'TOKEN_EXPIRED';
 
 // 创建axios实例
 const request = axios.create({
@@ -14,8 +18,8 @@ const request = axios.create({
 
 // 请求拦截器
 request.interceptors.request.use(
-  (config) => {
-    const token = getTokenSync();
+  async (config) => {
+    const token = await getToken();
     if (token && config.url !== 'haiyang/user/login') {
       config.headers.Authorization = token;
     }
@@ -41,14 +45,13 @@ request.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response) {
       // 服务器返回错误状态码
-      const { data } = error.response;
+      const { status, data } = error.response;
+      if (status === 410) {
+        clearTokenSync();
+        DeviceEventEmitter.emit(TOKEN_EXPIRED_EVENT);
+      }
       return Promise.reject(data);
-    } else if (error.request) {
-      // 请求已发出但没有收到响应
-      return Promise.reject({ message: '网络错误，请检查您的网络连接' });
     } else {
-      // 请求配置出错
-      return Promise.reject({ message: '请求配置错误' });
     }
   },
 );
