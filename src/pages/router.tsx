@@ -86,9 +86,9 @@ function MainTabs() {
 // 主导航栈
 function AppNavigator() {
   return (
-    <AuthProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <AuthProvider>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen name="Auth" component={AuthScreen} />
@@ -97,9 +97,9 @@ function AppNavigator() {
             <Stack.Screen name="GameHistory" component={GameHistory} />
             <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
           </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </AuthProvider>
+        </AuthProvider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 

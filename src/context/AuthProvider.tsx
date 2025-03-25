@@ -1,8 +1,11 @@
 import React, { useState, ReactNode, useEffect } from 'react';
-import { userlogin } from '../api/services/authService';
+import { getUserStatus, userlogin } from '../api/services/authService';
 import { AuthContext } from './AuthContext';
 import { UserResult, UserParams } from '../interface/User';
 import { clearTokenSync } from '../utils/storage';
+import { DeviceEventEmitter } from 'react-native';
+import { TOKEN_EXPIRED_EVENT } from '../api/request';
+import { useNavigation } from '@react-navigation/native';
 
 // 认证提供者组件属性
 interface AuthProviderProps {
@@ -13,9 +16,32 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserResult | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const navigation = useNavigation();
 
   // 初始化时检查登录状态
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      try {
+        const res = await getUserStatus();
+        res && setUser(res);
+        setIsLoggedIn(!!res);
+      } catch {
+        setUser(null);
+        setIsLoggedIn(false);
+      }
+    };
+    checkUserStatus();
+  }, []);
+
+  // 监听token过期事件
+  useEffect(() => {
+    const tokenExpiredListener = DeviceEventEmitter.addListener(TOKEN_EXPIRED_EVENT, () => {
+      setUser(null);
+      setIsLoggedIn(false);
+      navigation.navigate('Auth');
+    });
+    return () => tokenExpiredListener.remove();
+  }, [navigation]);
 
   // 登录函数
   const login = async (params: UserParams): Promise<boolean> => {
