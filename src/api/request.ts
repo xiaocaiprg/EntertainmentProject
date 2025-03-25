@@ -51,7 +51,10 @@ request.interceptors.response.use(
         DeviceEventEmitter.emit(TOKEN_EXPIRED_EVENT);
       }
       return Promise.reject(data);
+    } else if (error.request) {
+      return Promise.reject({ message: '网络错误，请检查您的网络连接' });
     } else {
+      return Promise.reject({ message: '请求配置错误' });
     }
   },
 );
