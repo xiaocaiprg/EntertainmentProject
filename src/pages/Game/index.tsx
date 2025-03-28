@@ -28,13 +28,14 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     continueGame,
     confirmModalVisible,
     setConfirmModalVisible,
-    historyRecords,
     gameStatusModalInfo,
     confirmGameStatus,
     setRoundId,
+    historyRecords,
     setHistoryRecords,
     setGameStatus,
     setGameNumber,
+    isSubmitting,
   } = useGameLogic();
 
   useEffect(() => {
@@ -111,6 +112,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
       {/* 确认下注弹窗 */}
       <GameModal
         visible={confirmModalVisible}
+        isSubmitting={isSubmitting}
         title="确认结果"
         currentChoice={currentChoice}
         onCancel={() => setConfirmModalVisible(false)}

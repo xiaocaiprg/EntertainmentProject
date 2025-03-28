@@ -84,4 +84,5 @@ export interface RoundStats {
   isFirstRound: boolean; // 是否是第一轮
   isFirstRoundAgain: boolean; // 是否是再次进入初始轮
   consecutiveLosses: number; // 连续负局计数
+  consecutiveDemotions: number; // 连续输的次数
 }

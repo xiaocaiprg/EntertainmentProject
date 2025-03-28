@@ -95,8 +95,8 @@ export interface GameRoundDto {
 }
 
 export interface GamePointDto {
-  betNumber?: number;
-  eventNum?: number;
+  betNumber: number;
+  eventNum: number;
   gameInningDtoList?: GameInningDto[];
 }
 

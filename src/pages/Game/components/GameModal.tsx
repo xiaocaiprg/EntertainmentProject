@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { BetChoice } from '../types';
+import { BetChoice, BetChoiceMap } from '../types';
 
 interface GameModalProps {
   visible: boolean;
@@ -12,6 +12,7 @@ interface GameModalProps {
   confirmText: string;
   showCancelButton?: boolean;
   isFullWidthButton?: boolean;
+  isSubmitting?: boolean;
 }
 
 export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
@@ -25,6 +26,7 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
     confirmText,
     showCancelButton = true,
     isFullWidthButton = false,
+    isSubmitting = false,
   } = props;
   const handleCancel = useCallback(() => {
     if (onCancel) {
@@ -43,8 +45,7 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
     return (
       <React.Fragment>
         <Text>
-          确认提交吗？
-          {/* 您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>， */}
+          您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>，确认提交吗？
         </Text>
       </React.Fragment>
     );
@@ -57,18 +58,32 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
           {getModalMessage()}
           <View style={styles.modalButtons}>
             {isFullWidthButton ? (
-              <TouchableOpacity style={styles.fullWidthButton} onPress={handleConfirm}>
-                <Text style={styles.confirmModalButtonText}>{confirmText}</Text>
+              <TouchableOpacity
+                style={[styles.fullWidthButton, isSubmitting && styles.disabledButton]}
+                onPress={handleConfirm}
+                disabled={isSubmitting}
+              >
+                <Text style={[styles.confirmModalButtonText, isSubmitting && styles.disabledText]}>{confirmText}</Text>
               </TouchableOpacity>
             ) : (
               <>
                 {showCancelButton && (
-                  <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={handleCancel}>
-                    <Text style={styles.cancelButtonText}>{cancelText}</Text>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.cancelButton, isSubmitting && styles.disabledButton]}
+                    onPress={handleCancel}
+                    disabled={isSubmitting}
+                  >
+                    <Text style={[styles.cancelButtonText, isSubmitting && styles.disabledText]}>{cancelText}</Text>
                   </TouchableOpacity>
                 )}
-                <TouchableOpacity style={[styles.modalButton, styles.confirmModalButton]} onPress={handleConfirm}>
-                  <Text style={styles.confirmModalButtonText}>{confirmText}</Text>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.confirmModalButton, isSubmitting && styles.disabledButton]}
+                  onPress={handleConfirm}
+                  disabled={isSubmitting}
+                >
+                  <Text style={[styles.confirmModalButtonText, isSubmitting && styles.disabledText]}>
+                    {confirmText}
+                  </Text>
                 </TouchableOpacity>
               </>
             )}
@@ -151,5 +166,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#e74c3c',
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  disabledText: {
+    opacity: 0.5,
   },
 });

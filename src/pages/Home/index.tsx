@@ -106,15 +106,15 @@ export const HomeScreen = React.memo(() => {
 
         <View style={styles.buttonsContainer}>
           <TouchableOpacity onPress={() => handleChallengePress('new')}>
-            <View style={styles.challengeButton}>
-              <Icon name="add-circle" size={24} color="#111" />
+            <View style={[styles.challengeButton, { backgroundColor: '#6c5ce7' }]}>
+              <Icon name="add-circle" size={24} color="#fff" />
               <Text style={styles.challengeButtonText}>新增挑战</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleChallengePress('existing')}>
-            <View style={styles.challengeButton}>
-              <Icon name="history" size={24} color="#111" />
+            <View style={[styles.challengeButton, { backgroundColor: '#00b894' }]}>
+              <Icon name="history" size={24} color="#fff" />
               <Text style={styles.challengeButtonText}>已有挑战</Text>
             </View>
           </TouchableOpacity>
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
   },
   challengeButtonText: {
-    color: '#111',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 10,
