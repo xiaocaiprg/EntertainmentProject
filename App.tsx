@@ -6,17 +6,12 @@
  */
 
 import 'react-native-gesture-handler';
+// import 'react-native-reanimated';
 import React from 'react';
-// import { StatusBar } from 'react-native';
 import AppNavigator from './src/pages/router';
 
 function App(): React.JSX.Element {
-  return (
-    // <>
-    //   <StatusBar barStyle="default" backgroundColor="#6c5ce7" />
-    <AppNavigator />
-    // </>
-  );
+  return <AppNavigator />;
 }
 
 export default App;

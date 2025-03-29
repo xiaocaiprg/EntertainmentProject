@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
 import { getToken, setTokenSync, clearTokenSync } from '../utils/storage';
 import { DeviceEventEmitter } from 'react-native';
+import { PATH } from './services/authService';
 
-const BASE_URL = 'http://85.31.225.25:8888/';
+const BASE_URL = 'https://www.junlong.biz/';
 
 // 定义事件名称
 export const TOKEN_EXPIRED_EVENT = 'TOKEN_EXPIRED';
@@ -20,7 +21,7 @@ const request = axios.create({
 request.interceptors.request.use(
   async (config) => {
     const token = await getToken();
-    if (token && config.url !== 'haiyang/user/login') {
+    if (token && config.url !== PATH.LOGIN) {
       config.headers.Authorization = token;
     }
     return config;
@@ -34,7 +35,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response: AxiosResponse) => {
     console.log('response', response.config.url, response.config.data, response.data);
-    if (response.config.url === 'haiyang/user/login') {
+    if (response.config.url === PATH.LOGIN) {
       const auth = response.headers?.authorization;
       if (auth) {
         setTokenSync(auth);

@@ -90,7 +90,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="default" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
       <GameHeader title="挑战详情" navigation={navigation} />
 

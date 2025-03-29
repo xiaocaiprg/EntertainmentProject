@@ -6,15 +6,21 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { STATUS_BAR_HEIGHT, SCREEN_WIDTH } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { useAuth } from '../../hooks/useAuth';
+import { mapUserRole, getUserAccessibleModules } from './utils/homeLogic';
+import { ModuleType } from './interface/IModuleProps';
 
-const BANNER_HEIGHT = 300; // 增加banner高度
+const BANNER_HEIGHT = 230;
 const HEADER_HEIGHT = 60;
 
 export const HomeScreen = React.memo(() => {
   const [currentBanner, setCurrentBanner] = useState(0);
   const scrollY = useRef(new Animated.Value(0)).current; // 用于监听滚动位置
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
+  // 从用户信息中获取角色
+  const userRole = useMemo(() => mapUserRole(user?.role), [user?.role]);
+  // 获取当前用户可访问的模块
+  const accessibleModules = useMemo(() => getUserAccessibleModules(userRole), [userRole]);
 
   // 计算背景色透明度
   const headerBgOpacity = scrollY.interpolate({
@@ -22,14 +28,9 @@ export const HomeScreen = React.memo(() => {
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
-
   // 轮播图数据
   const banners = useMemo(
     () => [
-      // {
-      //   id: 1,
-      //   image: 'https://fastly.picsum.photos/id/866/400/300.jpg?hmac=JMubLT0llOloTrCSJIptm4kmT13cmWrNcdbpI9vJwmw',
-      // },
       {
         id: 1,
         image: 'http://85.31.225.25/image/head.png',
@@ -37,7 +38,6 @@ export const HomeScreen = React.memo(() => {
     ],
     [],
   );
-
   // 自动轮播效果
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,9 +45,7 @@ export const HomeScreen = React.memo(() => {
     }, 3000);
     return () => clearInterval(interval);
   }, [banners.length]);
-
-  // 轮播Banner渲染
-  const bannerContent = useMemo(
+  const bannerContent = useCallback(
     () => (
       <View style={styles.bannerContainer}>
         <ScrollView
@@ -80,55 +78,57 @@ export const HomeScreen = React.memo(() => {
     ),
     [banners, currentBanner],
   );
-
-  // 检查登录态并跳转
-  const handleChallengePress = useCallback(
-    (type: 'new' | 'existing') => {
-      if (isLoggedIn) {
-        // 已登录，直接跳转
-        navigation.navigate('ChallengeSelect', { type });
-      } else {
-        // 未登录，跳转到登录页面，并设置返回参数
-        navigation.navigate('Auth', {
-          returnScreen: 'ChallengeSelect',
-          params: { type },
-        });
+  // 检查登录态和权限并跳转
+  const handleModulePress = useCallback(
+    (moduleType: ModuleType) => {
+      switch (moduleType) {
+        case ModuleType.CHALLENGE_NEW:
+          navigation.navigate('NewChallenge');
+          break;
+        case ModuleType.CHALLENGE_EXISTING:
+          navigation.navigate('ExistingChallenge');
+          break;
+        case ModuleType.ALL_CHALLENGE:
+          navigation.navigate('AllChallenge');
+          break;
+        default:
+          break;
       }
     },
-    [navigation, isLoggedIn],
+    [navigation],
   );
-
-  // 挑战选择模块
-  const challengeSection = useCallback(
-    () => (
-      <View style={styles.challengeContainer}>
-        <Text style={styles.challengeTitle}>选择挑战</Text>
-
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={() => handleChallengePress('new')}>
-            <View style={[styles.challengeButton, { backgroundColor: '#6c5ce7' }]}>
-              <Icon name="add-circle" size={24} color="#fff" />
-              <Text style={styles.challengeButtonText}>新增挑战</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => handleChallengePress('existing')}>
-            <View style={[styles.challengeButton, { backgroundColor: '#00b894' }]}>
-              <Icon name="history" size={24} color="#fff" />
-              <Text style={styles.challengeButtonText}>已有挑战</Text>
-            </View>
-          </TouchableOpacity>
+  // 根据模块配置渲染模块
+  const renderModules = useCallback(() => {
+    return (
+      <View style={styles.modulesContainer}>
+        <View style={styles.moduleGrid}>
+          {accessibleModules.map((module) => (
+            <TouchableOpacity
+              key={module.id}
+              onPress={() => handleModulePress(module.type)}
+              style={styles.moduleWrapper}
+            >
+              <View style={[styles.moduleButton, { backgroundColor: module.backgroundColor }]}>
+                <Icon name={module.icon} size={24} color="#fff" />
+                <Text style={styles.moduleButtonText}>{module.title}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
-    ),
-    [handleChallengePress],
-  );
-
+    );
+  }, [accessibleModules, handleModulePress]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigation.navigate('Auth', {
+        returnScreen: 'Home',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" barStyle="default" />
-
-      {/* 固定在顶部的Header，随着滚动变得可见 */}
       <Animated.View style={[styles.header, { opacity: 1 }]}>
         <Animated.View style={[styles.headerBackground, { opacity: headerBgOpacity }]} />
         <Text style={styles.headerTitle}>俊龍娛樂</Text>
@@ -139,10 +139,8 @@ export const HomeScreen = React.memo(() => {
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })}
         scrollEventThrottle={16}
       >
-        {/* Banner作为背景 */}
-        {bannerContent}
-
-        <View style={styles.contentContainer}>{challengeSection()}</View>
+        {bannerContent()}
+        <View style={styles.contentContainer}>{renderModules()}</View>
       </Animated.ScrollView>
     </View>
   );
@@ -162,8 +160,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingTop: STATUS_BAR_HEIGHT + 15,
-    paddingBottom: 15,
     paddingHorizontal: 20,
+    paddingBottom: 5,
     height: HEADER_HEIGHT + STATUS_BAR_HEIGHT,
     zIndex: 100,
   },
@@ -179,7 +177,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '800',
     color: '#111',
-    zIndex: 1,
   },
   content: {
     flex: 1,
@@ -212,39 +209,31 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginHorizontal: 4,
   },
-  challengeContainer: {
-    backgroundColor: '#fff',
-    margin: 15,
-    padding: 15,
-    borderRadius: 20,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+  modulesContainer: {
+    paddingVertical: 15,
+    paddingLeft: 15,
+    paddingRight: 5,
   },
-  challengeTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 20,
-  },
-  buttonsContainer: {
-    width: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
+  moduleGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 15,
   },
-  challengeButton: {
+  moduleWrapper: {
+    flex: 1,
+    marginBottom: 15,
+    marginRight: 10,
+  },
+  moduleButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 25,
-    width: 300,
-    height: 60,
+    borderRadius: 15,
+    padding: 15,
     borderWidth: 1,
     borderColor: '#e0e0e0',
   },
-  challengeButtonText: {
+  moduleButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
