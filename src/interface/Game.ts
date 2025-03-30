@@ -1,3 +1,5 @@
+import { UserResult } from './User';
+
 export interface QueryParams {
   pageNum: string;
   pageSize: string;
@@ -6,22 +8,11 @@ export interface UserRecordParams extends QueryParams {
   type: number;
 }
 export interface ChallengeListParams extends QueryParams {
-  isEnabled?: number;
-}
-export interface UserRecorder {
-  inviteCode: string;
-  id: number;
-  userId: number;
-  username: string;
-  password: string;
-  phone: string;
-  integral: number;
-  agentId: number;
-  role: string;
+  isEnabledList?: number[];
 }
 
 export interface RecorderList {
-  records: UserRecorder[];
+  records: UserResult[];
   pages: number;
   total: number;
   size: number;
@@ -36,29 +27,33 @@ export interface ChallengeList {
 }
 
 export interface GameMatchDto {
-  address?: string;
+  addressInfoId?: number;
+  addressName?: string;
   commissionRate?: number;
-  docPersonId?: number;
+  createTime?: string;
+  docPersonCode?: string;
   docPersonName?: string;
   docPersonProfit?: number;
   docPersonProfitStr?: string;
+  gameDate?: string;
   id?: number;
-  investPersonId?: number;
+  investPersonCode?: string;
   investPersonName?: string;
   investPersonProfit?: number;
   investPersonProfitStr?: string;
   isEnabled: number;
+  lossLimit?: number;
   name?: string;
-  createTime?: string;
-  operationPersonId?: number;
+  operationPersonCode?: string;
   operationPersonName?: string;
   operationPersonProfit?: number;
   operationPersonProfitStr?: string;
   orderNumber?: number;
-  playPersonId?: number;
+  playPersonCode?: string;
   playPersonName?: string;
   playPersonProfit?: number;
   playPersonProfitStr?: string;
+  principal?: number;
   profit?: number;
   profitStr?: string;
   roundList?: GameRoundDto[];
@@ -68,42 +63,42 @@ export interface GameMatchDto {
 }
 
 export interface GameRoundDto {
-  address?: string;
-  docPersonId?: number;
+  addressInfoId?: number;
+  addressName?: string;
+  createTime?: string;
+  docPersonCode?: string;
   docPersonName?: string;
   gamePointDtoList?: GamePointDto[];
   id?: number;
-  createTime?: string;
-  investPersonId?: number;
+  investPersonCode?: string;
   investPersonName?: string;
   isEnabled: number;
   matchId?: number;
-  operationPersonId?: number;
+  operationPersonCode?: string;
   operationPersonName?: string;
   orderNumber?: number;
-  playPersonId?: number;
+  playPersonCode?: string;
   playPersonName?: string;
-  profit?: number;
-  profitStr?: string; // 上下水
+  profit: number;
+  profitStr: string;
   tableNumber?: string;
-  totalProfit?: number;
-  totalProfitStr?: string;
-  totalTurnOver?: number;
-  totalTurnOverStr?: string;
-  turnOver?: number; // 转码
-  turnOverStr?: string;
+  totalProfit: number;
+  totalProfitStr: string;
+  totalTurnOver: number;
+  totalTurnOverStr: string;
+  turnOver: number;
+  turnOverStr: string;
 }
-
 export interface GamePointDto {
-  betNumber?: number;
-  eventNum?: number;
+  betNumber: number;
+  eventNum: number;
   gameInningDtoList?: GameInningDto[];
 }
 
 export interface GameInningDto {
   betNumber?: number;
-  eventNum?: number;
   createTime?: string;
+  eventNum?: number;
   id?: number;
   isDealer?: number; // 是否庄家：1庄2闲
   orderNumber?: number;
@@ -112,15 +107,14 @@ export interface GameInningDto {
 }
 
 export interface ChallengeCreateParams {
-  address?: string;
-  docPersonId?: number;
-  id?: number;
-  investPersonId?: number;
-  isEnabled: number; //1开启 0结束
-  name: string;
-  operationPersonId?: number;
-  orderNumber?: number;
-  playPersonId: number;
+  addressInfoId?: number;
+  contriAmount?: number;
+  gameDate?: string;
+  lossLimit?: number;
+  name?: string;
+  operationPersonCode?: string;
+  playPersonCode: string;
+  principal: number;
   tableNumber?: string;
 }
 
@@ -141,4 +135,27 @@ export interface InningCreateParams {
 export interface UpdateRoundStatusParams {
   id: number;
   isEnabled: number;
+}
+
+export interface PageDtoAddressInfo {
+  current?: number;
+  pages?: number;
+  records?: AddressInfo[];
+  size?: number;
+  total?: number;
+}
+
+export interface AddressInfo {
+  code?: string;
+  companyCode?: string;
+  createTime?: string;
+  id?: number;
+  name?: string;
+  orderNumber?: number;
+  phone?: string;
+  position?: string;
+}
+export interface UpdateMatchDocPersonParams {
+  id: number; // 挑战id
+  docPersonCode: string;
 }

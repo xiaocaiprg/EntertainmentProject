@@ -67,18 +67,17 @@ const styles = StyleSheet.create({
   ruleTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 8,
     color: '#333',
     textAlign: 'left',
   },
   betOptionsColumn: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: 12,
   },
   betOption: {
     alignItems: 'center',
-    width: '90%',
+    width: '95%',
     padding: 12,
     borderRadius: 10,
     borderWidth: 2,
@@ -135,6 +134,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     textAlign: 'center',
-    marginTop: 2,
   },
 });

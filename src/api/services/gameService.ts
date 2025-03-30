@@ -10,11 +10,14 @@ import {
   GameRoundDto,
   UpdateRoundStatusParams,
   GameMatchDto,
+  PageDtoAddressInfo,
+  QueryParams,
+  UpdateMatchDocPersonParams,
 } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
 
 const PATH = {
-  USER_LIST: 'haiyang/user/page',
+  USER_LIST: 'haiyang/business/page',
   CHALLENGE_LIST: 'haiyang/match/page',
   CHALLENGE_CREATE: 'haiyang/match/create',
   ROUND_CREATE: 'haiyang/round/create',
@@ -23,6 +26,8 @@ const PATH = {
   ROUND_DETAIL: 'haiyang/round/',
   ROUND_UPDATE: 'haiyang/round/updateStatus',
   MATCH_DETAIL: 'haiyang/match/',
+  ADDRESS_LIST: 'haiyang/addressInfo/page',
+  MATCH_UPDATE_DOC_PERSON: 'haiyang/match/updataDocPerson',
 };
 
 export const getOperatorList = (params: UserRecordParams): Promise<RecorderList | null> => {
@@ -133,4 +138,41 @@ export const getMatchDetail = (matchId: number): Promise<GameMatchDto | null> =>
     .catch(() => {
       return null;
     });
+};
+
+export const getAddressList = (params: QueryParams): Promise<PageDtoAddressInfo | null> => {
+  return post<ApiResponse<PageDtoAddressInfo>>(PATH.ADDRESS_LIST, params)
+    .then((res) => {
+      if (res.code === 200) {
+        return res.data;
+      } else {
+        throw new Error(res.msg);
+      }
+    })
+    .catch(() => {
+      return null;
+    });
+};
+
+export const getRecorderList = (params: UserRecordParams): Promise<RecorderList | null> => {
+  return post<ApiResponse<RecorderList>>(PATH.USER_LIST, params)
+    .then((res) => {
+      if (res.code === 200) {
+        return res.data;
+      } else {
+        throw new Error(res.msg);
+      }
+    })
+    .catch(() => {
+      return null;
+    });
+};
+export const updateMatchDocPerson = (params: UpdateMatchDocPersonParams): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.MATCH_UPDATE_DOC_PERSON, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };

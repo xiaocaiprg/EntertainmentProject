@@ -2,9 +2,9 @@ import { get, post } from '../request';
 import { UserResult, UserParams } from '../../interface/User';
 import { ApiResponse } from '../../interface/IModuleProps';
 
-const PATH = {
-  LOGIN: 'haiyang/user/login',
-  LOGIN_STATUS: 'haiyang/user/token',
+export const PATH = {
+  LOGIN: 'haiyang/business/login',
+  LOGIN_STATUS: 'haiyang/business/token',
 };
 
 // 登录
