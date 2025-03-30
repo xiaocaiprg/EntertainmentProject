@@ -86,7 +86,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="default" backgroundColor="#6c5ce7" />
+      <StatusBar barStyle="default" />
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity>

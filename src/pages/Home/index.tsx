@@ -131,7 +131,7 @@ export const HomeScreen = React.memo(() => {
   }, []);
   return (
     <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="default" />
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
       <Animated.View style={[styles.header, { opacity: 1 }]}>
         <Animated.View style={[styles.headerBackground, { opacity: headerBgOpacity }]} />
         <Text style={styles.headerTitle}>俊龍娛樂</Text>
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: THEME_COLORS.primary,
   },
   headerTitle: {
     fontSize: 22,
