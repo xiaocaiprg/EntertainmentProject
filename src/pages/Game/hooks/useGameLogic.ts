@@ -33,25 +33,13 @@ export const useGameLogic = () => {
   const isSubmittingRef = useRef(false); // 使用ref来标记接口请求状态
 
   // 处理庄押注结果
-  const handleBankerChange = useCallback(
-    (value: number) => {
-      if (gameStatus !== 'waiting') {
-        return;
-      }
-      setBanker(value);
-    },
-    [gameStatus],
-  );
+  const handleBankerChange = useCallback((value: number) => {
+    setBanker(value);
+  }, []);
   // 处理闲押注结果
-  const handlePlayerChange = useCallback(
-    (value: number) => {
-      if (gameStatus !== 'waiting') {
-        return;
-      }
-      setPlayer(value);
-    },
-    [gameStatus],
-  );
+  const handlePlayerChange = useCallback((value: number) => {
+    setPlayer(value);
+  }, []);
   // 继续游戏（用户点击确认弹窗后）
   const continueGame = useCallback(async () => {
     if (!currentChoice || isSubmittingRef.current) {
@@ -237,10 +225,10 @@ export const useGameLogic = () => {
         // 重置押注
         setBanker(0);
         setPlayer(0);
-        // 增加局数
-        setGameNumber((prev) => prev + 1);
         // 重置游戏状态为等待押注
         setGameStatus('waiting');
+        // 增加局数
+        setGameNumber((prev) => prev + 1);
       }
     };
     handleGameLogic();

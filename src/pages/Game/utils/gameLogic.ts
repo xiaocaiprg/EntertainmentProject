@@ -258,10 +258,11 @@ export const updateConsecutiveDemotions = (roundStats: RoundStats): number => {
   if (roundStats.gamesPlayed === 3 && netLosses === 1) {
     return roundStats.consecutiveDemotions + 1;
   }
-  // 非初始轮，只有在3局后净胜1局时重置
-  if (roundStats.gamesPlayed === 3 && netWins === 1) {
+  // 非初始轮，只有在3局后净胜1局或净胜3局时重置
+  if (roundStats.gamesPlayed === 3 && (netWins === 1 || netWins === 3)) {
     return 0;
   }
+
   // 保持当前连续降级次数不变
   return roundStats.consecutiveDemotions;
 };
