@@ -114,8 +114,8 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
       return (
         <FlatList
           data={sortedRounds}
-          renderItem={({ item }) => renderItem(item)} // 修改为使用解构赋值
-          keyExtractor={(item) => item.id?.toString() || ''}
+          renderItem={({ item }) => renderItem(item)}
+          keyExtractor={(item) => item.id?.toString() || new Date().getTime().toString()}
           style={styles.roundsList}
         />
       );

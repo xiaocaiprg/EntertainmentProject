@@ -79,15 +79,15 @@ export interface GameRoundDto {
   orderNumber?: number;
   playPersonCode?: string;
   playPersonName?: string;
-  profit?: number;
-  profitStr?: string;
+  profit: number;
+  profitStr: string;
   tableNumber?: string;
-  totalProfit?: number;
-  totalProfitStr?: string;
-  totalTurnOver?: number;
-  totalTurnOverStr?: string;
-  turnOver?: number;
-  turnOverStr?: string;
+  totalProfit: number;
+  totalProfitStr: string;
+  totalTurnOver: number;
+  totalTurnOverStr: string;
+  turnOver: number;
+  turnOverStr: string;
 }
 export interface GamePointDto {
   betNumber: number;
@@ -154,4 +154,8 @@ export interface AddressInfo {
   orderNumber?: number;
   phone?: string;
   position?: string;
+}
+export interface UpdateMatchDocPersonParams {
+  id: number; // 挑战id
+  docPersonCode: string;
 }

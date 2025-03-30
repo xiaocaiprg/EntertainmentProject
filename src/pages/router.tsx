@@ -11,6 +11,7 @@ import { NewChallengeScreen } from './NewChallenge/index';
 import { ExistingChallengeScreen } from './ExistingChallenge/index';
 import { GameHistory } from './GameHistory/index';
 import { ChallengeDetail } from './ChallengeDetail/index';
+import { CompletedFundingChallengeScreen } from './CompletedFundingChallenge/index';
 import { AllChallengeScreen } from './AllChallenge/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -30,6 +31,7 @@ type RootStackParamList = {
   GameHistory: undefined;
   ChallengeDetail: { matchId: number };
   AllChallenge: undefined;
+  CompletedFundingChallenge: undefined;
 };
 
 // 通用导航类型
@@ -102,6 +104,7 @@ function AppNavigator() {
             <Stack.Screen name="GameHistory" component={GameHistory} />
             <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
             <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
+            <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
           </Stack.Navigator>
         </AuthProvider>
       </NavigationContainer>

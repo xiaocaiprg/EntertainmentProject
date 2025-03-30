@@ -54,39 +54,36 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
         }
       });
     }
-  }, [roundId, setRoundId, setHistoryRecords, setRoundStats, setGameStatus, setGameNumber]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 处理庄赢
   const handleBankerWin = useCallback(() => {
     setCurrentChoice(BetChoice.BANKER_WIN); // 庄家赢
     handleBankerChange(1);
-    setRoundId(roundId);
     setConfirmModalVisible(true);
-  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
+  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice]);
 
   // 处理庄输
   const handleBankerLose = useCallback(() => {
     setCurrentChoice(BetChoice.BANKER_LOSE); // 庄家输
     handleBankerChange(-1);
-    setRoundId(roundId);
     setConfirmModalVisible(true);
-  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
+  }, [handleBankerChange, setConfirmModalVisible, setCurrentChoice]);
 
   // 处理闲赢
   const handlePlayerWin = useCallback(() => {
     setCurrentChoice(BetChoice.PLAYER_WIN); // 闲家赢
     handlePlayerChange(1);
-    setRoundId(roundId);
     setConfirmModalVisible(true);
-  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
+  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
 
   // 处理闲输
   const handlePlayerLose = useCallback(() => {
     setCurrentChoice(BetChoice.PLAYER_LOSE); // 闲家输
     handlePlayerChange(-1);
-    setRoundId(roundId);
     setConfirmModalVisible(true);
-  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice, setRoundId, roundId]);
+  }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
 
   return (
     <SafeAreaView style={styles.container}>

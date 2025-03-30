@@ -6,6 +6,7 @@ export enum ModuleType {
   CHALLENGE_NEW = 'challenge_new',
   CHALLENGE_EXISTING = 'challenge_existing',
   ALL_CHALLENGE = 'all_challenge',
+  COMPLETED_FUNDING_CHALLENGE = 'completed_funding_challenge',
 }
 
 // 模块配置类型定义

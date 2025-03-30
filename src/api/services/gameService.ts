@@ -12,6 +12,7 @@ import {
   GameMatchDto,
   PageDtoAddressInfo,
   QueryParams,
+  UpdateMatchDocPersonParams,
 } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
 
@@ -26,6 +27,7 @@ const PATH = {
   ROUND_UPDATE: 'haiyang/round/updateStatus',
   MATCH_DETAIL: 'haiyang/match/',
   ADDRESS_LIST: 'haiyang/addressInfo/page',
+  MATCH_UPDATE_DOC_PERSON: 'haiyang/match/updataDocPerson',
 };
 
 export const getOperatorList = (params: UserRecordParams): Promise<RecorderList | null> => {
@@ -138,7 +140,6 @@ export const getMatchDetail = (matchId: number): Promise<GameMatchDto | null> =>
     });
 };
 
-// 获取地点列表
 export const getAddressList = (params: QueryParams): Promise<PageDtoAddressInfo | null> => {
   return post<ApiResponse<PageDtoAddressInfo>>(PATH.ADDRESS_LIST, params)
     .then((res) => {
@@ -153,7 +154,6 @@ export const getAddressList = (params: QueryParams): Promise<PageDtoAddressInfo 
     });
 };
 
-// 获取记录人列表
 export const getRecorderList = (params: UserRecordParams): Promise<RecorderList | null> => {
   return post<ApiResponse<RecorderList>>(PATH.USER_LIST, params)
     .then((res) => {
@@ -166,4 +166,13 @@ export const getRecorderList = (params: UserRecordParams): Promise<RecorderList 
     .catch(() => {
       return null;
     });
+};
+export const updateMatchDocPerson = (params: UpdateMatchDocPersonParams): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.MATCH_UPDATE_DOC_PERSON, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };

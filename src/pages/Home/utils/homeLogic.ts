@@ -39,6 +39,13 @@ export const availableModules: ModuleConfig[] = [
     icon: 'list',
     backgroundColor: '#e17055',
   },
+  {
+    id: '4',
+    title: '更新记录人',
+    type: ModuleType.COMPLETED_FUNDING_CHALLENGE,
+    icon: 'check-circle',
+    backgroundColor: '#fdcb6e',
+  },
 ];
 
 // 定义角色到模块的映射
@@ -61,7 +68,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
   },
   {
     role: 'PITCHER',
-    moduleTypes: [ModuleType.CHALLENGE_EXISTING, ModuleType.ALL_CHALLENGE],
+    moduleTypes: [ModuleType.COMPLETED_FUNDING_CHALLENGE, ModuleType.ALL_CHALLENGE],
   },
 ];
 

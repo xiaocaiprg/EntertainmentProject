@@ -75,7 +75,7 @@ export const convertToHistoryRecords = (roundData: GameRoundDto): HistoryRecord[
     // 如果有局数据，则遍历每一局创建记录
     if (pointDto.gameInningDtoList?.length) {
       pointDto.gameInningDtoList.forEach((inning: GameInningDto, inningIndex: number) => {
-        let choice: BetChoice | null = null;
+        let choice: BetChoice | undefined;
         let isWin = false;
         // 判断庄闲和输赢情况
         // isDealer: 1-庄家，2-闲家
@@ -116,7 +116,7 @@ export const convertToHistoryRecords = (roundData: GameRoundDto): HistoryRecord[
  * @param {BetChoice | undefined} choice 选择
  * @returns {string} 显示文本
  */
-export const getChoiceDisplayText = (choice: BetChoice | undefined | null): string => {
+export const getChoiceDisplayText = (choice: BetChoice | undefined): string => {
   if (!choice) {
     return '未选择';
   }

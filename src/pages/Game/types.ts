@@ -68,7 +68,7 @@ export interface HistoryRecord {
   gameNumber: number;
   isWin: boolean;
   betAmount: number;
-  choice?: 'banker_win' | 'banker_lose' | 'player_win' | 'player_lose' | null;
+  choice?: BetChoice;
 }
 
 /**
@@ -85,4 +85,8 @@ export interface RoundStats {
   isFirstRoundAgain: boolean; // 是否是再次进入初始轮
   consecutiveLosses: number; // 连续负局计数
   consecutiveDemotions: number; // 连续输的次数
+  roundProfitStr: string; // 本场上下水字符串
+  roundTurnOverStr: string; // 本场转码字符串
+  challengeProfitStr: string; // 挑战上下水字符串
+  challengeTurnOverStr: string; // 挑战转码字符串
 }

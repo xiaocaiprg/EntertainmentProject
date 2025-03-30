@@ -8,7 +8,7 @@ import {
   isGameOver,
   updateConsecutiveDemotions,
 } from '../utils/gameLogic';
-import { inningCreate, updateRoundStatus } from '../../../api/services/gameService';
+import { inningCreate, updateRoundStatus, getRoundDetail } from '../../../api/services/gameService';
 import { createHistoryRecord } from '../utils/historyHelper';
 
 export const useGameLogic = () => {
@@ -69,6 +69,9 @@ export const useGameLogic = () => {
       roundId: roundId,
     };
     const result = await inningCreate(params);
+    // 获取最新的场信息
+    const newRoundDetail = await getRoundDetail(roundId);
+
     isSubmittingRef.current = false; // 重置ref状态
     setIsSubmitting(false); // 重置状态
 
@@ -119,6 +122,12 @@ export const useGameLogic = () => {
     }
     // 更新连续输的次数
     newStats.consecutiveDemotions = updateConsecutiveDemotions(newStats);
+    if (newRoundDetail) {
+      newStats.roundProfitStr = newRoundDetail.profitStr;
+      newStats.roundTurnOverStr = newRoundDetail.turnOverStr;
+      newStats.challengeProfitStr = newRoundDetail.totalProfitStr;
+      newStats.challengeTurnOverStr = newRoundDetail.totalTurnOverStr;
+    }
     setRoundStats(newStats);
     // 设置游戏状态为已完成
     setGameStatus('finished');

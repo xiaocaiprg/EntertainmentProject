@@ -25,6 +25,7 @@ export const GameHistory = React.memo(() => {
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchHistoryList = useCallback(async () => {
+    setLoading(true);
     const res = await getChallengeList({
       pageNum: pageNum,
       pageSize: pageSize,

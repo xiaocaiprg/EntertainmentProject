@@ -20,6 +20,10 @@ export const getInitialRoundStats = (): RoundStats => {
     isFirstRoundAgain: false,
     consecutiveLosses: 0,
     consecutiveDemotions: 0,
+    roundProfitStr: '0',
+    roundTurnOverStr: '0',
+    challengeProfitStr: '0',
+    challengeTurnOverStr: '0',
   };
 };
 
@@ -227,7 +231,10 @@ export const updateGameStats = (roundData: GameRoundDto): RoundStats => {
       stats.consecutiveDemotions = consecutiveDemotions;
     }
   }
-
+  stats.roundProfitStr = roundData.profitStr;
+  stats.roundTurnOverStr = roundData.turnOverStr;
+  stats.challengeProfitStr = roundData.totalProfitStr;
+  stats.challengeTurnOverStr = roundData.totalTurnOverStr;
   return stats;
 };
 

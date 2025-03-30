@@ -6,3 +6,10 @@ export enum ChallengeStatus {
   FUNDRAISING_COMPLETED = 3, // 募资完成
   COMPLETED = 4, // 已完成
 }
+// 添加
+export enum UserType {
+  RECORDER = 1, // 记录人
+  OPERATOR = 2, // 投手
+  INVESTOR = 3, // 投资人
+  PITCHER = 4, // 运营人
+}

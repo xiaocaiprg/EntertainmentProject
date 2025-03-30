@@ -32,7 +32,7 @@ export const AllChallengeScreen = React.memo(() => {
   const [loading, setLoading] = useState<boolean>(true);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
   const [pageNum, setPageNum] = useState<string>('1');
-  const pageSize = useRef<string>('20').current;
+  const pageSize = useRef<string>('1000').current;
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   // 清空列表并重置分页
@@ -64,10 +64,9 @@ export const AllChallengeScreen = React.memo(() => {
       if (activeTab !== tabValue) {
         setActiveTab(tabValue);
         resetList();
-        fetchChallengeList();
       }
     },
-    [activeTab, resetList, fetchChallengeList],
+    [activeTab, resetList],
   );
 
   // 加载更多数据
@@ -76,7 +75,10 @@ export const AllChallengeScreen = React.memo(() => {
       setPageNum(String(Number(pageNum) + 1));
     }
   }, [loading, hasMore, pageNum]);
-
+  useEffect(() => {
+    fetchChallengeList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
   useEffect(() => {
     fetchChallengeList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
