@@ -113,6 +113,10 @@ export const GameHistory = React.memo(() => {
                 <Text style={styles.label}>记录人:</Text>
                 <Text style={styles.value}>{item.docPersonName || '-'}</Text>
               </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>挑战开始时间:</Text>
+                <Text style={styles.value}>{item.gameDate || '-'}</Text>
+              </View>
             </View>
 
             <View style={styles.arrowContainer}>
@@ -155,7 +159,7 @@ export const GameHistory = React.memo(() => {
         <FlatList
           data={historyList}
           renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => `${String(item.id)}+${new Date().getTime()}`}
+          keyExtractor={(item) => `${String(item.id)}+${item.createTime}`}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           refreshing={loading}
@@ -210,8 +214,10 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: '#ffffff',
     borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 6,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: '#e0e0e0',
   },
@@ -248,12 +254,12 @@ const styles = StyleSheet.create({
   },
   itemRow: {
     flexDirection: 'row',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   label: {
     fontSize: 14,
     color: '#666',
-    width: 80,
+    width: 100,
   },
   value: {
     fontSize: 14,
