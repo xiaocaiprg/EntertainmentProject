@@ -5,7 +5,7 @@ import { BetChoice, BetChoiceMap } from '../types';
 interface GameModalProps {
   visible: boolean;
   title: string;
-  currentChoice: BetChoice | null;
+  currentChoice: BetChoice | undefined;
   onCancel?: () => void;
   onConfirm: () => void;
   cancelText?: string;

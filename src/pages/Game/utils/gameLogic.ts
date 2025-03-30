@@ -30,10 +30,14 @@ export const getInitialRoundStats = (): RoundStats => {
 /**
  * 计算是否进入下一轮
  * @param {RoundStats} stats 当前轮次统计
+ * @param {boolean} isGameOverResult  是否结束
  * @returns {boolean} 是否进入下一轮
  */
-export const shouldAdvanceToNextRound = (stats: RoundStats): boolean => {
-  const netWins = stats.wins - stats.losses; // 净胜局数
+export const shouldAdvanceToNextRound = (stats: RoundStats, isGameOverResult: boolean): boolean => {
+  const netWins = stats.wins - stats.losses;
+  if (isGameOverResult) {
+    return false;
+  }
   if (stats.isFirstRound) {
     // 初始轮：净胜2局进入下一轮
     return netWins === 2;

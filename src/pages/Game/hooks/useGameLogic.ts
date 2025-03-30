@@ -8,13 +8,13 @@ import {
   isGameOver,
   updateConsecutiveDemotions,
 } from '../utils/gameLogic';
-import { inningCreate, updateRoundStatus, getRoundDetail } from '../../../api/services/gameService';
+import { inningCreate, updateRoundStatus } from '../../../api/services/gameService';
 import { createHistoryRecord } from '../utils/historyHelper';
 
 export const useGameLogic = () => {
-  const [gameStatus, setGameStatus] = useState<'waiting' | 'playing' | 'finished'>('waiting'); // 游戏状态
+  const [gameStatus, setGameStatus] = useState<'waiting' | 'finished'>('waiting'); // 游戏状态
   const [gameNumber, setGameNumber] = useState(1); // 游戏次数
-  const [currentChoice, setCurrentChoice] = useState<BetChoice | null>(null); // 当前选择
+  const [currentChoice, setCurrentChoice] = useState<BetChoice | undefined>(undefined); // 当前选择
   const [banker, setBanker] = useState(0); // 庄家押注输赢结果
   const [player, setPlayer] = useState(0); // 闲家押注输赢结果
   const [confirmModalVisible, setConfirmModalVisible] = useState(false); // 弹窗状态
@@ -57,10 +57,10 @@ export const useGameLogic = () => {
     if (!currentChoice || isSubmittingRef.current) {
       return;
     }
-
     isSubmittingRef.current = true; // 开始提交前设置状态
     setIsSubmitting(true); // 更新状态
     const isWin = banker > 0 || player > 0;
+    const isLoss = banker < 0 || player < 0;
     const params = {
       betNumber: roundStats.betAmount,
       eventNum: roundStats.round,
@@ -68,15 +68,12 @@ export const useGameLogic = () => {
       result: isWin ? 1 : 2,
       roundId: roundId,
     };
-    const result = await inningCreate(params);
-    // 获取最新的场信息
-    const newRoundDetail = await getRoundDetail(roundId);
+    const inningResult = await inningCreate(params);
 
     isSubmittingRef.current = false; // 重置ref状态
     setIsSubmitting(false); // 重置状态
-
     // 如果请求失败，显示错误提示弹窗
-    if (!result) {
+    if (!inningResult) {
       console.error('提交游戏结果失败');
       setGameStatusModalInfo({
         visible: true,
@@ -89,12 +86,6 @@ export const useGameLogic = () => {
       setGameStatus('waiting');
       return;
     }
-
-    // 关闭确认对话框
-    setConfirmModalVisible(false);
-    // 设置游戏状态为进行中
-    setGameStatus('playing');
-
     // 创建并添加历史记录
     if (currentChoice) {
       const newRecord = createHistoryRecord(
@@ -107,7 +98,6 @@ export const useGameLogic = () => {
       );
       setHistoryRecords((prev) => [newRecord, ...prev]);
     }
-
     // 更新游戏统计信息
     const newStats = { ...roundStats };
     newStats.gamesPlayed += 1;
@@ -115,20 +105,20 @@ export const useGameLogic = () => {
       newStats.wins += 1;
       // 重置连续负局计数
       newStats.consecutiveLosses = 0;
-    } else {
+    } else if (isLoss) {
       newStats.losses += 1;
       // 更新连续负局计数
       newStats.consecutiveLosses += 1;
     }
     // 更新连续输的次数
     newStats.consecutiveDemotions = updateConsecutiveDemotions(newStats);
-    if (newRoundDetail) {
-      newStats.roundProfitStr = newRoundDetail.profitStr;
-      newStats.roundTurnOverStr = newRoundDetail.turnOverStr;
-      newStats.challengeProfitStr = newRoundDetail.totalProfitStr;
-      newStats.challengeTurnOverStr = newRoundDetail.totalTurnOverStr;
-    }
+    newStats.roundProfitStr = inningResult?.profitStr;
+    newStats.roundTurnOverStr = inningResult?.turnOverStr;
+    newStats.challengeProfitStr = inningResult?.totalProfitStr;
+    newStats.challengeTurnOverStr = inningResult?.totalTurnOverStr;
     setRoundStats(newStats);
+    // 关闭确认对话框
+    setConfirmModalVisible(false);
     // 设置游戏状态为已完成
     setGameStatus('finished');
   }, [banker, player, roundStats, currentChoice, gameNumber, roundId]);
@@ -143,84 +133,98 @@ export const useGameLogic = () => {
 
   // 处理游戏规则逻辑
   useEffect(() => {
-    if (gameStatus === 'finished') {
-      console.log('游戏状态为finished，轮次信息', roundStats);
-      // 检查是否游戏结束
-      if (isGameOver(roundStats)) {
-        updateRoundStatus({
-          id: roundId,
-          isEnabled: 0,
-        }).then(() => {
+    const handleGameLogic = async () => {
+      if (gameStatus === 'finished') {
+        console.log('游戏状态为finished，轮次信息', roundStats);
+        // 检查是否游戏结束
+        const isGameOverResult = isGameOver(roundStats);
+        if (isGameOverResult) {
+          const res = await updateRoundStatus({
+            id: roundId,
+            isEnabled: 0,
+          });
           // 显示游戏结束弹窗
+          if (res) {
+            setGameStatusModalInfo({
+              visible: true,
+              isGameOver: true,
+              title: '本场已结束',
+              confirmText: '返回首页',
+              nextRoundInfo: null,
+            });
+          } else {
+            setGameStatusModalInfo({
+              visible: true,
+              isGameOver: true,
+              title: '状态异常',
+              roundId: roundId,
+              confirmText: '返回首页',
+              nextRoundInfo: null,
+            });
+          }
+          return; // 游戏结束，不再继续
+        }
+        // 是否进入下一轮
+        if (shouldAdvanceToNextRound(roundStats, isGameOverResult)) {
+          const oldRound = roundStats.round;
+          const isFirstRoundTransition = roundStats.isFirstRound;
+
+          // 计算下一轮的押注金额和信息
+          const nextBetAmount = calculateNextRoundBetAmount(roundStats);
+
+          // 显示轮次结束弹窗
           setGameStatusModalInfo({
             visible: true,
-            isGameOver: true,
-            title: '本场已结束',
-            confirmText: '返回首页',
-            nextRoundInfo: null,
+            isGameOver: false,
+            title: '轮次结束',
+            confirmText: '开始下一轮',
+            nextRoundInfo: {
+              currentRound: oldRound,
+              nextRound: oldRound + 1,
+              nextBetAmount,
+            },
           });
-        });
-        return; // 游戏结束，不再继续
+          // 更新轮次状态
+          setRoundStats((prevStats) => {
+            const newStats = { ...prevStats };
+            // 检查是否是再次进入初始轮
+            const againInitRound = isAgainInitRound(
+              newStats.betAmount,
+              nextBetAmount,
+              isFirstRoundTransition,
+              oldRound,
+            );
+            // 更新为下一轮状态
+            newStats.round += 1;
+            newStats.wins = 0;
+            newStats.losses = 0;
+            newStats.consecutiveLosses = 0;
+            newStats.gamesPlayed = 0;
+            newStats.betAmount = nextBetAmount;
+            // 设置最大游戏次数
+            if (isFirstRoundTransition) {
+              newStats.isFirstRound = false;
+              newStats.maxGames = 3; // 第二轮开始每轮3局
+            } else if (againInitRound) {
+              newStats.isFirstRoundAgain = true;
+              newStats.maxGames = 3; // 再次进入初始轮最多3局
+            } else {
+              newStats.isFirstRoundAgain = false;
+              newStats.maxGames = 3; // 非初始轮最多3局
+            }
+            return newStats;
+          });
+        }
+        // 重置押注
+        setBanker(0);
+        setPlayer(0);
+        // 增加局数
+        setGameNumber((prev) => prev + 1);
+        // 重置游戏状态为等待押注
+        setGameStatus('waiting');
       }
-
-      // 是否进入下一轮
-      if (shouldAdvanceToNextRound(roundStats)) {
-        const oldRound = roundStats.round;
-        const isFirstRoundTransition = roundStats.isFirstRound;
-
-        // 计算下一轮的押注金额和信息
-        const nextBetAmount = calculateNextRoundBetAmount(roundStats);
-
-        // 显示轮次结束弹窗
-        setGameStatusModalInfo({
-          visible: true,
-          isGameOver: false,
-          title: '轮次结束',
-          confirmText: '开始下一轮',
-          nextRoundInfo: {
-            currentRound: oldRound,
-            nextRound: oldRound + 1,
-            nextBetAmount,
-          },
-        });
-
-        // 更新轮次状态
-        setRoundStats((prevStats) => {
-          const newStats = { ...prevStats };
-
-          // 检查是否是再次进入初始轮
-          const againInitRound = isAgainInitRound(newStats.betAmount, nextBetAmount, isFirstRoundTransition, oldRound);
-
-          // 更新为下一轮状态
-          newStats.round += 1;
-          newStats.wins = 0;
-          newStats.losses = 0;
-          newStats.consecutiveLosses = 0;
-          newStats.gamesPlayed = 0;
-          newStats.betAmount = nextBetAmount;
-
-          // 设置最大游戏次数
-          if (isFirstRoundTransition) {
-            newStats.isFirstRound = false;
-            newStats.maxGames = 3; // 第二轮开始每轮3局
-          } else if (againInitRound) {
-            newStats.isFirstRoundAgain = true;
-            newStats.maxGames = 3; // 再次进入初始轮最多3局
-          } else {
-            newStats.isFirstRoundAgain = false;
-            newStats.maxGames = 3; // 非初始轮最多3局
-          }
-          return newStats;
-        });
-      }
-      // 重置押注
-      setBanker(0);
-      setPlayer(0);
-      // 增加局数
-      setGameNumber((prev) => prev + 1);
-      // 重置游戏状态为等待押注
-      setGameStatus('waiting');
-    }
+    };
+    handleGameLogic();
   }, [gameStatus, roundId, roundStats]);
 
   return {

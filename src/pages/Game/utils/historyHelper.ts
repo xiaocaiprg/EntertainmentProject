@@ -1,6 +1,6 @@
 import { HistoryRecord, BetChoice, BetChoiceMap } from '../types';
 import { GameInningDto, GamePointDto, GameRoundDto } from '../../../interface/Game';
-import { formatDate } from '../../../utils/date';
+
 /**
  * 生成当前时间字符串
  * @returns {string} 格式化的时间字符串

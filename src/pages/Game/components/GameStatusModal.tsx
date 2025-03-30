@@ -10,7 +10,7 @@ interface GameStatusModalProps {
 
 export const GameStatusModal: React.FC<GameStatusModalProps> = React.memo((props) => {
   const { modalInfo, onConfirm, navigation } = props;
-  const { visible, title, confirmText, isGameOver, nextRoundInfo } = modalInfo;
+  const { visible, title, confirmText, isGameOver, nextRoundInfo, roundId } = modalInfo;
 
   const handleConfirm = useCallback(() => {
     onConfirm();
@@ -50,7 +50,14 @@ export const GameStatusModal: React.FC<GameStatusModalProps> = React.memo((props
           </Text>
         </View>
       );
+    } else if (roundId) {
+      return (
+        <View style={styles.messageContainer}>
+          <Text style={styles.modalMessage}>{`状态异常，请根据本场编号:${roundId}联系管理员`}</Text>
+        </View>
+      );
     }
+
     return null;
   };
 

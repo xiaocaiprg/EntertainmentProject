@@ -19,9 +19,9 @@ export const PointItem = React.memo((props: PointItemProps) => {
             inning.result === 1 ? styles.winText : inning.result === 2 ? styles.loseText : {},
           ]}
         >
-          {inning.result === 1 ? '赢' : inning.result === 2 ? '输' : '-'}
+          {inning.result === 1 ? '+' : inning.result === 2 ? '-' : ''}
         </Text>
-        {/* <Text style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</Text> */}
+        <Text style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</Text>
       </View>
     );
   }, []);
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   inningItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 4,
+    marginRight: 8,
     marginBottom: 4,
   },
   inningLabel: {
