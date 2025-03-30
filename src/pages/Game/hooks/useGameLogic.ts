@@ -74,7 +74,7 @@ export const useGameLogic = () => {
     setIsSubmitting(false); // 重置状态
     // 如果请求失败，显示错误提示弹窗
     if (!inningResult) {
-      console.error('提交游戏结果失败');
+      console.log('提交游戏结果失败');
       setGameStatusModalInfo({
         visible: true,
         isGameOver: false,

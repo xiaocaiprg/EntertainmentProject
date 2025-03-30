@@ -109,6 +109,10 @@ export const GameHistory = React.memo(() => {
                 <Text style={styles.label}>投手名字:</Text>
                 <Text style={styles.value}>{item.playPersonName || '-'}</Text>
               </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>记录人:</Text>
+                <Text style={styles.value}>{item.docPersonName || '-'}</Text>
+              </View>
             </View>
 
             <View style={styles.arrowContainer}>
@@ -151,7 +155,7 @@ export const GameHistory = React.memo(() => {
         <FlatList
           data={historyList}
           renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => `${String(item.id)} + ${item.createTime}`}
+          keyExtractor={(item) => `${String(item.id)}+${new Date().getTime()}`}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           refreshing={loading}

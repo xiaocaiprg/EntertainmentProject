@@ -67,6 +67,12 @@ export const ChallengeDetail = React.memo(() => {
                   <Text style={styles.label}>挑战名称:</Text>
                   <Text style={styles.value}>{matchDetail.name || '-'}</Text>
                 </View>
+              </View>
+              <View style={styles.infoColumn}>
+                <View style={styles.itemRow}>
+                  <Text style={styles.label}>记录人:</Text>
+                  <Text style={styles.value}>{matchDetail.docPersonName || '-'}</Text>
+                </View>
                 <View style={styles.itemRow}>
                   <Text style={styles.label}>投手名字:</Text>
                   <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
@@ -163,19 +169,18 @@ const styles = StyleSheet.create({
   },
   itemRow: {
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     flex: 1,
-    flexWrap: 'wrap',
     alignItems: 'center',
   },
   label: {
     fontSize: 14,
     color: '#666',
-    width: 70,
+    marginRight: 2,
   },
   value: {
     fontSize: 14,
     color: '#333',
-    flex: 1,
   },
   sectionTitle: {
     fontSize: 16,

@@ -18,7 +18,7 @@ import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 type GameScreenProps = RootStackScreenProps<'Game'>;
 
 export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }) => {
-  const { challengeName, operator, roundId } = route.params;
+  const { challengeName, operator, roundId, recorder } = route.params;
   const {
     currentChoice,
     setCurrentChoice,
@@ -102,7 +102,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
       <GameHeader title="挑战详情" navigation={navigation} />
 
       <View style={styles.content}>
-        <GameInfo gameName={challengeName} operator={operator} roundStats={roundStats} />
+        <GameInfo gameName={challengeName} operator={operator} recorder={recorder} roundStats={roundStats} />
 
         <GameRule
           handleBankerWin={handleBankerWin}

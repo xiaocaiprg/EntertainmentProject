@@ -12,6 +12,7 @@ export interface GameProps {
 export interface GameRouteParams {
   challengeName: string; // 挑战名称
   operator: string; // 操作员
+  recorder: string; // 记录人
   roundId: number; //场Id
   challengeId?: number; // 挑战ID（可选，仅在现有挑战时存在）
   isNewChallenge?: boolean; // 是否新挑战（可选）

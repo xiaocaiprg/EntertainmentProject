@@ -14,7 +14,7 @@ const initCache = async () => {
       memoryCache[TOKEN_KEY] = token;
     }
   } catch (error) {
-    console.error('初始化缓存失败:', error);
+    console.log('初始化缓存失败:', error);
   }
 };
 
@@ -29,7 +29,7 @@ export const setToken = async (token: string): Promise<void> => {
     // 持久化到AsyncStorage
     await AsyncStorage.setItem(TOKEN_KEY, token);
   } catch (error) {
-    console.error('存储Token失败:', error);
+    console.log('存储Token失败:', error);
   }
 };
 
@@ -37,7 +37,7 @@ export const setToken = async (token: string): Promise<void> => {
 export const setTokenSync = (token: string): void => {
   memoryCache[TOKEN_KEY] = token;
   // 后台异步保存，不等待完成
-  AsyncStorage.setItem(TOKEN_KEY, token).catch((error) => console.error('异步存储Token失败:', error));
+  AsyncStorage.setItem(TOKEN_KEY, token).catch((error) => console.log('异步存储Token失败:', error));
 };
 
 // 获取Token - 异步API (从AsyncStorage获取最新值)
@@ -50,7 +50,7 @@ export const getToken = async (): Promise<string | null> => {
     }
     return token;
   } catch (error) {
-    console.error('获取Token失败:', error);
+    console.log('获取Token失败:', error);
     return null;
   }
 };
@@ -68,7 +68,7 @@ export const clearToken = async (): Promise<void> => {
     // 从AsyncStorage中移除
     await AsyncStorage.removeItem(TOKEN_KEY);
   } catch (error) {
-    console.error('清除Token失败:', error);
+    console.log('清除Token失败:', error);
   }
 };
 
@@ -76,7 +76,7 @@ export const clearToken = async (): Promise<void> => {
 export const clearTokenSync = (): void => {
   delete memoryCache[TOKEN_KEY];
   // 后台异步删除
-  AsyncStorage.removeItem(TOKEN_KEY).catch((error) => console.error('异步清除Token失败:', error));
+  AsyncStorage.removeItem(TOKEN_KEY).catch((error) => console.log('异步清除Token失败:', error));
 };
 
 // 通用存储方法 - 异步API
@@ -85,14 +85,14 @@ export const setItem = async (key: string, value: string): Promise<void> => {
     memoryCache[key] = value;
     await AsyncStorage.setItem(key, value);
   } catch (error) {
-    console.error(`存储${key}失败:`, error);
+    console.log(`存储${key}失败:`, error);
   }
 };
 
 // 通用存储方法 - 同步API
 export const setItemSync = (key: string, value: string): void => {
   memoryCache[key] = value;
-  AsyncStorage.setItem(key, value).catch((error) => console.error(`异步存储${key}失败:`, error));
+  AsyncStorage.setItem(key, value).catch((error) => console.log(`异步存储${key}失败:`, error));
 };
 
 // 获取项 - 异步API
@@ -104,7 +104,7 @@ export const getItem = async (key: string): Promise<string | null> => {
     }
     return value;
   } catch (error) {
-    console.error(`获取${key}失败:`, error);
+    console.log(`获取${key}失败:`, error);
     return null;
   }
 };
@@ -120,14 +120,14 @@ export const removeItem = async (key: string): Promise<void> => {
     delete memoryCache[key];
     await AsyncStorage.removeItem(key);
   } catch (error) {
-    console.error(`删除${key}失败:`, error);
+    console.log(`删除${key}失败:`, error);
   }
 };
 
 // 移除项 - 同步API
 export const removeItemSync = (key: string): void => {
   delete memoryCache[key];
-  AsyncStorage.removeItem(key).catch((error) => console.error(`异步删除${key}失败:`, error));
+  AsyncStorage.removeItem(key).catch((error) => console.log(`异步删除${key}失败:`, error));
 };
 
 // 清除所有 - 异步API
@@ -138,14 +138,14 @@ export const clearAll = async (): Promise<void> => {
     // 清除AsyncStorage
     await AsyncStorage.clear();
   } catch (error) {
-    console.error('清除所有存储失败:', error);
+    console.log('清除所有存储失败:', error);
   }
 };
 
 // 清除所有 - 同步API
 export const clearAllSync = (): void => {
   Object.keys(memoryCache).forEach((key) => delete memoryCache[key]);
-  AsyncStorage.clear().catch((error) => console.error('异步清除所有存储失败:', error));
+  AsyncStorage.clear().catch((error) => console.log('异步清除所有存储失败:', error));
 };
 
 // 支持存储对象 - 异步API
@@ -155,7 +155,7 @@ export const setObject = async <T>(key: string, value: T): Promise<void> => {
     memoryCache[key] = jsonValue;
     await AsyncStorage.setItem(key, jsonValue);
   } catch (error) {
-    console.error(`存储对象${key}失败:`, error);
+    console.log(`存储对象${key}失败:`, error);
   }
 };
 
@@ -164,9 +164,9 @@ export const setObjectSync = <T>(key: string, value: T): void => {
   try {
     const jsonValue = JSON.stringify(value);
     memoryCache[key] = jsonValue;
-    AsyncStorage.setItem(key, jsonValue).catch((error) => console.error(`异步存储对象${key}失败:`, error));
+    AsyncStorage.setItem(key, jsonValue).catch((error) => console.log(`异步存储对象${key}失败:`, error));
   } catch (error) {
-    console.error(`序列化对象${key}失败:`, error);
+    console.log(`序列化对象${key}失败:`, error);
   }
 };
 
@@ -180,7 +180,7 @@ export const getObject = async <T>(key: string): Promise<T | null> => {
     }
     return null;
   } catch (error) {
-    console.error(`获取对象${key}失败:`, error);
+    console.log(`获取对象${key}失败:`, error);
     return null;
   }
 };
@@ -192,7 +192,7 @@ export const getObjectSync = <T>(key: string): T | null => {
     try {
       return JSON.parse(value) as T;
     } catch (e) {
-      console.error(`解析对象${key}失败:`, e);
+      console.log(`解析对象${key}失败:`, e);
       return null;
     }
   }
@@ -220,7 +220,7 @@ const getAllStoredData = async () => {
       console.log('No stored data found.');
     }
   } catch (error) {
-    console.error('Error fetching all stored data:', error);
+    console.log('Error fetching all stored data:', error);
   }
 };
 

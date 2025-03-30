@@ -47,7 +47,7 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
     //   }
     // } catch (error) {
     //   Alert.alert('错误', '注册过程中发生错误');
-    //   console.error(error);
+    //   console.log(error);
     // } finally {
     //   setLoading(false);
     // }

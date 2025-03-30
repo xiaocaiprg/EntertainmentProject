@@ -33,7 +33,7 @@ export const HomeScreen = React.memo(() => {
     () => [
       {
         id: 1,
-        image: 'http://85.31.225.25/image/head.png',
+        image: 'http://85.31.225.25/image/chess.jpg',
       },
     ],
     [],
@@ -144,6 +144,18 @@ export const HomeScreen = React.memo(() => {
       >
         {bannerContent()}
         <View style={styles.contentContainer}>{renderModules()}</View>
+        {!isLoggedIn && (
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => {
+              navigation.navigate('Auth', {
+                returnScreen: 'Home',
+              });
+            }}
+          >
+            <Text style={styles.loginButtonText}>去登录</Text>
+          </TouchableOpacity>
+        )}
       </Animated.ScrollView>
     </View>
   );
@@ -152,7 +164,7 @@ export const HomeScreen = React.memo(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: THEME_COLORS.background,
+    backgroundColor: '#fff',
   },
   header: {
     position: 'absolute',
@@ -174,7 +186,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: THEME_COLORS.primary,
   },
   headerTitle: {
     fontSize: 22,
@@ -241,5 +252,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 10,
+  },
+
+  loginButton: {
+    margin: 20,
+    backgroundColor: THEME_COLORS.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

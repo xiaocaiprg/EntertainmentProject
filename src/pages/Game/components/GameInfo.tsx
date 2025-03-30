@@ -4,11 +4,12 @@ import { RoundStats } from '../types';
 interface GameInfoProps {
   gameName: string;
   operator: string;
+  recorder: string;
   roundStats: RoundStats;
 }
 
 export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
-  const { gameName, operator, roundStats } = props;
+  const { gameName, operator, roundStats, recorder } = props;
   const {
     round,
     wins,
@@ -51,6 +52,7 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
         <Text style={styles.gameName} numberOfLines={1}>
           {gameName}
         </Text>
+        <Text style={styles.operator}>记录人: {recorder}</Text>
         <Text style={styles.operator}>投手: {operator}</Text>
       </View>
       <View style={styles.gridContainer}>
