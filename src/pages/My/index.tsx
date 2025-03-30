@@ -56,7 +56,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
           <View style={styles.avatarContainer}>
             <Image
               source={{
-                uri: 'http://85.31.225.25/image/avatar.png',
+                uri: 'https://i.postimg.cc/1tWgY8mR/user.jpg',
               }}
               style={styles.avatar}
             />

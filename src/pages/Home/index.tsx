@@ -33,7 +33,7 @@ export const HomeScreen = React.memo(() => {
     () => [
       {
         id: 1,
-        image: 'http://85.31.225.25/image/chess.jpg',
+        image: 'https://i.postimg.cc/h496xVGq/chess-3801531-640.jpg',
       },
     ],
     [],
