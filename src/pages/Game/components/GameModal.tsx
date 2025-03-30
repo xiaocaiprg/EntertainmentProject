@@ -13,6 +13,7 @@ interface GameModalProps {
   showCancelButton?: boolean;
   isFullWidthButton?: boolean;
   isSubmitting?: boolean;
+  message?: string;
 }
 
 export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
@@ -27,6 +28,7 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
     showCancelButton = true,
     isFullWidthButton = false,
     isSubmitting = false,
+    message,
   } = props;
   const handleCancel = useCallback(() => {
     if (onCancel) {
@@ -40,16 +42,19 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
   // 获取弹窗显示消息
   const getModalMessage = useCallback(() => {
     if (!currentChoice) {
-      return <Text>未知错误</Text>;
+      if (message) {
+        return <Text style={styles.modalMessage}>{message}</Text>;
+      }
+      return <Text style={styles.modalMessage}>未知错误</Text>;
     }
     return (
       <React.Fragment>
-        <Text>
+        <Text style={styles.modalMessage}>
           您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>，确认提交吗？
         </Text>
       </React.Fragment>
     );
-  }, [currentChoice]);
+  }, [currentChoice, message]);
   return (
     <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={handleCancel}>
       <View style={styles.modalOverlay}>

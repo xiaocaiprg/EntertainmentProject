@@ -131,38 +131,57 @@ export const useGameLogic = () => {
     }));
   }, []);
 
+  // 更新本场状态
+  const updateRound = useCallback(async () => {
+    if (!roundId) {
+      return false;
+    }
+    const res = await updateRoundStatus({
+      id: roundId,
+      isEnabled: 0,
+    });
+    if (res) {
+      setGameStatusModalInfo({
+        visible: true,
+        isGameOver: true,
+        title: '本场已结束',
+        confirmText: '返回首页',
+        nextRoundInfo: null,
+      });
+    } else {
+      setGameStatusModalInfo({
+        visible: true,
+        isGameOver: true,
+        title: '状态异常',
+        roundId: roundId,
+        confirmText: '返回首页',
+        nextRoundInfo: null,
+      });
+    }
+    return !!res;
+  }, [roundId]);
+
+  // 结束本场函数
+  const handleEndRound = useCallback(async () => {
+    if (!roundId) {
+      return;
+    }
+    setIsSubmitting(true);
+    await updateRound();
+    setIsSubmitting(false);
+  }, [roundId, updateRound]);
+
   // 处理游戏规则逻辑
   useEffect(() => {
     const handleGameLogic = async () => {
       if (gameStatus === 'finished') {
-        console.log('游戏状态为finished，轮次信息', roundStats);
+        console.log('游戏状态为finished,轮次信息', roundStats);
         // 检查是否游戏结束
         const isGameOverResult = isGameOver(roundStats);
         if (isGameOverResult) {
-          const res = await updateRoundStatus({
-            id: roundId,
-            isEnabled: 0,
-          });
-          // 显示游戏结束弹窗
-          if (res) {
-            setGameStatusModalInfo({
-              visible: true,
-              isGameOver: true,
-              title: '本场已结束',
-              confirmText: '返回首页',
-              nextRoundInfo: null,
-            });
-          } else {
-            setGameStatusModalInfo({
-              visible: true,
-              isGameOver: true,
-              title: '状态异常',
-              roundId: roundId,
-              confirmText: '返回首页',
-              nextRoundInfo: null,
-            });
-          }
-          return; // 游戏结束，不再继续
+          const updateSuccess = await updateRound();
+          console.log('结束本场结果', updateSuccess);
+          return;
         }
         // 是否进入下一轮
         if (shouldAdvanceToNextRound(roundStats, isGameOverResult)) {
@@ -225,7 +244,7 @@ export const useGameLogic = () => {
       }
     };
     handleGameLogic();
-  }, [gameStatus, roundId, roundStats]);
+  }, [gameStatus, roundId, roundStats, updateRound]);
 
   return {
     gameStatus,
@@ -248,5 +267,6 @@ export const useGameLogic = () => {
     gameStatusModalInfo,
     confirmGameStatus,
     isSubmitting,
+    handleEndRound,
   };
 };
