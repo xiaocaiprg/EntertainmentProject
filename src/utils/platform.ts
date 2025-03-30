@@ -5,7 +5,7 @@ import { Platform, StatusBar, Dimensions } from 'react-native';
  * @returns {number} 状态栏高度
  */
 const getStatusBarHeight = (): number => {
-  return Platform.OS === 'ios' ? 44 : StatusBar.currentHeight || 0;
+  return Platform.OS === 'ios' ? 44 : StatusBar.currentHeight || 28;
 };
 export const STATUS_BAR_HEIGHT = getStatusBarHeight();
 

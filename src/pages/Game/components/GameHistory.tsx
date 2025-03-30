@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { HistoryRecord } from '../types';
-import { groupRecordsByRound } from '../utils/historyHelper';
+import { groupRecordsByRound, getChoiceDisplayText } from '../utils/historyHelper';
 
 interface GameHistoryProps {
   historyRecords: HistoryRecord[];
@@ -36,10 +36,9 @@ export const GameHistory: React.FC<GameHistoryProps> = React.memo(({ historyReco
               {groupedRecords[round].map((record) => (
                 <View key={`record-${record.id}`} style={styles.recordItem}>
                   <Text style={styles.betAmountText}>押注：{record.betAmount}</Text>
-                  <Text style={[styles.resultText, record.isWin ? styles.winText : styles.loseText]}>
-                    {record.result}
+                  <Text style={[styles.choiceText, record.isWin ? styles.winText : styles.loseText]}>
+                    {getChoiceDisplayText(record.choice)}
                   </Text>
-                  {/* <Text style={styles.choiceText}>{getChoiceDisplayText(record.choice as BetChoice)}</Text> */}
                   <Text style={styles.timeText}>{record.time}</Text>
                 </View>
               ))}
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 8,
     textAlign: 'left',
     color: '#333',
   },

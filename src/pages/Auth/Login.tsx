@@ -25,7 +25,7 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = React.memo((props) => {
   const { navigation, route } = props;
-  const [username, setUsername] = useState('');
+  const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -35,12 +35,12 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
   const returnParams = route?.params?.params;
 
   const handleLogin = useCallback(async () => {
-    if (!username || !password) {
+    if (!code || !password) {
       Alert.alert('提示', '请输入用户名和密码');
       return;
     }
     setLoading(true);
-    const success = await login({ username, password });
+    const success = await login({ code, password });
     if (success) {
       if (returnScreen) {
         navigation.navigate(returnScreen, returnParams);
@@ -51,10 +51,10 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
       Alert.alert('登录失败', '用户名或密码错误');
     }
     setLoading(false);
-  }, [username, password, login, navigation, returnScreen, returnParams]);
+  }, [code, password, login, navigation, returnScreen, returnParams]);
 
   const handleUsernameChange = useCallback((text: string) => {
-    setUsername(text);
+    setCode(text);
   }, []);
 
   const handlePasswordChange = useCallback((text: string) => {
@@ -85,9 +85,9 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
                 <Icon name="person" size={20} color="#6c5ce7" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
-                  placeholder="用户名"
+                  placeholder="用户编号"
                   placeholderTextColor="#95a5a6"
-                  value={username}
+                  value={code}
                   onChangeText={handleUsernameChange}
                   autoCapitalize="none"
                 />

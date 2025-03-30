@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
-import DropdownSelect from './DropdownSelect';
+import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
+import DropdownSelect from '../../../components/DropdownSelect';
 import { THEME_COLORS } from '../../../utils/styles';
 import { GameMatchDto, GameRoundDto } from '../../../interface/Game';
 import { getRoundList } from '../../../api/services/gameService';
@@ -93,33 +93,37 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
         return <Text style={styles.emptyText}>暂无场次记录</Text>;
       }
 
-      return (
-        <ScrollView style={styles.roundsList}>
-          {sortedRounds.map((round) => {
-            const isActive = round.isEnabled === 1;
-            return (
-              <View style={styles.roundItem} key={round.id}>
-                <View style={styles.roundInfo}>
-                  <Text style={styles.roundName}>{`场次${round.orderNumber || ''}`}</Text>
-                  <View style={[styles.statusBadge, isActive ? styles.activeBadge : styles.inactiveBadge]}>
-                    <Text style={[styles.statusBadgeText, isActive ? styles.activeText : styles.inactiveText]}>
-                      {isActive ? '进行中' : '已结束'}
-                    </Text>
-                  </View>
-                </View>
-                {round.playPersonName && <Text style={styles.roundDetail}>玩家: {round.playPersonName}</Text>}
-                {round.address && <Text style={styles.roundDetail}>地址: {round.address}</Text>}
+      const renderItem = (item: GameRoundDto) => {
+        const isActive = item.isEnabled === 1;
+        return (
+          <View style={styles.roundItem}>
+            <View style={styles.roundInfo}>
+              <Text style={styles.roundName}>{`场次${item.orderNumber || ''}`}</Text>
+              <View style={[styles.statusBadge, isActive ? styles.activeBadge : styles.inactiveBadge]}>
+                <Text style={[styles.statusBadgeText, isActive ? styles.activeText : styles.inactiveText]}>
+                  {isActive ? '进行中' : '已结束'}
+                </Text>
               </View>
-            );
-          })}
-        </ScrollView>
+            </View>
+            {item.playPersonName && <Text style={styles.roundDetail}>玩家: {item.playPersonName}</Text>}
+            {item.addressName && <Text style={styles.roundDetail}>地址: {item.addressName}</Text>}
+          </View>
+        );
+      };
+
+      return (
+        <FlatList
+          data={sortedRounds}
+          renderItem={({ item }) => renderItem(item)}
+          keyExtractor={(item) => item.id?.toString() || new Date().getTime().toString()}
+          style={styles.roundsList}
+        />
       );
     }, [loading, sortedRounds]);
 
     return (
       <View style={styles.formContainer}>
         <DropdownSelect
-          title="选择挑战"
           options={challenges}
           selectedValue={selectedChallengeId}
           placeholder="请选择挑战"

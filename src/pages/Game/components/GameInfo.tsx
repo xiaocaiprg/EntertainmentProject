@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RoundStats } from '../types';
-
 interface GameInfoProps {
   gameName: string;
   operator: string;
@@ -10,7 +9,19 @@ interface GameInfoProps {
 
 export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
   const { gameName, operator, roundStats } = props;
-  const { round, wins, losses, gamesPlayed, maxGames, isFirstRound, betAmount } = roundStats;
+  const {
+    round,
+    wins,
+    losses,
+    gamesPlayed,
+    maxGames,
+    isFirstRound,
+    betAmount,
+    roundProfitStr,
+    roundTurnOverStr,
+    challengeProfitStr,
+    challengeTurnOverStr,
+  } = roundStats;
   // 获取轮次描述
   const getRoundDescription = () => {
     if (isFirstRound) {
@@ -20,43 +31,75 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
     }
   };
 
+  // 判断上下水是正数还是负数来决定颜色
+  const getProfitColor = (profitStr: string): string => {
+    if (!profitStr) {
+      return '#333';
+    } // 默认颜色
+
+    // 如果以负号开头，显示红色
+    if (profitStr.startsWith('-')) {
+      return '#e74c3c'; // 红色
+    }
+    // 如果是正数或0，显示绿色（0也显示为绿色）
+    return '#27ae60'; // 绿色
+  };
+
   return (
     <View style={styles.infoContainer}>
-      <View style={styles.infoHeader}>
+      <View style={styles.header}>
         <Text style={styles.gameName} numberOfLines={1}>
           {gameName}
         </Text>
-        <Text style={styles.operator}>操作者: {operator}</Text>
+        <Text style={styles.operator}>投手: {operator}</Text>
       </View>
-
-      <View style={styles.statsContainer}>
-        <View style={styles.statItem}>
-          <Text style={styles.statLabel}>当前轮次</Text>
-          <Text style={styles.statValue}>{getRoundDescription()}</Text>
-        </View>
-
-        <View style={styles.statItem}>
-          <Text style={styles.statLabel}>押注金额</Text>
-          <Text style={styles.statValue}>{betAmount}元</Text>
-        </View>
-
-        <View style={styles.flexRow}>
-          <View style={styles.statItemHalf}>
-            <Text style={styles.statLabel}>赢</Text>
-            <Text style={[styles.statValue, styles.winValue]}>{wins}</Text>
+      <View style={styles.gridContainer}>
+        <View style={styles.infoLine}>
+          <View style={styles.infoLineItem}>
+            <Text style={styles.label}>本挑战上下水:</Text>
+            <Text style={[styles.value, { color: getProfitColor(challengeProfitStr) }]}>{challengeProfitStr}</Text>
           </View>
-
-          <View style={styles.statItemHalf}>
-            <Text style={styles.statLabel}>输</Text>
-            <Text style={[styles.statValue, styles.loseValue]}>{losses}</Text>
+          <View style={styles.infoLineItem}>
+            <Text style={styles.label}>本挑战转码:</Text>
+            <Text style={styles.value}>{challengeTurnOverStr}</Text>
           </View>
         </View>
+        <View style={styles.infoLine}>
+          <View style={styles.infoLineItem}>
+            <Text style={styles.label}>本场上下水:</Text>
+            <Text style={[styles.value, { color: getProfitColor(roundProfitStr) }]}>{roundProfitStr}</Text>
+          </View>
+          <View style={styles.infoLineItem}>
+            <Text style={styles.label}>本场转码:</Text>
+            <Text style={styles.value}>{roundTurnOverStr}</Text>
+          </View>
+        </View>
+        <View style={styles.infoRow}>
+          <View style={styles.infoItem}>
+            <Text style={styles.label}>当前轮次:</Text>
+            <Text style={styles.value}>{getRoundDescription()}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.label}>押注金额:</Text>
+            <Text style={styles.value}>{betAmount}元</Text>
+          </View>
+        </View>
+        <View style={styles.infoRow}>
+          <View style={styles.infoItem}>
+            <Text style={styles.label}>赢:</Text>
+            <Text style={[styles.value, styles.winValue]}>{wins}</Text>
+          </View>
 
-        <View style={styles.statItem}>
-          <Text style={styles.statLabel}>进度</Text>
-          <Text style={styles.statValue}>
-            {gamesPlayed} / {maxGames === Infinity ? '∞' : maxGames}
-          </Text>
+          <View style={styles.infoItem}>
+            <Text style={styles.label}>输:</Text>
+            <Text style={[styles.value, styles.loseValue]}>{losses}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.label}>进度:</Text>
+            <Text style={styles.value}>
+              {gamesPlayed} / {maxGames === Infinity ? '∞' : maxGames}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -66,64 +109,71 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
 const styles = StyleSheet.create({
   infoContainer: {
     backgroundColor: '#fff',
-    marginTop: 10,
-    marginHorizontal: 15,
-    borderRadius: 10,
-    padding: 12,
+    marginTop: 6,
+    marginHorizontal: 10,
+    borderRadius: 6,
+    padding: 8,
     borderWidth: 1,
     borderColor: '#e0e0e0',
   },
-  infoHeader: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
-    paddingBottom: 8,
+    marginBottom: 6,
+    paddingBottom: 4,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
   gameName: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     color: '#333',
     maxWidth: '65%',
   },
   operator: {
-    fontSize: 14,
-    color: '#666',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  statItem: {
-    width: '48%',
-    marginBottom: 10,
-    padding: 8,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 6,
-  },
-  flexRow: {
-    width: '48%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  statItemHalf: {
-    width: '48%',
-    marginBottom: 10,
-    padding: 8,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 6,
-  },
-  statLabel: {
     fontSize: 12,
     color: '#666',
-    marginBottom: 4,
   },
-  statValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  gridContainer: {
+    flexDirection: 'column',
+  },
+  infoRow: {
+    flexDirection: 'row',
+    marginBottom: 4,
+    justifyContent: 'space-between',
+  },
+  infoLine: {
+    flexDirection: 'row',
+    marginBottom: 4,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    padding: 4,
+    borderRadius: 3,
+  },
+  infoLineItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  infoItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    padding: 4,
+    borderRadius: 3,
+    marginRight: 3,
+  },
+  label: {
+    fontSize: 13,
+    color: '#666',
+    marginRight: 2,
+  },
+  value: {
+    fontSize: 13,
+    fontWeight: '500',
     color: '#333',
   },
   winValue: {

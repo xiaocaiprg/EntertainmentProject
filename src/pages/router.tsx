@@ -7,9 +7,12 @@ import { MyScreen } from './My/index';
 // import { TournamentScreen } from './Tournament/index';
 import { AuthScreen } from './Auth/AuthScreen';
 import { Game } from './Game/index';
-import { ChallengeSelectScreen } from './ChallengeSelect/index';
+import { NewChallengeScreen } from './NewChallenge/index';
+import { ExistingChallengeScreen } from './ExistingChallenge/index';
 import { GameHistory } from './GameHistory/index';
 import { ChallengeDetail } from './ChallengeDetail/index';
+import { CompletedFundingChallengeScreen } from './CompletedFundingChallenge/index';
+import { AllChallengeScreen } from './AllChallenge/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -23,9 +26,12 @@ type RootStackParamList = {
   Main: undefined;
   Auth: undefined;
   Game: GameRouteParams;
-  ChallengeSelect: undefined;
+  NewChallenge: undefined;
+  ExistingChallenge: undefined;
   GameHistory: undefined;
   ChallengeDetail: { matchId: number };
+  AllChallenge: undefined;
+  CompletedFundingChallenge: undefined;
 };
 
 // 通用导航类型
@@ -93,9 +99,12 @@ function AppNavigator() {
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen name="Auth" component={AuthScreen} />
             <Stack.Screen name="Game" component={Game} />
-            <Stack.Screen name="ChallengeSelect" component={ChallengeSelectScreen} />
+            <Stack.Screen name="NewChallenge" component={NewChallengeScreen} />
+            <Stack.Screen name="ExistingChallenge" component={ExistingChallengeScreen} />
             <Stack.Screen name="GameHistory" component={GameHistory} />
             <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
+            <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
+            <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
           </Stack.Navigator>
         </AuthProvider>
       </NavigationContainer>

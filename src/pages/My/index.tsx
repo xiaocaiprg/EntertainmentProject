@@ -62,8 +62,8 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
             />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.username || 'Ika Puspita Sari'}</Text>
-            <Text style={styles.userHandle}>@{user?.username || 'ikapuspitasari8'}</Text>
+            <Text style={styles.userName}>{user?.name || 'Ika Puspita Sari'}</Text>
+            <Text style={styles.userHandle}>@{user?.name || 'ikapuspitasari8'}</Text>
           </View>
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress}>
             <Icon name="exit-to-app" size={24} color="#fff" />

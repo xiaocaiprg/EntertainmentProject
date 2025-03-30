@@ -23,13 +23,13 @@ interface RegisterProps {
 }
 
 export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onToggleMode }) => {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRegister = useCallback(async () => {
-    if (!username || !password || !confirmPassword) {
+    if (!name || !password || !confirmPassword) {
       Alert.alert('提示', '请填写所有字段');
       return;
     }
@@ -41,7 +41,7 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
 
     setLoading(true);
     // try {
-    //   const success = await register(username, password);
+    //   const success = await register(name, password);
     //   if (!success) {
     //     Alert.alert('注册失败', '用户名可能已被占用');
     //   }
@@ -51,10 +51,10 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
     // } finally {
     //   setLoading(false);
     // }
-  }, [username, password, confirmPassword]);
+  }, [name, password, confirmPassword]);
 
   const handleUsernameChange = useCallback((text: string) => {
-    setUsername(text);
+    setName(text);
   }, []);
 
   const handlePasswordChange = useCallback((text: string) => {
@@ -91,7 +91,7 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
                   style={styles.input}
                   placeholder="用户名"
                   placeholderTextColor="#95a5a6"
-                  value={username}
+                  value={name}
                   onChangeText={handleUsernameChange}
                   autoCapitalize="none"
                 />
