@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 15,
     marginTop: 10,
-    marginHorizontal: 15,
+    marginHorizontal: 10,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#e0e0e0',
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   betOption: {
     alignItems: 'center',
-    width: '95%',
+    width: '100%',
     padding: 12,
     borderRadius: 10,
     borderWidth: 2,

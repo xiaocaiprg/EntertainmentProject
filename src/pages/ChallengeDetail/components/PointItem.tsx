@@ -19,9 +19,9 @@ export const PointItem = React.memo((props: PointItemProps) => {
             inning.result === 1 ? styles.winText : inning.result === 2 ? styles.loseText : {},
           ]}
         >
-          {inning.result === 1 ? '赢' : inning.result === 2 ? '输' : '-'}
+          {inning.result === 1 ? '+' : inning.result === 2 ? '-' : ''}
         </Text>
-        {/* <Text style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</Text> */}
+        <Text style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</Text>
       </View>
     );
   }, []);
@@ -30,7 +30,6 @@ export const PointItem = React.memo((props: PointItemProps) => {
     <View style={styles.pointItem}>
       <Text style={styles.pointLable}>第{point.eventNum}轮:</Text>
       <Text style={styles.pointLable}>押注:{point.betNumber}</Text>
-
       {point.gameInningDtoList && point.gameInningDtoList.length > 0 && (
         <View style={styles.inningContainer}>{point.gameInningDtoList.map(renderInning)}</View>
       )}
@@ -41,10 +40,10 @@ export const PointItem = React.memo((props: PointItemProps) => {
 const styles = StyleSheet.create({
   pointItem: {
     flexDirection: 'row',
-    alignContent: 'space-evenly',
+    alignItems: 'center',
     backgroundColor: '#f9f9f9',
     borderRadius: 6,
-    padding: 8,
+    paddingHorizontal: 8,
     marginBottom: 6,
     borderWidth: 0.5,
     borderColor: '#eaeaea',
@@ -52,17 +51,18 @@ const styles = StyleSheet.create({
   pointLable: {
     fontSize: 12,
     color: '#777',
-    marginRight: 3,
+    marginRight: 4,
   },
   inningContainer: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginTop: 2,
   },
   inningItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 4,
+    marginRight: 8,
     marginBottom: 4,
   },
   inningLabel: {
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   inningResult: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: '700',
   },
   winText: {
     color: '#4caf50',

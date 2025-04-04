@@ -12,6 +12,7 @@ export interface GameProps {
 export interface GameRouteParams {
   challengeName: string; // 挑战名称
   operator: string; // 操作员
+  recorder: string; // 记录人
   roundId: number; //场Id
   challengeId?: number; // 挑战ID（可选，仅在现有挑战时存在）
   isNewChallenge?: boolean; // 是否新挑战（可选）
@@ -25,10 +26,10 @@ export enum BetChoice {
   PLAYER_LOSE = 'player_lose',
 }
 export const BetChoiceMap = {
-  [BetChoice.BANKER_WIN]: '庄赢',
-  [BetChoice.BANKER_LOSE]: '庄输',
-  [BetChoice.PLAYER_WIN]: '闲赢',
-  [BetChoice.PLAYER_LOSE]: '闲输',
+  [BetChoice.BANKER_WIN]: '+(庄)',
+  [BetChoice.BANKER_LOSE]: '-(庄)',
+  [BetChoice.PLAYER_WIN]: '+(闲)',
+  [BetChoice.PLAYER_LOSE]: '-(闲)',
 };
 export const BankerOrPlayerMap = {
   [BetChoice.BANKER_WIN]: 1, // 庄
@@ -55,6 +56,7 @@ export interface GameStatusModalInfo {
   title: string;
   confirmText: string;
   nextRoundInfo: NextRoundInfo | null;
+  roundId?: number;
 }
 
 /**
