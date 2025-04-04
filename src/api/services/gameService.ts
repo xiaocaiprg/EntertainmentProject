@@ -74,8 +74,8 @@ export const roundCreate = (params: RoundCreateParams): Promise<string> => {
     }
   });
 };
-export const inningCreate = (params: InningCreateParams): Promise<string | null> => {
-  return post<ApiResponse<string>>(PATH.INNING_CREATE, params)
+export const inningCreate = (params: InningCreateParams): Promise<GameRoundDto | null> => {
+  return post<ApiResponse<GameRoundDto>>(PATH.INNING_CREATE, params)
     .then((res) => {
       if (res.code === 200) {
         return res.data;

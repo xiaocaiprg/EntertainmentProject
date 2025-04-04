@@ -1,6 +1,6 @@
 import { HistoryRecord, BetChoice, BetChoiceMap } from '../types';
 import { GameInningDto, GamePointDto, GameRoundDto } from '../../../interface/Game';
-import { formatDate } from '../../../utils/date';
+
 /**
  * 生成当前时间字符串
  * @returns {string} 格式化的时间字符串
@@ -95,7 +95,7 @@ export const convertToHistoryRecords = (roundData: GameRoundDto): HistoryRecord[
         }
         // 创建历史记录对象
         allRecords.push({
-          id: inning.id || roundIndex * 100 + inningIndex,
+          id: inning.id,
           time: inning.createTime || '', // 只显示时间部分
           result: isWin ? '赢' : '输',
           round: round, // 使用计算出的轮次

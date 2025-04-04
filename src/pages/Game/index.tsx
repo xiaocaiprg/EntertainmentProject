@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, StatusBar, View } from 'react-native';
 import { GameHeader } from './components/GameHeader';
 import { GameInfo } from './components/GameInfo';
@@ -6,6 +6,7 @@ import { GameRule } from './components/GameRule';
 import { GameModal } from './components/GameModal';
 import { GameStatusModal } from './components/GameStatusModal';
 import { GameHistory } from './components/GameHistory';
+import { GameActions } from './components/GameActions';
 import { useGameLogic } from './hooks/useGameLogic';
 import { BetChoice } from './types';
 import { getRoundDetail } from '../../api/services/gameService';
@@ -17,7 +18,7 @@ import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 type GameScreenProps = RootStackScreenProps<'Game'>;
 
 export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }) => {
-  const { challengeName, operator, roundId } = route.params;
+  const { challengeName, operator, roundId, recorder } = route.params;
   const {
     currentChoice,
     setCurrentChoice,
@@ -36,7 +37,11 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     setGameStatus,
     setGameNumber,
     isSubmitting,
+    handleEndRound,
   } = useGameLogic();
+
+  // 添加结束本场确认弹窗状态
+  const [endRoundModalVisible, setEndRoundModalVisible] = useState(false);
 
   useEffect(() => {
     setRoundId(roundId);
@@ -85,6 +90,11 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     setConfirmModalVisible(true);
   }, [handlePlayerChange, setConfirmModalVisible, setCurrentChoice]);
 
+  // 打开结束本场确认弹窗
+  const handleOpenEndRoundModal = useCallback(() => {
+    setEndRoundModalVisible(true);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -92,7 +102,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
       <GameHeader title="挑战详情" navigation={navigation} />
 
       <View style={styles.content}>
-        <GameInfo gameName={challengeName} operator={operator} roundStats={roundStats} />
+        <GameInfo gameName={challengeName} operator={operator} recorder={recorder} roundStats={roundStats} />
 
         <GameRule
           handleBankerWin={handleBankerWin}
@@ -100,6 +110,9 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
           handlePlayerWin={handlePlayerWin}
           handlePlayerLose={handlePlayerLose}
         />
+
+        {/* 使用新的操作区域组件 */}
+        <GameActions onEndRound={handleOpenEndRoundModal} />
 
         <View style={styles.historyWrapper}>
           <GameHistory historyRecords={historyRecords} />
@@ -115,6 +128,21 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
         onCancel={() => setConfirmModalVisible(false)}
         onConfirm={() => continueGame()}
         confirmText="确认"
+      />
+
+      {/* 结束本场确认弹窗 */}
+      <GameModal
+        visible={endRoundModalVisible}
+        title="确认结束本场"
+        isSubmitting={isSubmitting}
+        currentChoice={undefined}
+        onCancel={() => setEndRoundModalVisible(false)}
+        onConfirm={async () => {
+          await handleEndRound();
+          setEndRoundModalVisible(false);
+        }}
+        confirmText="确认结束"
+        message="是否确认结束本场次？结束后将无法继续进行。"
       />
 
       {/* 游戏状态弹窗（包含轮次结束和游戏结束） */}

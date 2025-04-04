@@ -67,7 +67,7 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="default" backgroundColor="#6c5ce7" />
+      <StatusBar barStyle="default" />
       <KeyboardAvoidingView behavior={isIOS() ? 'padding' : 'height'} style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>

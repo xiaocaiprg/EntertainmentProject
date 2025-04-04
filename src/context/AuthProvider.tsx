@@ -51,7 +51,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoggedIn(true);
       return true;
     } catch (error) {
-      console.error('登录失败:', error);
       return false;
     }
   };
@@ -65,7 +64,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(null);
       setIsLoggedIn(false);
     } catch (error) {
-      console.error('退出登录失败:', error);
+      console.log('退出登录失败:', error);
     }
   };
 

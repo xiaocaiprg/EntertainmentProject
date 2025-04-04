@@ -47,7 +47,7 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
     //   }
     // } catch (error) {
     //   Alert.alert('错误', '注册过程中发生错误');
-    //   console.error(error);
+    //   console.log(error);
     // } finally {
     //   setLoading(false);
     // }
@@ -71,7 +71,7 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="default" backgroundColor="#6c5ce7" />
+      <StatusBar barStyle="default" />
       <KeyboardAvoidingView behavior={isIOS() ? 'padding' : 'height'} style={styles.container}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>

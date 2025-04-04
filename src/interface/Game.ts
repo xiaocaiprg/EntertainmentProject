@@ -99,7 +99,7 @@ export interface GameInningDto {
   betNumber?: number;
   createTime?: string;
   eventNum?: number;
-  id?: number;
+  id: number;
   isDealer?: number; // 是否庄家：1庄2闲
   orderNumber?: number;
   result?: number; // 结果：1赢2输
