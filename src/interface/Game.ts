@@ -69,7 +69,7 @@ export interface GameRoundDto {
   docPersonCode?: string;
   docPersonName?: string;
   gamePointDtoList?: GamePointDto[];
-  id?: number;
+  id: number;
   investPersonCode?: string;
   investPersonName?: string;
   isEnabled: number;
@@ -88,6 +88,7 @@ export interface GameRoundDto {
   totalTurnOverStr: string;
   turnOver: number;
   turnOverStr: string;
+  gameInningDto: GameInningDto;
 }
 export interface GamePointDto {
   betNumber: number;
@@ -132,7 +133,7 @@ export interface InningCreateParams {
   roundId?: number;
 }
 
-export interface UpdateRoundStatusParams {
+export interface UpdateStatusParams {
   id: number;
   isEnabled: number;
 }

@@ -9,11 +9,11 @@ import { GameHistory } from './components/GameHistory';
 import { GameActions } from './components/GameActions';
 import { useGameLogic } from './hooks/useGameLogic';
 import { BetChoice } from './types';
-import { getRoundDetail } from '../../api/services/gameService';
-import { convertToHistoryRecords } from './utils/historyHelper';
-import { updateGameStats } from './utils/gameLogic';
+import { getRoundDetail, deleteInning } from '../../api/services/gameService';
 import { RootStackScreenProps } from '../router';
+import { updateGameStats } from './utils/gameLogic';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
+import { convertToHistoryRecords } from './utils/historyHelper';
 // 使用导航栈中定义的类型
 type GameScreenProps = RootStackScreenProps<'Game'>;
 
@@ -30,6 +30,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     confirmModalVisible,
     setConfirmModalVisible,
     gameStatusModalInfo,
+    setGameStatusModalInfo,
     confirmGameStatus,
     setRoundId,
     historyRecords,
@@ -37,11 +38,14 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     setGameStatus,
     setGameNumber,
     isSubmitting,
+    setIsSubmitting,
     handleEndRound,
   } = useGameLogic();
 
   // 添加结束本场确认弹窗状态
   const [endRoundModalVisible, setEndRoundModalVisible] = useState(false);
+  // 添加删除上一局确认弹窗状态
+  const [deleteLastInningModalVisible, setDeleteLastInningModalVisible] = useState(false);
 
   useEffect(() => {
     setRoundId(roundId);
@@ -49,13 +53,12 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
       // 加载场次详情数据
       getRoundDetail(roundId).then((roundData) => {
         if (roundData) {
-          const records = convertToHistoryRecords(roundData);
+          const records = convertToHistoryRecords(roundData).reverse();
           setHistoryRecords(records);
           const updatedStats = updateGameStats(roundData);
           setRoundStats(updatedStats);
           setGameStatus('finished');
           setGameNumber(records.length + 1);
-          console.log('加载历史数据完成，游戏统计:', updatedStats);
         }
       });
     }
@@ -95,6 +98,63 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     setEndRoundModalVisible(true);
   }, []);
 
+  // 打开删除上一局确认弹窗
+  const handleOpenDeleteLastInningModal = useCallback(() => {
+    if (historyRecords.length === 0) {
+      setGameStatusModalInfo({
+        visible: true,
+        isGameOver: false,
+        title: '无可删除的历史记录',
+        confirmText: '确认',
+        nextRoundInfo: null,
+      });
+      return;
+    }
+    setDeleteLastInningModalVisible(true);
+  }, [historyRecords.length, setGameStatusModalInfo]);
+
+  // 处理删除上一局
+  const handleDeleteLastInning = useCallback(async () => {
+    try {
+      setIsSubmitting(true);
+      // 因为历史记录已经倒序排列，所以最后一局就是第一项
+      const lastInning = historyRecords[0];
+      const inningId = lastInning.id;
+      await deleteInning(inningId);
+      // 更新历史记录（删除第一项，即最后一局）
+      const updatedRecords = historyRecords.slice(1);
+      setHistoryRecords(updatedRecords);
+
+      // 更新游戏状态
+      if (roundId) {
+        const roundData = await getRoundDetail(roundId);
+        if (roundData) {
+          const updatedStats = updateGameStats(roundData);
+          setRoundStats(updatedStats);
+        }
+      }
+
+      setGameStatusModalInfo({
+        visible: true,
+        isGameOver: false,
+        title: '删除成功',
+        confirmText: '确认',
+        nextRoundInfo: null,
+      });
+    } catch (error) {
+      setGameStatusModalInfo({
+        visible: true,
+        isGameOver: false,
+        title: '删除失败, 请再试一次',
+        confirmText: '确认',
+        nextRoundInfo: null,
+      });
+    } finally {
+      setIsSubmitting(false);
+      setDeleteLastInningModalVisible(false);
+    }
+  }, [historyRecords, roundId, setHistoryRecords, setRoundStats, setGameStatusModalInfo, setIsSubmitting]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -111,8 +171,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
           handlePlayerLose={handlePlayerLose}
         />
 
-        {/* 使用新的操作区域组件 */}
-        <GameActions onEndRound={handleOpenEndRoundModal} />
+        <GameActions onEndRound={handleOpenEndRoundModal} onDeleteLastInning={handleOpenDeleteLastInningModal} />
 
         <View style={styles.historyWrapper}>
           <GameHistory historyRecords={historyRecords} />
@@ -142,7 +201,19 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
           setEndRoundModalVisible(false);
         }}
         confirmText="确认结束"
-        message="是否确认结束本场次？结束后将无法继续进行。"
+        message="是否确认结束本场？结束后将无法继续,请谨慎操作。"
+      />
+
+      {/* 删除上一局确认弹窗 */}
+      <GameModal
+        visible={deleteLastInningModalVisible}
+        title="确认删除"
+        isSubmitting={isSubmitting}
+        currentChoice={undefined}
+        onCancel={() => setDeleteLastInningModalVisible(false)}
+        onConfirm={handleDeleteLastInning}
+        confirmText="确认删除"
+        message="是否删除上一把？删除后不可恢复,请谨慎操作。"
       />
 
       {/* 游戏状态弹窗（包含轮次结束和游戏结束） */}

@@ -8,7 +8,7 @@ import {
   RoundCreateParams,
   InningCreateParams,
   GameRoundDto,
-  UpdateRoundStatusParams,
+  UpdateStatusParams,
   GameMatchDto,
   PageDtoAddressInfo,
   QueryParams,
@@ -18,16 +18,18 @@ import { ApiResponse } from '../../interface/IModuleProps';
 
 const PATH = {
   USER_LIST: 'haiyang/business/page',
-  CHALLENGE_LIST: 'haiyang/match/page',
-  CHALLENGE_CREATE: 'haiyang/match/create',
+  ADDRESS_LIST: 'haiyang/addressInfo/page',
   ROUND_CREATE: 'haiyang/round/create',
-  INNING_CREATE: 'haiyang/inning/create',
   ROUND_LIST: 'haiyang/round/list',
   ROUND_DETAIL: 'haiyang/round/',
   ROUND_UPDATE: 'haiyang/round/updateStatus',
+  INNING_CREATE: 'haiyang/inning/create',
+  INNING_DELETE: 'haiyang/inning/delete',
   MATCH_DETAIL: 'haiyang/match/',
-  ADDRESS_LIST: 'haiyang/addressInfo/page',
+  CHALLENGE_LIST: 'haiyang/match/page',
+  CHALLENGE_CREATE: 'haiyang/match/create',
   MATCH_UPDATE_DOC_PERSON: 'haiyang/match/updataDocPerson',
+  MATCH_UPDATE_STATUS: 'haiyang/match/updateStatus',
 };
 
 export const getOperatorList = (params: UserRecordParams): Promise<RecorderList | null> => {
@@ -88,7 +90,7 @@ export const inningCreate = (params: InningCreateParams): Promise<GameRoundDto |
     });
 };
 export const getRoundList = (matchId: number): Promise<GameRoundDto[] | null> => {
-  return post<ApiResponse<GameRoundDto[]>>(PATH.ROUND_LIST, { matchId })
+  return post<ApiResponse<GameRoundDto[]>>(PATH.ROUND_LIST, { matchId: matchId })
     .then((res) => {
       if (res.code === 200) {
         return res.data;
@@ -113,7 +115,7 @@ export const getRoundDetail = (roundId: number): Promise<GameRoundDto | null> =>
       return null;
     });
 };
-export const updateRoundStatus = (params: UpdateRoundStatusParams): Promise<GameMatchDto | null> => {
+export const updateRoundStatus = (params: UpdateStatusParams): Promise<GameMatchDto | null> => {
   return post<ApiResponse<GameMatchDto>>(PATH.ROUND_UPDATE, params)
     .then((res) => {
       if (res.code === 200) {
@@ -169,6 +171,28 @@ export const getRecorderList = (params: UserRecordParams): Promise<RecorderList 
 };
 export const updateMatchDocPerson = (params: UpdateMatchDocPersonParams): Promise<string> => {
   return post<ApiResponse<string>>(PATH.MATCH_UPDATE_DOC_PERSON, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
+};
+export const updateMatchStatus = (params: UpdateStatusParams): Promise<GameMatchDto | null> => {
+  return post<ApiResponse<GameMatchDto>>(PATH.MATCH_UPDATE_STATUS, params)
+    .then((res) => {
+      if (res.code === 200) {
+        return res.data;
+      } else {
+        throw new Error(res.msg);
+      }
+    })
+    .catch(() => {
+      return null;
+    });
+};
+export const deleteInning = (inningId: number): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.INNING_DELETE, { id: inningId }).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {
