@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '../context/AuthProvider';
+import { RoleProvider } from '../context/RoleContext';
 import { isIOS } from '../utils/platform';
 import { THEME_COLORS } from '../utils/styles';
 import { GameRouteParams } from './Game/types';
@@ -95,17 +96,19 @@ function AppNavigator() {
     <SafeAreaProvider>
       <NavigationContainer>
         <AuthProvider>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Main" component={MainTabs} />
-            <Stack.Screen name="Auth" component={AuthScreen} />
-            <Stack.Screen name="Game" component={Game} />
-            <Stack.Screen name="NewChallenge" component={NewChallengeScreen} />
-            <Stack.Screen name="ExistingChallenge" component={ExistingChallengeScreen} />
-            <Stack.Screen name="GameHistory" component={GameHistory} />
-            <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
-            <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
-            <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
-          </Stack.Navigator>
+          <RoleProvider>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Main" component={MainTabs} />
+              <Stack.Screen name="Auth" component={AuthScreen} />
+              <Stack.Screen name="Game" component={Game} />
+              <Stack.Screen name="NewChallenge" component={NewChallengeScreen} />
+              <Stack.Screen name="ExistingChallenge" component={ExistingChallengeScreen} />
+              <Stack.Screen name="GameHistory" component={GameHistory} />
+              <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
+              <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
+              <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
+            </Stack.Navigator>
+          </RoleProvider>
         </AuthProvider>
       </NavigationContainer>
     </SafeAreaProvider>

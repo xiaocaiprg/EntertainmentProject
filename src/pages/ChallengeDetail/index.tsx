@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -8,20 +8,29 @@ import {
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getMatchDetail } from '../../api/services/gameService';
+import { getMatchDetail, updateMatchStatus } from '../../api/services/gameService';
 import { GameMatchDto, GameRoundDto } from '../../interface/Game';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { RoundItem } from './components/RoundItem';
+import { ChallengeStatus } from '../../interface/Common';
+import { useRole } from '../../hooks/useRole';
+import { THEME_COLORS } from '../../utils/styles';
+import ConfirmModal from '../../components/ConfirmModal';
+import { RootStackScreenProps } from '../router';
 
-export const ChallengeDetail = React.memo(() => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { matchId } = route.params as { matchId: number };
+// 使用导航堆栈中定义的类型
+type ChallengeDetailScreenProps = RootStackScreenProps<'ChallengeDetail'>;
+
+export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(({ navigation, route }) => {
+  const { matchId } = route.params;
   const [loading, setLoading] = useState<boolean>(true);
   const [matchDetail, setMatchDetail] = useState<GameMatchDto | null>(null);
+  const [processing, setProcessing] = useState<boolean>(false);
+  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
+  const { isInvestmentManager } = useRole();
 
   const fetchMatchDetail = useCallback(async () => {
     setLoading(true);
@@ -39,9 +48,149 @@ export const ChallengeDetail = React.memo(() => {
     navigation.goBack();
   }, [navigation]);
 
+  // 显示结束挑战确认弹窗
+  const showEndChallengeConfirm = useCallback(() => {
+    setConfirmModalVisible(true);
+  }, []);
+
+  // 隐藏结束挑战确认弹窗
+  const hideEndChallengeConfirm = useCallback(() => {
+    setConfirmModalVisible(false);
+  }, []);
+
+  // 确认结束挑战
+  const confirmEndChallenge = useCallback(async () => {
+    setProcessing(true);
+    const result = await updateMatchStatus({
+      id: matchId,
+      isEnabled: ChallengeStatus.ENDED, // 设置为已结束状态
+    });
+    if (result) {
+      fetchMatchDetail();
+      Alert.alert('操作成功', '挑战已成功结束');
+    } else {
+      Alert.alert('错误', '操作失败，请重试');
+    }
+    setProcessing(false);
+    setConfirmModalVisible(false);
+  }, [matchId, fetchMatchDetail]);
+
+  // 获取状态文本和颜色
+  const getStatusInfo = useCallback((status: number): { text: string; color: string } => {
+    switch (status) {
+      case ChallengeStatus.ENDED:
+        return { text: '已结束', color: '#999999' };
+      case ChallengeStatus.IN_PROGRESS:
+        return { text: '进行中', color: '#1890ff' };
+      case ChallengeStatus.FUNDRAISING:
+        return { text: '募资中', color: '#52c41a' };
+      case ChallengeStatus.FUNDRAISING_COMPLETED:
+        return { text: '募资完成', color: '#faad14' };
+      case ChallengeStatus.COMPLETED:
+        return { text: '已完成', color: '#722ed1' };
+      default:
+        return { text: '未知', color: '#999999' };
+    }
+  }, []);
+
+  // 判断挑战是否可以结束
+  const canEndChallenge = useMemo(
+    () =>
+      isInvestmentManager &&
+      (matchDetail?.isEnabled === ChallengeStatus.IN_PROGRESS ||
+        matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING ||
+        matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING_COMPLETED),
+    [isInvestmentManager, matchDetail?.isEnabled],
+  );
+
+  // 获取当前状态信息
+  const statusInfo = useMemo(() => {
+    return matchDetail ? getStatusInfo(matchDetail.isEnabled) : { text: '-', color: '#999999' };
+  }, [matchDetail, getStatusInfo]);
+
   const renderRound = useCallback((round: GameRoundDto, index: number) => {
     return <RoundItem key={`round-${round.id || index}`} round={round} index={index} />;
   }, []);
+
+  // 渲染挑战详情
+  const renderMatchDetail = useCallback(() => {
+    if (!matchDetail) {
+      return null;
+    }
+    return (
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <View style={styles.matchInfoContainer}>
+          <View style={styles.infoRow}>
+            <View style={styles.infoColumn}>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>挑战名称:</Text>
+                <Text style={styles.value} numberOfLines={1}>
+                  {matchDetail.name || '-'}
+                </Text>
+                <View style={styles.statusContainer}>
+                  <View style={[styles.statusTag, { backgroundColor: `${statusInfo.color}20` }]}>
+                    <Text style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.infoColumn}>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>记录人:</Text>
+                <Text style={styles.value}>{matchDetail.docPersonName || '-'}</Text>
+              </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>投手名字:</Text>
+                <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
+              </View>
+            </View>
+            <View style={styles.infoColumn}>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>挑战上下水:</Text>
+                <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
+              </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>挑战转码:</Text>
+                <Text style={styles.value}>{matchDetail.turnOverStr || '-'}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {canEndChallenge && (
+          <View style={styles.endChallengeContainer}>
+            <TouchableOpacity style={styles.endChallengeButton} onPress={showEndChallengeConfirm} disabled={processing}>
+              <Icon name="stop-circle" size={18} color="#fff" style={styles.endButtonIcon} />
+              <Text style={styles.endChallengeButtonText}>结束挑战</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        <Text style={styles.sectionTitle}>场次信息</Text>
+        <View style={styles.roundsContainer}>{matchDetail.roundList?.map(renderRound)}</View>
+      </ScrollView>
+    );
+  }, [matchDetail, statusInfo, canEndChallenge, processing, showEndChallengeConfirm, renderRound]);
+
+  const renderContent = useCallback(() => {
+    if (loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    }
+
+    if (matchDetail) {
+      return renderMatchDetail();
+    }
+
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>暂无挑战详情</Text>
+      </View>
+    );
+  }, [loading, matchDetail, renderMatchDetail]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -53,51 +202,17 @@ export const ChallengeDetail = React.memo(() => {
         <Text style={styles.headerTitle}>挑战详情</Text>
         <View style={styles.headerRight} />
       </View>
-
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      ) : matchDetail ? (
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.matchInfoContainer}>
-            <View style={styles.infoRow}>
-              <View style={styles.infoColumn}>
-                <View style={styles.itemRow}>
-                  <Text style={styles.label}>挑战名称:</Text>
-                  <Text style={styles.value}>{matchDetail.name || '-'}</Text>
-                </View>
-              </View>
-              <View style={styles.infoColumn}>
-                <View style={styles.itemRow}>
-                  <Text style={styles.label}>记录人:</Text>
-                  <Text style={styles.value}>{matchDetail.docPersonName || '-'}</Text>
-                </View>
-                <View style={styles.itemRow}>
-                  <Text style={styles.label}>投手名字:</Text>
-                  <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
-                </View>
-              </View>
-              <View style={styles.infoColumn}>
-                <View style={styles.itemRow}>
-                  <Text style={styles.label}>上下水:</Text>
-                  <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
-                </View>
-                <View style={styles.itemRow}>
-                  <Text style={styles.label}>转码:</Text>
-                  <Text style={styles.value}>{matchDetail.turnOverStr || '-'}</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <Text style={styles.sectionTitle}>场次信息</Text>
-          <View style={styles.roundsContainer}>{matchDetail.roundList?.map(renderRound)}</View>
-        </ScrollView>
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>暂无挑战详情</Text>
-        </View>
-      )}
+      {renderContent()}
+      <ConfirmModal
+        visible={confirmModalVisible}
+        title="确认结束挑战"
+        message="确定要结束该挑战吗？此操作不可撤销。"
+        cancelText="取消"
+        confirmText="确认结束"
+        onCancel={hideEndChallengeConfirm}
+        onConfirm={confirmEndChallenge}
+        isProcessing={processing}
+      />
     </SafeAreaView>
   );
 });
@@ -181,6 +296,19 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 14,
     color: '#333',
+    flex: 1,
+  },
+  statusContainer: {
+    marginLeft: 'auto',
+  },
+  statusTag: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 4,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '400',
   },
   sectionTitle: {
     fontSize: 16,
@@ -190,6 +318,27 @@ const styles = StyleSheet.create({
   },
   roundsContainer: {
     marginBottom: 16,
+  },
+  endChallengeContainer: {
+    marginBottom: 10,
+  },
+  endChallengeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: THEME_COLORS.danger,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    justifyContent: 'center',
+    width: '100%',
+  },
+  endChallengeButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  endButtonIcon: {
+    marginRight: 4,
   },
 });
 
