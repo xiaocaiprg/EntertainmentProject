@@ -20,14 +20,14 @@ export const GameHistory = React.memo(() => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(true);
   const [historyList, setHistoryList] = useState<GameMatchDto[]>([]);
-  const [pageNum, setPageNum] = useState<string>('1');
-  const pageSize = useRef<string>('20').current;
+  const pageNum = useRef<number>(1);
+  const pageSize = useRef<number>(5).current;
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchHistoryList = useCallback(async () => {
     setLoading(true);
     const res = await getChallengeList({
-      pageNum: pageNum,
+      pageNum: pageNum.current,
       pageSize: pageSize,
     });
     setLoading(false);
@@ -40,7 +40,7 @@ export const GameHistory = React.memo(() => {
 
   const handleLoadMore = useCallback(() => {
     if (!loading && hasMore) {
-      setPageNum(String(Number(pageNum) + 1));
+      pageNum.current += 1;
       fetchHistoryList();
     }
   }, [loading, hasMore, pageNum, fetchHistoryList]);
@@ -106,7 +106,7 @@ export const GameHistory = React.memo(() => {
                 <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>投手名字:</Text>
+                <Text style={styles.label}>投手:</Text>
                 <Text style={styles.value}>{item.playPersonName || '-'}</Text>
               </View>
               <View style={styles.itemRow}>

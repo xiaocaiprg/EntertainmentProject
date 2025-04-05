@@ -1,8 +1,8 @@
 import { UserResult } from './User';
 
 export interface QueryParams {
-  pageNum: string;
-  pageSize: string;
+  pageNum: number;
+  pageSize: number;
 }
 export interface UserRecordParams extends QueryParams {
   type: number;
