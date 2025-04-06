@@ -29,15 +29,15 @@ export const HomeScreen = React.memo(() => {
     () => [
       {
         id: 1,
-        image: 'https://junlong2.s3.ap-southeast-2.amazonaws.com/chess.jpg',
+        image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/chess.jpg',
       },
       {
         id: 2,
-        image: 'https://i.postimg.cc/mkL3Gn79/puzzle-1721464-640.jpg',
+        image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/puzzle.jpg',
       },
       {
         id: 3,
-        image: 'https://junlong2.s3.ap-southeast-2.amazonaws.com/chess.jpg',
+        image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/macao.jpg',
       },
     ],
     [],
