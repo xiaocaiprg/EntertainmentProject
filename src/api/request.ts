@@ -3,7 +3,7 @@ import { getToken, setTokenSync, clearTokenSync } from '../utils/storage';
 import { DeviceEventEmitter } from 'react-native';
 import { PATH } from './services/authService';
 
-const BASE_URL = 'http://85.31.225.25:8888/';
+const BASE_URL = 'https://junlongpro.com/';
 
 // 定义事件名称
 export const TOKEN_EXPIRED_EVENT = 'TOKEN_EXPIRED';

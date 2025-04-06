@@ -1,4 +1,5 @@
 import { UserResult } from './User';
+import { ContributionDto } from './Contribution';
 
 export interface QueryParams {
   pageNum: number;
@@ -29,7 +30,10 @@ export interface ChallengeList {
 export interface GameMatchDto {
   addressInfoId?: number;
   addressName?: string;
+  availableAmount?: number;
   commissionRate?: number;
+  contributedAmount?: number;
+  contributionDtoList?: ContributionDto[];
   createTime?: string;
   docPersonCode?: string;
   docPersonName?: string;

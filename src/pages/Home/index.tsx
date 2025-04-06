@@ -124,6 +124,9 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.COMPLETED_FUNDING_CHALLENGE:
           navigation.navigate('CompletedFundingChallenge');
           break;
+        case ModuleType.FUNDRAISING_CHALLENGE:
+          navigation.navigate('FundraisingChallenge');
+          break;
         default:
           break;
       }

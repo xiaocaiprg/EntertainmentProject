@@ -14,11 +14,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getMatchDetail, updateMatchStatus } from '../../api/services/gameService';
 import { GameMatchDto, GameRoundDto } from '../../interface/Game';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
-import { RoundItem } from './components/RoundItem';
 import { ChallengeStatus } from '../../interface/Common';
 import { useRole } from '../../hooks/useRole';
 import { THEME_COLORS } from '../../utils/styles';
 import ConfirmModal from '../../components/ConfirmModal';
+import { RoundItem } from './components/RoundItem';
+import { FundraisingInfo } from './components/FundraisingInfo';
 import { RootStackScreenProps } from '../router';
 
 // 使用导航堆栈中定义的类型
@@ -108,6 +109,11 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
     return matchDetail ? getStatusInfo(matchDetail.isEnabled) : { text: '-', color: '#999999' };
   }, [matchDetail, getStatusInfo]);
 
+  // 判断是否显示募资信息
+  const showFundraisingInfo = useMemo(() => {
+    return matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING;
+  }, [matchDetail]);
+
   const renderRound = useCallback((round: GameRoundDto, index: number) => {
     return <RoundItem key={`round-${round.id || index}`} round={round} index={index} />;
   }, []);
@@ -146,6 +152,16 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
+                <Text style={styles.label}>地点:</Text>
+                <Text style={styles.value}>{matchDetail.addressName || '-'}</Text>
+              </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>时间:</Text>
+                <Text style={styles.value}>{matchDetail.gameDate || '-'}</Text>
+              </View>
+            </View>
+            <View style={styles.infoColumn}>
+              <View style={styles.itemRow}>
                 <Text style={styles.label}>挑战上下水:</Text>
                 <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
               </View>
@@ -157,6 +173,8 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
           </View>
         </View>
 
+        {showFundraisingInfo && <FundraisingInfo matchDetail={matchDetail} />}
+
         {canEndChallenge && (
           <View style={styles.endChallengeContainer}>
             <TouchableOpacity style={styles.endChallengeButton} onPress={showEndChallengeConfirm} disabled={processing}>
@@ -165,12 +183,11 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
             </TouchableOpacity>
           </View>
         )}
-
-        <Text style={styles.sectionTitle}>场次信息</Text>
+        {matchDetail?.roundList?.length ? <Text style={styles.sectionTitle}>场次信息</Text> : null}
         <View style={styles.roundsContainer}>{matchDetail.roundList?.map(renderRound)}</View>
       </ScrollView>
     );
-  }, [matchDetail, statusInfo, canEndChallenge, processing, showEndChallengeConfirm, renderRound]);
+  }, [matchDetail, statusInfo, canEndChallenge, processing, showEndChallengeConfirm, renderRound, showFundraisingInfo]);
 
   const renderContent = useCallback(() => {
     if (loading) {

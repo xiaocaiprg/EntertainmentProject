@@ -26,6 +26,7 @@ export const NewChallengeScreen = React.memo(() => {
     name: '',
     date: new Date(),
     principal: '',
+    contriAmount: '',
   });
 
   // 处理表单数据变更
@@ -46,6 +47,7 @@ export const NewChallengeScreen = React.memo(() => {
       addressInfoId: formData.locationId,
       gameDate: formData.date ? formatDate(formData.date, 'YYYY-MM-DD') : '',
       principal: parseFloat(formData.principal),
+      contriAmount: parseFloat(formData.contriAmount),
     };
 
     // 校验参数

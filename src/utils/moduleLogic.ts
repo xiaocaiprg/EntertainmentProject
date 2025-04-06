@@ -30,6 +30,13 @@ export const availableModules: ModuleConfig[] = [
     icon: 'check-circle',
     backgroundColor: '#fdcb6e',
   },
+  {
+    id: '5',
+    title: '出资',
+    type: ModuleType.FUNDRAISING_CHALLENGE,
+    icon: 'monetization-on',
+    backgroundColor: '#2ecc71',
+  },
 ];
 
 // 定义角色到模块的映射
@@ -40,7 +47,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
   },
   {
     role: 'INVESTOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.FUNDRAISING_CHALLENGE],
   },
   {
     role: 'RECORDER',

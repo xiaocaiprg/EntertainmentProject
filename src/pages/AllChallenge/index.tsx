@@ -98,20 +98,20 @@ export const AllChallengeScreen = React.memo(() => {
           <View style={styles.itemContent}>
             <View style={styles.itemLeft}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>创建时间:</Text>
-                <Text style={styles.value}>{item.createTime || '-'}</Text>
+                <Text style={styles.label}>挑战时间:</Text>
+                <Text style={styles.value}>{item.gameDate || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
                 <Text style={styles.label}>挑战名称:</Text>
                 <Text style={styles.value}>{item.name || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战上下水:</Text>
-                <Text style={styles.value}>{item.profitStr || '-'}</Text>
+                <Text style={styles.label}>地点:</Text>
+                <Text style={styles.value}>{item.addressName || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战转码:</Text>
-                <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+                <Text style={styles.label}>本金:</Text>
+                <Text style={styles.value}>{item.principal || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
                 <Text style={styles.label}>投手:</Text>
@@ -260,7 +260,8 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: THEME_COLORS.cardBackground,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 2,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: THEME_COLORS.border.light,
