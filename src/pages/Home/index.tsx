@@ -314,10 +314,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginBottom: 8,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
     shadowRadius: 2,
   },
   moduleButtonText: {
@@ -335,10 +331,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
     shadowRadius: 3,
   },
   loginButtonText: {

@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useRole } from '../../hooks/useRole';
 import { ChallengeList } from './ChallengeList';
 import { InvestmentDetail } from './InvestmentDetail';
+import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 
 export const FundraisingChallengeScreen = React.memo(() => {
   const navigation = useNavigation();
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   safeArea: {
     flex: 1,

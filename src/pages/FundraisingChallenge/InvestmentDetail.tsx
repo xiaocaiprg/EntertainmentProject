@@ -1,20 +1,8 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TouchableOpacity,
-  Alert,
-  TextInput,
-} from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
-import { isIOS } from '../../utils/platform';
 import { getMatchDetail } from '../../api/services/gameService';
 import { createContribution, getContributionDetail, deleteContribution } from '../../api/services/contributionService';
 import { ContributionDto } from '../../interface/Contribution';
@@ -132,12 +120,21 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
   // 判断是否已有出资
   const hasContribution = useMemo(() => !!myContribution?.amount, [myContribution]);
 
+  // 判断是否能够删除出资（只有在挑战募资未结束时才能删除）
+  const canDeleteContribution = useMemo(
+    () => isAvailableForInvest && hasContribution,
+    [isAvailableForInvest, hasContribution],
+  );
+
   const renderMyContribution = useCallback(() => {
     return (
       <View style={styles.myContributionCard}>
-        <Text style={styles.myContributionTitle}>我的出资:</Text>
-        <View style={styles.myContributionActions}>
+        <View style={styles.myContributionInfo}>
+          <Text style={styles.cardTitle}>我的出资:</Text>
           <Text style={styles.myContributionAmount}>{myContribution?.amount}</Text>
+        </View>
+
+        {canDeleteContribution ? (
           <TouchableOpacity style={styles.deleteButton} onPress={handleShowDeleteModal} disabled={submitting}>
             {submitting ? (
               <ActivityIndicator size="small" color="#fff" />
@@ -145,15 +142,15 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
               <Text style={styles.deleteButtonText}>删除</Text>
             )}
           </TouchableOpacity>
-        </View>
+        ) : null}
       </View>
     );
-  }, [myContribution?.amount, handleShowDeleteModal, submitting]);
+  }, [myContribution?.amount, canDeleteContribution, handleShowDeleteModal, submitting]);
 
   const renderInvestForm = useCallback(() => {
     return (
       <View style={styles.investFormCard}>
-        <Text style={styles.formLabel}>出资金额</Text>
+        <Text style={styles.cardTitle}>出资金额</Text>
         <TextInput
           style={styles.amountInput}
           value={amount}
@@ -189,47 +186,40 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
   }
 
   return (
-    <KeyboardAvoidingView behavior={isIOS() ? 'padding' : 'height'} style={styles.detailContainer}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.detailInner}>
-          <View style={styles.detailHeader}>
-            <TouchableOpacity onPress={onBack} style={styles.backButton}>
-              <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
-            </TouchableOpacity>
-            <Text style={styles.detailTitle}>挑战出资</Text>
-            <View style={styles.headerRight} />
-          </View>
+    <View style={styles.detailInner}>
+      <View style={styles.detailHeader}>
+        <TouchableOpacity onPress={onBack} style={styles.backButton}>
+          <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
+        </TouchableOpacity>
+        <Text style={styles.detailTitle}>挑战出资</Text>
+        <View style={styles.headerRight} />
+      </View>
 
-          <View style={styles.detailContent}>
-            <ChallengeDetailCard matchDetail={matchDetail} />
-            <ContributionList contributions={matchDetail?.contributionDtoList} />
-            {hasContribution ? renderMyContribution() : renderInvestForm()}
-          </View>
+      <View style={styles.detailContent}>
+        <ChallengeDetailCard matchDetail={matchDetail} />
+        {hasContribution ? renderMyContribution() : renderInvestForm()}
+        <ContributionList contributions={matchDetail?.contributionDtoList} matchDetail={matchDetail} />
+      </View>
 
-          {/* 删除确认模态框 */}
-          <ConfirmModal
-            visible={showDeleteModal}
-            title="删除出资"
-            message="您确定要删除此出资吗？"
-            cancelText="取消"
-            confirmText="确认删除"
-            onCancel={handleCancelDelete}
-            onConfirm={handleConfirmDelete}
-            isProcessing={submitting}
-          />
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      {/* 删除确认模态框 */}
+      <ConfirmModal
+        visible={showDeleteModal}
+        title="删除出资"
+        message="您确定要删除此出资吗？"
+        cancelText="取消"
+        confirmText="确认删除"
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        isProcessing={submitting}
+      />
+    </View>
   );
 });
 
 const styles = StyleSheet.create({
-  detailContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   detailInner: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   detailHeader: {
     flexDirection: 'row',
@@ -255,7 +245,7 @@ const styles = StyleSheet.create({
   },
   detailContent: {
     flex: 1,
-    padding: 12,
+    padding: 15,
   },
   loadingContainer: {
     flex: 1,
@@ -268,30 +258,30 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   myContributionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: '#fff',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#f0f0f0',
-    padding: 12,
-    marginBottom: 12,
+    padding: 10,
+    marginBottom: 8,
+  },
+  myContributionInfo: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  myContributionTitle: {
+  cardTitle: {
     fontSize: 15,
     fontWeight: '600',
     color: THEME_COLORS.text.primary,
+    marginRight: 4,
   },
   myContributionAmount: {
     fontSize: 16,
     fontWeight: 'bold',
     color: THEME_COLORS.primary,
-    marginRight: 10,
-  },
-  myContributionActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   deleteButton: {
     backgroundColor: THEME_COLORS.danger || '#ff4d4f',
@@ -306,29 +296,25 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
   },
-  // 投资表单相关样式
   investFormCard: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
     padding: 10,
-  },
-  formLabel: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: '#333',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   amountInput: {
     height: 44,
     borderRadius: 6,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     fontSize: 15,
-    marginBottom: 10,
     backgroundColor: '#f5f5f5',
   },
   amountHint: {
+    marginVertical: 4,
     fontSize: 13,
     color: THEME_COLORS.success,
-    marginBottom: 12,
-    paddingHorizontal: 0,
   },
   investSubmitButton: {
     backgroundColor: THEME_COLORS.primary,

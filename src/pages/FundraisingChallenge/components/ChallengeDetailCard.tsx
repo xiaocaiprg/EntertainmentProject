@@ -61,10 +61,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#f0f0f0',
-    paddingHorizontal: 12,
-    paddingTop: 12,
-    paddingBottom: 2,
-    marginBottom: 12,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    marginBottom: 10,
   },
   detailCardTitle: {
     fontSize: 15,
@@ -78,7 +77,6 @@ const styles = StyleSheet.create({
   },
   detailColumn: {
     flex: 1,
-    paddingRight: 8,
   },
   detailColumnRight: {
     flex: 1,

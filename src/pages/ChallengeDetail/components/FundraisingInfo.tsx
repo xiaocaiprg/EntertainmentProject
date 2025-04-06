@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { GameMatchDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
 
@@ -15,6 +15,19 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
     const principal = matchDetail?.principal || 0;
     return principal > 0 ? Math.floor((contributedAmount / principal) * 100) : 0;
   }, [matchDetail]);
+
+  const hasContributions = useMemo(() => {
+    return Boolean(matchDetail?.contributionDtoList && matchDetail.contributionDtoList.length > 0);
+  }, [matchDetail?.contributionDtoList]);
+
+  const renderItem = useMemo(() => {
+    return ({ item }: { item: any }) => (
+      <View style={styles.contributionItem}>
+        <Text style={styles.contributionName}>出资人: {item.investPersonName}</Text>
+        <Text style={styles.contributionAmount}>金额: {item.amount}</Text>
+      </View>
+    );
+  }, []);
 
   if (!matchDetail) {
     return null;
@@ -44,19 +57,20 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
         <Text style={styles.progressText}>{percentage}%</Text>
       </View>
 
-      {matchDetail.contributionDtoList && matchDetail.contributionDtoList.length > 0 ? (
-        <View style={styles.contributionList}>
+      {hasContributions && (
+        <View>
           <Text style={styles.contributionTitle}>出资明细</Text>
-          {matchDetail.contributionDtoList.map((contribution, index) => (
-            <View key={`contribution-${contribution.id || index}`} style={styles.contributionItem}>
-              <View style={styles.contributionContent}>
-                <Text style={styles.contributionName}>出资人: {contribution.investPersonName}</Text>
-                <Text style={styles.contributionAmount}>金额: {contribution.amount}</Text>
-              </View>
-            </View>
-          ))}
+          <View style={styles.listContainer}>
+            <FlatList
+              data={matchDetail.contributionDtoList}
+              keyExtractor={(item, index) => `${item.id}-${index}`}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={true}
+              nestedScrollEnabled={true}
+            />
+          </View>
         </View>
-      ) : null}
+      )}
     </View>
   );
 });
@@ -66,20 +80,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#f0f0f0',
-    padding: 15,
-    marginBottom: 15,
+    borderColor: '#e0e0e0',
+    padding: 10,
   },
   title: {
     fontSize: 16,
     fontWeight: '600',
     color: THEME_COLORS.text.primary,
-    marginBottom: 12,
+    marginBottom: 4,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
+    marginBottom: 5,
   },
   infoItem: {
     alignItems: 'center',
@@ -107,7 +120,7 @@ const styles = StyleSheet.create({
   progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 4,
   },
   progressBg: {
     flex: 1,
@@ -128,23 +141,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     width: 40,
   },
-  contributionList: {
-    marginTop: 10,
-  },
   contributionTitle: {
     fontSize: 14,
     fontWeight: '500',
     color: '#666',
-    marginBottom: 6,
+  },
+  listContainer: {
+    height: 150,
   },
   contributionItem: {
-    paddingVertical: 8,
-    borderTopWidth: 1,
-    borderTopColor: '#f5f5f5',
-  },
-  contributionContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingVertical: 4,
   },
   contributionAmount: {
     color: THEME_COLORS.primary,
