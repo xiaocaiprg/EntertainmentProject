@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { GameMatchDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
 
@@ -20,15 +20,6 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
     return Boolean(matchDetail?.contributionDtoList && matchDetail.contributionDtoList.length > 0);
   }, [matchDetail?.contributionDtoList]);
 
-  const renderItem = useMemo(() => {
-    return ({ item }: { item: any }) => (
-      <View style={styles.contributionItem}>
-        <Text style={styles.contributionName}>出资人: {item.investPersonName}</Text>
-        <Text style={styles.contributionAmount}>金额: {item.amount}</Text>
-      </View>
-    );
-  }, []);
-
   if (!matchDetail) {
     return null;
   }
@@ -37,7 +28,7 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
       <Text style={styles.title}>募资信息</Text>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>本金额度</Text>
+          <Text style={styles.label}>本金</Text>
           <Text style={styles.value}>{matchDetail.principal || '-'}</Text>
         </View>
         <View style={styles.infoItem}>
@@ -61,13 +52,14 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
         <View>
           <Text style={styles.contributionTitle}>出资明细</Text>
           <View style={styles.listContainer}>
-            <FlatList
-              data={matchDetail.contributionDtoList}
-              keyExtractor={(item, index) => `${item.id}-${index}`}
-              renderItem={renderItem}
-              showsVerticalScrollIndicator={true}
-              nestedScrollEnabled={true}
-            />
+            <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
+              {matchDetail.contributionDtoList?.map((item, index) => (
+                <View key={`${item.id}-${index}`} style={styles.contributionItem}>
+                  <Text style={styles.contributionName}>出资人: {item.investPersonName}</Text>
+                  <Text style={styles.contributionAmount}>金额: {item.amount}</Text>
+                </View>
+              ))}
+            </ScrollView>
           </View>
         </View>
       )}

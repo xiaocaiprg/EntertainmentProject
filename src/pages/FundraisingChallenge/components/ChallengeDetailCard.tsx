@@ -38,7 +38,7 @@ export const ChallengeDetailCard: React.FC<ChallengeDetailCardProps> = React.mem
         </View>
         <View style={styles.detailColumnRight}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>本金额度:</Text>
+            <Text style={styles.detailLabel}>本金:</Text>
             <Text style={[styles.detailValue, styles.amountValue]}>{matchDetail.principal || '-'}</Text>
           </View>
           <View style={styles.detailItem}>

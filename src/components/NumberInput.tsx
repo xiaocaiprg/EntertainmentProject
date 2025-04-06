@@ -8,10 +8,19 @@ interface NumberInputProps {
   placeholder?: string;
   keyboardType?: 'numeric' | 'decimal-pad';
   errorMessage?: string;
+  hint?: string;
 }
 
 export const NumberInput: React.FC<NumberInputProps> = React.memo((props: NumberInputProps) => {
-  const { title, value, onChangeText, placeholder = '请输入', keyboardType = 'decimal-pad', errorMessage } = props;
+  const {
+    title,
+    value,
+    onChangeText,
+    placeholder = '请输入',
+    keyboardType = 'decimal-pad',
+    errorMessage,
+    hint,
+  } = props;
 
   const handleChangeText = useCallback(
     (text: string) => {
@@ -30,6 +39,7 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
   return (
     <View style={styles.container}>
       <Text style={styles.labelText}>{title}</Text>
+
       <TextInput
         style={[styles.input, errorMessage && styles.inputError]}
         value={value}
@@ -38,6 +48,7 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
         placeholderTextColor="#999"
         keyboardType={keyboardType}
       />
+      {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
   );
@@ -45,7 +56,7 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 10,
   },
   labelText: {
     fontSize: 16,
@@ -69,6 +80,11 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 12,
     color: '#ff3b30',
+    marginTop: 4,
+  },
+  hintText: {
+    fontSize: 12,
+    color: '#999',
     marginTop: 4,
   },
 });

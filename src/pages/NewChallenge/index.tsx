@@ -47,7 +47,7 @@ export const NewChallengeScreen = React.memo(() => {
       addressInfoId: formData.locationId,
       gameDate: formData.date ? formatDate(formData.date, 'YYYY-MM-DD') : '',
       principal: parseFloat(formData.principal),
-      contriAmount: parseFloat(formData.contriAmount),
+      contriAmount: formData.contriAmount ? parseFloat(formData.contriAmount) : 0,
     };
 
     // 校验参数

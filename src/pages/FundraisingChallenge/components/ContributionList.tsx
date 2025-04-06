@@ -27,7 +27,7 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
       <Text style={styles.title}>募资信息</Text>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>本金额度</Text>
+          <Text style={styles.label}>本金</Text>
           <Text style={styles.value}>{matchDetail.principal || '-'}</Text>
         </View>
         <View style={styles.infoItem}>

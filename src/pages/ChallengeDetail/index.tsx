@@ -172,9 +172,7 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
             </View>
           </View>
         </View>
-
         {showFundraisingInfo && <FundraisingInfo matchDetail={matchDetail} />}
-
         {canEndChallenge && (
           <View style={styles.endChallengeContainer}>
             <TouchableOpacity style={styles.endChallengeButton} onPress={showEndChallengeConfirm} disabled={processing}>
@@ -337,7 +335,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   endChallengeContainer: {
-    marginBottom: 10,
+    marginTop: 10,
   },
   endChallengeButton: {
     flexDirection: 'row',
