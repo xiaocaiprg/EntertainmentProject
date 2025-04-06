@@ -27,7 +27,7 @@ export const availableModules: ModuleConfig[] = [
   },
   {
     id: '2',
-    title: '查询已有挑战',
+    title: '记录',
     type: ModuleType.CHALLENGE_EXISTING,
     icon: 'history',
     backgroundColor: '#00b894',
