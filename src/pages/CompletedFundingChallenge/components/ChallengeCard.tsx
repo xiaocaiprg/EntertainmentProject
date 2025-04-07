@@ -34,15 +34,15 @@ export const ChallengeCard = React.memo((props: ChallengeCardProps) => {
             <Text style={styles.value}>{item.createTime || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>挑战上下水:</Text>
-            <Text style={styles.value}>{item.profitStr || '-'}</Text>
+            <Text style={styles.label}>挑战地点:</Text>
+            <Text style={styles.value}>{item.addressName || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>挑战转码:</Text>
-            <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+            <Text style={styles.label}>挑战时间:</Text>
+            <Text style={styles.value}>{item.gameDate || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>投手名字:</Text>
+            <Text style={styles.label}>投手:</Text>
             <Text style={styles.value}>{item.playPersonName || '-'}</Text>
           </View>
         </View>

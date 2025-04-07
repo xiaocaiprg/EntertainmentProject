@@ -1,12 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
 import { getToken, setTokenSync, clearTokenSync } from '../utils/storage';
-import { DeviceEventEmitter } from 'react-native';
+import { eventEmitter, TOKEN_EXPIRED_EVENT } from '../utils/eventEmitter';
 import { PATH } from './services/authService';
 
-const BASE_URL = 'https://www.junlong.biz/';
-
-// 定义事件名称
-export const TOKEN_EXPIRED_EVENT = 'TOKEN_EXPIRED';
+const BASE_URL = 'https://junlongpro.com/';
 
 // 创建axios实例
 const request = axios.create({
@@ -49,7 +46,7 @@ request.interceptors.response.use(
       const { status, data } = error.response;
       if (status === 410) {
         clearTokenSync();
-        DeviceEventEmitter.emit(TOKEN_EXPIRED_EVENT);
+        eventEmitter.emit(TOKEN_EXPIRED_EVENT);
       }
       return Promise.reject(data);
     } else if (error.request) {

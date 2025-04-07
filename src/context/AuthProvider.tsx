@@ -3,8 +3,7 @@ import { getUserStatus, userlogin } from '../api/services/authService';
 import { AuthContext } from './AuthContext';
 import { UserResult, UserParams } from '../interface/User';
 import { clearTokenSync } from '../utils/storage';
-import { DeviceEventEmitter } from 'react-native';
-import { TOKEN_EXPIRED_EVENT } from '../api/request';
+import { eventEmitter, TOKEN_EXPIRED_EVENT } from '../utils/eventEmitter';
 import { useNavigation } from '@react-navigation/native';
 
 // 认证提供者组件属性
@@ -35,7 +34,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // 监听token过期事件
   useEffect(() => {
-    const tokenExpiredListener = DeviceEventEmitter.addListener(TOKEN_EXPIRED_EVENT, () => {
+    const tokenExpiredListener = eventEmitter.addListener(TOKEN_EXPIRED_EVENT, () => {
       setUser(null);
       setIsLoggedIn(false);
       navigation.navigate('Auth');

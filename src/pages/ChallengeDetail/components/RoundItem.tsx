@@ -20,11 +20,11 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
       <View style={styles.roundHeader}>
         <Text style={styles.roundTitle}>场次 {round.orderNumber || index + 1}</Text>
         <View style={styles.itemRow}>
-          <Text style={styles.label}>上下水:</Text>
+          <Text style={styles.label}>本场上下水:</Text>
           <Text style={styles.value}>{round.profitStr || '-'}</Text>
         </View>
         <View style={styles.itemRow}>
-          <Text style={styles.label}>转码:</Text>
+          <Text style={styles.label}>本场转码:</Text>
           <Text style={styles.value}>{round.turnOverStr || '-'}</Text>
         </View>
         <Text style={styles.roundStatus}>{round.isEnabled === 1 ? '进行中' : '已结束'}</Text>

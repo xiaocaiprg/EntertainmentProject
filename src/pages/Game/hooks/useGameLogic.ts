@@ -77,7 +77,7 @@ export const useGameLogic = () => {
     // 创建并添加历史记录
     if (currentChoice) {
       const newRecord = createHistoryRecord(
-        Date.now(),
+        inningResult.gameInningDto.id,
         roundStats.round,
         gameNumber,
         currentChoice,
@@ -253,8 +253,10 @@ export const useGameLogic = () => {
     historyRecords,
     setHistoryRecords,
     gameStatusModalInfo,
+    setGameStatusModalInfo,
     confirmGameStatus,
     isSubmitting,
+    setIsSubmitting,
     handleEndRound,
   };
 };

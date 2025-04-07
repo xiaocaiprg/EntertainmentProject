@@ -1,20 +1,4 @@
-import { ModuleConfig, UserRole, RoleModuleMapping, ModuleType } from '../interface/IModuleProps';
-
-// 将后端角色字符串映射到前端UserRole类型
-export const mapUserRole = (role?: string): UserRole | undefined => {
-  if (!role) {
-    return undefined;
-  }
-  // 根据后端返回的role值映射到前端定义的UserRole
-  const roleMap: Record<string, UserRole> = {
-    ROLE_INVEST_ADMIN: 'INVESTMENT_MANAGER',
-    ROLE_INVESTPERSON: 'INVESTOR',
-    ROLE_DOCPERSON: 'RECORDER',
-    ROLE_PLAYPERSON: 'OPERATOR',
-    ROLE_OPERATIONPERSON: 'PITCHER',
-  };
-  return roleMap[role] || undefined;
-};
+import { ModuleConfig, UserRole, RoleModuleMapping, ModuleType } from '../interface/Role';
 
 // 定义所有可用模块
 export const availableModules: ModuleConfig[] = [
@@ -27,7 +11,7 @@ export const availableModules: ModuleConfig[] = [
   },
   {
     id: '2',
-    title: '查询已有挑战',
+    title: '记录',
     type: ModuleType.CHALLENGE_EXISTING,
     icon: 'history',
     backgroundColor: '#00b894',
@@ -46,6 +30,13 @@ export const availableModules: ModuleConfig[] = [
     icon: 'check-circle',
     backgroundColor: '#fdcb6e',
   },
+  {
+    id: '5',
+    title: '出资',
+    type: ModuleType.FUNDRAISING_CHALLENGE,
+    icon: 'monetization-on',
+    backgroundColor: '#2ecc71',
+  },
 ];
 
 // 定义角色到模块的映射
@@ -56,7 +47,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
   },
   {
     role: 'INVESTOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.FUNDRAISING_CHALLENGE],
   },
   {
     role: 'RECORDER',

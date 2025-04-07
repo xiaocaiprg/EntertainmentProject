@@ -7,7 +7,6 @@ export const PATH = {
   LOGIN_STATUS: 'haiyang/business/token',
 };
 
-// 登录
 export const userlogin = (params: UserParams): Promise<UserResult> => {
   return post<ApiResponse<UserResult>>(PATH.LOGIN, params).then((res) => {
     if (res.code === 200) {

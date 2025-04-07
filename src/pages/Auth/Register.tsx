@@ -174,11 +174,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 15,
     padding: 25,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
     shadowRadius: 12,
-    elevation: 8,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -203,11 +199,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
-    shadowColor: '#6c5ce7',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 5,
   },
   buttonText: {
     color: '#fff',
