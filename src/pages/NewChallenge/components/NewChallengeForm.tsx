@@ -114,14 +114,14 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         value={formData.principal}
         onChangeText={(value: any) => updateField('principal', value)}
         placeholder="请输入本金金额"
-        hint="本金必须为10000的倍数"
+        hint="本金需要为10000的倍数"
       />
       <NumberInput
         title="设置出资额(不能大于本金)"
         value={formData.contriAmount}
         onChangeText={(value: any) => updateField('contriAmount', value)}
         placeholder="请输入出资额"
-        hint="出资额必须为10000的倍数"
+        hint="出资额需要为10000的倍数"
       />
       {/*
       <NumberInput

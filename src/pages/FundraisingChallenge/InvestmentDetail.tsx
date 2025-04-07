@@ -52,7 +52,7 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     setAmount(text);
   }, []);
 
-  // 处理投资
+  // 处理出资
   const handleInvest = useCallback(async () => {
     if (!amount || parseFloat(amount) <= 0) {
       Alert.alert('提示', '请输入有效的出资金额');
@@ -66,6 +66,13 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
       Alert.alert('提示', '出资金额不能超过可出资金额');
       return;
     }
+
+    // 校验出资额必须为10000的倍数
+    if (amountValue % 10000 !== 0) {
+      Alert.alert('提示', '出资金额必须为10000的倍数');
+      return;
+    }
+
     setSubmitting(true);
     const result = await createContribution({
       matchId,

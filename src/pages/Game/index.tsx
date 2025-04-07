@@ -131,6 +131,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
         if (roundData) {
           const updatedStats = updateGameStats(roundData);
           setRoundStats(updatedStats);
+          setGameStatus('finished');
         }
       }
 
@@ -153,7 +154,15 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
       setIsSubmitting(false);
       setDeleteLastInningModalVisible(false);
     }
-  }, [historyRecords, roundId, setHistoryRecords, setRoundStats, setGameStatusModalInfo, setIsSubmitting]);
+  }, [
+    historyRecords,
+    roundId,
+    setHistoryRecords,
+    setGameStatus,
+    setRoundStats,
+    setGameStatusModalInfo,
+    setIsSubmitting,
+  ]);
 
   return (
     <SafeAreaView style={styles.container}>
