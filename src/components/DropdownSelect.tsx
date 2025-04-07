@@ -96,7 +96,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
         listMessageContainerStyle={styles.emptyContainer}
         listMessageTextStyle={styles.emptyText}
         translation={{
-          NOTHING_TO_SHOW: '加载中',
+          NOTHING_TO_SHOW: '暂无数据',
         }}
         itemKey="value"
         dropDownDirection={'BOTTOM'}

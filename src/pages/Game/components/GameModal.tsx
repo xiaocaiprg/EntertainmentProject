@@ -39,22 +39,22 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
   const handleConfirm = useCallback(() => {
     onConfirm();
   }, [onConfirm]);
+
   // 获取弹窗显示消息
   const getModalMessage = useCallback(() => {
     if (!currentChoice) {
       if (message) {
-        return <Text style={styles.modalMessage}>{message}</Text>;
+        return <Text style={[styles.modalMessage, { color: '#EB1D04' }]}>{message}</Text>;
       }
       return <Text style={styles.modalMessage}>未知错误</Text>;
     }
     return (
-      <React.Fragment>
-        <Text style={styles.modalMessage}>
-          您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>，确认提交吗？
-        </Text>
-      </React.Fragment>
+      <Text style={styles.modalMessage}>
+        您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>，确认提交吗？
+      </Text>
     );
   }, [currentChoice, message]);
+
   return (
     <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={handleCancel}>
       <View style={styles.modalOverlay}>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 20,
     width: '80%',
     alignItems: 'center',
@@ -118,13 +118,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
     color: '#333',
+    textAlign: 'center',
   },
   modalMessage: {
     fontSize: 16,
     color: '#333',
     marginBottom: 20,
     textAlign: 'center',
-    lineHeight: 24,
+    paddingHorizontal: 5,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -132,28 +133,28 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   modalButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    width: '45%',
+    paddingVertical: 12,
+    paddingHorizontal: 0,
+    borderRadius: 8,
+    width: '48%',
     alignItems: 'center',
-    marginTop: 10,
   },
   fullWidthButton: {
     paddingVertical: 12,
     backgroundColor: '#6c5ce7',
-    borderRadius: 5,
+    borderRadius: 8,
     width: '100%',
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f6fa',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#dfe4ea',
   },
   cancelButtonText: {
     color: '#666',
     fontWeight: '500',
+    fontSize: 15,
   },
   confirmModalButton: {
     backgroundColor: '#6c5ce7',
@@ -161,14 +162,15 @@ const styles = StyleSheet.create({
   confirmModalButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: 15,
   },
   playerText: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#3498db',
   },
   bankerText: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#e74c3c',
   },

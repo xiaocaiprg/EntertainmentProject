@@ -31,22 +31,21 @@ export const AllChallengeScreen = React.memo(() => {
   const [activeTab, setActiveTab] = useState<number>(ChallengeStatus.FUNDRAISING); // 默认选中'募资中'标签
   const [loading, setLoading] = useState<boolean>(true);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
-  const [pageNum, setPageNum] = useState<string>('1');
-  const pageSize = useRef<string>('1000').current;
+  const pageNum = useRef<number>(1);
+  const pageSize = useRef<number>(5).current;
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   // 清空列表并重置分页
   const resetList = useCallback(() => {
     setChallengeList([]);
-    setPageNum('1');
-    setHasMore(true);
-    setLoading(true);
+    pageNum.current = 1;
   }, []);
 
   // 获取挑战列表
   const fetchChallengeList = useCallback(async () => {
+    setLoading(true);
     const res = await getChallengeList({
-      pageNum: pageNum,
+      pageNum: pageNum.current,
       pageSize: pageSize,
       isEnabledList: [activeTab], // 根据当前选中的Tab筛选状态
     });
@@ -72,18 +71,15 @@ export const AllChallengeScreen = React.memo(() => {
   // 加载更多数据
   const handleLoadMore = useCallback(() => {
     if (!loading && hasMore) {
-      setPageNum(String(Number(pageNum) + 1));
+      pageNum.current += 1;
+      fetchChallengeList();
     }
-  }, [loading, hasMore, pageNum]);
+  }, [loading, hasMore, pageNum, fetchChallengeList]);
+
   useEffect(() => {
     fetchChallengeList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
-  useEffect(() => {
-    fetchChallengeList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // 点击挑战项，跳转到详情页
   const handleItemPress = useCallback(
     (matchId: number | undefined) => {
@@ -102,23 +98,23 @@ export const AllChallengeScreen = React.memo(() => {
           <View style={styles.itemContent}>
             <View style={styles.itemLeft}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>创建时间:</Text>
-                <Text style={styles.value}>{item.createTime || '-'}</Text>
+                <Text style={styles.label}>挑战时间:</Text>
+                <Text style={styles.value}>{item.gameDate || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
                 <Text style={styles.label}>挑战名称:</Text>
                 <Text style={styles.value}>{item.name || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战上下水:</Text>
-                <Text style={styles.value}>{item.profitStr || '-'}</Text>
+                <Text style={styles.label}>地点:</Text>
+                <Text style={styles.value}>{item.addressName || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战转码:</Text>
-                <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+                <Text style={styles.label}>本金:</Text>
+                <Text style={styles.value}>{item.principal || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>投手名字:</Text>
+                <Text style={styles.label}>投手:</Text>
                 <Text style={styles.value}>{item.playPersonName || '-'}</Text>
               </View>
             </View>
@@ -264,7 +260,8 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: THEME_COLORS.cardBackground,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 2,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: THEME_COLORS.border.light,

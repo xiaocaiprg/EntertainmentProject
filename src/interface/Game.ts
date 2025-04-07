@@ -1,8 +1,9 @@
 import { UserResult } from './User';
+import { ContributionDto } from './Contribution';
 
 export interface QueryParams {
-  pageNum: string;
-  pageSize: string;
+  pageNum: number;
+  pageSize: number;
 }
 export interface UserRecordParams extends QueryParams {
   type: number;
@@ -29,7 +30,10 @@ export interface ChallengeList {
 export interface GameMatchDto {
   addressInfoId?: number;
   addressName?: string;
+  availableAmount?: number;
   commissionRate?: number;
+  contributedAmount?: number;
+  contributionDtoList?: ContributionDto[];
   createTime?: string;
   docPersonCode?: string;
   docPersonName?: string;
@@ -69,7 +73,7 @@ export interface GameRoundDto {
   docPersonCode?: string;
   docPersonName?: string;
   gamePointDtoList?: GamePointDto[];
-  id?: number;
+  id: number;
   investPersonCode?: string;
   investPersonName?: string;
   isEnabled: number;
@@ -88,6 +92,7 @@ export interface GameRoundDto {
   totalTurnOverStr: string;
   turnOver: number;
   turnOverStr: string;
+  gameInningDto: GameInningDto;
 }
 export interface GamePointDto {
   betNumber: number;
@@ -132,7 +137,7 @@ export interface InningCreateParams {
   roundId?: number;
 }
 
-export interface UpdateRoundStatusParams {
+export interface UpdateStatusParams {
   id: number;
   isEnabled: number;
 }

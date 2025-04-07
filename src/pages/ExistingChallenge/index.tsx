@@ -91,8 +91,8 @@ export const ExistingChallengeScreen = React.memo(() => {
 
   useEffect(() => {
     getChallengeList({
-      pageNum: '1',
-      pageSize: '999',
+      pageNum: 1,
+      pageSize: 1000,
       isEnabledList: [ChallengeStatus.FUNDRAISING_COMPLETED, ChallengeStatus.IN_PROGRESS],
     }).then((res) => {
       setChallengeList(res?.records || []);

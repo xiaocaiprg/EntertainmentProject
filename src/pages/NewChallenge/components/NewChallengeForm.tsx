@@ -37,7 +37,8 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
       !!formData.operatorCode &&
       formData.locationId > 0 &&
       !!formData.date &&
-      validateNumberInput(formData.principal) > 0
+      validateNumberInput(formData.principal) > 0 &&
+      validateNumberInput(formData.contriAmount) >= 0
     );
   }, [formData]);
 
@@ -109,23 +110,25 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
       />
       {renderChallengeNameInput()}
       <NumberInput
-        title="设置本金(默认与出资额相同)"
+        title="设置本金"
         value={formData.principal}
         onChangeText={(value: any) => updateField('principal', value)}
         placeholder="请输入本金金额"
+        hint="本金需要为10000的倍数"
       />
-      {/* <NumberInput
-        title="设置出资额度"
+      <NumberInput
+        title="设置出资额(不能大于本金)"
         value={formData.contriAmount}
         onChangeText={(value: any) => updateField('contriAmount', value)}
-        placeholder="请输入出资额度"
-      /> */}
-      {/* 
+        placeholder="请输入出资额"
+        hint="出资额需要为10000的倍数"
+      />
+      {/*
       <NumberInput
-        title="设置止损额度"
+        title="设置止损额"
         value={formData.lossLimit}
         onChangeText={(value: any) => updateField('lossLimit', value)}
-        placeholder="请输入止损额度"
+        placeholder="请输入止损额"
       /> */}
       <View style={styles.spacer} />
       <TouchableOpacity

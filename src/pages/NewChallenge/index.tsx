@@ -26,6 +26,7 @@ export const NewChallengeScreen = React.memo(() => {
     name: '',
     date: new Date(),
     principal: '',
+    contriAmount: '',
   });
 
   // 处理表单数据变更
@@ -46,8 +47,8 @@ export const NewChallengeScreen = React.memo(() => {
       addressInfoId: formData.locationId,
       gameDate: formData.date ? formatDate(formData.date, 'YYYY-MM-DD') : '',
       principal: parseFloat(formData.principal),
+      contriAmount: formData.contriAmount ? parseFloat(formData.contriAmount) : 0,
     };
-    console.log('新增挑战参数', params);
 
     // 校验参数
     const validation = validateChallengeParams(params);
@@ -72,10 +73,10 @@ export const NewChallengeScreen = React.memo(() => {
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
 
   useEffect(() => {
-    getOperatorList({ pageNum: '1', pageSize: '999', type: 2 }).then((res) => {
+    getOperatorList({ pageNum: 1, pageSize: 999, type: 2 }).then((res) => {
       setOperatorList(res?.records || []);
     });
-    getAddressList({ pageNum: '1', pageSize: '999' }).then((res) => {
+    getAddressList({ pageNum: 1, pageSize: 999 }).then((res) => {
       setLocationList(res?.records || []);
     });
   }, []);
