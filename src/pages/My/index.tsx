@@ -12,8 +12,12 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     navigation.navigate('Auth');
   }, [navigation]);
 
-  const handleHistoryPress = useCallback(() => {
-    navigation.navigate('GameHistory');
+  // const handleHistoryPress = useCallback(() => {
+  //   navigation.navigate('GameHistory');
+  // }, [navigation]);
+
+  const handleMyGames = useCallback(() => {
+    navigation.navigate('MyGames');
   }, [navigation]);
 
   const handleLogoutPress = useCallback(async () => {
@@ -77,11 +81,12 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         </View> */}
 
         <View style={styles.menuContainer}>
-          <MenuItem icon="history" title="历史记录" onPress={handleHistoryPress} />
+          {/* <MenuItem icon="history" title="历史记录" onPress={handleHistoryPress} /> */}
+          <MenuItem icon="playlist-play" title="我的挑战" onPress={handleMyGames} />
         </View>
       </>
     ),
-    [user, handleHistoryPress, handleLogoutPress, MenuItem],
+    [user, handleMyGames, handleLogoutPress, MenuItem],
   );
 
   return (
@@ -204,24 +209,18 @@ const styles = StyleSheet.create({
   //   color: '#333',
   // },
   logoutButton: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
+    padding: 8,
   },
   // 列表模块样式
   menuContainer: {
-    marginTop: 20,
     backgroundColor: '#fff',
     borderRadius: 15,
-    marginHorizontal: 15,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#f5f5f5',
   },

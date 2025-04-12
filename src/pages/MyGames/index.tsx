@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -11,50 +11,37 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getChallengeList } from '../../api/services/gameService';
-import { ChallengeListParams, GameMatchDto } from '../../interface/Game';
+import { getChallengeList, getMatchDetail } from '../../api/services/gameService';
+import { ContributionDto } from '../../interface/Contribution';
+import { ChallengeListParams, GameMatchDto, GameMatchProfitDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getStatusText } from '../../public/Game';
+import { ProfitModal } from './components/ProfitModal';
+import ContributionModal from './components/ContributionModal';
 
-// 状态Tab选项
-const STATUS_TABS = [
-  { label: '全部', value: -1 },
-  { label: '募资中', value: ChallengeStatus.FUNDRAISING },
-  { label: '募资完成', value: ChallengeStatus.FUNDRAISING_COMPLETED },
-  { label: '进行中', value: ChallengeStatus.IN_PROGRESS },
-  { label: '已结束', value: ChallengeStatus.ENDED },
-  { label: '已完成', value: ChallengeStatus.COMPLETED },
-];
-
-export const AllChallengeScreen = React.memo(() => {
+export const MyGamesScreen = React.memo(() => {
   const navigation = useNavigation();
-  const [activeTab, setActiveTab] = useState<number>(-1); // 默认选中'全部'标签
   const [loading, setLoading] = useState<boolean>(true);
+  const [detailLoading, setDetailLoading] = useState<boolean>(false);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
   const pageNum = useRef<number>(1);
-  const pageSize = useRef<number>(5).current;
+  const pageSize = useRef<number>(10).current;
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [profitModalVisible, setProfitModalVisible] = useState<boolean>(false);
+  const [contributionModalVisible, setContributionModalVisible] = useState<boolean>(false);
+  const [selectedContribution, setSelectedContribution] = useState<ContributionDto[]>([]);
+  const [selectedProfit, setSelectedProfit] = useState<GameMatchProfitDto | null>(null);
+  const lastFetchedMatchId = useRef<number>(-1);
 
-  // 清空列表并重置分页
-  const resetList = useCallback(() => {
-    setChallengeList([]);
-    pageNum.current = 1;
-  }, []);
-
-  // 获取挑战列表
-  const fetchChallengeList = useCallback(async () => {
+  // 获取已完成的挑战列表
+  const fetchCompletedChallenges = useCallback(async () => {
     setLoading(true);
     const params: ChallengeListParams = {
       pageNum: pageNum.current,
       pageSize: pageSize,
     };
-
-    // 只有在非全部选项时才传递isEnabledList参数
-    if (activeTab !== -1) {
-      params.isEnabledList = [activeTab];
-    }
 
     const res = await getChallengeList(params);
     setLoading(false);
@@ -63,48 +50,81 @@ export const AllChallengeScreen = React.memo(() => {
       setHasMore(isHasMore);
       setChallengeList((prev) => [...prev, ...(res.records || [])]);
     }
-  }, [pageNum, pageSize, activeTab]);
-
-  // 切换Tab时重置列表并获取数据
-  const handleTabChange = useCallback(
-    (tabValue: number) => {
-      if (activeTab !== tabValue) {
-        setActiveTab(tabValue);
-        resetList();
-      }
-    },
-    [activeTab, resetList],
-  );
+  }, [pageNum, pageSize]);
 
   // 加载更多数据
   const handleLoadMore = useCallback(() => {
     if (!loading && hasMore) {
       pageNum.current += 1;
-      fetchChallengeList();
+      fetchCompletedChallenges();
     }
-  }, [loading, hasMore, pageNum, fetchChallengeList]);
+  }, [loading, hasMore, fetchCompletedChallenges]);
 
   useEffect(() => {
-    fetchChallengeList();
+    fetchCompletedChallenges();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab]);
-  // 点击挑战项，跳转到详情页
-  const handleItemPress = useCallback(
-    (matchId: number | undefined) => {
-      if (matchId) {
-        navigation.navigate('ChallengeDetail', { matchId });
+  }, []);
+
+  // 获取挑战详情
+  const fetchChallengeDetail = useCallback(async (matchId: number) => {
+    if (!matchId) {
+      return;
+    }
+
+    // 如果是同一个挑战ID，则直接复用数据
+    if (lastFetchedMatchId.current === matchId) {
+      return;
+    }
+
+    setDetailLoading(true);
+    const detailData = await getMatchDetail(matchId);
+    if (detailData) {
+      setSelectedProfit(detailData.gameMatchProfitDto || null);
+      setSelectedContribution(detailData.contributionDtoList || []);
+      lastFetchedMatchId.current = matchId;
+    }
+    setDetailLoading(false);
+  }, []);
+
+  // 查看利润分配
+  const handleViewProfit = useCallback(
+    (item: GameMatchDto) => {
+      setProfitModalVisible(true);
+      if (item.id) {
+        fetchChallengeDetail(item.id);
       }
     },
-    [navigation],
+    [fetchChallengeDetail],
   );
+
+  // 查看出资详情
+  const handleViewContribution = useCallback(
+    (item: GameMatchDto) => {
+      setContributionModalVisible(true);
+      if (item.id) {
+        fetchChallengeDetail(item.id);
+      }
+    },
+    [fetchChallengeDetail],
+  );
+
+  // 关闭利润弹窗
+  const handleCloseProfitModal = useCallback(() => {
+    setProfitModalVisible(false);
+  }, []);
+
+  // 关闭出资弹窗
+  const handleCloseContributionModal = useCallback(() => {
+    setContributionModalVisible(false);
+  }, []);
 
   // 渲染挑战项
   const renderItem = useCallback(
     (item: GameMatchDto) => {
       const status = getStatusText(item.isEnabled);
-
+      const showProfitBtn = item.isEnabled === ChallengeStatus.ENDED || item.isEnabled === ChallengeStatus.COMPLETED;
       return (
-        <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
+        <View style={styles.itemContainer}>
           <View style={styles.itemHeader}>
             <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
@@ -113,34 +133,42 @@ export const AllChallengeScreen = React.memo(() => {
               <Text style={[styles.statusText, { color: status.color }]}>{status.text}</Text>
             </View>
           </View>
-
           <View style={styles.itemContent}>
-            <View style={styles.itemLeft}>
+            <View style={styles.itemLine}>
               <View style={styles.itemRow}>
                 <Text style={styles.label}>挑战时间:</Text>
                 <Text style={styles.value}>{item.gameDate || '-'}</Text>
-              </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>地点:</Text>
-                <Text style={styles.value}>{item.addressName || '-'}</Text>
-              </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>本金:</Text>
-                <Text style={styles.value}>{item.principal || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
                 <Text style={styles.label}>投手:</Text>
                 <Text style={styles.value}>{item.playPersonName || '-'}</Text>
               </View>
             </View>
-            <View style={styles.arrowContainer}>
-              <Icon name="chevron-right" size={20} color="#bbb" />
+            <View style={styles.itemLine}>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>挑战上下水:</Text>
+                <Text style={styles.value}>{item.profitStr || '-'}</Text>
+              </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>挑战转码:</Text>
+                <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+              </View>
             </View>
           </View>
-        </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            {showProfitBtn && (
+              <TouchableOpacity style={styles.actionButton} onPress={() => handleViewProfit(item)}>
+                <Text style={styles.buttonText}>查看利润分配</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.actionButton} onPress={() => handleViewContribution(item)}>
+              <Text style={styles.buttonText}>查看出资</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       );
     },
-    [handleItemPress],
+    [handleViewProfit, handleViewContribution],
   );
 
   // 渲染列表底部加载状态
@@ -161,20 +189,6 @@ export const AllChallengeScreen = React.memo(() => {
     navigation.goBack();
   }, [navigation]);
 
-  // 渲染状态选项卡
-  const renderTabs = useCallback(() => {
-    return (
-      <View style={styles.tabsContainer}>
-        {STATUS_TABS.map((tab) => (
-          <TouchableOpacity key={tab.value} style={styles.tabItem} onPress={() => handleTabChange(tab.value)}>
-            <Text style={[styles.tabText, activeTab === tab.value && styles.activeTabText]}>{tab.label}</Text>
-            <View style={[styles.tabLine, activeTab === tab.value && styles.activeTabLine]} />
-          </TouchableOpacity>
-        ))}
-      </View>
-    );
-  }, [activeTab, handleTabChange]);
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -182,11 +196,9 @@ export const AllChallengeScreen = React.memo(() => {
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>所有挑战</Text>
+        <Text style={styles.headerTitle}>我的挑战</Text>
         <View style={styles.headerRight} />
       </View>
-
-      {renderTabs()}
 
       <View style={styles.container}>
         <FlatList
@@ -201,10 +213,24 @@ export const AllChallengeScreen = React.memo(() => {
         />
         {challengeList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无挑战记录</Text>
+            <Text style={styles.emptyText}>暂无已完成的挑战记录</Text>
           </View>
         )}
       </View>
+      {selectedProfit ? (
+        <ProfitModal
+          visible={profitModalVisible}
+          onClose={handleCloseProfitModal}
+          profit={selectedProfit}
+          loading={detailLoading}
+        />
+      ) : null}
+      <ContributionModal
+        visible={contributionModalVisible}
+        onClose={handleCloseContributionModal}
+        selectedContribution={selectedContribution}
+        loading={detailLoading}
+      />
     </SafeAreaView>
   );
 });
@@ -220,7 +246,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 44,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: THEME_COLORS.border.light,
     backgroundColor: '#fff',
@@ -236,34 +262,6 @@ const styles = StyleSheet.create({
   headerRight: {
     width: 36,
   },
-  tabsContainer: {
-    flexDirection: 'row',
-    paddingTop: 5,
-  },
-  tabItem: {
-    flex: 1,
-    paddingVertical: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tabText: {
-    fontSize: 14,
-    color: THEME_COLORS.text.light,
-    fontWeight: '400',
-  },
-  tabLine: {
-    height: 4,
-    width: 40,
-    marginTop: 4,
-  },
-  activeTabLine: {
-    borderRadius: 10,
-    backgroundColor: THEME_COLORS.primary,
-  },
-  activeTabText: {
-    fontWeight: '600',
-    color: THEME_COLORS.primary,
-  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
@@ -273,10 +271,10 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     backgroundColor: THEME_COLORS.cardBackground,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     paddingTop: 10,
-    paddingBottom: 2,
-    marginBottom: 5,
+    paddingBottom: 10,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: THEME_COLORS.border.light,
     borderRadius: 8,
@@ -307,24 +305,43 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   itemContent: {
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
-  itemLeft: {
-    flex: 1,
+  itemLine: {
+    flexDirection: 'row',
+    marginBottom: 8,
   },
   itemRow: {
     flexDirection: 'row',
-    marginBottom: 8,
+    flex: 1,
   },
   label: {
     fontSize: 14,
     color: THEME_COLORS.text.secondary,
-    width: 80,
   },
   value: {
     fontSize: 14,
     color: THEME_COLORS.text.primary,
-    flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: THEME_COLORS.border.light,
+    paddingTop: 8,
+  },
+  actionButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: THEME_COLORS.primary,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
   },
   arrowContainer: {
     justifyContent: 'center',
@@ -357,3 +374,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+
+export default MyGamesScreen;
