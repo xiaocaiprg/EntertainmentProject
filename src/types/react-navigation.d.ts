@@ -13,6 +13,11 @@ declare global {
       };
       NewChallenge: undefined;
       ExistingChallenge: undefined;
+      GameHistory: undefined;
+      AllChallenge: undefined;
+      CompletedFundingChallenge: undefined;
+      FundraisingChallenge: undefined;
+      MyGames: undefined;
       ChallengeDetail: {
         matchId: number; // 挑战ID
       };

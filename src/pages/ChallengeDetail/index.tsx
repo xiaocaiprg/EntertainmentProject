@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   endChallengeContainer: {
-    marginTop: 10,
+    marginBottom: 10,
   },
   endChallengeButton: {
     flexDirection: 'row',
