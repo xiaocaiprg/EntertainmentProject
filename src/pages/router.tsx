@@ -14,6 +14,7 @@ import { ChallengeDetail } from './ChallengeDetail/index';
 import { CompletedFundingChallengeScreen } from './CompletedFundingChallenge/index';
 import { AllChallengeScreen } from './AllChallenge/index';
 import { FundraisingChallengeScreen } from './FundraisingChallenge/index';
+import { MyGamesScreen } from './MyGames/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -35,6 +36,7 @@ type RootStackParamList = {
   AllChallenge: undefined;
   CompletedFundingChallenge: undefined;
   FundraisingChallenge: undefined;
+  MyGames: undefined;
 };
 
 // 通用导航类型
@@ -110,6 +112,7 @@ function AppNavigator() {
               <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
               <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
               <Stack.Screen name="FundraisingChallenge" component={FundraisingChallengeScreen} />
+              <Stack.Screen name="MyGames" component={MyGamesScreen} />
             </Stack.Navigator>
           </RoleProvider>
         </AuthProvider>

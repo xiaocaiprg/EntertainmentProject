@@ -1,4 +1,4 @@
-import React, { useCallback, memo } from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
@@ -20,7 +20,7 @@ interface ConfirmModalProps {
   isProcessing?: boolean;
 }
 
-export const ConfirmModal = memo((props: ConfirmModalProps) => {
+export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
   const {
     visible,
     title,

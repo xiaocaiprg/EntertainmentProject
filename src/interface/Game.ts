@@ -26,6 +26,33 @@ export interface ChallengeList {
   size: number;
   total: number;
 }
+export interface PersonProfitDto {
+  id?: number;
+  investPersonCode?: string;
+  investPersonName?: string;
+  matchId: number;
+  profit: number;
+  profitStr: string;
+}
+export interface GameMatchProfitDto {
+  docCompanyCode?: string;
+  docCompanyName?: string;
+  docCompanyProfit?: number;
+  docCompanyProfitStr?: string;
+  investCompanyCode?: string;
+  investCompanyName?: string;
+  investCompanyProfit?: number;
+  investCompanyProfitStr?: string;
+  operationCompanyCode?: string;
+  operationCompanyName?: string;
+  operationCompanyProfit?: number;
+  operationCompanyProfitStr?: string;
+  personProfitDtoList?: PersonProfitDto[];
+  playCompanyCode?: string;
+  playCompanyName?: string;
+  playCompanyProfit?: number;
+  playCompanyProfitStr?: string;
+}
 
 export interface GameMatchDto {
   addressInfoId?: number;
@@ -34,6 +61,7 @@ export interface GameMatchDto {
   commissionRate?: number;
   contributedAmount?: number;
   contributionDtoList?: ContributionDto[];
+  gameMatchProfitDto?: GameMatchProfitDto;
   createTime?: string;
   docPersonCode?: string;
   docPersonName?: string;
