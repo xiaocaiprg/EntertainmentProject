@@ -12,14 +12,16 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList, getMatchDetail } from '../../api/services/gameService';
+import { ContributionDto } from '../../interface/Contribution';
 import { ChallengeListParams, GameMatchDto, GameMatchProfitDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getStatusText } from '../../public/Game';
 import { ProfitModal } from './components/ProfitModal';
+import ContributionModal from './components/ContributionModal';
 
-export const ProfitListScreen = React.memo(() => {
+export const MyGamesScreen = React.memo(() => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(true);
   const [detailLoading, setDetailLoading] = useState<boolean>(false);
@@ -27,8 +29,11 @@ export const ProfitListScreen = React.memo(() => {
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(10).current;
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [profitModalVisible, setProfitModalVisible] = useState<boolean>(false);
+  const [contributionModalVisible, setContributionModalVisible] = useState<boolean>(false);
+  const [selectedContribution, setSelectedContribution] = useState<ContributionDto[]>([]);
   const [selectedProfit, setSelectedProfit] = useState<GameMatchProfitDto | null>(null);
+  const lastFetchedMatchId = useRef<number>(-1);
 
   // 获取已完成的挑战列表
   const fetchCompletedChallenges = useCallback(async () => {
@@ -36,7 +41,6 @@ export const ProfitListScreen = React.memo(() => {
     const params: ChallengeListParams = {
       pageNum: pageNum.current,
       pageSize: pageSize,
-      isEnabledList: [ChallengeStatus.COMPLETED, ChallengeStatus.ENDED],
     };
 
     const res = await getChallengeList(params);
@@ -66,18 +70,26 @@ export const ProfitListScreen = React.memo(() => {
     if (!matchId) {
       return;
     }
+
+    // 如果是同一个挑战ID，则直接复用数据
+    if (lastFetchedMatchId.current === matchId) {
+      return;
+    }
+
     setDetailLoading(true);
     const detailData = await getMatchDetail(matchId);
     if (detailData) {
       setSelectedProfit(detailData.gameMatchProfitDto || null);
+      setSelectedContribution(detailData.contributionDtoList || []);
+      lastFetchedMatchId.current = matchId;
     }
     setDetailLoading(false);
   }, []);
 
-  // 点击挑战项，显示利润分配弹窗
-  const handleItemPress = useCallback(
+  // 查看利润分配
+  const handleViewProfit = useCallback(
     (item: GameMatchDto) => {
-      setModalVisible(true);
+      setProfitModalVisible(true);
       if (item.id) {
         fetchChallengeDetail(item.id);
       }
@@ -85,18 +97,34 @@ export const ProfitListScreen = React.memo(() => {
     [fetchChallengeDetail],
   );
 
-  // 关闭弹窗
-  const handleCloseModal = useCallback(() => {
-    setModalVisible(false);
-    setSelectedProfit(null);
+  // 查看出资详情
+  const handleViewContribution = useCallback(
+    (item: GameMatchDto) => {
+      setContributionModalVisible(true);
+      if (item.id) {
+        fetchChallengeDetail(item.id);
+      }
+    },
+    [fetchChallengeDetail],
+  );
+
+  // 关闭利润弹窗
+  const handleCloseProfitModal = useCallback(() => {
+    setProfitModalVisible(false);
+  }, []);
+
+  // 关闭出资弹窗
+  const handleCloseContributionModal = useCallback(() => {
+    setContributionModalVisible(false);
   }, []);
 
   // 渲染挑战项
   const renderItem = useCallback(
     (item: GameMatchDto) => {
       const status = getStatusText(item.isEnabled);
+      const showProfitBtn = item.isEnabled === ChallengeStatus.ENDED || item.isEnabled === ChallengeStatus.COMPLETED;
       return (
-        <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item)} activeOpacity={0.7}>
+        <View style={styles.itemContainer}>
           <View style={styles.itemHeader}>
             <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
@@ -105,13 +133,18 @@ export const ProfitListScreen = React.memo(() => {
               <Text style={[styles.statusText, { color: status.color }]}>{status.text}</Text>
             </View>
           </View>
-
           <View style={styles.itemContent}>
-            <View style={styles.itemLeft}>
+            <View style={styles.itemLine}>
               <View style={styles.itemRow}>
                 <Text style={styles.label}>挑战时间:</Text>
                 <Text style={styles.value}>{item.gameDate || '-'}</Text>
               </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>投手:</Text>
+                <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+              </View>
+            </View>
+            <View style={styles.itemLine}>
               <View style={styles.itemRow}>
                 <Text style={styles.label}>挑战上下水:</Text>
                 <Text style={styles.value}>{item.profitStr || '-'}</Text>
@@ -120,19 +153,22 @@ export const ProfitListScreen = React.memo(() => {
                 <Text style={styles.label}>挑战转码:</Text>
                 <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
               </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>投手:</Text>
-                <Text style={styles.value}>{item.playPersonName || '-'}</Text>
-              </View>
-            </View>
-            <View style={styles.arrowContainer}>
-              <Icon name="chevron-right" size={20} color="#bbb" />
             </View>
           </View>
-        </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            {showProfitBtn && (
+              <TouchableOpacity style={styles.actionButton} onPress={() => handleViewProfit(item)}>
+                <Text style={styles.buttonText}>查看利润分配</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.actionButton} onPress={() => handleViewContribution(item)}>
+              <Text style={styles.buttonText}>查看出资</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       );
     },
-    [handleItemPress],
+    [handleViewProfit, handleViewContribution],
   );
 
   // 渲染列表底部加载状态
@@ -160,7 +196,7 @@ export const ProfitListScreen = React.memo(() => {
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>查看利润分配</Text>
+        <Text style={styles.headerTitle}>我的挑战</Text>
         <View style={styles.headerRight} />
       </View>
 
@@ -183,12 +219,18 @@ export const ProfitListScreen = React.memo(() => {
       </View>
       {selectedProfit ? (
         <ProfitModal
-          visible={modalVisible}
-          onClose={handleCloseModal}
+          visible={profitModalVisible}
+          onClose={handleCloseProfitModal}
           profit={selectedProfit}
           loading={detailLoading}
         />
       ) : null}
+      <ContributionModal
+        visible={contributionModalVisible}
+        onClose={handleCloseContributionModal}
+        selectedContribution={selectedContribution}
+        loading={detailLoading}
+      />
     </SafeAreaView>
   );
 });
@@ -231,7 +273,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME_COLORS.cardBackground,
     paddingHorizontal: 10,
     paddingTop: 10,
-    paddingBottom: 2,
+    paddingBottom: 10,
     marginBottom: 8,
     borderWidth: 1,
     borderColor: THEME_COLORS.border.light,
@@ -263,24 +305,43 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   itemContent: {
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
-  itemLeft: {
-    flex: 1,
+  itemLine: {
+    flexDirection: 'row',
+    marginBottom: 8,
   },
   itemRow: {
     flexDirection: 'row',
-    marginBottom: 8,
+    flex: 1,
   },
   label: {
     fontSize: 14,
     color: THEME_COLORS.text.secondary,
-    width: 80,
   },
   value: {
     fontSize: 14,
     color: THEME_COLORS.text.primary,
-    flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: THEME_COLORS.border.light,
+    paddingTop: 8,
+  },
+  actionButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: THEME_COLORS.primary,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
   },
   arrowContainer: {
     justifyContent: 'center',
@@ -313,3 +374,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+
+export default MyGamesScreen;

@@ -16,8 +16,8 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
   //   navigation.navigate('GameHistory');
   // }, [navigation]);
 
-  const handleProfitPress = useCallback(() => {
-    navigation.navigate('ProfitList');
+  const handleMyGames = useCallback(() => {
+    navigation.navigate('MyGames');
   }, [navigation]);
 
   const handleLogoutPress = useCallback(async () => {
@@ -82,11 +82,11 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
 
         <View style={styles.menuContainer}>
           {/* <MenuItem icon="history" title="历史记录" onPress={handleHistoryPress} /> */}
-          <MenuItem icon="monetization-on" title="利润分配" onPress={handleProfitPress} />
+          <MenuItem icon="playlist-play" title="我的挑战" onPress={handleMyGames} />
         </View>
       </>
     ),
-    [user, handleProfitPress, handleLogoutPress, MenuItem],
+    [user, handleMyGames, handleLogoutPress, MenuItem],
   );
 
   return (

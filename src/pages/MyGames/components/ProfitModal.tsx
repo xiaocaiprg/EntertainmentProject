@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchProfitDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
+import { SlideModal } from '../../../components/SlideModal';
 
 interface ProfitModalProps {
   visible: boolean;
@@ -14,7 +15,7 @@ interface ProfitModalProps {
 export const ProfitModal = React.memo((props: ProfitModalProps) => {
   const { visible, onClose, profit, loading = false } = props;
 
-  const renderPersonProfitList = useCallback((profitData: GameMatchProfitDto) => {
+  const renderPersonMyGames = useCallback((profitData: GameMatchProfitDto) => {
     if (!profitData.personProfitDtoList || profitData.personProfitDtoList.length === 0) {
       return null;
     }
@@ -32,7 +33,7 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     );
   }, []);
 
-  const modalContent = useCallback(() => {
+  const renderContent = useCallback(() => {
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
@@ -69,74 +70,28 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           <Text style={styles.profitLabel}>{`投手公司:${profit.playCompanyName}`}</Text>
           <Text style={styles.profitValue}>{profit.playCompanyProfitStr}</Text>
         </View>
-        {renderPersonProfitList(profit)}
+        {renderPersonMyGames(profit)}
       </View>
     );
-  }, [loading, profit, renderPersonProfitList]);
+  }, [loading, profit, renderPersonMyGames]);
 
   return (
-    <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <TouchableOpacity style={styles.modalBackground} activeOpacity={1} onPress={onClose} />
-        <View style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
-            <View style={{ width: 30 }} />
-            <Text style={styles.modalTitle}>利润分配详情</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Icon name="close" size={24} color="#333" />
-            </TouchableOpacity>
-          </View>
-          <ScrollView nestedScrollEnabled={true}>{modalContent()}</ScrollView>
-        </View>
-      </View>
-    </Modal>
+    <SlideModal visible={visible} onClose={onClose} title="利润分配详情">
+      {renderContent()}
+    </SlideModal>
   );
 });
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalBackground: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  modalContainer: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '70%',
-    minHeight: '40%',
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: THEME_COLORS.text.primary,
-  },
-  closeButton: {
-    padding: 2,
-  },
   profitContent: {
     paddingHorizontal: 15,
     paddingVertical: 10,
+    marginBottom: 10,
   },
   profitItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 3,
+    paddingVertical: 8,
   },
   profitLabel: {
     fontSize: 15,
@@ -180,3 +135,5 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
+
+export default ProfitModal;

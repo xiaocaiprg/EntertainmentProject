@@ -17,7 +17,7 @@ declare global {
       AllChallenge: undefined;
       CompletedFundingChallenge: undefined;
       FundraisingChallenge: undefined;
-      ProfitList: undefined;
+      MyGames: undefined;
       ChallengeDetail: {
         matchId: number; // 挑战ID
       };
