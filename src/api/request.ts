@@ -4,6 +4,7 @@ import { eventEmitter, TOKEN_EXPIRED_EVENT } from '../utils/eventEmitter';
 import { PATH } from './services/authService';
 
 const BASE_URL = 'https://junlongpro.com/';
+// const BASE_URL = 'https://junlong.biz/';
 
 // 创建axios实例
 const request = axios.create({

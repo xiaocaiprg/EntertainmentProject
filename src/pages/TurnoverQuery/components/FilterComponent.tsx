@@ -1,25 +1,49 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
+import { UserResult } from '../../../interface/User';
 import { FilterProps, QueryCondition } from '../interface/ITurnoverQuery';
 import { DatePicker } from '../../../components/DatePicker';
 import { formatDate } from '../../../utils/date';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SlideModal } from '../../../components/SlideModal';
+import { getOperatorList } from '../../../api/services/gameService';
 
 export const FilterComponent = React.memo((props: FilterProps) => {
-  const { onSearch, userList, companyList, currentUserType } = props;
-  const [startDate, setStartDate] = useState<Date>(new Date());
+  const { onSearch, companyList, currentUserType } = props;
+  const [startDate, setStartDate] = useState<Date>(() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 6);
+    return date;
+  });
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const [selectedCompanyCode, setSelectedCompanyCode] = useState<string | undefined>(undefined);
-  const [selectedPersonCode, setSelectedPersonCode] = useState<string | undefined>(undefined);
+  const [selectedCompanyCode, setSelectedCompanyCode] = useState<string>('');
+  const [selectedPersonCode, setSelectedPersonCode] = useState<string>('');
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [personModalOpen, setPersonModalOpen] = useState(false);
+  const [users, setUsers] = useState<UserResult[]>([]);
+  const pageNumRef = useRef(1);
+  const pageSizeRef = useRef(100);
 
-  const handleCompanySelect = useCallback((companyCode: string, _companyName: string) => {
-    setSelectedCompanyCode(companyCode);
-    setCompanyModalOpen(false);
+  const fetchUsers = useCallback(async (companyCode: string) => {
+    const result = await getOperatorList({
+      companyCode: companyCode,
+      pageNum: pageNumRef.current,
+      pageSize: pageSizeRef.current,
+    });
+    if (result && result.records) {
+      setUsers(result.records);
+    }
   }, []);
+
+  const handleCompanySelect = useCallback(
+    (companyCode: string) => {
+      fetchUsers(companyCode);
+      setSelectedCompanyCode(companyCode);
+      setCompanyModalOpen(false);
+    },
+    [fetchUsers],
+  );
 
   const handlePersonSelect = useCallback((personCode: string) => {
     setSelectedPersonCode(personCode);
@@ -40,6 +64,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
     }
     onSearch(params);
   }, [startDate, endDate, selectedCompanyCode, selectedPersonCode, onSearch]);
+
   // 获取当前选中公司名称
   const selectedCompanyName = useMemo(() => {
     const company = companyList.find((c) => c.code === selectedCompanyCode);
@@ -47,9 +72,9 @@ export const FilterComponent = React.memo((props: FilterProps) => {
   }, [companyList, selectedCompanyCode]);
   // 获取当前选中人员名称
   const selectedPersonName = useMemo(() => {
-    const person = userList.find((u) => u.code === selectedPersonCode);
-    return person ? person.name : '选择个人(可选)';
-  }, [userList, selectedPersonCode]);
+    const person = users.find((u) => u.code === selectedPersonCode);
+    return person ? person.name : '选择个人(非必填)';
+  }, [users, selectedPersonCode]);
   const renderCompanyList = useCallback(
     () => (
       <View style={styles.selectorListContent}>
@@ -57,7 +82,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
           <TouchableOpacity
             key={company.code}
             style={[styles.selectorItem, selectedCompanyCode === company.code && styles.selectorItemSelected]}
-            onPress={() => handleCompanySelect(company.code!, company.name!)}
+            onPress={() => handleCompanySelect(company.code)}
           >
             <Text style={styles.selectorItemText}>{company.name}</Text>
             {selectedCompanyCode === company.code && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
@@ -78,11 +103,11 @@ export const FilterComponent = React.memo((props: FilterProps) => {
           {!selectedPersonCode && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
         </TouchableOpacity>
 
-        {userList.map((person) => (
+        {users?.map((person) => (
           <TouchableOpacity
             key={person.code}
             style={[styles.selectorItem, selectedPersonCode === person.code && styles.selectorItemSelected]}
-            onPress={() => handlePersonSelect(person.code!)}
+            onPress={() => handlePersonSelect(person.code)}
           >
             <Text style={styles.selectorItemText}>{person.name}</Text>
             {selectedPersonCode === person.code && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
@@ -90,7 +115,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
         ))}
       </View>
     ),
-    [userList, selectedPersonCode, handlePersonSelect],
+    [users, selectedPersonCode, handlePersonSelect],
   );
   const renderFilterBar = useCallback(
     () => (
@@ -136,8 +161,8 @@ export const FilterComponent = React.memo((props: FilterProps) => {
   );
 
   useEffect(() => {
-    setSelectedCompanyCode(undefined);
-    setSelectedPersonCode(undefined);
+    setSelectedCompanyCode('');
+    setSelectedPersonCode('');
   }, [currentUserType]);
   return (
     <View style={styles.container}>
