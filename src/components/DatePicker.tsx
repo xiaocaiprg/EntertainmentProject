@@ -69,7 +69,7 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
         <DateTimePicker
           value={selectedDate}
           mode="date"
-          display="default"
+          display="spinner"
           onChange={handleDateChange}
           minimumDate={new Date(2024, 0, 1)}
           maximumDate={new Date(2030, 11, 31)}
