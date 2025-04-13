@@ -9,7 +9,7 @@ export enum ChallengeStatus {
 // 添加
 export enum UserType {
   RECORDER = 1, // 记录人
-  OPERATOR = 2, // 投手
+  PLAYPERSON = 2, // 投手
   INVESTOR = 3, // 投资人
-  PITCHER = 4, // 运营人
+  OPERATIONPERSON = 4, // 运营人
 }

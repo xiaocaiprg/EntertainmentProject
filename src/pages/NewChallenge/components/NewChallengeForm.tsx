@@ -65,8 +65,8 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
           onSelect={(value: any) => updateField('operatorCode', value)}
           valueKey="code"
           labelKey="name"
-          isOpen={activeDropdown === DropdownType.OPERATOR}
-          onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.OPERATOR, isOpen)}
+          isOpen={activeDropdown === DropdownType.PLAYPERSON}
+          onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.PLAYPERSON, isOpen)}
           zIndex={3000}
           zIndexInverse={1000}
         />
