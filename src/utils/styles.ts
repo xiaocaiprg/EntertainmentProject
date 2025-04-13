@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 // 获取屏幕尺寸
 export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -57,4 +57,31 @@ export const getWidthPercentage = (percentage: number): number => {
  */
 export const getHeightPercentage = (percentage: number): number => {
   return (percentage / 100) * SCREEN_HEIGHT;
+};
+
+/**
+ * 合并样式函数
+ * 将自定义样式与默认样式合并
+ * @param defaultStyles 默认样式对象
+ * @param customStyles 自定义样式对象
+ * @returns 返回一个对象，其中包含所有合并后的样式
+ */
+export const mergeStyles = <T extends Record<string, any>>(
+  defaultStyles: T,
+  customStyles?: Partial<{ [K in keyof T]: any }>,
+): { [K in keyof T]: any } => {
+  if (!customStyles) {
+    return defaultStyles;
+  }
+
+  const mergedStyles: any = { ...defaultStyles };
+
+  Object.keys(customStyles).forEach((key) => {
+    const styleKey = key as keyof T;
+    if (styleKey in defaultStyles && customStyles[styleKey]) {
+      mergedStyles[styleKey] = StyleSheet.compose(defaultStyles[styleKey], customStyles[styleKey]);
+    }
+  });
+
+  return mergedStyles;
 };

@@ -8,6 +8,7 @@ export enum ModuleType {
   ALL_CHALLENGE = 'all_challenge',
   COMPLETED_FUNDING_CHALLENGE = 'completed_funding_challenge',
   FUNDRAISING_CHALLENGE = 'fundraising_challenge',
+  TURNOVER_QUERY = 'turnover_query',
 }
 
 // 模块配置类型定义
