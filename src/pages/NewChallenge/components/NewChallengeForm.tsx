@@ -42,22 +42,6 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
     );
   }, [formData]);
 
-  // 渲染挑战名称输入框
-  const renderChallengeNameInput = useCallback(() => {
-    return (
-      <View style={styles.inputContainer}>
-        <Text style={styles.labelText}>挑战名称</Text>
-        <TextInput
-          style={styles.textInput}
-          value={formData.name}
-          onChangeText={(text) => updateField('name', text)}
-          placeholder="请输入本次挑战名称"
-          placeholderTextColor="#999"
-        />
-      </View>
-    );
-  }, [formData.name, updateField]);
-
   // 处理下拉框状态变化
   const handleDropdownStateChange = useCallback(
     (type: DropdownType, isOpen: boolean) => {
@@ -107,8 +91,20 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         selectedDate={formData.date}
         onDateChange={(date) => updateField('date', date)}
         format="YYYY-MM-DD"
+        style={{
+          container: { marginBottom: 10 },
+        }}
       />
-      {renderChallengeNameInput()}
+      <View style={{ marginBottom: 10 }}>
+        <Text style={styles.labelText}>挑战名称</Text>
+        <TextInput
+          style={styles.textInput}
+          value={formData.name}
+          onChangeText={(text) => updateField('name', text)}
+          placeholder="请输入本次挑战名称"
+          placeholderTextColor="#999"
+        />
+      </View>
       <NumberInput
         title="设置本金"
         value={formData.principal}
@@ -145,9 +141,6 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
-  },
-  inputContainer: {
-    marginBottom: 20,
   },
   labelText: {
     fontSize: 16,

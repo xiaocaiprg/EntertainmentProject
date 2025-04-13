@@ -1,7 +1,8 @@
 import React, { useCallback, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ViewStyle, TextStyle } from 'react-native';
 import { formatDate } from '../utils/date';
 import { isAndroid, isIOS } from '../utils/platform';
+import { mergeStyles } from '../utils/styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface DatePickerProps {
@@ -10,12 +11,16 @@ interface DatePickerProps {
   format?: string;
   selectedDate: Date;
   onDateChange: (date: Date) => void;
+  style?: Partial<Record<keyof typeof styles, ViewStyle | TextStyle>>;
 }
 
 export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePickerProps) => {
-  const { title, selectedDate, onDateChange, placeholder = '请选择日期', format = 'YYYY-MM-DD' } = props;
+  const { title, selectedDate, onDateChange, placeholder = '请选择日期', format = 'YYYY-MM-DD', style } = props;
   const [showPicker, setShowPicker] = useState(false);
   const [tempSelectedDate, setTempSelectedDate] = useState<Date>(selectedDate);
+
+  // 使用mergeStyles合并样式
+  const mergedStyles = useMemo(() => mergeStyles(styles, style), [style]);
 
   // 打开日期选择器
   const handleOpenPicker = useCallback(() => {
@@ -59,17 +64,17 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
   }, [selectedDate, format, placeholder]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.labelText}>{title}</Text>
-      <TouchableOpacity style={styles.datePicker} onPress={handleOpenPicker}>
-        <Text style={styles.dateText}>{formattedDate}</Text>
+    <View style={mergedStyles.container}>
+      {title && <Text style={mergedStyles.labelText}>{title}</Text>}
+      <TouchableOpacity style={mergedStyles.datePicker} onPress={handleOpenPicker}>
+        <Text style={mergedStyles.dateText}>{formattedDate}</Text>
       </TouchableOpacity>
 
       {isAndroid() && showPicker && (
         <DateTimePicker
           value={selectedDate}
           mode="date"
-          display="default"
+          display="spinner"
           onChange={handleDateChange}
           minimumDate={new Date(2024, 0, 1)}
           maximumDate={new Date(2030, 11, 31)}
@@ -77,20 +82,20 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
       )}
 
       {isIOS() && showPicker && (
-        <Modal transparent={true} animationType="slide" visible={showPicker} supportedOrientations={['portrait']}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleCancel} style={styles.button}>
-                  <Text style={styles.buttonTextCancel}>取消</Text>
+        <Modal transparent={true} animationType="fade" visible={showPicker} supportedOrientations={['portrait']}>
+          <View style={mergedStyles.modalContainer}>
+            <View style={mergedStyles.modalContent}>
+              <View style={mergedStyles.buttonContainer}>
+                <TouchableOpacity onPress={handleCancel} style={mergedStyles.button}>
+                  <Text style={mergedStyles.buttonTextCancel}>取消</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleConfirm} style={styles.button}>
-                  <Text style={styles.buttonTextConfirm}>确定</Text>
+                <TouchableOpacity onPress={handleConfirm} style={mergedStyles.button}>
+                  <Text style={mergedStyles.buttonTextConfirm}>确定</Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.datePickerWrapper}>
+              <View style={mergedStyles.datePickerWrapper}>
                 <DateTimePicker
-                  style={styles.iosDatePicker}
+                  style={mergedStyles.iosDatePicker}
                   value={tempSelectedDate}
                   mode="date"
                   display="spinner"
@@ -98,6 +103,9 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
                   locale="zh-CN"
                   minimumDate={new Date(2024, 0, 1)}
                   maximumDate={new Date(2030, 11, 31)}
+                  themeVariant="light"
+                  textColor="#000000"
+                  accentColor="#007AFF"
                 />
               </View>
             </View>
@@ -107,10 +115,8 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
     </View>
   );
 });
-
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
     zIndex: 1,
   },
   labelText: {
@@ -124,7 +130,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     backgroundColor: '#f5f5f5',
-    padding: 12,
+    padding: 8,
   },
   dateText: {
     fontSize: 14,
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 16,
+    padding: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },

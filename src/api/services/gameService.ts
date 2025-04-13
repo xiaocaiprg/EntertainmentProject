@@ -13,6 +13,8 @@ import {
   PageDtoAddressInfo,
   QueryParams,
   UpdateMatchDocPersonParams,
+  GameTurnOverDtoParams,
+  GameTurnOverDto,
 } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
 
@@ -30,6 +32,7 @@ const PATH = {
   CHALLENGE_CREATE: 'haiyang/match/create',
   MATCH_UPDATE_DOC_PERSON: 'haiyang/match/updataDocPerson',
   MATCH_UPDATE_STATUS: 'haiyang/match/updateStatus',
+  MATCH_TURNOVER: 'haiyang/match/turnover',
 };
 
 export const getOperatorList = (params: UserRecordParams): Promise<RecorderList | null> => {
@@ -199,4 +202,17 @@ export const deleteInning = (inningId: number): Promise<string> => {
       throw new Error(res.msg);
     }
   });
+};
+export const getMatchTurnOver = (params: GameTurnOverDtoParams): Promise<GameTurnOverDto | null> => {
+  return post<ApiResponse<GameTurnOverDto>>(PATH.MATCH_TURNOVER, params)
+    .then((res) => {
+      if (res.code === 200) {
+        return res.data;
+      } else {
+        throw new Error(res.msg);
+      }
+    })
+    .catch(() => {
+      return null;
+    });
 };
