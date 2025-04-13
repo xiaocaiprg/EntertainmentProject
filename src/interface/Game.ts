@@ -192,3 +192,30 @@ export interface UpdateMatchDocPersonParams {
   id: number; // 挑战id
   docPersonCode: string;
 }
+
+export interface GameTurnOverDtoParams {
+  businessCode?: string;
+  companyCode?: string;
+  endTime: string;
+  startTime: string;
+}
+
+export interface GameTurnOverDto {
+  gameTurnOverItemDtoList?: GameTurnOverItemDto[];
+  profit?: number;
+  profitStr?: string;
+  turnOver?: number;
+  turnOverStr?: string;
+}
+
+export interface GameTurnOverItemDto {
+  addressInfoId?: number;
+  addressName?: string;
+  gameDate?: string;
+  id?: number;
+  name?: string;
+  profit?: number;
+  profitStr?: string;
+  turnOver?: number;
+  turnOverStr?: string;
+}
