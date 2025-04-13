@@ -7,7 +7,7 @@ export interface PageDtoCompany {
 }
 
 export interface Company {
-  code?: string;
+  code: string;
   createTime?: string;
   id?: number;
   integral?: number;

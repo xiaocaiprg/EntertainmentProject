@@ -140,8 +140,18 @@ export const MyGamesScreen = React.memo(() => {
                 <Text style={styles.value}>{item.gameDate || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
+                <Text style={styles.label}>挑战地点:</Text>
+                <Text style={styles.value}>{item.addressName}</Text>
+              </View>
+            </View>
+            <View style={styles.itemLine}>
+              <View style={styles.itemRow}>
                 <Text style={styles.label}>投手:</Text>
                 <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+              </View>
+              <View style={styles.itemRow}>
+                <Text style={styles.label}>记录:</Text>
+                <Text style={styles.value}>{item.docPersonName || '-'}</Text>
               </View>
             </View>
             <View style={styles.itemLine}>
