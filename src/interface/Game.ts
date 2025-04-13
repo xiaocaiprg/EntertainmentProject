@@ -6,7 +6,8 @@ export interface QueryParams {
   pageSize: number;
 }
 export interface UserRecordParams extends QueryParams {
-  type: number;
+  type?: number;
+  companyCode?: string;
 }
 export interface ChallengeListParams extends QueryParams {
   isEnabledList?: number[];

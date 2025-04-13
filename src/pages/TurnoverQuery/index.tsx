@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getCompany } from '../../api/services/companyService';
-import { getOperatorList, getMatchTurnOver } from '../../api/services/gameService';
+import { getMatchTurnOver } from '../../api/services/gameService';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { FilterComponent } from './components/FilterComponent';
@@ -13,7 +13,6 @@ import { QueryCondition } from './interface/ITurnoverQuery';
 import { UserType } from '../../interface/Common';
 import { GameTurnOverDto } from '../../interface/Game';
 import { Company } from '../../interface/Company';
-import { UserResult } from '../../interface/User';
 
 // 用户类型选项
 const userTypeOptions = [
@@ -28,7 +27,6 @@ export const TurnoverQueryScreen = React.memo(() => {
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<GameTurnOverDto | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [users, setUsers] = useState<UserResult[]>([]);
   const [currentUserType, setCurrentUserType] = useState<number>(UserType.INVESTOR);
 
   const pageNumRef = useRef(1);
@@ -44,22 +42,11 @@ export const TurnoverQueryScreen = React.memo(() => {
       setCompanies(result.records);
     }
   }, [currentUserType]);
-  const fetchUsers = useCallback(async () => {
-    const result = await getOperatorList({
-      type: currentUserType,
-      pageNum: pageNumRef.current,
-      pageSize: pageSizeRef.current,
-    });
-    if (result && result.records) {
-      setUsers(result.records);
-    }
-  }, [currentUserType]);
 
   const handleUserTypeChange = useCallback((type: number) => {
     setCurrentUserType(type);
     setCompanies([]);
     setSearchResults(null);
-    setUsers([]);
   }, []);
 
   const renderCategoryTabs = useCallback(
@@ -98,7 +85,6 @@ export const TurnoverQueryScreen = React.memo(() => {
 
   useEffect(() => {
     fetchCompanies();
-    fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserType]);
 
@@ -113,12 +99,7 @@ export const TurnoverQueryScreen = React.memo(() => {
         <View style={styles.headerRight} />
       </View>
       {renderCategoryTabs()}
-      <FilterComponent
-        onSearch={handleSearch}
-        userList={users}
-        companyList={companies}
-        currentUserType={currentUserType}
-      />
+      <FilterComponent onSearch={handleSearch} companyList={companies} currentUserType={currentUserType} />
       <ResultList loading={loading} data={searchResults} />
     </SafeAreaView>
   );

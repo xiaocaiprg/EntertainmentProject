@@ -22,7 +22,7 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     return (
       <>
         <View style={styles.divider} />
-        <Text style={styles.sectionTitle}>投资人利润详情</Text>
+        <Text style={styles.sectionTitle}>投资公司利润详情</Text>
         {profitData.personProfitDtoList.map((person, index) => (
           <View key={index} style={styles.profitItem}>
             <Text style={styles.profitLabel}>{person.investPersonName}</Text>

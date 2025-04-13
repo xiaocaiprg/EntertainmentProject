@@ -4,7 +4,7 @@ export interface UserParams {
 }
 export interface UserResult {
   agentId?: number;
-  code?: string;
+  code: string;
   createTime?: string;
   id?: number;
   integral?: number;
