@@ -1,6 +1,5 @@
 import { Company } from '../../../interface/Company';
 import { GameTurnOverDto } from '../../../interface/Game';
-import { UserResult } from '../../../interface/User';
 
 export interface QueryCondition {
   startTime: string;
@@ -12,7 +11,6 @@ export interface QueryCondition {
 
 export interface FilterProps {
   onSearch: (params: QueryCondition) => void;
-  userList: UserResult[];
   companyList: Company[];
   currentUserType: number;
 }

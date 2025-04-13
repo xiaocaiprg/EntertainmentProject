@@ -15,6 +15,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserResult | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [initCheckLogin, setInitCheckLogin] = useState<boolean>(true);
   const navigation = useNavigation();
 
   // 初始化时检查登录状态
@@ -27,6 +28,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } catch {
         setUser(null);
         setIsLoggedIn(false);
+      } finally {
+        setInitCheckLogin(false);
       }
     };
     checkUserStatus();
@@ -70,6 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value = {
     user,
     isLoggedIn,
+    initCheckLogin,
     login,
     logout,
   };

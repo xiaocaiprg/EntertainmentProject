@@ -4,6 +4,7 @@ import { UserResult, UserParams } from '../interface/User';
 export interface AuthContextType {
   user: UserResult | null;
   isLoggedIn: boolean;
+  initCheckLogin: boolean;
   login: (params: UserParams) => Promise<boolean>;
   logout: () => Promise<void>;
 }
@@ -11,6 +12,7 @@ export interface AuthContextType {
 export const AuthContext = React.createContext<AuthContextType>({
   user: null,
   isLoggedIn: false,
+  initCheckLogin: true,
   login: async () => false,
   logout: async () => {},
 });

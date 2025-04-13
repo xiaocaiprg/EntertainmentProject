@@ -1,5 +1,14 @@
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -18,7 +27,7 @@ export const HomeScreen = React.memo(() => {
   const [currentBanner, setCurrentBanner] = useState(0);
   const bannerScrollViewRef = useRef<ScrollView>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, initCheckLogin } = useAuth();
   const { userRole } = useRole();
 
   // 获取当前用户可访问的模块
@@ -160,8 +169,39 @@ export const HomeScreen = React.memo(() => {
     );
   }, [accessibleModules, handleModulePress]);
 
-  useEffect(() => {
+  // 渲染认证状态相关内容
+  const renderAuthContent = useCallback(() => {
+    // 如果正在进行初始身份验证检查，显示加载指示器
+    if (initCheckLogin) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={THEME_COLORS.primary} />
+          <Text style={styles.loadingText}>身份验证中...</Text>
+        </View>
+      );
+    }
+    // 身份验证已完成，且用户未登录，显示登录按钮
     if (!isLoggedIn) {
+      return (
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => {
+            navigation.navigate('Auth', {
+              returnScreen: 'Home',
+            });
+          }}
+        >
+          <Text style={styles.loginButtonText}>去登录</Text>
+        </TouchableOpacity>
+      );
+    }
+    // 用户已登录，不显示任何内容
+    return null;
+  }, [initCheckLogin, isLoggedIn, navigation]);
+
+  useEffect(() => {
+    // 只有在身份验证加载完成且用户未登录时才跳转
+    if (!initCheckLogin && !isLoggedIn) {
       navigation.navigate('Auth', {
         returnScreen: 'Home',
       });
@@ -182,18 +222,7 @@ export const HomeScreen = React.memo(() => {
         {bannerContent()}
         <View style={styles.contentContainer}>
           {renderModules()}
-          {!isLoggedIn && (
-            <TouchableOpacity
-              style={styles.loginButton}
-              onPress={() => {
-                navigation.navigate('Auth', {
-                  returnScreen: 'Home',
-                });
-              }}
-            >
-              <Text style={styles.loginButtonText}>去登录</Text>
-            </TouchableOpacity>
-          )}
+          {renderAuthContent()}
         </View>
       </ScrollView>
     </View>
@@ -340,5 +369,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 14,
+    color: '#666',
   },
 });
