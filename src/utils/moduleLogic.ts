@@ -37,29 +37,36 @@ export const availableModules: ModuleConfig[] = [
     icon: 'monetization-on',
     backgroundColor: '#2ecc71',
   },
+  {
+    id: '6',
+    title: '查看转码',
+    type: ModuleType.TURNOVER_QUERY,
+    icon: 'swap-horiz',
+    backgroundColor: '#0984e3',
+  },
 ];
 
 // 定义角色到模块的映射
 export const roleModuleMappings: RoleModuleMapping[] = [
   {
     role: 'INVESTMENT_MANAGER',
-    moduleTypes: [ModuleType.CHALLENGE_NEW, ModuleType.ALL_CHALLENGE],
+    moduleTypes: [ModuleType.CHALLENGE_NEW, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
     role: 'INVESTOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.FUNDRAISING_CHALLENGE],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.FUNDRAISING_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
     role: 'RECORDER',
-    moduleTypes: [ModuleType.CHALLENGE_EXISTING, ModuleType.ALL_CHALLENGE],
+    moduleTypes: [ModuleType.CHALLENGE_EXISTING, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
     role: 'OPERATOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
     role: 'PITCHER',
-    moduleTypes: [ModuleType.COMPLETED_FUNDING_CHALLENGE, ModuleType.ALL_CHALLENGE],
+    moduleTypes: [ModuleType.COMPLETED_FUNDING_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
 ];
 

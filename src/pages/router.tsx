@@ -15,6 +15,7 @@ import { CompletedFundingChallengeScreen } from './CompletedFundingChallenge/ind
 import { AllChallengeScreen } from './AllChallenge/index';
 import { FundraisingChallengeScreen } from './FundraisingChallenge/index';
 import { MyGamesScreen } from './MyGames/index';
+import { TurnoverQueryScreen } from './TurnoverQuery/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -37,6 +38,7 @@ type RootStackParamList = {
   CompletedFundingChallenge: undefined;
   FundraisingChallenge: undefined;
   MyGames: undefined;
+  TurnoverQuery: undefined;
 };
 
 // 通用导航类型
@@ -113,6 +115,7 @@ function AppNavigator() {
               <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
               <Stack.Screen name="FundraisingChallenge" component={FundraisingChallengeScreen} />
               <Stack.Screen name="MyGames" component={MyGamesScreen} />
+              <Stack.Screen name="TurnoverQuery" component={TurnoverQueryScreen} />
             </Stack.Navigator>
           </RoleProvider>
         </AuthProvider>
