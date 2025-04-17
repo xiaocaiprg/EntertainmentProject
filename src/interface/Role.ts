@@ -1,5 +1,15 @@
 // 用户角色类型定义
-export type UserRole = 'INVESTMENT_MANAGER' | 'INVESTOR' | 'RECORDER' | 'OPERATOR' | 'PITCHER';
+export type UserRole =
+  | 'INVESTMENT_ADMIN'
+  | 'INVESTOR'
+  | 'RECORDER'
+  | 'PLAYPERSON'
+  | 'OPERATIONPERSON'
+  | 'RECORDER_ADMIN'
+  | 'PLAY_ADMIN'
+  | 'OPERATION_ADMIN'
+  | 'ADMIN'
+  | 'USER';
 
 // 模块类型定义
 export enum ModuleType {

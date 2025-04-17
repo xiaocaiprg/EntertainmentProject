@@ -1,7 +1,7 @@
 // 定义下拉框枚举类型
 export enum DropdownType {
   NONE = 'none',
-  OPERATOR = 'operator',
+  PLAYPERSON = 'operator',
   LOCATION = 'location',
 }
 

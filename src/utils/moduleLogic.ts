@@ -49,7 +49,7 @@ export const availableModules: ModuleConfig[] = [
 // 定义角色到模块的映射
 export const roleModuleMappings: RoleModuleMapping[] = [
   {
-    role: 'INVESTMENT_MANAGER',
+    role: 'INVESTMENT_ADMIN',
     moduleTypes: [ModuleType.CHALLENGE_NEW, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
@@ -57,15 +57,27 @@ export const roleModuleMappings: RoleModuleMapping[] = [
     moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.FUNDRAISING_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
+    role: 'RECORDER_ADMIN',
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+  },
+  {
     role: 'RECORDER',
     moduleTypes: [ModuleType.CHALLENGE_EXISTING, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
-    role: 'OPERATOR',
+    role: 'PLAY_ADMIN',
     moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
-    role: 'PITCHER',
+    role: 'PLAYPERSON',
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+  },
+  {
+    role: 'OPERATION_ADMIN',
+    moduleTypes: [ModuleType.COMPLETED_FUNDING_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+  },
+  {
+    role: 'OPERATIONPERSON',
     moduleTypes: [ModuleType.COMPLETED_FUNDING_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
 ];
