@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface ConfirmModalProps {
   visible: boolean;
@@ -21,12 +22,13 @@ interface ConfirmModalProps {
 }
 
 export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
+  const { t } = useTranslation();
   const {
     visible,
     title,
     message,
-    cancelText = '取消',
-    confirmText = '确认',
+    cancelText = t('common.cancel'),
+    confirmText = t('common.confirm'),
     onCancel,
     onConfirm,
     isProcessing = false,

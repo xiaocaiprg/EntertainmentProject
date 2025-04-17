@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { GameRoundDto, GamePointDto } from '../../../interface/Game';
 import { PointItem } from './PointItem';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface RoundItemProps {
   round: GameRoundDto;
@@ -10,6 +11,7 @@ interface RoundItemProps {
 
 export const RoundItem = React.memo((props: RoundItemProps) => {
   const { round, index } = props;
+  const { t } = useTranslation();
 
   const renderPoint = useCallback((point: GamePointDto, idx: number) => {
     return <PointItem key={`point-${idx}`} point={point} index={idx} />;
@@ -18,23 +20,27 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
   return (
     <View style={styles.roundItem}>
       <View style={styles.roundHeader}>
-        <Text style={styles.roundTitle}>场次 {round.orderNumber || index + 1}</Text>
+        <Text style={styles.roundTitle}>
+          {t('challengeDetail.round')} {round.orderNumber || index + 1}
+        </Text>
         <View style={styles.itemRow}>
-          <Text style={styles.label}>本场上下水:</Text>
+          <Text style={styles.label}>{t('challengeDetail.roundWaterInfo')}:</Text>
           <Text style={styles.value}>{round.profitStr || '-'}</Text>
         </View>
         <View style={styles.itemRow}>
-          <Text style={styles.label}>本场转码:</Text>
+          <Text style={styles.label}>{t('challengeDetail.roundTranscoding')}:</Text>
           <Text style={styles.value}>{round.turnOverStr || '-'}</Text>
         </View>
-        <Text style={styles.roundStatus}>{round.isEnabled === 1 ? '进行中' : '已结束'}</Text>
+        <Text style={styles.roundStatus}>
+          {round.isEnabled === 1 ? t('challengeDetail.inProgress') : t('challengeDetail.ended')}
+        </Text>
       </View>
       {round.gamePointDtoList && round.gamePointDtoList.length > 0 && (
         <>
           <View style={styles.pointsContainer}>
-            <Text style={styles.pointsTitle}>详细信息</Text>
+            <Text style={styles.pointsTitle}>{t('challengeDetail.detailInfo')}</Text>
             <View style={styles.itemRow}>
-              <Text style={styles.label}>创建时间:</Text>
+              <Text style={styles.label}>{t('challengeDetail.createTime')}:</Text>
               <Text style={styles.value}>{round.createTime || '-'}</Text>
             </View>
           </View>

@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Sta
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../../hooks/useAuth';
+import { useTranslation } from '../../hooks/useTranslation';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 
 export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
+  const { t } = useTranslation();
   const { user, isLoggedIn, logout } = useAuth();
 
   const handleLoginPress = useCallback(() => {
@@ -18,6 +20,10 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
 
   const handleMyGames = useCallback(() => {
     navigation.navigate('MyGames');
+  }, [navigation]);
+
+  const handleSettingsPress = useCallback(() => {
+    navigation.navigate('Settings');
   }, [navigation]);
 
   const handleLogoutPress = useCallback(async () => {
@@ -43,13 +49,13 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     () => (
       <View style={styles.notLoggedInContainer}>
         <FontAwesome name="user-circle" size={100} color="#bdc3c7" />
-        <Text style={styles.loginText}>请登录以查看个人信息</Text>
+        <Text style={styles.loginText}>{t('auth.loginToViewProfile')}</Text>
         <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-          <Text style={styles.loginButtonText}>登录</Text>
+          <Text style={styles.loginButtonText}>{t('auth.login')}</Text>
         </TouchableOpacity>
       </View>
     ),
-    [handleLoginPress],
+    [handleLoginPress, t],
   );
 
   // 已登录状态的UI
@@ -76,17 +82,17 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         {/*
         <View style={styles.membershipCardWrapper}>
           <View style={styles.membershipCard}>
-            <Text style={styles.membershipLabel}>会员权益</Text>
+            <Text style={styles.membershipLabel}>{t('my.membershipBenefits')}</Text>
           </View>
         </View> */}
 
         <View style={styles.menuContainer}>
-          {/* <MenuItem icon="history" title="历史记录" onPress={handleHistoryPress} /> */}
-          <MenuItem icon="playlist-play" title="我的挑战" onPress={handleMyGames} />
+          {/* <MenuItem icon="history" title={t('my.historyRecord')} onPress={handleHistoryPress} /> */}
+          <MenuItem icon="playlist-play" title={t('navigation.myGames')} onPress={handleMyGames} />
         </View>
       </>
     ),
-    [user, handleMyGames, handleLogoutPress, MenuItem],
+    [user, handleMyGames, handleLogoutPress, MenuItem, t],
   );
 
   return (
@@ -94,7 +100,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
       <StatusBar barStyle="default" />
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSettingsPress}>
             <Icon name="menu" size={24} color="#fff" />
           </TouchableOpacity>
           {/* <TouchableOpacity>

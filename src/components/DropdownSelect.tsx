@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface DropdownSelectProps {
   options: any[];
@@ -17,10 +18,11 @@ interface DropdownSelectProps {
 }
 
 export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: DropdownSelectProps) => {
+  const { t } = useTranslation();
   const {
     options,
     selectedValue,
-    placeholder = '请选择',
+    placeholder = t('common.select'),
     onSelect,
     valueKey,
     labelKey,
@@ -96,7 +98,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
         listMessageContainerStyle={styles.emptyContainer}
         listMessageTextStyle={styles.emptyText}
         translation={{
-          NOTHING_TO_SHOW: '暂无数据',
+          NOTHING_TO_SHOW: t('common.noData'),
         }}
         itemKey="value"
         dropDownDirection={'BOTTOM'}

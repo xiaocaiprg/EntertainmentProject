@@ -5,7 +5,7 @@ import { GameMatchDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
 import { getChallengeList } from '../../api/services/gameService';
 import { ChallengeStatus } from '../../interface/Common';
-
+import { useTranslation } from '../../hooks/useTranslation';
 interface ChallengeListProps {
   onItemPress: (matchId: number | undefined) => void;
   onBack: () => void;
@@ -13,6 +13,7 @@ interface ChallengeListProps {
 
 export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) => {
   const { onItemPress, onBack } = props;
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
   const pageNum = useRef<number>(1);
@@ -95,10 +96,10 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <Text style={styles.footerText}>加载中...</Text>
+        <Text style={styles.footerText}>{t('common.loading')}</Text>
       </View>
     );
-  }, [loading]);
+  }, [loading, t]);
 
   return (
     <>
@@ -106,14 +107,14 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>募资中挑战</Text>
+        <Text style={styles.headerTitle}>{t('fundraisingChallenge.fundraisingChallenges')}</Text>
         <View style={styles.headerRight} />
       </View>
 
       <View style={styles.contentContainer}>
         {challengeList.length === 0 && !loading ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无募资中的挑战</Text>
+            <Text style={styles.emptyText}>{t('fundraisingChallenge.noFundraisingChallenges')}</Text>
           </View>
         ) : (
           <FlatList

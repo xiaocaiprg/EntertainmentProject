@@ -16,6 +16,7 @@ import { AllChallengeScreen } from './AllChallenge/index';
 import { FundraisingChallengeScreen } from './FundraisingChallenge/index';
 import { MyGamesScreen } from './MyGames/index';
 import { TurnoverQueryScreen } from './TurnoverQuery/index';
+import { SettingsScreen } from './Settings/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -24,6 +25,7 @@ import { RoleProvider } from '../context/RoleContext';
 import { isIOS } from '../utils/platform';
 import { THEME_COLORS } from '../utils/styles';
 import { GameRouteParams } from './Game/types';
+import { useTranslation } from '../hooks/useTranslation';
 
 // 定义导航参数类型
 type RootStackParamList = {
@@ -39,6 +41,7 @@ type RootStackParamList = {
   FundraisingChallenge: undefined;
   MyGames: undefined;
   TurnoverQuery: undefined;
+  Settings: undefined;
 };
 
 // 通用导航类型
@@ -49,6 +52,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 // 主页面底部Tab导航
 function MainTabs() {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -69,7 +74,7 @@ function MainTabs() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarLabel: '首页',
+          tabBarLabel: t('navigation.home'),
           tabBarIcon: ({ color, size }) => <Icon name="home" color={color} size={size} />,
           headerShown: false,
         }}
@@ -78,7 +83,7 @@ function MainTabs() {
         name="Tournament"
         component={TournamentScreen}
         options={{
-          tabBarLabel: '赛事',
+          tabBarLabel: t('navigation.tournament'),
           tabBarIcon: ({ color, size }) => <Icon name="emoji-events" color={color} size={size} />,
           headerShown: false,
         }}
@@ -87,7 +92,7 @@ function MainTabs() {
         name="My"
         component={MyScreen}
         options={{
-          tabBarLabel: '我的',
+          tabBarLabel: t('navigation.my'),
           tabBarIcon: ({ color, size }) => <FontAwesome name="user" color={color} size={size} />,
           headerShown: false,
         }}
@@ -116,6 +121,7 @@ function AppNavigator() {
               <Stack.Screen name="FundraisingChallenge" component={FundraisingChallengeScreen} />
               <Stack.Screen name="MyGames" component={MyGamesScreen} />
               <Stack.Screen name="TurnoverQuery" component={TurnoverQueryScreen} />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
             </Stack.Navigator>
           </RoleProvider>
         </AuthProvider>
