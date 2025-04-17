@@ -41,7 +41,7 @@ export const CompletedFundingChallengeScreen = React.memo(() => {
     const res = await getChallengeList({
       pageNum: pageNum.current,
       pageSize: pageSize,
-      isEnabledList: [ChallengeStatus.FUNDRAISING_COMPLETED], // 仅查询已完成募资的挑战
+      isEnabledList: [ChallengeStatus.FUNDRAISING_COMPLETED, ChallengeStatus.FUNDRAISING, ChallengeStatus.IN_PROGRESS], // 仅查询已完成募资的挑战
     });
     setLoading(false);
     if (res) {
