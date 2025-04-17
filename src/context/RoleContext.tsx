@@ -27,13 +27,19 @@ export const mapUserRole = (role?: string): UserRole | undefined => {
   if (!role) {
     return undefined;
   }
+
   // 根据后端返回的role值映射到前端定义的UserRole
   const roleMap: Record<string, UserRole> = {
-    ROLE_INVEST_ADMIN: 'INVESTMENT_MANAGER',
+    ROLE_INVEST_ADMIN: 'INVESTMENT_ADMIN',
     ROLE_INVESTPERSON: 'INVESTOR',
+    ROLE_DOC_ADMIN: 'RECORDER_ADMIN',
     ROLE_DOCPERSON: 'RECORDER',
-    ROLE_PLAYPERSON: 'OPERATOR',
-    ROLE_OPERATIONPERSON: 'PITCHER',
+    ROLE_PLAY_ADMIN: 'PLAY_ADMIN',
+    ROLE_PLAYPERSON: 'PLAYPERSON',
+    ROLE_OPERATION_ADMIN: 'OPERATION_ADMIN',
+    ROLE_OPERATIONPERSON: 'OPERATIONPERSON',
+    ROLE_ADMIN: 'ADMIN',
+    ROLE_USER: 'USER',
   };
   return roleMap[role] || undefined;
 };
@@ -44,6 +50,7 @@ interface RoleProviderProps {
 }
 
 // 角色提供者组件
+// ROLE_PLAYPERSON：投手公司员工  ROLE_INVESTPERSON:投资人 ROLE_OPERATIONPERSON:娱乐场公司员工ROLE_DOC_ADMIN：记录公司管理员 ROLE_PLAY_ADMIN:投手公司管理员 ROLE_INVEST_ADMIN：投资公司管理员 ROLE_OPERATION_ADMIN:娱乐场公司管理员  ROLE_ADMIN:系统管理员 ROLE_USER:普通用户
 export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const { user } = useAuth();
 
@@ -51,11 +58,11 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const userRole = useMemo(() => mapUserRole(user?.role), [user?.role]);
 
   // 角色判断辅助方法
-  const isInvestmentManager = useMemo(() => userRole === 'INVESTMENT_MANAGER', [userRole]);
+  const isInvestmentManager = useMemo(() => userRole === 'INVESTMENT_ADMIN', [userRole]);
   const isInvestor = useMemo(() => userRole === 'INVESTOR', [userRole]);
   const isRecorder = useMemo(() => userRole === 'RECORDER', [userRole]);
-  const isOperator = useMemo(() => userRole === 'OPERATOR', [userRole]);
-  const isPitcher = useMemo(() => userRole === 'PITCHER', [userRole]);
+  const isOperator = useMemo(() => userRole === 'PLAYPERSON', [userRole]);
+  const isPitcher = useMemo(() => userRole === 'OPERATIONPERSON', [userRole]);
 
   // 角色上下文值
   const value = {
