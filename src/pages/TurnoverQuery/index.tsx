@@ -18,8 +18,8 @@ import { Company } from '../../interface/Company';
 const userTypeOptions = [
   { label: '投资', value: UserType.INVESTOR },
   { label: '记录', value: UserType.RECORDER },
-  { label: '投手', value: UserType.OPERATOR },
-  { label: '运营', value: UserType.PITCHER },
+  { label: '投手', value: UserType.PLAYPERSON },
+  { label: '运营', value: UserType.OPERATIONPERSON },
 ];
 
 export const TurnoverQueryScreen = React.memo(() => {
