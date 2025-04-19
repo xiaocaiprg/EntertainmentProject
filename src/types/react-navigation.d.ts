@@ -22,6 +22,9 @@ declare global {
       ChallengeDetail: {
         matchId: number; // 挑战ID
       };
+      RoundDetail: {
+        matchId: number; // 挑战ID
+      };
     }
   }
 }

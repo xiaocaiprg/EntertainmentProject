@@ -160,7 +160,7 @@ export const CompletedFundingChallengeScreen = React.memo(() => {
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>已完成募资的挑战</Text>
+        <Text style={styles.headerTitle}>可修改的挑战</Text>
         <View style={styles.headerRight} />
       </View>
 

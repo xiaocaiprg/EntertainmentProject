@@ -88,7 +88,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
 
         <View style={styles.menuContainer}>
           {/* <MenuItem icon="history" title={t('my.historyRecord')} onPress={handleHistoryPress} /> */}
-          <MenuItem icon="playlist-play" title={t('navigation.myGames')} onPress={handleMyGames} />
+          <MenuItem icon="playlist-play" title={t('my.myGames')} onPress={handleMyGames} />
         </View>
       </>
     ),

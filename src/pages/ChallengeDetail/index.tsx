@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginRight: 2,
+    width: 75,
   },
   value: {
     fontSize: 14,

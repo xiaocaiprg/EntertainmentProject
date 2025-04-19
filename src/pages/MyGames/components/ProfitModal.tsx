@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchProfitDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
 import { SlideModal } from '../../../components/SlideModal';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ProfitModalProps {
   visible: boolean;
@@ -14,31 +15,35 @@ interface ProfitModalProps {
 
 export const ProfitModal = React.memo((props: ProfitModalProps) => {
   const { visible, onClose, profit, loading = false } = props;
+  const { t } = useTranslation();
 
-  const renderPersonMyGames = useCallback((profitData: GameMatchProfitDto) => {
-    if (!profitData.personProfitDtoList || profitData.personProfitDtoList.length === 0) {
-      return null;
-    }
-    return (
-      <>
-        <View style={styles.divider} />
-        <Text style={styles.sectionTitle}>投资公司利润详情</Text>
-        {profitData.personProfitDtoList.map((person, index) => (
-          <View key={index} style={styles.profitItem}>
-            <Text style={styles.profitLabel}>{person.investPersonName}</Text>
-            <Text style={styles.profitValue}>{person.profitStr}</Text>
-          </View>
-        ))}
-      </>
-    );
-  }, []);
+  const renderPersonMyGames = useCallback(
+    (profitData: GameMatchProfitDto) => {
+      if (!profitData.personProfitDtoList || profitData.personProfitDtoList.length === 0) {
+        return null;
+      }
+      return (
+        <>
+          <View style={styles.divider} />
+          <Text style={styles.sectionTitle}>{t('myGames.investmentCompanyProfitDetails')}</Text>
+          {profitData.personProfitDtoList.map((person, index) => (
+            <View key={index} style={styles.profitItem}>
+              <Text style={styles.profitLabel}>{person.investPersonName}</Text>
+              <Text style={styles.profitValue}>{person.profitStr}</Text>
+            </View>
+          ))}
+        </>
+      );
+    },
+    [t],
+  );
 
   const renderContent = useCallback(() => {
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>正在加载详情...</Text>
+          <Text style={styles.loadingText}>{t('myGames.loadingDetails')}</Text>
         </View>
       );
     }
@@ -47,7 +52,7 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
       return (
         <View style={styles.noProfitContainer}>
           <Icon name="info" size={40} color="#ccc" />
-          <Text style={styles.noProfitText}>暂无利润分配信息</Text>
+          <Text style={styles.noProfitText}>{t('myGames.noProfitInfo')}</Text>
         </View>
       );
     }
@@ -55,28 +60,28 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     return (
       <View style={styles.profitContent}>
         <View style={styles.profitItem}>
-          <Text style={styles.profitLabel}>{`记录公司:${profit.docCompanyName}`}</Text>
+          <Text style={styles.profitLabel}>{`${t('myGames.recordCompany')}:${profit.docCompanyName}`}</Text>
           <Text style={styles.profitValue}>{profit.docCompanyProfitStr}</Text>
         </View>
         <View style={styles.profitItem}>
-          <Text style={styles.profitLabel}>{`投资公司:${profit.investCompanyName}`}</Text>
+          <Text style={styles.profitLabel}>{`${t('myGames.investCompany')}:${profit.investCompanyName}`}</Text>
           <Text style={styles.profitValue}>{profit.investCompanyProfitStr}</Text>
         </View>
         <View style={styles.profitItem}>
-          <Text style={styles.profitLabel}>{`运营公司:${profit.operationCompanyName}`}</Text>
+          <Text style={styles.profitLabel}>{`${t('myGames.operationCompany')}:${profit.operationCompanyName}`}</Text>
           <Text style={styles.profitValue}>{profit.operationCompanyProfitStr}</Text>
         </View>
         <View style={styles.profitItem}>
-          <Text style={styles.profitLabel}>{`投手公司:${profit.playCompanyName}`}</Text>
+          <Text style={styles.profitLabel}>{`${t('myGames.playerCompany')}:${profit.playCompanyName}`}</Text>
           <Text style={styles.profitValue}>{profit.playCompanyProfitStr}</Text>
         </View>
         {renderPersonMyGames(profit)}
       </View>
     );
-  }, [loading, profit, renderPersonMyGames]);
+  }, [loading, profit, renderPersonMyGames, t]);
 
   return (
-    <SlideModal visible={visible} onClose={onClose} title="利润分配详情">
+    <SlideModal visible={visible} onClose={onClose} title={t('myGames.profitDetails')}>
       {renderContent()}
     </SlideModal>
   );

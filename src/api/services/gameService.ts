@@ -5,7 +5,6 @@ import {
   ChallengeList,
   ChallengeListParams,
   ChallengeCreateParams,
-  RoundCreateParams,
   InningCreateParams,
   GameRoundDto,
   UpdateStatusParams,
@@ -21,10 +20,6 @@ import { ApiResponse } from '../../interface/IModuleProps';
 const PATH = {
   USER_LIST: 'haiyang/business/page',
   ADDRESS_LIST: 'haiyang/addressInfo/page',
-  ROUND_CREATE: 'haiyang/round/create',
-  ROUND_LIST: 'haiyang/round/list',
-  ROUND_DETAIL: 'haiyang/round/',
-  ROUND_UPDATE: 'haiyang/round/updateStatus',
   INNING_CREATE: 'haiyang/inning/create',
   INNING_DELETE: 'haiyang/inning/delete',
   MATCH_DETAIL: 'haiyang/match/',
@@ -70,15 +65,7 @@ export const createChallenge = (params: ChallengeCreateParams): Promise<string> 
     }
   });
 };
-export const roundCreate = (params: RoundCreateParams): Promise<string> => {
-  return post<ApiResponse<string>>(PATH.ROUND_CREATE, params).then((res) => {
-    if (res.code === 200) {
-      return res.data;
-    } else {
-      throw new Error(res.msg);
-    }
-  });
-};
+
 export const inningCreate = (params: InningCreateParams): Promise<GameRoundDto | null> => {
   return post<ApiResponse<GameRoundDto>>(PATH.INNING_CREATE, params)
     .then((res) => {
@@ -92,45 +79,7 @@ export const inningCreate = (params: InningCreateParams): Promise<GameRoundDto |
       return null;
     });
 };
-export const getRoundList = (matchId: number): Promise<GameRoundDto[] | null> => {
-  return post<ApiResponse<GameRoundDto[]>>(PATH.ROUND_LIST, { matchId: matchId })
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-};
-export const getRoundDetail = (roundId: number): Promise<GameRoundDto | null> => {
-  return get<ApiResponse<GameRoundDto>>(`${PATH.ROUND_DETAIL}${roundId}`)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-};
-export const updateRoundStatus = (params: UpdateStatusParams): Promise<GameMatchDto | null> => {
-  return post<ApiResponse<GameMatchDto>>(PATH.ROUND_UPDATE, params)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-};
+
 export const getMatchDetail = (matchId: number): Promise<GameMatchDto | null> => {
   return get<ApiResponse<GameMatchDto>>(`${PATH.MATCH_DETAIL}${matchId}`)
     .then((res) => {

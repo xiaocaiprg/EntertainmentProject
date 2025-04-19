@@ -163,7 +163,7 @@ export const HomeScreen = React.memo(() => {
               <View style={[styles.moduleButton, { backgroundColor: module.backgroundColor }]}>
                 <Icon name={module.icon} size={28} color="#fff" />
               </View>
-              <Text style={styles.moduleButtonText}>{module.title}</Text>
+              <Text style={styles.moduleButtonText}>{t(module.title)}</Text>
             </TouchableOpacity>
           ))}
         </View>

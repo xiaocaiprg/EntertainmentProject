@@ -5,6 +5,8 @@ export const zh = {
     verifying: '身份验证中...',
     cancel: '取消',
     confirm: '确认',
+    ok: '确定',
+    error: '错误',
     select: '请选择',
     inputNumber: '请输入',
     selectDate: '请选择日期',
@@ -16,7 +18,6 @@ export const zh = {
   navigation: {
     home: '首页',
     my: '我的',
-    myGames: '我的游戏',
     settings: '设置',
   },
 
@@ -29,6 +30,16 @@ export const zh = {
   // 首页
   home: {
     functionMenu: '功能菜单',
+  },
+
+  // 模块标题
+  modules: {
+    challengeNew: '发起挑战',
+    record: '记录',
+    allChallengeList: '所有挑战列表',
+    updateRecorder: '更新记录人',
+    funding: '出资',
+    viewTranscoding: '查看转码',
   },
 
   // 设置相关
@@ -72,5 +83,35 @@ export const zh = {
   my: {
     membershipBenefits: '会员权益',
     historyRecord: '历史记录',
+    myGames: '我的挑战',
+  },
+
+  // 我的挑战
+  myGames: {
+    title: '我的挑战',
+    noGames: '暂无已完成的挑战记录',
+    viewProfit: '查看利润分配',
+    viewContribution: '查看出资',
+    restart: '场次重启',
+    roundDetails: '场次详情',
+    noRounds: '暂无场次记录',
+    restartRound: '重启本场',
+    restartRoundTitle: '重启场次',
+    restartRoundConfirmation: '确定要重启该场次吗？这将删除最后一把的数据。',
+    restartRoundFailed: '重启场次失败',
+    challengeTime: '挑战时间',
+    challengeLocation: '挑战地点',
+    pitcher: '投手',
+    recorder: '记录',
+    waterProfit: '挑战上下水',
+    turnover: '挑战转码',
+    profitDetails: '利润分配详情',
+    loadingDetails: '正在加载详情...',
+    noProfitInfo: '暂无利润分配信息',
+    recordCompany: '记录公司',
+    investCompany: '投资公司',
+    operationCompany: '运营公司',
+    playerCompany: '投手公司',
+    investmentCompanyProfitDetails: '投资公司利润详情',
   },
 };

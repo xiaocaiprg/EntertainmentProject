@@ -5,6 +5,8 @@ export const en = {
     verifying: 'Verifying...',
     cancel: 'Cancel',
     confirm: 'Confirm',
+    ok: 'OK',
+    error: 'Error',
     select: 'Please select',
     inputNumber: 'Please input',
     selectDate: 'Please select date',
@@ -16,7 +18,6 @@ export const en = {
   navigation: {
     home: 'Home',
     my: 'Mine',
-    myGames: 'My Games',
     settings: 'Settings',
   },
 
@@ -29,6 +30,16 @@ export const en = {
   // Home
   home: {
     functionMenu: 'Function Menu',
+  },
+
+  // Module Titles
+  modules: {
+    challengeNew: 'New Challenge',
+    record: 'Record',
+    allChallengeList: 'All Challenges',
+    updateRecorder: 'Update Recorder',
+    funding: 'Funding',
+    viewTranscoding: 'View Transcoding',
   },
 
   // Settings related
@@ -72,5 +83,35 @@ export const en = {
   my: {
     membershipBenefits: 'Membership Benefits',
     historyRecord: 'History Records',
+    myGames: 'My Games',
+  },
+
+  // My Games
+  myGames: {
+    title: 'My Games',
+    noGames: 'No completed game records',
+    viewProfit: 'View Profit Distribution',
+    viewContribution: 'View Contribution',
+    restart: 'Restart Round',
+    roundDetails: 'Round Details',
+    noRounds: 'No round records',
+    restartRound: 'Restart Round',
+    restartRoundTitle: 'Restart Round',
+    restartRoundConfirmation: 'Are you sure you want to restart this round? This will delete the last innings.',
+    restartRoundFailed: 'Failed to restart round',
+    challengeTime: 'Challenge Time',
+    challengeLocation: 'Challenge Location',
+    pitcher: 'Pitcher',
+    recorder: 'Recorder',
+    waterProfit: 'Challenge Water Profit',
+    turnover: 'Challenge Turnover',
+    profitDetails: 'Profit Distribution Details',
+    loadingDetails: 'Loading details...',
+    noProfitInfo: 'No profit distribution information',
+    recordCompany: 'Record Company',
+    investCompany: 'Investment Company',
+    operationCompany: 'Operation Company',
+    playerCompany: 'Player Company',
+    investmentCompanyProfitDetails: 'Investment Company Profit Details',
   },
 };

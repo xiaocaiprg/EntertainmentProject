@@ -11,6 +11,10 @@ interface LanguageOption {
   label: string;
 }
 
+const languageOptions: LanguageOption[] = [
+  { value: 'zh', label: '中文' },
+  { value: 'en', label: 'English' },
+];
 export const SettingsScreen = React.memo(() => {
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -19,11 +23,6 @@ export const SettingsScreen = React.memo(() => {
   const goBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
-
-  const languageOptions: LanguageOption[] = [
-    { value: 'zh', label: '中文' },
-    { value: 'en', label: 'English' },
-  ];
 
   const handleChangeLanguage = useCallback(
     async (language: string) => {
