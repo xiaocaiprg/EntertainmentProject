@@ -8,6 +8,9 @@ export interface RoleContextType {
   isInvestmentManager: boolean;
   isInvestor: boolean;
   isRecorder: boolean;
+  isRecorderAdmin: boolean;
+  isPlayAdmin: boolean;
+  isOperationAdmin: boolean;
   isOperator: boolean;
   isPitcher: boolean;
 }
@@ -18,6 +21,9 @@ export const RoleContext = createContext<RoleContextType>({
   isInvestmentManager: false,
   isInvestor: false,
   isRecorder: false,
+  isRecorderAdmin: false,
+  isPlayAdmin: false,
+  isOperationAdmin: false,
   isOperator: false,
   isPitcher: false,
 });
@@ -63,6 +69,9 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const isRecorder = useMemo(() => userRole === 'RECORDER', [userRole]);
   const isOperator = useMemo(() => userRole === 'PLAYPERSON', [userRole]);
   const isPitcher = useMemo(() => userRole === 'OPERATIONPERSON', [userRole]);
+  const isRecorderAdmin = useMemo(() => userRole === 'RECORDER_ADMIN', [userRole]);
+  const isPlayAdmin = useMemo(() => userRole === 'PLAY_ADMIN', [userRole]);
+  const isOperationAdmin = useMemo(() => userRole === 'OPERATION_ADMIN', [userRole]);
 
   // 角色上下文值
   const value = {
@@ -70,6 +79,9 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
     isInvestmentManager,
     isInvestor,
     isRecorder,
+    isRecorderAdmin,
+    isPlayAdmin,
+    isOperationAdmin,
     isOperator,
     isPitcher,
   };

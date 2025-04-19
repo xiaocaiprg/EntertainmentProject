@@ -83,7 +83,7 @@ export const RecorderSelector = React.memo((props: RecorderSelectorProps) => {
   }, [recorderList, selectedRecorder, submitting, onClose, onSubmit, renderRecorderItem]);
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onClose}>
       {modalContent}
     </Modal>
   );

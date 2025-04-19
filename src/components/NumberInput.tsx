@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface NumberInputProps {
   title: string;
@@ -12,11 +13,12 @@ interface NumberInputProps {
 }
 
 export const NumberInput: React.FC<NumberInputProps> = React.memo((props: NumberInputProps) => {
+  const { t } = useTranslation();
   const {
     title,
     value,
     onChangeText,
-    placeholder = '请输入',
+    placeholder = t('common.inputNumber'),
     keyboardType = 'decimal-pad',
     errorMessage,
     hint,

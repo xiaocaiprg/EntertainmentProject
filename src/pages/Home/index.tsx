@@ -18,12 +18,14 @@ import { useAuth } from '../../hooks/useAuth';
 import { useRole } from '../../hooks/useRole';
 import { getUserAccessibleModules } from '../../utils/moduleLogic';
 import { ModuleType } from '../../interface/Role';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const BANNER_HEIGHT = 180;
 const HEADER_HEIGHT = 50;
 const CARD_WIDTH = SCREEN_WIDTH - 40;
 
 export const HomeScreen = React.memo(() => {
+  const { t } = useTranslation();
   const [currentBanner, setCurrentBanner] = useState(0);
   const bannerScrollViewRef = useRef<ScrollView>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -130,8 +132,8 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.ALL_CHALLENGE:
           navigation.navigate('AllChallenge');
           break;
-        case ModuleType.COMPLETED_FUNDING_CHALLENGE:
-          navigation.navigate('CompletedFundingChallenge');
+        case ModuleType.CHANGE_RECORDER_CHALLENGE:
+          navigation.navigate('ChangeRecorderChallenge');
           break;
         case ModuleType.FUNDRAISING_CHALLENGE:
           navigation.navigate('FundraisingChallenge');
@@ -150,7 +152,7 @@ export const HomeScreen = React.memo(() => {
   const renderModules = useCallback(() => {
     return (
       <View style={styles.modulesContainer}>
-        <Text style={styles.sectionTitle}>功能菜单</Text>
+        <Text style={styles.sectionTitle}>{t('home.functionMenu')}</Text>
         <View style={styles.moduleGrid}>
           {accessibleModules.map((module) => (
             <TouchableOpacity
@@ -161,13 +163,13 @@ export const HomeScreen = React.memo(() => {
               <View style={[styles.moduleButton, { backgroundColor: module.backgroundColor }]}>
                 <Icon name={module.icon} size={28} color="#fff" />
               </View>
-              <Text style={styles.moduleButtonText}>{module.title}</Text>
+              <Text style={styles.moduleButtonText}>{t(module.title)}</Text>
             </TouchableOpacity>
           ))}
         </View>
       </View>
     );
-  }, [accessibleModules, handleModulePress]);
+  }, [accessibleModules, handleModulePress, t]);
 
   // 渲染认证状态相关内容
   const renderAuthContent = useCallback(() => {
@@ -176,7 +178,7 @@ export const HomeScreen = React.memo(() => {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>身份验证中...</Text>
+          <Text style={styles.loadingText}>{t('common.verifying')}</Text>
         </View>
       );
     }
@@ -191,13 +193,13 @@ export const HomeScreen = React.memo(() => {
             });
           }}
         >
-          <Text style={styles.loginButtonText}>去登录</Text>
+          <Text style={styles.loginButtonText}>{t('common.goLogin')}</Text>
         </TouchableOpacity>
       );
     }
     // 用户已登录，不显示任何内容
     return null;
-  }, [initCheckLogin, isLoggedIn, navigation]);
+  }, [initCheckLogin, isLoggedIn, navigation, t]);
 
   useEffect(() => {
     // 只有在身份验证加载完成且用户未登录时才跳转

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { ContributionDto } from '../../../interface/Contribution';
 import { THEME_COLORS } from '../../../utils/styles';
 import { GameMatchDto } from '../../../interface/Game';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ContributionListProps {
   contributions: ContributionDto[] | undefined;
@@ -11,6 +12,7 @@ interface ContributionListProps {
 
 export const ContributionList: React.FC<ContributionListProps> = React.memo((props) => {
   const { contributions, matchDetail } = props;
+  const { t } = useTranslation();
 
   const percentage = useMemo(() => {
     const contributedAmount = matchDetail?.contributedAmount || 0;
@@ -24,18 +26,18 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>募资信息</Text>
+      <Text style={styles.title}>{t('fundraisingChallenge.fundraisingInfo')}</Text>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>本金</Text>
+          <Text style={styles.label}>{t('fundraisingChallenge.principal')}</Text>
           <Text style={styles.value}>{matchDetail.principal || '-'}</Text>
         </View>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>已募资金额</Text>
+          <Text style={styles.label}>{t('fundraisingChallenge.raisedAmount')}</Text>
           <Text style={styles.valueHighlight}>{matchDetail.contributedAmount || '0'}</Text>
         </View>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>可募资金额</Text>
+          <Text style={styles.label}>{t('fundraisingChallenge.availableAmount')}</Text>
           <Text style={styles.valueAvailable}>{matchDetail.availableAmount || '0'}</Text>
         </View>
       </View>
@@ -48,15 +50,19 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
       </View>
       {contributions && contributions.length > 0 ? (
         <View>
-          <Text style={styles.contributionTitle}>出资明细</Text>
+          <Text style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</Text>
           <View style={styles.listContainer}>
             <FlatList
               data={contributions}
               keyExtractor={(item, index) => `${item.id}-${index}`}
               renderItem={({ item }) => (
                 <View style={styles.contributionContent}>
-                  <Text style={styles.contributionName}>出资人: {item.investPersonName}</Text>
-                  <Text style={styles.contributionAmount}>金额: {item.amount}</Text>
+                  <Text style={styles.contributionName}>
+                    {t('fundraisingChallenge.contributor')}: {item.investPersonName}
+                  </Text>
+                  <Text style={styles.contributionAmount}>
+                    {t('fundraisingChallenge.amount')}: {item.amount}
+                  </Text>
                 </View>
               )}
               style={styles.flatList}
@@ -68,7 +74,7 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
         </View>
       ) : (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>暂无出资记录</Text>
+          <Text style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</Text>
         </View>
       )}
     </View>

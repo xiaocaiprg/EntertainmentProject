@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface ConfirmModalProps {
   visible: boolean;
@@ -18,18 +19,21 @@ interface ConfirmModalProps {
   onCancel?: () => void;
   onConfirm?: () => void;
   isProcessing?: boolean;
+  customContent?: React.ReactNode;
 }
 
 export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
+  const { t } = useTranslation();
   const {
     visible,
     title,
     message,
-    cancelText = '取消',
-    confirmText = '确认',
+    cancelText = t('common.cancel'),
+    confirmText = t('common.confirm'),
     onCancel,
     onConfirm,
     isProcessing = false,
+    customContent,
   } = props;
 
   // 处理背景点击，阻止事件冒泡
@@ -48,6 +52,7 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
               </View>
               <View style={styles.modalBody}>
                 <Text style={styles.modalMessage}>{message}</Text>
+                {customContent && <View style={styles.customContent}>{customContent}</View>}
               </View>
               <View style={styles.modalFooter}>
                 {onCancel && (
@@ -115,6 +120,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     paddingHorizontal: 5,
+  },
+  customContent: {
+    marginTop: 10,
+    width: '100%',
   },
   modalFooter: {
     flexDirection: 'row',
