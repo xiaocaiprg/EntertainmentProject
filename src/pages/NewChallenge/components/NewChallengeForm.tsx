@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useState } from 'react';
-import { View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import DropdownSelect from '../../../components/DropdownSelect';
 import NumberInput from '../../../components/NumberInput';
@@ -9,6 +9,8 @@ import { UserResult } from '../../../interface/User';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
 import { ChallengeFormData, DropdownType } from '../interface/IModuleProps';
+import CustomText from '../../../components/CustomText';
+import CustomTextInput from '../../../components/CustomTextInput';
 
 interface NewChallengeFormProps {
   operators: UserResult[];
@@ -57,7 +59,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
   return (
     <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled">
       <>
-        <Text style={styles.labelText}>选择投手</Text>
+        <CustomText style={styles.labelText}>选择投手</CustomText>
         <DropdownSelect
           options={operators}
           selectedValue={formData.operatorCode}
@@ -72,7 +74,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         />
       </>
       <>
-        <Text style={styles.labelText}>选择地点</Text>
+        <CustomText style={styles.labelText}>选择地点</CustomText>
         <DropdownSelect
           options={locations}
           selectedValue={formData.locationId}
@@ -96,8 +98,8 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         }}
       />
       <View style={{ marginBottom: 10 }}>
-        <Text style={styles.labelText}>挑战名称</Text>
-        <TextInput
+        <CustomText style={styles.labelText}>挑战名称</CustomText>
+        <CustomTextInput
           style={styles.textInput}
           value={formData.name}
           onChangeText={(text) => updateField('name', text)}
@@ -132,7 +134,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         onPress={onConfirm}
         disabled={!isFormValid}
       >
-        <Text style={styles.confirmButtonText}>确认</Text>
+        <CustomText style={styles.confirmButtonText}>确认</CustomText>
       </TouchableOpacity>
     </ScrollView>
   );

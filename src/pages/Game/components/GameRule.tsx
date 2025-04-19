@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import CustomText from '../../../components/CustomText';
 
 interface GameRuleProps {
   handleBankerWin: () => void;
@@ -13,10 +14,10 @@ export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProp
   const { handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose } = props;
   return (
     <View style={styles.ruleContainer}>
-      <Text style={styles.ruleTitle}>规则</Text>
+      <CustomText style={styles.ruleTitle}>规则</CustomText>
       <View style={styles.betOptionsColumn}>
         <View style={[styles.betOption, styles.bankerOption]}>
-          <Text style={[styles.betLabel, styles.bankerLabel]}>庄</Text>
+          <CustomText style={[styles.betLabel, styles.bankerLabel]}>庄</CustomText>
           <View style={styles.buttonsContainer}>
             <View style={styles.buttonWithLabel}>
               <TouchableOpacity style={styles.button} onPress={handleBankerWin}>
@@ -32,7 +33,7 @@ export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProp
         </View>
 
         <View style={[styles.betOption, styles.playerOption]}>
-          <Text style={[styles.betLabel, styles.playerLabel]}>闲</Text>
+          <CustomText style={[styles.betLabel, styles.playerLabel]}>闲</CustomText>
 
           <View style={styles.buttonsContainer}>
             <View style={styles.buttonWithLabel}>
@@ -49,7 +50,7 @@ export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProp
         </View>
       </View>
 
-      <Text style={styles.ruleDescription}>点击"+"表示赢，点击"-"表示输</Text>
+      <CustomText style={styles.ruleDescription}>点击"+"表示赢，点击"-"表示输</CustomText>
     </View>
   );
 });

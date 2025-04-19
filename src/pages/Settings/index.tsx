@@ -1,10 +1,11 @@
 import React, { useCallback, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from '../../hooks/useTranslation';
 import { LanguageContext } from '../../context/LanguageContext';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
+import CustomText from '../../components/CustomText';
 
 interface LanguageOption {
   value: string;
@@ -39,12 +40,12 @@ export const SettingsScreen = React.memo(() => {
           <TouchableOpacity onPress={goBack}>
             <Icon name="arrow-back" size={24} color="#111" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('settings.settings')}</Text>
+          <CustomText style={styles.headerTitle}>{t('settings.settings')}</CustomText>
           <View style={{ width: 24 }} />
         </View>
         <View style={{ padding: 10 }}>
           <View style={styles.content}>
-            <Text style={styles.sectionTitle}>{`${t('settings.language')}:`}</Text>
+            <CustomText style={styles.sectionTitle}>{`${t('settings.language')}:`}</CustomText>
             <View style={styles.languageOptions}>
               {languageOptions.map((option) => (
                 <TouchableOpacity
@@ -52,9 +53,11 @@ export const SettingsScreen = React.memo(() => {
                   style={[styles.languageOption, currentLanguage === option.value && styles.selectedLanguage]}
                   onPress={() => handleChangeLanguage(option.value)}
                 >
-                  <Text style={[styles.languageText, currentLanguage === option.value && styles.selectedLanguageText]}>
+                  <CustomText
+                    style={[styles.languageText, currentLanguage === option.value && styles.selectedLanguageText]}
+                  >
                     {option.label}
-                  </Text>
+                  </CustomText>
                 </TouchableOpacity>
               ))}
             </View>

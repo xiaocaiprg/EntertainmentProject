@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { THEME_COLORS } from '../utils/styles';
+import CustomText from './CustomText';
 
 interface SlideModalProps {
   visible: boolean;
@@ -20,7 +21,7 @@ export const SlideModal = React.memo((props: SlideModalProps) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <View style={{ width: 30 }} />
-            <Text style={styles.modalTitle}>{title}</Text>
+            <CustomText style={styles.modalTitle}>{title}</CustomText>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Icon name="close" size={24} color="#333" />
             </TouchableOpacity>

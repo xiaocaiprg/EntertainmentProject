@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
+import CustomText from './CustomText';
+import CustomTextInput from './CustomTextInput';
 
 interface NumberInputProps {
   title: string;
@@ -40,9 +42,9 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
 
   return (
     <View style={styles.container}>
-      <Text style={styles.labelText}>{title}</Text>
+      <CustomText style={styles.labelText}>{title}</CustomText>
 
-      <TextInput
+      <CustomTextInput
         style={[styles.input, errorMessage && styles.inputError]}
         value={value}
         onChangeText={handleChangeText}
@@ -50,8 +52,8 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
         placeholderTextColor="#999"
         keyboardType={keyboardType}
       />
-      {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
-      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+      {hint ? <CustomText style={styles.hintText}>{hint}</CustomText> : null}
+      {errorMessage ? <CustomText style={styles.errorText}>{errorMessage}</CustomText> : null}
     </View>
   );
 });

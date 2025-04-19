@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -19,6 +18,7 @@ import { ConfirmModal } from '../../components/ConfirmModal';
 import { useTranslation } from '../../hooks/useTranslation';
 import { RootStackScreenProps } from '../router';
 import { RoundItem } from './components/RoundItem';
+import CustomText from '../../components/CustomText';
 
 // 使用导航堆栈中定义的类型
 type RoundDetailScreenProps = RootStackScreenProps<'RoundDetail'>;
@@ -98,7 +98,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>{t('common.loading')}</Text>
+          <CustomText style={styles.loadingText}>{t('common.loading')}</CustomText>
         </View>
       );
     }
@@ -106,7 +106,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
     if (!matchDetail?.roundList?.length) {
       return (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>{t('roundDetail.noRounds')}</Text>
+          <CustomText style={styles.emptyText}>{t('roundDetail.noRounds')}</CustomText>
         </View>
       );
     }
@@ -128,7 +128,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('roundDetail.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('roundDetail.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 

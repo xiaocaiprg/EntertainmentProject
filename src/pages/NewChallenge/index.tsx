@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity, Text } from 'react-native';
+import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { THEME_COLORS } from '../../utils/styles';
@@ -12,7 +12,7 @@ import { AddressInfo } from '../../interface/Game';
 import { formatDate } from '../../utils/date';
 import { validateChallengeParams } from './utils/validation';
 import { ChallengeFormData } from './interface/IModuleProps';
-
+import CustomText from '../../components/CustomText';
 export const NewChallengeScreen = React.memo(() => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -88,7 +88,7 @@ export const NewChallengeScreen = React.memo(() => {
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>新增挑战</Text>
+        <CustomText style={styles.headerTitle}>新增挑战</CustomText>
         <View style={styles.placeholder} />
       </View>
       <View style={styles.content}>

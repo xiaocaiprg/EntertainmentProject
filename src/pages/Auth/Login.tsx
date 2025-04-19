@@ -1,8 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import {
   View,
-  Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
@@ -16,6 +14,8 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
+import CustomText from '../../components/CustomText';
+import CustomTextInput from '../../components/CustomTextInput';
 
 interface LoginProps {
   navigation: any;
@@ -76,14 +76,14 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
             </TouchableOpacity>
 
             <View style={styles.header}>
-              <Text style={styles.title}>登录</Text>
-              <Text style={styles.subtitle}>欢迎回来</Text>
+              <CustomText style={styles.title}>登录</CustomText>
+              <CustomText style={styles.subtitle}>欢迎回来</CustomText>
             </View>
 
             <View style={styles.form}>
               <View style={styles.inputContainer}>
                 <Icon name="person" size={20} color="#6c5ce7" style={styles.inputIcon} />
-                <TextInput
+                <CustomTextInput
                   style={styles.input}
                   placeholder="用户编号"
                   placeholderTextColor="#95a5a6"
@@ -95,7 +95,7 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
 
               <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#6c5ce7" style={styles.inputIcon} />
-                <TextInput
+                <CustomTextInput
                   style={styles.input}
                   placeholder="密码"
                   placeholderTextColor="#95a5a6"
@@ -106,12 +106,12 @@ export const Login: React.FC<LoginProps> = React.memo((props) => {
               </View>
 
               <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-                {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>登录</Text>}
+                {loading ? <ActivityIndicator color="#fff" /> : <CustomText style={styles.buttonText}>登录</CustomText>}
               </TouchableOpacity>
               {/* <View style={styles.footer}>
-                <Text style={styles.footerText}>没有账号？</Text>
+                <CustomText style={styles.footerText}>没有账号？</CustomText>
                 <TouchableOpacity onPress={props.onToggleMode}>
-                  <Text style={styles.footerLink}>立即注册</Text>
+                  <CustomText style={styles.footerLink}>立即注册</CustomText>
                 </TouchableOpacity>
               </View> */}
             </View>

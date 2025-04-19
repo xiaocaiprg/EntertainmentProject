@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTranslation } from '../hooks/useTranslation';
+import CustomText from './CustomText';
 
 interface DropdownSelectProps {
   options: any[];
@@ -84,9 +85,11 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
         onChangeValue={handleValueChange}
         placeholder={placeholder}
         style={styles.dropdown}
+        renderListItem={(props) => {
+          return <CustomText style={styles.optionItem}>{props.label}</CustomText>;
+        }}
         textStyle={styles.dropdownText}
         listItemLabelStyle={styles.optionText}
-        listItemContainerStyle={styles.optionItem}
         maxHeight={200}
         scrollViewProps={{
           nestedScrollEnabled: true,

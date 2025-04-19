@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
@@ -9,6 +9,8 @@ import { ContributionDto } from '../../interface/Contribution';
 import { ChallengeDetailCard } from './components/ChallengeDetailCard';
 import { ContributionList } from './components/ContributionList';
 import ConfirmModal from '../../components/ConfirmModal';
+import CustomText from '../../components/CustomText';
+import CustomTextInput from '../../components/CustomTextInput';
 
 interface InvestmentDetailProps {
   matchId: number;
@@ -137,8 +139,8 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     return (
       <View style={styles.myContributionCard}>
         <View style={styles.myContributionInfo}>
-          <Text style={styles.cardTitle}>我的出资:</Text>
-          <Text style={styles.myContributionAmount}>{myContribution?.amount}</Text>
+          <CustomText style={styles.cardTitle}>我的出资:</CustomText>
+          <CustomText style={styles.myContributionAmount}>{myContribution?.amount}</CustomText>
         </View>
 
         {canDeleteContribution ? (
@@ -146,7 +148,7 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
             {submitting ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text style={styles.deleteButtonText}>删除</Text>
+              <CustomText style={styles.deleteButtonText}>删除</CustomText>
             )}
           </TouchableOpacity>
         ) : null}
@@ -157,8 +159,8 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
   const renderInvestForm = useCallback(() => {
     return (
       <View style={styles.investFormCard}>
-        <Text style={styles.cardTitle}>出资金额</Text>
-        <TextInput
+        <CustomText style={styles.cardTitle}>出资金额</CustomText>
+        <CustomTextInput
           style={styles.amountInput}
           value={amount}
           onChangeText={handleAmountChange}
@@ -166,7 +168,7 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
           placeholderTextColor="#999"
           keyboardType="numeric"
         />
-        <Text style={styles.amountHint}>可出资金额：{matchDetail?.availableAmount || 0}</Text>
+        <CustomText style={styles.amountHint}>可出资金额：{matchDetail?.availableAmount || 0}</CustomText>
 
         <TouchableOpacity
           style={[styles.investSubmitButton, !isAvailableForInvest && styles.disabledButton]}
@@ -176,7 +178,7 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
           {submitting ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.investSubmitButtonText}>确认出资</Text>
+            <CustomText style={styles.investSubmitButtonText}>确认出资</CustomText>
           )}
         </TouchableOpacity>
       </View>
@@ -187,7 +189,7 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-        <Text style={styles.loadingText}>加载中...</Text>
+        <CustomText style={styles.loadingText}>加载中...</CustomText>
       </View>
     );
   }
@@ -198,7 +200,7 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.detailTitle}>挑战出资</Text>
+        <CustomText style={styles.detailTitle}>挑战出资</CustomText>
         <View style={styles.headerRight} />
       </View>
 

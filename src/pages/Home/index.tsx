@@ -1,17 +1,9 @@
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  StatusBar,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import CustomText from '../../components/CustomText';
 import { STATUS_BAR_HEIGHT, SCREEN_WIDTH } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { useAuth } from '../../hooks/useAuth';
@@ -152,7 +144,7 @@ export const HomeScreen = React.memo(() => {
   const renderModules = useCallback(() => {
     return (
       <View style={styles.modulesContainer}>
-        <Text style={styles.sectionTitle}>{t('home.functionMenu')}</Text>
+        <CustomText style={styles.sectionTitle}>{t('home.functionMenu')}</CustomText>
         <View style={styles.moduleGrid}>
           {accessibleModules.map((module) => (
             <TouchableOpacity
@@ -163,7 +155,7 @@ export const HomeScreen = React.memo(() => {
               <View style={[styles.moduleButton, { backgroundColor: module.backgroundColor }]}>
                 <Icon name={module.icon} size={28} color="#fff" />
               </View>
-              <Text style={styles.moduleButtonText}>{t(module.title)}</Text>
+              <CustomText style={styles.moduleButtonText}>{t(module.title)}</CustomText>
             </TouchableOpacity>
           ))}
         </View>
@@ -178,7 +170,7 @@ export const HomeScreen = React.memo(() => {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>{t('common.verifying')}</Text>
+          <CustomText style={styles.loadingText}>{t('common.verifying')}</CustomText>
         </View>
       );
     }
@@ -193,7 +185,7 @@ export const HomeScreen = React.memo(() => {
             });
           }}
         >
-          <Text style={styles.loginButtonText}>{t('common.goLogin')}</Text>
+          <CustomText style={styles.loginButtonText}>{t('common.goLogin')}</CustomText>
         </TouchableOpacity>
       );
     }
@@ -217,7 +209,7 @@ export const HomeScreen = React.memo(() => {
 
       {/* 固定头部 */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>俊龍娛樂</Text>
+        <CustomText style={styles.headerTitle}>俊龍娛樂</CustomText>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>

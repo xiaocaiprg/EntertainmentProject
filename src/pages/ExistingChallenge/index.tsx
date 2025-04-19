@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity, Text } from 'react-native';
+import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { THEME_COLORS } from '../../utils/styles';
@@ -10,6 +10,7 @@ import { roundCreate } from '../../api/services/roundService';
 import { GameMatchDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
+import CustomText from '../../components/CustomText';
 
 export const ExistingChallengeScreen = React.memo(() => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -107,7 +108,7 @@ export const ExistingChallengeScreen = React.memo(() => {
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>查询已有挑战</Text>
+        <CustomText style={styles.headerTitle}>查询已有挑战</CustomText>
         <View style={styles.placeholder} />
       </View>
       <View style={styles.content}>

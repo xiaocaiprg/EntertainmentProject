@@ -1,14 +1,7 @@
 import React, { useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, Modal, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
+import CustomText from './CustomText';
 
 interface ConfirmModalProps {
   visible: boolean;
@@ -48,10 +41,10 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
           <TouchableWithoutFeedback onPress={handleModalPress}>
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>{title}</Text>
+                <CustomText style={styles.modalTitle}>{title}</CustomText>
               </View>
               <View style={styles.modalBody}>
-                <Text style={styles.modalMessage}>{message}</Text>
+                <CustomText style={styles.modalMessage}>{message}</CustomText>
                 {customContent && <View style={styles.customContent}>{customContent}</View>}
               </View>
               <View style={styles.modalFooter}>
@@ -61,7 +54,9 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
                     onPress={onCancel}
                     disabled={isProcessing}
                   >
-                    <Text style={[styles.cancelButtonText, isProcessing && styles.disabledText]}>{cancelText}</Text>
+                    <CustomText style={[styles.cancelButtonText, isProcessing && styles.disabledText]}>
+                      {cancelText}
+                    </CustomText>
                   </TouchableOpacity>
                 )}
                 {onConfirm && (
@@ -73,7 +68,9 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
                     {isProcessing ? (
                       <ActivityIndicator size="small" color="#fff" />
                     ) : (
-                      <Text style={[styles.confirmButtonText, isProcessing && styles.disabledText]}>{confirmText}</Text>
+                      <CustomText style={[styles.confirmButtonText, isProcessing && styles.disabledText]}>
+                        {confirmText}
+                      </CustomText>
                     )}
                   </TouchableOpacity>
                 )}

@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { ContributionDto } from '../../../interface/Contribution';
 import { THEME_COLORS } from '../../../utils/styles';
 import { SlideModal } from '../../../components/SlideModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from '../../../hooks/useTranslation';
+import CustomText from '../../../components/CustomText';
 
 interface ContributionModalProps {
   visible: boolean;
@@ -22,7 +23,7 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>{t('myGames.loadingDetails')}</Text>
+          <CustomText style={styles.loadingText}>{t('myGames.loadingDetails')}</CustomText>
         </View>
       );
     }
@@ -31,22 +32,22 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
       return (
         <View style={styles.emptyContainer}>
           <Icon name="info" size={40} color="#ccc" />
-          <Text style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</Text>
+          <CustomText style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</CustomText>
         </View>
       );
     }
 
     return (
       <View style={styles.contentContainer}>
-        <Text style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</Text>
+        <CustomText style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</CustomText>
         {selectedContribution.map((item, index) => (
           <View key={`${item.id}-${index}`} style={styles.contributionContent}>
-            <Text style={styles.contributionName}>
+            <CustomText style={styles.contributionName}>
               {t('fundraisingChallenge.contributor')}: {item.investPersonName}
-            </Text>
-            <Text style={styles.contributionAmount}>
+            </CustomText>
+            <CustomText style={styles.contributionAmount}>
               {t('fundraisingChallenge.amount')}: {item.amount}
-            </Text>
+            </CustomText>
           </View>
         ))}
       </View>

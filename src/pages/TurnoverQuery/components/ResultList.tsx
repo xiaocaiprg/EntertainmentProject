@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import CustomText from '../../../components/CustomText';
 import { THEME_COLORS } from '../../../utils/styles';
 import { ResultListProps } from '../interface/ITurnoverQuery';
 import { GameTurnOverItemDto } from '../../../interface/Game';
@@ -13,8 +14,8 @@ export const ResultList = React.memo((props: ResultListProps) => {
   const renderHeader = useCallback(
     () => (
       <View style={styles.headerContainer}>
-        <Text style={styles.totalText}>总转码: {data?.turnOverStr}</Text>
-        <Text style={styles.totalText}>总上下水: {data?.profitStr}</Text>
+        <CustomText style={styles.totalText}>总转码: {data?.turnOverStr}</CustomText>
+        <CustomText style={styles.totalText}>总上下水: {data?.profitStr}</CustomText>
       </View>
     ),
     [data],
@@ -24,22 +25,22 @@ export const ResultList = React.memo((props: ResultListProps) => {
     ({ item }: { item: GameTurnOverItemDto }) => (
       <View style={styles.itemContainer}>
         <View style={styles.itemHeader}>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-          <Text style={styles.itemDate}>{item.gameDate}</Text>
+          <CustomText style={styles.itemTitle}>{item.name}</CustomText>
+          <CustomText style={styles.itemDate}>{item.gameDate}</CustomText>
         </View>
         <View style={styles.itemContent}>
           <View style={styles.statWrapper}>
-            <Text style={styles.statLabel}>地址:</Text>
-            <Text style={styles.statValue}>{item.addressName}</Text>
+            <CustomText style={styles.statLabel}>地址:</CustomText>
+            <CustomText style={styles.statValue}>{item.addressName}</CustomText>
           </View>
 
           <View style={styles.statWrapper}>
-            <Text style={styles.statLabel}>转码:</Text>
-            <Text style={styles.statValue}>{item.turnOverStr}</Text>
+            <CustomText style={styles.statLabel}>转码:</CustomText>
+            <CustomText style={styles.statValue}>{item.turnOverStr}</CustomText>
           </View>
           <View style={styles.statWrapper}>
-            <Text style={styles.statLabel}>上下水:</Text>
-            <Text
+            <CustomText style={styles.statLabel}>上下水:</CustomText>
+            <CustomText
               style={[
                 styles.statValue,
                 parseFloat(item.profitStr || '0') > 0
@@ -50,7 +51,7 @@ export const ResultList = React.memo((props: ResultListProps) => {
               ]}
             >
               {item.profitStr || '0'}
-            </Text>
+            </CustomText>
           </View>
         </View>
       </View>
@@ -62,14 +63,14 @@ export const ResultList = React.memo((props: ResultListProps) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-        <Text style={styles.loadingText}>正在加载数据...</Text>
+        <CustomText style={styles.loadingText}>正在加载数据...</CustomText>
       </View>
     );
   }
   if (!hasData) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>暂无数据</Text>
+        <CustomText style={styles.emptyText}>暂无数据</CustomText>
       </View>
     );
   }

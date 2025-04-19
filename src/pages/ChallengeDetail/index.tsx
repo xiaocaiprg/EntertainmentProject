@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -22,6 +21,7 @@ import { RoundItem } from './components/RoundItem';
 import { FundraisingInfo } from './components/FundraisingInfo';
 import { RootStackScreenProps } from '../router';
 import { useTranslation } from '../../hooks/useTranslation';
+import CustomText from '../../components/CustomText';
 
 // 使用导航堆栈中定义的类型
 type ChallengeDetailScreenProps = RootStackScreenProps<'ChallengeDetail'>;
@@ -134,45 +134,45 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
           <View style={styles.infoRow}>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.challengeName')}:</Text>
-                <Text style={styles.value} numberOfLines={1}>
+                <CustomText style={styles.label}>{t('challengeDetail.challengeName')}:</CustomText>
+                <CustomText style={styles.value} numberOfLines={1}>
                   {matchDetail.name || '-'}
-                </Text>
+                </CustomText>
                 <View style={styles.statusContainer}>
                   <View style={[styles.statusTag, { backgroundColor: `${statusInfo.color}20` }]}>
-                    <Text style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</Text>
+                    <CustomText style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</CustomText>
                   </View>
                 </View>
               </View>
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.recorder')}:</Text>
-                <Text style={styles.value}>{matchDetail.docPersonName || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.recorder')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.docPersonName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.pitcher')}:</Text>
-                <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
-              </View>
-            </View>
-            <View style={styles.infoColumn}>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.location')}:</Text>
-                <Text style={styles.value}>{matchDetail.addressName || '-'}</Text>
-              </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.time')}:</Text>
-                <Text style={styles.value}>{matchDetail.gameDate || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.pitcher')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.playPersonName || '-'}</CustomText>
               </View>
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.waterProfit')}:</Text>
-                <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.location')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.addressName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.turnover')}:</Text>
-                <Text style={styles.value}>{matchDetail.turnOverStr || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.time')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.gameDate || '-'}</CustomText>
+              </View>
+            </View>
+            <View style={styles.infoColumn}>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('challengeDetail.waterProfit')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.profitStr || '-'}</CustomText>
+              </View>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('challengeDetail.turnover')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.turnOverStr || '-'}</CustomText>
               </View>
             </View>
           </View>
@@ -182,12 +182,12 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
           <View style={styles.endChallengeContainer}>
             <TouchableOpacity style={styles.endChallengeButton} onPress={showEndChallengeConfirm} disabled={processing}>
               <Icon name="stop-circle" size={18} color="#fff" style={styles.endButtonIcon} />
-              <Text style={styles.endChallengeButtonText}>{t('challengeDetail.endChallenge')}</Text>
+              <CustomText style={styles.endChallengeButtonText}>{t('challengeDetail.endChallenge')}</CustomText>
             </TouchableOpacity>
           </View>
         )}
         {matchDetail?.roundList?.length ? (
-          <Text style={styles.sectionTitle}>{t('challengeDetail.roundInfo')}</Text>
+          <CustomText style={styles.sectionTitle}>{t('challengeDetail.roundInfo')}</CustomText>
         ) : null}
         <View style={styles.roundsContainer}>{matchDetail.roundList?.map(renderRound)}</View>
       </ScrollView>
@@ -218,7 +218,7 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
 
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>{t('challengeDetail.noDetail')}</Text>
+        <CustomText style={styles.emptyText}>{t('challengeDetail.noDetail')}</CustomText>
       </View>
     );
   }, [loading, matchDetail, renderMatchDetail, t]);
@@ -230,7 +230,7 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('challengeDetail.detail')}</Text>
+        <CustomText style={styles.headerTitle}>{t('challengeDetail.detail')}</CustomText>
         <View style={styles.headerRight} />
       </View>
       {renderContent()}

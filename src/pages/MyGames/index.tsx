@@ -1,14 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList, getMatchDetail } from '../../api/services/gameService';
 import { ContributionDto } from '../../interface/Contribution';
@@ -23,6 +14,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import useFocusRefresh from '../../hooks/useFocusRefresh';
 import { useRole } from '../../hooks/useRole';
 import { RootStackScreenProps } from '../router';
+import CustomText from '../../components/CustomText';
 
 // 使用导航堆栈中定义的类型
 type MyGamesScreenProps = RootStackScreenProps<'MyGames'>;
@@ -140,42 +132,42 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
       return (
         <View style={styles.itemContainer}>
           <View style={styles.itemHeader}>
-            <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
-            </Text>
+            </CustomText>
             <View style={[styles.statusTag, { backgroundColor: status.color + '20' }]}>
-              <Text style={[styles.statusText, { color: status.color }]}>{status.text}</Text>
+              <CustomText style={[styles.statusText, { color: status.color }]}>{status.text}</CustomText>
             </View>
           </View>
           <View style={styles.itemContent}>
             <View style={styles.itemLine}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('myGames.challengeTime')}:</Text>
-                <Text style={styles.value}>{item.gameDate || '-'}</Text>
+                <CustomText style={styles.label}>{t('myGames.challengeTime')}:</CustomText>
+                <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('myGames.challengeLocation')}:</Text>
-                <Text style={styles.value}>{item.addressName}</Text>
-              </View>
-            </View>
-            <View style={styles.itemLine}>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('myGames.pitcher')}:</Text>
-                <Text style={styles.value}>{item.playPersonName || '-'}</Text>
-              </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('myGames.recorder')}:</Text>
-                <Text style={styles.value}>{item.docPersonName || '-'}</Text>
+                <CustomText style={styles.label}>{t('myGames.challengeLocation')}:</CustomText>
+                <CustomText style={styles.value}>{item.addressName}</CustomText>
               </View>
             </View>
             <View style={styles.itemLine}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('myGames.waterProfit')}:</Text>
-                <Text style={styles.value}>{item.profitStr || '-'}</Text>
+                <CustomText style={styles.label}>{t('myGames.pitcher')}:</CustomText>
+                <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('myGames.turnover')}:</Text>
-                <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+                <CustomText style={styles.label}>{t('myGames.recorder')}:</CustomText>
+                <CustomText style={styles.value}>{item.docPersonName || '-'}</CustomText>
+              </View>
+            </View>
+            <View style={styles.itemLine}>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('myGames.waterProfit')}:</CustomText>
+                <CustomText style={styles.value}>{item.profitStr || '-'}</CustomText>
+              </View>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('myGames.turnover')}:</CustomText>
+                <CustomText style={styles.value}>{item.turnOverStr || '-'}</CustomText>
               </View>
             </View>
           </View>
@@ -186,7 +178,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
                 onPress={() => handleViewRoundDetail(item)}
               >
                 <Icon name="refresh" size={12} color="#fff" style={styles.buttonIcon} />
-                <Text style={styles.buttonText}>{t('myGames.restart')}</Text>
+                <CustomText style={styles.buttonText}>{t('myGames.restart')}</CustomText>
               </TouchableOpacity>
             )}
             {showEditBetBtn && (
@@ -195,16 +187,16 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
                 onPress={() => handleViewRoundDetail(item)}
               >
                 <Icon name="edit" size={12} color="#fff" style={styles.buttonIcon} />
-                <Text style={styles.buttonText}>{t('myGames.editBet')}</Text>
+                <CustomText style={styles.buttonText}>{t('myGames.editBet')}</CustomText>
               </TouchableOpacity>
             )}
             {showProfitBtn && (
               <TouchableOpacity style={styles.actionButton} onPress={() => handleViewProfit(item)}>
-                <Text style={styles.buttonText}>{t('myGames.viewProfit')}</Text>
+                <CustomText style={styles.buttonText}>{t('myGames.viewProfit')}</CustomText>
               </TouchableOpacity>
             )}
             <TouchableOpacity style={styles.actionButton} onPress={() => handleViewContribution(item)}>
-              <Text style={styles.buttonText}>{t('myGames.viewContribution')}</Text>
+              <CustomText style={styles.buttonText}>{t('myGames.viewContribution')}</CustomText>
             </TouchableOpacity>
           </View>
         </View>
@@ -221,7 +213,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <Text style={styles.footerText}>{t('common.loading')}</Text>
+        <CustomText style={styles.footerText}>{t('common.loading')}</CustomText>
       </View>
     );
   }, [loading, t]);
@@ -238,7 +230,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('myGames.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('myGames.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -255,7 +247,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
         />
         {challengeList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>{t('myGames.noGames')}</Text>
+            <CustomText style={styles.emptyText}>{t('myGames.noGames')}</CustomText>
           </View>
         )}
       </View>

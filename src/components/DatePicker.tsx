@@ -1,11 +1,11 @@
 import React, { useCallback, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ViewStyle, TextStyle } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, ViewStyle, TextStyle } from 'react-native';
 import { formatDate } from '../utils/date';
 import { isAndroid, isIOS } from '../utils/platform';
 import { mergeStyles } from '../utils/styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTranslation } from '../hooks/useTranslation';
-
+import CustomText from './CustomText';
 interface DatePickerProps {
   title: string;
   placeholder?: string;
@@ -74,9 +74,9 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
 
   return (
     <View style={mergedStyles.container}>
-      {title && <Text style={mergedStyles.labelText}>{title}</Text>}
+      {title && <CustomText style={mergedStyles.labelText}>{title}</CustomText>}
       <TouchableOpacity style={mergedStyles.datePicker} onPress={handleOpenPicker}>
-        <Text style={mergedStyles.dateText}>{formattedDate}</Text>
+        <CustomText style={mergedStyles.dateText}>{formattedDate}</CustomText>
       </TouchableOpacity>
 
       {isAndroid() && showPicker && (
@@ -96,10 +96,10 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
             <View style={mergedStyles.modalContent}>
               <View style={mergedStyles.buttonContainer}>
                 <TouchableOpacity onPress={handleCancel} style={mergedStyles.button}>
-                  <Text style={mergedStyles.buttonTextCancel}>{t('common.cancel')}</Text>
+                  <CustomText style={mergedStyles.buttonTextCancel}>{t('common.cancel')}</CustomText>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleConfirm} style={mergedStyles.button}>
-                  <Text style={mergedStyles.buttonTextConfirm}>{t('common.confirm')}</Text>
+                  <CustomText style={mergedStyles.buttonTextConfirm}>{t('common.confirm')}</CustomText>
                 </TouchableOpacity>
               </View>
               <View style={mergedStyles.datePickerWrapper}>
