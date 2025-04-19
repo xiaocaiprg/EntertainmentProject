@@ -21,6 +21,7 @@ import ConfirmModal from '../../components/ConfirmModal';
 import { RoundItem } from './components/RoundItem';
 import { FundraisingInfo } from './components/FundraisingInfo';
 import { RootStackScreenProps } from '../router';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // 使用导航堆栈中定义的类型
 type ChallengeDetailScreenProps = RootStackScreenProps<'ChallengeDetail'>;
@@ -32,6 +33,7 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
   const [processing, setProcessing] = useState<boolean>(false);
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
   const { isInvestmentManager } = useRole();
+  const { t } = useTranslation();
 
   const fetchMatchDetail = useCallback(async () => {
     setLoading(true);
@@ -68,31 +70,34 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
     });
     if (result) {
       fetchMatchDetail();
-      Alert.alert('操作成功', '挑战已成功结束');
+      Alert.alert(t('common.success'), t('challengeDetail.endSuccess'));
     } else {
-      Alert.alert('错误', '操作失败，请重试');
+      Alert.alert(t('common.error'), t('challengeDetail.endFailed'));
     }
     setProcessing(false);
     setConfirmModalVisible(false);
-  }, [matchId, fetchMatchDetail]);
+  }, [matchId, fetchMatchDetail, t]);
 
   // 获取状态文本和颜色
-  const getStatusInfo = useCallback((status: number): { text: string; color: string } => {
-    switch (status) {
-      case ChallengeStatus.ENDED:
-        return { text: '已结束', color: '#999999' };
-      case ChallengeStatus.IN_PROGRESS:
-        return { text: '进行中', color: '#1890ff' };
-      case ChallengeStatus.FUNDRAISING:
-        return { text: '募资中', color: '#52c41a' };
-      case ChallengeStatus.FUNDRAISING_COMPLETED:
-        return { text: '募资完成', color: '#faad14' };
-      case ChallengeStatus.COMPLETED:
-        return { text: '已完成', color: '#722ed1' };
-      default:
-        return { text: '未知', color: '#999999' };
-    }
-  }, []);
+  const getStatusInfo = useCallback(
+    (status: number): { text: string; color: string } => {
+      switch (status) {
+        case ChallengeStatus.ENDED:
+          return { text: t('challenge.status.ended'), color: '#999999' };
+        case ChallengeStatus.IN_PROGRESS:
+          return { text: t('challenge.status.inProgress'), color: '#1890ff' };
+        case ChallengeStatus.FUNDRAISING:
+          return { text: t('challenge.status.fundraising'), color: '#52c41a' };
+        case ChallengeStatus.FUNDRAISING_COMPLETED:
+          return { text: t('challenge.status.fundraisingCompleted'), color: '#faad14' };
+        case ChallengeStatus.COMPLETED:
+          return { text: t('challenge.status.completed'), color: '#722ed1' };
+        default:
+          return { text: t('challenge.status.unknown'), color: '#999999' };
+      }
+    },
+    [t],
+  );
 
   // 判断挑战是否可以结束
   const canEndChallenge = useMemo(
@@ -129,7 +134,7 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
           <View style={styles.infoRow}>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战名称:</Text>
+                <Text style={styles.label}>{t('challengeDetail.challengeName')}:</Text>
                 <Text style={styles.value} numberOfLines={1}>
                   {matchDetail.name || '-'}
                 </Text>
@@ -142,31 +147,31 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>记录人:</Text>
+                <Text style={styles.label}>{t('challengeDetail.recorder')}:</Text>
                 <Text style={styles.value}>{matchDetail.docPersonName || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>投手:</Text>
+                <Text style={styles.label}>{t('challengeDetail.pitcher')}:</Text>
                 <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
               </View>
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>地点:</Text>
+                <Text style={styles.label}>{t('challengeDetail.location')}:</Text>
                 <Text style={styles.value}>{matchDetail.addressName || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>时间:</Text>
+                <Text style={styles.label}>{t('challengeDetail.time')}:</Text>
                 <Text style={styles.value}>{matchDetail.gameDate || '-'}</Text>
               </View>
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战上下水:</Text>
+                <Text style={styles.label}>{t('challengeDetail.waterProfit')}:</Text>
                 <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战转码:</Text>
+                <Text style={styles.label}>{t('challengeDetail.turnover')}:</Text>
                 <Text style={styles.value}>{matchDetail.turnOverStr || '-'}</Text>
               </View>
             </View>
@@ -177,15 +182,26 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
           <View style={styles.endChallengeContainer}>
             <TouchableOpacity style={styles.endChallengeButton} onPress={showEndChallengeConfirm} disabled={processing}>
               <Icon name="stop-circle" size={18} color="#fff" style={styles.endButtonIcon} />
-              <Text style={styles.endChallengeButtonText}>结束挑战</Text>
+              <Text style={styles.endChallengeButtonText}>{t('challengeDetail.endChallenge')}</Text>
             </TouchableOpacity>
           </View>
         )}
-        {matchDetail?.roundList?.length ? <Text style={styles.sectionTitle}>场次信息</Text> : null}
+        {matchDetail?.roundList?.length ? (
+          <Text style={styles.sectionTitle}>{t('challengeDetail.roundInfo')}</Text>
+        ) : null}
         <View style={styles.roundsContainer}>{matchDetail.roundList?.map(renderRound)}</View>
       </ScrollView>
     );
-  }, [matchDetail, statusInfo, canEndChallenge, processing, showEndChallengeConfirm, renderRound, showFundraisingInfo]);
+  }, [
+    matchDetail,
+    statusInfo,
+    canEndChallenge,
+    processing,
+    showEndChallengeConfirm,
+    renderRound,
+    showFundraisingInfo,
+    t,
+  ]);
 
   const renderContent = useCallback(() => {
     if (loading) {
@@ -202,10 +218,10 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
 
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>暂无挑战详情</Text>
+        <Text style={styles.emptyText}>{t('challengeDetail.noDetail')}</Text>
       </View>
     );
-  }, [loading, matchDetail, renderMatchDetail]);
+  }, [loading, matchDetail, renderMatchDetail, t]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -214,16 +230,16 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>挑战详情</Text>
+        <Text style={styles.headerTitle}>{t('challengeDetail.detail')}</Text>
         <View style={styles.headerRight} />
       </View>
       {renderContent()}
       <ConfirmModal
         visible={confirmModalVisible}
-        title="确认结束挑战"
-        message="确定要结束该挑战吗？此操作不可撤销。"
-        cancelText="取消"
-        confirmText="确认结束"
+        title={t('challengeDetail.confirmEnd')}
+        message={t('challengeDetail.confirmEndMessage')}
+        cancelText={t('common.cancel')}
+        confirmText={t('challengeDetail.confirmEndAction')}
         onCancel={hideEndChallengeConfirm}
         onConfirm={confirmEndChallenge}
         isProcessing={processing}
@@ -307,7 +323,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginRight: 2,
-    width: 75,
+    width: 70,
   },
   value: {
     fontSize: 14,

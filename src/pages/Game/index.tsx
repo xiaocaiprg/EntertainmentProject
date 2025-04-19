@@ -9,7 +9,7 @@ import { GameHistory } from './components/GameHistory';
 import { GameActions } from './components/GameActions';
 import { useGameLogic } from './hooks/useGameLogic';
 import { BetChoice } from './types';
-import { deleteInning } from '../../api/services/gameService';
+import { deleteInning } from '../../api/services/inningService';
 import { getRoundDetail } from '../../api/services/roundService';
 import { RootStackScreenProps } from '../router';
 import { updateGameStats } from './utils/gameLogic';

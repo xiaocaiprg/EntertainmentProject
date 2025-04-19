@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { GameRoundDto, GamePointDto } from '../../../interface/Game';
 import { PointItem } from './PointItem';
@@ -16,6 +16,8 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
   const renderPoint = useCallback((point: GamePointDto, idx: number) => {
     return <PointItem key={`point-${idx}`} point={point} index={idx} />;
   }, []);
+
+  const faultData = useMemo(() => round.faultGameInningDtoList || [], [round.faultGameInningDtoList]);
 
   return (
     <View style={styles.roundItem}>
@@ -35,6 +37,20 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
           {round.isEnabled === 1 ? t('challengeDetail.inProgress') : t('challengeDetail.ended')}
         </Text>
       </View>
+
+      {faultData.length > 0 && (
+        <View style={styles.faultContainer}>
+          <Text style={styles.faultTitle}>{t('challengeDetail.faultBetData')}</Text>
+          <View style={styles.faultItemsContainer}>
+            {faultData.map((item, idx) => (
+              <Text style={styles.faultText} key={`fault-${item.id || idx}`}>
+                {`第${item.eventNum}轮-第${item.orderNumber}把实际押注:  ${item.betNumber}`}
+              </Text>
+            ))}
+          </View>
+        </View>
+      )}
+
       {round.gamePointDtoList && round.gamePointDtoList.length > 0 && (
         <>
           <View style={styles.pointsContainer}>
@@ -63,6 +79,7 @@ const styles = StyleSheet.create({
   roundHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
     paddingBottom: 6,
@@ -80,10 +97,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginVertical: 2,
   },
   label: {
     fontSize: 13,
     color: '#666',
+    marginRight: 5,
   },
   value: {
     fontSize: 13,
@@ -97,7 +116,24 @@ const styles = StyleSheet.create({
   pointsTitle: {
     fontSize: 14,
     fontWeight: '500',
-    marginVertical: 8,
+    marginVertical: 4,
     color: '#333',
+  },
+  faultContainer: {
+    marginVertical: 5,
+  },
+  faultTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#EF4B00',
+  },
+  faultItemsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginTop: 2,
+  },
+  faultText: {
+    fontSize: 13,
+    color: '#555',
   },
 });

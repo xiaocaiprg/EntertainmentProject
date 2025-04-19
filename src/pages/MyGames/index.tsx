@@ -134,6 +134,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
       const showProfitBtn = item.isEnabled === ChallengeStatus.ENDED || item.isEnabled === ChallengeStatus.COMPLETED;
       const isAllRoundEnd = item.roundList?.every((round) => round.isEnabled === ChallengeStatus.ENDED);
       const showRestartBtn = item.isEnabled === ChallengeStatus.IN_PROGRESS && isAllRoundEnd && isOperationAdmin;
+      const showEditBetBtn = item.isEnabled === ChallengeStatus.IN_PROGRESS && isOperationAdmin;
 
       return (
         <View style={styles.itemContainer}>
@@ -185,6 +186,15 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
               >
                 <Icon name="refresh" size={12} color="#fff" style={styles.buttonIcon} />
                 <Text style={styles.buttonText}>{t('myGames.restart')}</Text>
+              </TouchableOpacity>
+            )}
+            {showEditBetBtn && (
+              <TouchableOpacity
+                style={[styles.actionButton, styles.editBetButton]}
+                onPress={() => handleViewRoundDetail(item)}
+              >
+                <Icon name="edit" size={12} color="#fff" style={styles.buttonIcon} />
+                <Text style={styles.buttonText}>{t('myGames.editBet')}</Text>
               </TouchableOpacity>
             )}
             {showProfitBtn && (
@@ -360,16 +370,17 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    flexWrap: 'wrap',
     borderTopWidth: 1,
     borderTopColor: THEME_COLORS.border.light,
-    paddingTop: 8,
   },
   actionButton: {
     paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     backgroundColor: THEME_COLORS.primary,
     borderRadius: 4,
     marginLeft: 8,
+    marginTop: 4,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -408,7 +419,9 @@ const styles = StyleSheet.create({
   },
   restartButton: {
     backgroundColor: '#4a6fa5',
-    marginRight: 8,
+  },
+  editBetButton: {
+    backgroundColor: '#5a9e6f',
   },
 });
 

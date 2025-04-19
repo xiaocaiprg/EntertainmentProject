@@ -5,8 +5,6 @@ import {
   ChallengeList,
   ChallengeListParams,
   ChallengeCreateParams,
-  InningCreateParams,
-  GameRoundDto,
   UpdateStatusParams,
   GameMatchDto,
   PageDtoAddressInfo,
@@ -20,8 +18,6 @@ import { ApiResponse } from '../../interface/IModuleProps';
 const PATH = {
   USER_LIST: 'haiyang/business/page',
   ADDRESS_LIST: 'haiyang/addressInfo/page',
-  INNING_CREATE: 'haiyang/inning/create',
-  INNING_DELETE: 'haiyang/inning/delete',
   MATCH_DETAIL: 'haiyang/match/',
   CHALLENGE_LIST: 'haiyang/match/page',
   CHALLENGE_CREATE: 'haiyang/match/create',
@@ -65,21 +61,6 @@ export const createChallenge = (params: ChallengeCreateParams): Promise<string> 
     }
   });
 };
-
-export const inningCreate = (params: InningCreateParams): Promise<GameRoundDto | null> => {
-  return post<ApiResponse<GameRoundDto>>(PATH.INNING_CREATE, params)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-};
-
 export const getMatchDetail = (matchId: number): Promise<GameMatchDto | null> => {
   return get<ApiResponse<GameMatchDto>>(`${PATH.MATCH_DETAIL}${matchId}`)
     .then((res) => {
@@ -143,15 +124,7 @@ export const updateMatchStatus = (params: UpdateStatusParams): Promise<GameMatch
       return null;
     });
 };
-export const deleteInning = (inningId: number): Promise<string> => {
-  return post<ApiResponse<string>>(PATH.INNING_DELETE, { id: inningId }).then((res) => {
-    if (res.code === 200) {
-      return res.data;
-    } else {
-      throw new Error(res.msg);
-    }
-  });
-};
+
 export const getMatchTurnOver = (params: GameTurnOverDtoParams): Promise<GameTurnOverDto | null> => {
   return post<ApiResponse<GameTurnOverDto>>(PATH.MATCH_TURNOVER, params)
     .then((res) => {

@@ -102,7 +102,6 @@ export const AllChallengeScreen = React.memo(() => {
   const renderItem = useCallback(
     (item: GameMatchDto) => {
       const status = getStatusText(item.isEnabled);
-
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemHeader}>

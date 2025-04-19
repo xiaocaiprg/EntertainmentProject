@@ -14,11 +14,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getMatchDetail } from '../../api/services/gameService';
 import { removeLastInning } from '../../api/services/roundService';
 import { GameMatchDto, GameRoundDto } from '../../interface/Game';
-import { ChallengeStatus } from '../../interface/Common';
 import { THEME_COLORS } from '../../utils/styles';
 import { ConfirmModal } from '../../components/ConfirmModal';
 import { useTranslation } from '../../hooks/useTranslation';
 import { RootStackScreenProps } from '../router';
+import { RoundItem } from './components/RoundItem';
 
 // 使用导航堆栈中定义的类型
 type RoundDetailScreenProps = RootStackScreenProps<'RoundDetail'>;
@@ -78,53 +78,18 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
       fetchMatchDetail(); // 重新获取数据
     } catch (error) {
       setConfirmModalVisible(false);
-      const errorMessage = error instanceof Error ? error.message : t('myGames.restartRoundFailed');
+      const errorMessage = error instanceof Error ? error.message : t('roundDetail.restartRoundFailed');
       Alert.alert(t('common.error'), errorMessage, [{ text: t('common.ok'), style: 'cancel' }], { cancelable: true });
       console.log('重启场次失败:', error);
-    } finally {
-      setConfirmModalVisible(false);
-      setProcessing(false);
     }
+    setProcessing(false);
   }, [selectedRoundId, fetchMatchDetail, t]);
 
-  // 渲染场次项
   const renderRoundItem = useCallback(
     ({ item, index }: { item: GameRoundDto; index: number }) => {
-      const showRestartButton = index === 0 && item?.isEnabled === ChallengeStatus.ENDED;
-      return (
-        <View style={styles.roundItem}>
-          <View style={styles.roundHeader}>
-            <Text style={styles.roundTitle}>
-              {t('challengeDetail.round')} {item.orderNumber}
-            </Text>
-            <Text style={styles.createTime}>
-              {t('challengeDetail.createTime')}: {item.createTime || '-'}
-            </Text>
-          </View>
-
-          <View style={styles.roundContent}>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>{t('challengeDetail.roundWaterInfo')}:</Text>
-              <Text style={styles.infoValue}>{item.profitStr || '-'}</Text>
-            </View>
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>{t('challengeDetail.roundTranscoding')}:</Text>
-              <Text style={styles.infoValue}>{item.turnOverStr || '-'}</Text>
-            </View>
-          </View>
-          {showRestartButton && (
-            <View style={styles.actionContainer}>
-              <TouchableOpacity style={styles.restartButton} onPress={() => showRestartConfirm(item.id)}>
-                <Icon name="refresh" size={16} color="#fff" style={styles.buttonIcon} />
-                <Text style={styles.buttonText}>{t('myGames.restartRound')}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      );
+      return <RoundItem item={item} index={index} onRestartConfirm={showRestartConfirm} onRefresh={fetchMatchDetail} />;
     },
-    [showRestartConfirm, t],
+    [showRestartConfirm, fetchMatchDetail],
   );
 
   // 渲染内容区域
@@ -141,7 +106,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
     if (!matchDetail?.roundList?.length) {
       return (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>{t('myGames.noRounds')}</Text>
+          <Text style={styles.emptyText}>{t('roundDetail.noRounds')}</Text>
         </View>
       );
     }
@@ -163,7 +128,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('myGames.roundDetails')}</Text>
+        <Text style={styles.headerTitle}>{t('roundDetail.title')}</Text>
         <View style={styles.headerRight} />
       </View>
 
@@ -171,8 +136,8 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
 
       <ConfirmModal
         visible={confirmModalVisible}
-        title={t('myGames.restartRoundTitle')}
-        message={t('myGames.restartRoundConfirmation')}
+        title={t('roundDetail.restartRoundTitle')}
+        message={t('roundDetail.restartRoundConfirmation')}
         onCancel={handleCancelRestart}
         onConfirm={handleConfirmRestart}
         isProcessing={processing}
@@ -191,7 +156,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 50,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#eeeeee',
@@ -227,73 +192,7 @@ const styles = StyleSheet.create({
     color: THEME_COLORS.text.light,
   },
   listContent: {
-    padding: 12,
-  },
-  roundItem: {
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    marginBottom: 10,
+    backgroundColor: '#f5f5f5',
     padding: 10,
   },
-  roundHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eeeeee',
-    paddingVertical: 2,
-  },
-  roundTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: THEME_COLORS.text.primary,
-  },
-  createTime: {
-    fontSize: 12,
-    color: THEME_COLORS.text.light,
-  },
-  roundContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginRight: 4,
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: THEME_COLORS.text.secondary,
-    marginRight: 4,
-  },
-  infoValue: {
-    fontSize: 14,
-    color: THEME_COLORS.text.primary,
-    fontWeight: '500',
-  },
-  actionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 8,
-  },
-  restartButton: {
-    backgroundColor: '#4a6fa5',
-    borderRadius: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-  },
-  buttonIcon: {
-    marginRight: 4,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '500',
-  },
 });
-
-export default RoundDetailScreen;
