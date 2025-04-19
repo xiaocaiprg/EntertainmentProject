@@ -4,6 +4,7 @@ import { formatDate } from '../utils/date';
 import { isAndroid, isIOS } from '../utils/platform';
 import { mergeStyles } from '../utils/styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface DatePickerProps {
   title: string;
@@ -15,7 +16,15 @@ interface DatePickerProps {
 }
 
 export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePickerProps) => {
-  const { title, selectedDate, onDateChange, placeholder = '请选择日期', format = 'YYYY-MM-DD', style } = props;
+  const { t } = useTranslation();
+  const {
+    title,
+    selectedDate,
+    onDateChange,
+    placeholder = t('common.selectDate'),
+    format = 'YYYY-MM-DD',
+    style,
+  } = props;
   const [showPicker, setShowPicker] = useState(false);
   const [tempSelectedDate, setTempSelectedDate] = useState<Date>(selectedDate);
 
@@ -87,10 +96,10 @@ export const DatePicker: React.FC<DatePickerProps> = React.memo((props: DatePick
             <View style={mergedStyles.modalContent}>
               <View style={mergedStyles.buttonContainer}>
                 <TouchableOpacity onPress={handleCancel} style={mergedStyles.button}>
-                  <Text style={mergedStyles.buttonTextCancel}>取消</Text>
+                  <Text style={mergedStyles.buttonTextCancel}>{t('common.cancel')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleConfirm} style={mergedStyles.button}>
-                  <Text style={mergedStyles.buttonTextConfirm}>确定</Text>
+                  <Text style={mergedStyles.buttonTextConfirm}>{t('common.confirm')}</Text>
                 </TouchableOpacity>
               </View>
               <View style={mergedStyles.datePickerWrapper}>

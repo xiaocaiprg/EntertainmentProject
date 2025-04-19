@@ -8,7 +8,8 @@ import {
   isGameOver,
   updateConsecutiveDemotions,
 } from '../utils/gameLogic';
-import { inningCreate, updateRoundStatus } from '../../../api/services/gameService';
+import { inningCreate } from '../../../api/services/inningService';
+import { updateRoundStatus } from '../../../api/services/roundService';
 import { createHistoryRecord } from '../utils/historyHelper';
 
 export const useGameLogic = () => {

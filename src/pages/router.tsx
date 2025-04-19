@@ -11,19 +11,23 @@ import { NewChallengeScreen } from './NewChallenge/index';
 import { ExistingChallengeScreen } from './ExistingChallenge/index';
 import { GameHistory } from './GameHistory/index';
 import { ChallengeDetail } from './ChallengeDetail/index';
-import { CompletedFundingChallengeScreen } from './CompletedFundingChallenge/index';
+import { ChangeRecorderChallenge } from './ChangeRecorderChallenge/index';
 import { AllChallengeScreen } from './AllChallenge/index';
 import { FundraisingChallengeScreen } from './FundraisingChallenge/index';
 import { MyGamesScreen } from './MyGames/index';
+import { RoundDetailScreen } from './RoundDetail/index';
 import { TurnoverQueryScreen } from './TurnoverQuery/index';
+import { SettingsScreen } from './Settings/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '../context/AuthProvider';
 import { RoleProvider } from '../context/RoleContext';
+import { LanguageProvider } from '../context/LanguageContext';
 import { isIOS } from '../utils/platform';
 import { THEME_COLORS } from '../utils/styles';
 import { GameRouteParams } from './Game/types';
+import { useTranslation } from '../hooks/useTranslation';
 
 // 定义导航参数类型
 type RootStackParamList = {
@@ -35,10 +39,12 @@ type RootStackParamList = {
   GameHistory: undefined;
   ChallengeDetail: { matchId: number };
   AllChallenge: undefined;
-  CompletedFundingChallenge: undefined;
+  ChangeRecorderChallenge: undefined;
   FundraisingChallenge: undefined;
   MyGames: undefined;
+  RoundDetail: { matchId: number };
   TurnoverQuery: undefined;
+  Settings: undefined;
 };
 
 // 通用导航类型
@@ -49,6 +55,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 // 主页面底部Tab导航
 function MainTabs() {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -69,7 +77,7 @@ function MainTabs() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarLabel: '首页',
+          tabBarLabel: t('navigation.home'),
           tabBarIcon: ({ color, size }) => <Icon name="home" color={color} size={size} />,
           headerShown: false,
         }}
@@ -78,7 +86,7 @@ function MainTabs() {
         name="Tournament"
         component={TournamentScreen}
         options={{
-          tabBarLabel: '赛事',
+          tabBarLabel: t('navigation.tournament'),
           tabBarIcon: ({ color, size }) => <Icon name="emoji-events" color={color} size={size} />,
           headerShown: false,
         }}
@@ -87,7 +95,7 @@ function MainTabs() {
         name="My"
         component={MyScreen}
         options={{
-          tabBarLabel: '我的',
+          tabBarLabel: t('navigation.my'),
           tabBarIcon: ({ color, size }) => <FontAwesome name="user" color={color} size={size} />,
           headerShown: false,
         }}
@@ -100,26 +108,30 @@ function MainTabs() {
 function AppNavigator() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <AuthProvider>
-          <RoleProvider>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Main" component={MainTabs} />
-              <Stack.Screen name="Auth" component={AuthScreen} />
-              <Stack.Screen name="Game" component={Game} />
-              <Stack.Screen name="NewChallenge" component={NewChallengeScreen} />
-              <Stack.Screen name="ExistingChallenge" component={ExistingChallengeScreen} />
-              <Stack.Screen name="GameHistory" component={GameHistory} />
-              <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
-              <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
-              <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
-              <Stack.Screen name="FundraisingChallenge" component={FundraisingChallengeScreen} />
-              <Stack.Screen name="MyGames" component={MyGamesScreen} />
-              <Stack.Screen name="TurnoverQuery" component={TurnoverQueryScreen} />
-            </Stack.Navigator>
-          </RoleProvider>
-        </AuthProvider>
-      </NavigationContainer>
+      <LanguageProvider>
+        <NavigationContainer>
+          <AuthProvider>
+            <RoleProvider>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Main" component={MainTabs} />
+                <Stack.Screen name="Auth" component={AuthScreen} />
+                <Stack.Screen name="Game" component={Game} />
+                <Stack.Screen name="NewChallenge" component={NewChallengeScreen} />
+                <Stack.Screen name="ExistingChallenge" component={ExistingChallengeScreen} />
+                <Stack.Screen name="GameHistory" component={GameHistory} />
+                <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
+                <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
+                <Stack.Screen name="ChangeRecorderChallenge" component={ChangeRecorderChallenge} />
+                <Stack.Screen name="FundraisingChallenge" component={FundraisingChallengeScreen} />
+                <Stack.Screen name="MyGames" component={MyGamesScreen} />
+                <Stack.Screen name="RoundDetail" component={RoundDetailScreen} />
+                <Stack.Screen name="TurnoverQuery" component={TurnoverQueryScreen} />
+                <Stack.Screen name="Settings" component={SettingsScreen} />
+              </Stack.Navigator>
+            </RoleProvider>
+          </AuthProvider>
+        </NavigationContainer>
+      </LanguageProvider>
     </SafeAreaProvider>
   );
 }
