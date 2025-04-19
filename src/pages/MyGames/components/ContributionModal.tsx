@@ -4,6 +4,7 @@ import { ContributionDto } from '../../../interface/Contribution';
 import { THEME_COLORS } from '../../../utils/styles';
 import { SlideModal } from '../../../components/SlideModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ContributionModalProps {
   visible: boolean;
@@ -14,13 +15,14 @@ interface ContributionModalProps {
 
 export const ContributionModal = React.memo((props: ContributionModalProps) => {
   const { visible, onClose, selectedContribution, loading = false } = props;
+  const { t } = useTranslation();
 
   const renderContent = useCallback(() => {
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>正在加载出资信息...</Text>
+          <Text style={styles.loadingText}>{t('myGames.loadingDetails')}</Text>
         </View>
       );
     }
@@ -29,26 +31,30 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
       return (
         <View style={styles.emptyContainer}>
           <Icon name="info" size={40} color="#ccc" />
-          <Text style={styles.emptyText}>暂无出资信息</Text>
+          <Text style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</Text>
         </View>
       );
     }
 
     return (
       <View style={styles.contentContainer}>
-        <Text style={styles.contributionTitle}>出资明细</Text>
+        <Text style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</Text>
         {selectedContribution.map((item, index) => (
           <View key={`${item.id}-${index}`} style={styles.contributionContent}>
-            <Text style={styles.contributionName}>出资人: {item.investPersonName}</Text>
-            <Text style={styles.contributionAmount}>金额: {item.amount}</Text>
+            <Text style={styles.contributionName}>
+              {t('fundraisingChallenge.contributor')}: {item.investPersonName}
+            </Text>
+            <Text style={styles.contributionAmount}>
+              {t('fundraisingChallenge.amount')}: {item.amount}
+            </Text>
           </View>
         ))}
       </View>
     );
-  }, [loading, selectedContribution]);
+  }, [loading, selectedContribution, t]);
 
   return (
-    <SlideModal visible={visible} onClose={onClose} title="挑战出资详情">
+    <SlideModal visible={visible} onClose={onClose} title={t('fundraisingChallenge.contributionDetails')}>
       {renderContent()}
     </SlideModal>
   );
@@ -106,5 +112,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-export default ContributionModal;

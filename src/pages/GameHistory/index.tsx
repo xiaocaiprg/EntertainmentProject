@@ -22,7 +22,7 @@ export const GameHistory = React.memo(() => {
   const [historyList, setHistoryList] = useState<GameMatchDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(5).current;
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
   const fetchHistoryList = useCallback(async () => {
     setLoading(true);
@@ -30,12 +30,12 @@ export const GameHistory = React.memo(() => {
       pageNum: pageNum.current,
       pageSize: pageSize,
     });
-    setLoading(false);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
       setHistoryList((prev) => [...prev, ...(res.records || [])]);
     }
+    setLoading(false);
   }, [pageNum, pageSize]);
 
   const handleLoadMore = useCallback(() => {

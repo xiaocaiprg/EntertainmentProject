@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { GameMatchDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ChallengeDetailCardProps {
   matchDetail: GameMatchDto | null;
@@ -9,6 +10,7 @@ interface ChallengeDetailCardProps {
 
 export const ChallengeDetailCard: React.FC<ChallengeDetailCardProps> = React.memo((props) => {
   const { matchDetail } = props;
+  const { t } = useTranslation();
 
   if (!matchDetail) {
     return null;
@@ -16,37 +18,37 @@ export const ChallengeDetailCard: React.FC<ChallengeDetailCardProps> = React.mem
 
   return (
     <View style={styles.detailCard}>
-      <Text style={styles.detailCardTitle}>挑战详情</Text>
+      <Text style={styles.detailCardTitle}>{t('fundraisingChallenge.challengeDetails')}</Text>
       <View style={styles.detailRow}>
         <View style={styles.detailColumn}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>挑战名称:</Text>
+            <Text style={styles.detailLabel}>{t('fundraisingChallenge.challengeName')}:</Text>
             <Text style={styles.detailValue}>{matchDetail.name || '-'}</Text>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>时间:</Text>
+            <Text style={styles.detailLabel}>{t('fundraisingChallenge.time')}:</Text>
             <Text style={styles.detailValue}>{matchDetail.gameDate || '-'}</Text>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>地点:</Text>
+            <Text style={styles.detailLabel}>{t('fundraisingChallenge.location')}:</Text>
             <Text style={styles.detailValue}>{matchDetail.addressName || '-'}</Text>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>投手:</Text>
+            <Text style={styles.detailLabel}>{t('fundraisingChallenge.pitcher')}:</Text>
             <Text style={styles.detailValue}>{matchDetail.playPersonName || '-'}</Text>
           </View>
         </View>
         <View style={styles.detailColumnRight}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>本金:</Text>
+            <Text style={styles.detailLabel}>{t('fundraisingChallenge.principal')}:</Text>
             <Text style={[styles.detailValue, styles.amountValue]}>{matchDetail.principal || '-'}</Text>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>已出资额:</Text>
+            <Text style={styles.detailLabel}>{t('fundraisingChallenge.raisedAmount')}:</Text>
             <Text style={[styles.detailValue, styles.amountValue]}>{matchDetail.contributedAmount || '-'}</Text>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>可出资额:</Text>
+            <Text style={styles.detailLabel}>{t('fundraisingChallenge.availableAmount')}:</Text>
             <Text style={[styles.detailValue, styles.availableAmount]}>{matchDetail.availableAmount || '0'}</Text>
           </View>
         </View>

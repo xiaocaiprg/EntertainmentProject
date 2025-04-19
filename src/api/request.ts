@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
-import { getToken, setTokenSync, clearTokenSync } from '../utils/storage';
+import { getToken, setToken, clearToken } from '../utils/storage';
 import { eventEmitter, TOKEN_EXPIRED_EVENT } from '../utils/eventEmitter';
 import { PATH } from './services/authService';
 
@@ -31,22 +31,22 @@ request.interceptors.request.use(
 
 // 响应拦截器
 request.interceptors.response.use(
-  (response: AxiosResponse) => {
+  async (response: AxiosResponse) => {
     console.log('response', response.config.url, response.config.data, response.data);
     if (response.config.url === PATH.LOGIN) {
       const auth = response.headers?.authorization;
       if (auth) {
-        setTokenSync(auth);
+        await setToken(auth);
       }
     }
     return response.data;
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
     if (error.response) {
       // 服务器返回错误状态码
       const { status, data } = error.response;
       if (status === 410) {
-        clearTokenSync();
+        await clearToken();
         eventEmitter.emit(TOKEN_EXPIRED_EVENT);
       }
       return Promise.reject(data);
