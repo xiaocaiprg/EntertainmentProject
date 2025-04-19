@@ -31,11 +31,11 @@ const STATUS_TABS = [
 export const AllChallengeScreen = React.memo(() => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState<number>(-1); // 默认选中'全部'标签
-  const [loading, setLoading] = useState<boolean>(true);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(5).current;
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
   // 清空列表并重置分页
   const resetList = useCallback(() => {
@@ -57,12 +57,12 @@ export const AllChallengeScreen = React.memo(() => {
     }
 
     const res = await getChallengeList(params);
-    setLoading(false);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
       setChallengeList((prev) => [...prev, ...(res.records || [])]);
     }
+    setLoading(false);
   }, [pageNum, pageSize, activeTab]);
 
   // 切换Tab时重置列表并获取数据

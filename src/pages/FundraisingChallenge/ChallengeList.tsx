@@ -18,7 +18,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(10).current;
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
   // 获取募资中的挑战列表
   const fetchChallengeList = useCallback(async () => {
@@ -28,12 +28,12 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
       pageSize: pageSize,
       isEnabledList: [ChallengeStatus.FUNDRAISING], // 仅获取募资中的挑战
     });
-    setLoading(false);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
       setChallengeList((prev) => [...prev, ...(res.records || [])]);
     }
+    setLoading(false);
   }, [pageSize]);
 
   // 加载更多数据

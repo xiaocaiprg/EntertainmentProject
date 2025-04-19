@@ -27,7 +27,7 @@ type ChangeRecorderChallengeScreenProps = RootStackScreenProps<'ChangeRecorderCh
 export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProps> = React.memo(({ navigation }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [recorderList, setRecorderList] = useState<UserResult[]>([]);
   const [selectedRecorder, setSelectedRecorder] = useState<UserResult | null>(null);
@@ -45,12 +45,12 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
       pageSize: pageSize.current,
       isEnabledList: [ChallengeStatus.FUNDRAISING_COMPLETED, ChallengeStatus.FUNDRAISING, ChallengeStatus.IN_PROGRESS], // 仅查询已完成募资的挑战
     });
-    setLoading(false);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
       setChallengeList((prev) => [...prev, ...(res.records || [])]);
     }
+    setLoading(false);
   }, []);
 
   // 获取记录人列表

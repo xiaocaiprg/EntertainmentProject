@@ -36,7 +36,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(10);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const [profitModalVisible, setProfitModalVisible] = useState<boolean>(false);
   const [contributionModalVisible, setContributionModalVisible] = useState<boolean>(false);
   const [selectedContribution, setSelectedContribution] = useState<ContributionDto[]>([]);
@@ -56,12 +56,13 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     };
 
     const res = await getChallengeList(params);
-    setLoading(false);
+    console.log('getChallengeList', res);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
       setChallengeList((prev) => (shouldReset ? [...(res.records || [])] : [...prev, ...(res.records || [])]));
     }
+    setLoading(false);
   }, []);
 
   // 加载更多数据
