@@ -41,7 +41,6 @@ export const InningList: React.FC<InningListProps> = React.memo((props) => {
   // 打开修改押注确认框
   const showModifyConfirm = useCallback((inning: GameInningDto) => {
     setSelectedInning(inning);
-    setNewBetAmount(inning.betNumber?.toString() || '');
     setConfirmModalVisible(true);
   }, []);
 
@@ -54,10 +53,9 @@ export const InningList: React.FC<InningListProps> = React.memo((props) => {
 
   // 确认修改押注金额
   const handleConfirmModify = useCallback(async () => {
-    if (!selectedInning || !newBetAmount) {
+    if (!selectedInning) {
       return;
     }
-
     const result = validateBetAmount(newBetAmount);
     if (!result.valid) {
       // 显示对应的错误提示

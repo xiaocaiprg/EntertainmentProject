@@ -19,7 +19,7 @@ import { ConfirmModal } from '../../components/ConfirmModal';
 import { useTranslation } from '../../hooks/useTranslation';
 import { RootStackScreenProps } from '../router';
 import { RoundItem } from './components/RoundItem';
-
+import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 // 使用导航堆栈中定义的类型
 type RoundDetailScreenProps = RootStackScreenProps<'RoundDetail'>;
 
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   headerContainer: {
     flexDirection: 'row',
