@@ -10,7 +10,6 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList, getRecorderList, updateMatchDocPerson } from '../../api/services/gameService';
 import { GameMatchDto, UserRecordParams } from '../../interface/Game';
@@ -20,9 +19,12 @@ import { THEME_COLORS } from '../../utils/styles';
 import { UserResult } from '../../interface/User';
 import { RecorderSelector } from './components/RecorderSelector';
 import { ChallengeCard } from './components/ChallengeCard';
+import { RootStackScreenProps } from '../router';
 
-export const CompletedFundingChallengeScreen = React.memo(() => {
-  const navigation = useNavigation();
+// 使用导航堆栈中定义的类型
+type ChangeRecorderChallengeScreenProps = RootStackScreenProps<'ChangeRecorderChallenge'>;
+
+export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProps> = React.memo(({ navigation }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -32,15 +34,15 @@ export const CompletedFundingChallengeScreen = React.memo(() => {
   const [currentChallengeId, setCurrentChallengeId] = useState<number | undefined>(undefined);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const pageNum = useRef<number>(1);
-  const pageSize = useRef<number>(10).current;
-  const pageSizeForRecorder = useRef<number>(1000).current;
+  const pageSize = useRef<number>(10);
+  const pageSizeForRecorder = useRef<number>(1000);
 
   // 获取挑战列表
   const fetchChallengeList = useCallback(async () => {
     setLoading(true);
     const res = await getChallengeList({
       pageNum: pageNum.current,
-      pageSize: pageSize,
+      pageSize: pageSize.current,
       isEnabledList: [ChallengeStatus.FUNDRAISING_COMPLETED, ChallengeStatus.FUNDRAISING, ChallengeStatus.IN_PROGRESS], // 仅查询已完成募资的挑战
     });
     setLoading(false);
@@ -49,20 +51,20 @@ export const CompletedFundingChallengeScreen = React.memo(() => {
       setHasMore(isHasMore);
       setChallengeList((prev) => [...prev, ...(res.records || [])]);
     }
-  }, [pageNum, pageSize]);
+  }, []);
 
   // 获取记录人列表
   const fetchRecorderList = useCallback(async () => {
     const params: UserRecordParams = {
       pageNum: 1,
-      pageSize: pageSizeForRecorder,
+      pageSize: pageSizeForRecorder.current,
       type: UserType.RECORDER,
     };
     const res = await getRecorderList(params);
     if (res && res.records) {
       setRecorderList(res.records);
     }
-  }, [pageSizeForRecorder]);
+  }, []);
 
   // 加载更多挑战
   const handleLoadMore = useCallback(() => {
@@ -70,7 +72,7 @@ export const CompletedFundingChallengeScreen = React.memo(() => {
       pageNum.current += 1;
       fetchChallengeList();
     }
-  }, [loading, hasMore, pageNum, fetchChallengeList]);
+  }, [loading, hasMore, fetchChallengeList]);
 
   // 初始加载数据
   useEffect(() => {
@@ -177,7 +179,7 @@ export const CompletedFundingChallengeScreen = React.memo(() => {
         />
         {challengeList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无已完成募资的挑战</Text>
+            <Text style={styles.emptyText}>暂无挑战</Text>
           </View>
         )}
       </View>
@@ -227,8 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   listContent: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    padding: 10,
   },
   footerContainer: {
     padding: 10,

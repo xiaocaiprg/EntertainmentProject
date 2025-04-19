@@ -15,7 +15,7 @@ declare global {
       ExistingChallenge: undefined;
       GameHistory: undefined;
       AllChallenge: undefined;
-      CompletedFundingChallenge: undefined;
+      ChangeRecorderChallenge: undefined;
       FundraisingChallenge: undefined;
       MyGames: undefined;
       TurnoverQuery: undefined;

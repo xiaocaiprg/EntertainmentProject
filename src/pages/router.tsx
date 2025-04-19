@@ -11,7 +11,7 @@ import { NewChallengeScreen } from './NewChallenge/index';
 import { ExistingChallengeScreen } from './ExistingChallenge/index';
 import { GameHistory } from './GameHistory/index';
 import { ChallengeDetail } from './ChallengeDetail/index';
-import { CompletedFundingChallengeScreen } from './CompletedFundingChallenge/index';
+import { ChangeRecorderChallenge } from './ChangeRecorderChallenge/index';
 import { AllChallengeScreen } from './AllChallenge/index';
 import { FundraisingChallengeScreen } from './FundraisingChallenge/index';
 import { MyGamesScreen } from './MyGames/index';
@@ -39,7 +39,7 @@ type RootStackParamList = {
   GameHistory: undefined;
   ChallengeDetail: { matchId: number };
   AllChallenge: undefined;
-  CompletedFundingChallenge: undefined;
+  ChangeRecorderChallenge: undefined;
   FundraisingChallenge: undefined;
   MyGames: undefined;
   RoundDetail: { matchId: number };
@@ -121,7 +121,7 @@ function AppNavigator() {
                 <Stack.Screen name="GameHistory" component={GameHistory} />
                 <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
                 <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
-                <Stack.Screen name="CompletedFundingChallenge" component={CompletedFundingChallengeScreen} />
+                <Stack.Screen name="ChangeRecorderChallenge" component={ChangeRecorderChallenge} />
                 <Stack.Screen name="FundraisingChallenge" component={FundraisingChallengeScreen} />
                 <Stack.Screen name="MyGames" component={MyGamesScreen} />
                 <Stack.Screen name="RoundDetail" component={RoundDetailScreen} />

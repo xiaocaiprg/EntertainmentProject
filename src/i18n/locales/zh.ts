@@ -59,6 +59,22 @@ export const zh = {
     createTime: '创建时间',
   },
 
+  // 挑战状态
+  challenge: {
+    status: {
+      ended: '已结束',
+      inProgress: '进行中',
+      fundraising: '募资中',
+      fundraisingCompleted: '募资完成',
+      completed: '已完成',
+    },
+    createTime: '创建时间',
+    location: '挑战地点',
+    time: '挑战时间',
+    pitcher: '投手',
+    recorder: '记录人',
+  },
+
   // 募资挑战
   fundraisingChallenge: {
     fundraisingInfo: '募资信息',
@@ -108,10 +124,11 @@ export const zh = {
     profitDetails: '利润分配详情',
     loadingDetails: '正在加载详情...',
     noProfitInfo: '暂无利润分配信息',
-    recordCompany: '记录公司',
+    docCompany: '记录公司利润',
     investCompany: '投资公司',
     operationCompany: '运营公司',
     playerCompany: '投手公司',
     investmentCompanyProfitDetails: '投资公司利润详情',
+    companyProfitDetails: '记录公司分配详情',
   },
 };

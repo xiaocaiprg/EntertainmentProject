@@ -26,7 +26,7 @@ export const availableModules: ModuleConfig[] = [
   {
     id: '4',
     title: 'modules.updateRecorder',
-    type: ModuleType.COMPLETED_FUNDING_CHALLENGE,
+    type: ModuleType.CHANGE_RECORDER_CHALLENGE,
     icon: 'check-circle',
     backgroundColor: '#fdcb6e',
   },
@@ -74,11 +74,11 @@ export const roleModuleMappings: RoleModuleMapping[] = [
   },
   {
     role: 'OPERATION_ADMIN',
-    moduleTypes: [ModuleType.COMPLETED_FUNDING_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [ModuleType.CHANGE_RECORDER_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
   {
     role: 'OPERATIONPERSON',
-    moduleTypes: [ModuleType.COMPLETED_FUNDING_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [ModuleType.CHANGE_RECORDER_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
   },
 ];
 

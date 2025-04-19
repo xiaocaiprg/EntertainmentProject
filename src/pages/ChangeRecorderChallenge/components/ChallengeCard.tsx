@@ -1,8 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
+import { ChallengeStatus } from '../../../interface/Common';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ChallengeCardProps {
   item: GameMatchDto;
@@ -11,11 +13,44 @@ interface ChallengeCardProps {
 
 export const ChallengeCard = React.memo((props: ChallengeCardProps) => {
   const { item, onEditPress } = props;
+  const { t } = useTranslation();
 
   // 处理编辑按钮点击
   const handleEditPress = useCallback(() => {
     onEditPress(item.id);
   }, [item.id, onEditPress]);
+
+  // 根据挑战状态获取对应的状态文案和样式
+  const statusInfo = useMemo(() => {
+    let statusText = '';
+    let backgroundColor = '';
+    let textColor = '';
+    switch (item.isEnabled) {
+      case ChallengeStatus.IN_PROGRESS:
+        statusText = t('challenge.status.inProgress');
+        backgroundColor = '#52c41a20';
+        textColor = '#52c41a';
+        break;
+      case ChallengeStatus.FUNDRAISING:
+        statusText = t('challenge.status.fundraising');
+        backgroundColor = '#1890ff20';
+        textColor = '#1890ff';
+        break;
+      case ChallengeStatus.FUNDRAISING_COMPLETED:
+        statusText = t('challenge.status.fundraisingCompleted');
+        backgroundColor = '#faad1420';
+        textColor = '#faad14';
+        break;
+    }
+
+    return {
+      statusText,
+      style: {
+        backgroundColor,
+        textColor,
+      },
+    };
+  }, [item.isEnabled, t]);
 
   return (
     <View style={styles.itemContainer}>
@@ -23,27 +58,31 @@ export const ChallengeCard = React.memo((props: ChallengeCardProps) => {
         <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
           {item.name || '-'}
         </Text>
-        <View style={styles.statusTag}>
-          <Text style={styles.statusText}>募资完成</Text>
+        <View style={[styles.statusTag, { backgroundColor: statusInfo.style.backgroundColor }]}>
+          <Text style={[styles.statusText, { color: statusInfo.style.textColor }]}>{statusInfo.statusText}</Text>
         </View>
       </View>
       <View style={styles.itemContent}>
         <View style={styles.itemLeft}>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>创建时间:</Text>
+            <Text style={styles.label}>{t('challenge.createTime')}:</Text>
             <Text style={styles.value}>{item.createTime || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>挑战地点:</Text>
+            <Text style={styles.label}>{t('challenge.location')}:</Text>
             <Text style={styles.value}>{item.addressName || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>挑战时间:</Text>
+            <Text style={styles.label}>{t('challenge.time')}:</Text>
             <Text style={styles.value}>{item.gameDate || '-'}</Text>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>投手:</Text>
+            <Text style={styles.label}>{t('challenge.pitcher')}:</Text>
             <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.label}>{t('challenge.recorder')}:</Text>
+            <Text style={styles.value}>{item.docPersonName || '-'}</Text>
           </View>
         </View>
         <TouchableOpacity style={styles.editButton} onPress={handleEditPress} activeOpacity={0.7}>
@@ -58,8 +97,10 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: '#ffffff',
     borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 4,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: '#e0e0e0',
   },
@@ -83,12 +124,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 4,
     marginLeft: 8,
-    backgroundColor: '#faad14' + '20',
   },
   statusText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#faad14',
   },
   itemContent: {
     flexDirection: 'row',

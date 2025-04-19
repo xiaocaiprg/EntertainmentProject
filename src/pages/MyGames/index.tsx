@@ -9,7 +9,6 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList, getMatchDetail } from '../../api/services/gameService';
 import { ContributionDto } from '../../interface/Contribution';
@@ -19,13 +18,19 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getStatusText } from '../../public/Game';
 import { ProfitModal } from './components/ProfitModal';
-import ContributionModal from './components/ContributionModal';
+import { ContributionModal } from './components/ContributionModal';
 import { useTranslation } from '../../hooks/useTranslation';
 import useFocusRefresh from '../../hooks/useFocusRefresh';
+import { useRole } from '../../hooks/useRole';
+import { RootStackScreenProps } from '../router';
 
-export const MyGamesScreen = React.memo(() => {
+// 使用导航堆栈中定义的类型
+type MyGamesScreenProps = RootStackScreenProps<'MyGames'>;
+
+export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) => {
+  const { navigation } = props;
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const { isOperationAdmin } = useRole();
   const [loading, setLoading] = useState<boolean>(true);
   const [detailLoading, setDetailLoading] = useState<boolean>(false);
   const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
@@ -128,7 +133,7 @@ export const MyGamesScreen = React.memo(() => {
       const status = getStatusText(item.isEnabled);
       const showProfitBtn = item.isEnabled === ChallengeStatus.ENDED || item.isEnabled === ChallengeStatus.COMPLETED;
       const isAllRoundEnd = item.roundList?.every((round) => round.isEnabled === ChallengeStatus.ENDED);
-      const showRestartBtn = item.isEnabled === ChallengeStatus.IN_PROGRESS && isAllRoundEnd;
+      const showRestartBtn = item.isEnabled === ChallengeStatus.IN_PROGRESS && isAllRoundEnd && isOperationAdmin;
 
       return (
         <View style={styles.itemContainer}>
@@ -194,7 +199,7 @@ export const MyGamesScreen = React.memo(() => {
         </View>
       );
     },
-    [handleViewProfit, handleViewContribution, handleViewRoundDetail, t],
+    [handleViewProfit, handleViewContribution, handleViewRoundDetail, t, isOperationAdmin],
   );
 
   // 渲染列表底部加载状态

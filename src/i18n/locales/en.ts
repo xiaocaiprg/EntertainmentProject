@@ -59,6 +59,22 @@ export const en = {
     createTime: 'Create Time',
   },
 
+  // Challenge Status
+  challenge: {
+    status: {
+      ended: 'Ended',
+      inProgress: 'In Progress',
+      fundraising: 'Fundraising',
+      fundraisingCompleted: 'Fundraising Completed',
+      completed: 'Completed',
+    },
+    createTime: 'Create Time',
+    location: 'Location',
+    time: 'Time',
+    pitcher: 'Pitcher',
+    recorder: 'Recorder',
+  },
+
   // Fundraising Challenge
   fundraisingChallenge: {
     fundraisingInfo: 'Fundraising Information',
@@ -108,10 +124,11 @@ export const en = {
     profitDetails: 'Profit Distribution Details',
     loadingDetails: 'Loading details...',
     noProfitInfo: 'No profit distribution information',
-    recordCompany: 'Record Company',
+    docCompany: 'Record Company',
     investCompany: 'Investment Company',
     operationCompany: 'Operation Company',
     playerCompany: 'Player Company',
     investmentCompanyProfitDetails: 'Investment Company Profit Details',
+    companyProfitDetails: 'Record Company Profit Details',
   },
 };

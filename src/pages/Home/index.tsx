@@ -132,8 +132,8 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.ALL_CHALLENGE:
           navigation.navigate('AllChallenge');
           break;
-        case ModuleType.COMPLETED_FUNDING_CHALLENGE:
-          navigation.navigate('CompletedFundingChallenge');
+        case ModuleType.CHANGE_RECORDER_CHALLENGE:
+          navigation.navigate('ChangeRecorderChallenge');
           break;
         case ModuleType.FUNDRAISING_CHALLENGE:
           navigation.navigate('FundraisingChallenge');

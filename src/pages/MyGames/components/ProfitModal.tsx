@@ -38,6 +38,27 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     [t],
   );
 
+  const renderDocCompanyProfit = useCallback(
+    (profitData: GameMatchProfitDto) => {
+      if (!profitData.docCompanyProfitDtoList || profitData.docCompanyProfitDtoList.length === 0) {
+        return null;
+      }
+      return (
+        <>
+          <View style={styles.divider} />
+          <Text style={styles.sectionTitle}>{t('myGames.companyProfitDetails')}</Text>
+          {profitData.docCompanyProfitDtoList.map((company, index) => (
+            <View key={index} style={styles.profitItem}>
+              <Text style={styles.profitLabel}>{company.companyName}</Text>
+              <Text style={styles.profitValue}>{company.profitStr}</Text>
+            </View>
+          ))}
+        </>
+      );
+    },
+    [t],
+  );
+
   const renderContent = useCallback(() => {
     if (loading) {
       return (
@@ -60,7 +81,7 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     return (
       <View style={styles.profitContent}>
         <View style={styles.profitItem}>
-          <Text style={styles.profitLabel}>{`${t('myGames.recordCompany')}:${profit.docCompanyName}`}</Text>
+          <Text style={styles.profitLabel}>{`${t('myGames.docCompany')}`}</Text>
           <Text style={styles.profitValue}>{profit.docCompanyProfitStr}</Text>
         </View>
         <View style={styles.profitItem}>
@@ -76,9 +97,10 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           <Text style={styles.profitValue}>{profit.playCompanyProfitStr}</Text>
         </View>
         {renderPersonMyGames(profit)}
+        {renderDocCompanyProfit(profit)}
       </View>
     );
-  }, [loading, profit, renderPersonMyGames, t]);
+  }, [loading, profit, renderPersonMyGames, renderDocCompanyProfit, t]);
 
   return (
     <SlideModal visible={visible} onClose={onClose} title={t('myGames.profitDetails')}>
@@ -140,5 +162,3 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
-
-export default ProfitModal;
