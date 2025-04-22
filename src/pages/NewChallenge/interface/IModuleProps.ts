@@ -14,13 +14,13 @@ export enum ChallengeType {
   // 这里可以添加更多的挑战类型
 }
 export const BET_AMOUNT_OPTIONS = [
-  { label: BASE_BET_AMOUNT.THREE_THOUSAND.toString(), value: BASE_BET_AMOUNT.THREE_THOUSAND.toString() },
+  { label: BASE_BET_AMOUNT.THREE_THOUSAND.toString(), value: BASE_BET_AMOUNT.THREE_THOUSAND },
   {
     label: BASE_BET_AMOUNT.ONE_THOUSAND_TWO_HUNDRED.toString(),
-    value: BASE_BET_AMOUNT.ONE_THOUSAND_TWO_HUNDRED.toString(),
+    value: BASE_BET_AMOUNT.ONE_THOUSAND_TWO_HUNDRED,
   },
-  { label: BASE_BET_AMOUNT.SIX_HUNDRED.toString(), value: BASE_BET_AMOUNT.SIX_HUNDRED.toString() },
-  { label: BASE_BET_AMOUNT.THREE_HUNDRED.toString(), value: BASE_BET_AMOUNT.THREE_HUNDRED.toString() },
+  { label: BASE_BET_AMOUNT.SIX_HUNDRED.toString(), value: BASE_BET_AMOUNT.SIX_HUNDRED },
+  { label: BASE_BET_AMOUNT.THREE_HUNDRED.toString(), value: BASE_BET_AMOUNT.THREE_HUNDRED },
 ];
 
 // 定义表单数据类型
