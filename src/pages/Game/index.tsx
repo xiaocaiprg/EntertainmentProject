@@ -19,7 +19,7 @@ import { convertToHistoryRecords } from './utils/historyHelper';
 type GameScreenProps = RootStackScreenProps<'Game'>;
 
 export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }) => {
-  const { challengeName, operator, roundId, recorder } = route.params;
+  const { challengeName, operator, roundId, recorder, baseNumber } = route.params;
   const {
     currentChoice,
     setCurrentChoice,
@@ -41,7 +41,7 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
     isSubmitting,
     setIsSubmitting,
     handleEndRound,
-  } = useGameLogic();
+  } = useGameLogic(baseNumber);
 
   // 添加结束本场确认弹窗状态
   const [endRoundModalVisible, setEndRoundModalVisible] = useState(false);

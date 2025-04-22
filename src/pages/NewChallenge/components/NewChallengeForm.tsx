@@ -8,7 +8,7 @@ import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
-import { ChallengeFormData, DropdownType } from '../interface/IModuleProps';
+import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS } from '../interface/IModuleProps';
 
 interface NewChallengeFormProps {
   operators: UserResult[];
@@ -56,6 +56,21 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
 
   return (
     <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled">
+      <>
+        <Text style={styles.labelText}>投注基数</Text>
+        <DropdownSelect
+          options={BET_AMOUNT_OPTIONS}
+          selectedValue={formData.initialBetAmount}
+          placeholder="请选择投注基数"
+          onSelect={(value: any) => updateField('initialBetAmount', value)}
+          valueKey="value"
+          labelKey="label"
+          isOpen={activeDropdown === DropdownType.BET_AMOUNT}
+          onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.BET_AMOUNT, isOpen)}
+          zIndex={1900}
+          zIndexInverse={2100}
+        />
+      </>
       <>
         <Text style={styles.labelText}>选择投手</Text>
         <DropdownSelect

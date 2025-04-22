@@ -85,6 +85,8 @@ export interface GameMatchDto {
   orderNumber?: number;
   playPersonCode?: string;
   playPersonName?: string;
+  baseNumber: number;
+  playRuleId?: number;
   principal?: number;
   profit?: number;
   profitStr?: string;
@@ -120,6 +122,8 @@ export interface GameRoundDto {
   turnOver: number;
   turnOverStr: string;
   gameInningDto: GameInningDto;
+  baseNumber: number;
+  playRuleId?: number;
 }
 export interface GamePointDto {
   betNumber: number;
@@ -145,15 +149,16 @@ export interface GameInningDto {
 }
 
 export interface ChallengeCreateParams {
-  addressInfoId?: number;
-  contriAmount?: number;
-  gameDate?: string;
+  addressInfoId: number;
+  contriAmount: number;
+  gameDate: string;
   lossLimit?: number;
   name?: string;
-  operationPersonCode?: string;
   playPersonCode: string;
   principal: number;
   tableNumber?: string;
+  baseNumber: number;
+  playRuleId?: number;
 }
 
 export interface RoundCreateParams {
