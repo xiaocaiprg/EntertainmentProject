@@ -20,7 +20,7 @@ export const NewChallengeScreen = React.memo(() => {
 
   const [operatorList, setOperatorList] = useState<UserResult[]>([]);
   const [locationList, setLocationList] = useState<AddressInfo[]>([]);
-  const [selectedChallengeType, setSelectedChallengeType] = useState<string>('');
+  const [selectedChallengeType, setSelectedChallengeType] = useState<ChallengeType | ''>('');
 
   // 使用单一状态管理表单数据
   const [formData, setFormData] = useState<ChallengeFormData>({
@@ -44,7 +44,7 @@ export const NewChallengeScreen = React.memo(() => {
   }, []);
 
   // 处理挑战类型变更
-  const handleChallengeTypeChange = useCallback((type: string) => {
+  const handleChallengeTypeChange = useCallback((type: ChallengeType) => {
     setSelectedChallengeType(type);
     setFormData((prevData) => ({
       ...prevData,
@@ -63,6 +63,7 @@ export const NewChallengeScreen = React.memo(() => {
       principal: parseFloat(formData.principal),
       contriAmount: formData.contriAmount ? parseFloat(formData.contriAmount) : 0,
       baseNumber: formData.initialBetAmount,
+      playRuleCode: formData.challengeType,
     };
 
     // 校验参数
@@ -99,7 +100,8 @@ export const NewChallengeScreen = React.memo(() => {
   // 挑战类型选项
   const challengeTypes = useMemo(
     () => [
-      { label: '无止盈过关', value: ChallengeType.STANDARD },
+      { label: '无止盈过关', value: ChallengeType.NO_PROFIT_LIMIT },
+      { label: '平注', value: ChallengeType.EVEN_BET },
       // 可以在这里添加更多的挑战类型
     ],
     [],
@@ -148,6 +150,7 @@ export const NewChallengeScreen = React.memo(() => {
 
         {selectedChallengeType ? (
           <NewChallengeForm
+            challengeType={selectedChallengeType}
             operators={operatorList}
             locations={locationList}
             formData={formData}
@@ -195,11 +198,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     zIndex: 1,
   },
   stepContainer: {
-    marginBottom: 25,
+    marginBottom: 10,
   },
   stepNumberContainer: {
     flexDirection: 'row',
@@ -253,8 +257,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   challengeTypeContainer: {
-    marginBottom: 25,
-    zIndex: 4000,
+    marginBottom: 5,
   },
   labelText: {
     fontSize: 16,

@@ -8,9 +8,10 @@ import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
-import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS } from '../interface/IModuleProps';
+import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS, ChallengeType } from '../interface/IModuleProps';
 
 interface NewChallengeFormProps {
+  challengeType: ChallengeType;
   operators: UserResult[];
   locations: AddressInfo[];
   formData: ChallengeFormData;
@@ -19,7 +20,7 @@ interface NewChallengeFormProps {
 }
 
 export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((props: NewChallengeFormProps) => {
-  const { operators, locations, formData, onChange, onConfirm } = props;
+  const { operators, locations, formData, onChange, onConfirm, challengeType } = props;
   // 用于控制当前打开的下拉框
   const [activeDropdown, setActiveDropdown] = useState<DropdownType>(DropdownType.NONE);
 
@@ -59,7 +60,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
       <>
         <Text style={styles.labelText}>投注基数</Text>
         <DropdownSelect
-          options={BET_AMOUNT_OPTIONS}
+          options={BET_AMOUNT_OPTIONS[challengeType]}
           selectedValue={formData.initialBetAmount}
           placeholder="请选择投注基数"
           onSelect={(value: any) => updateField('initialBetAmount', value)}

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface GameRuleProps {
+  playRuleCode: string;
   handleBankerWin: () => void;
   handleBankerLose: () => void;
   handlePlayerWin: () => void;
@@ -10,10 +11,13 @@ interface GameRuleProps {
 }
 
 export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProps) => {
-  const { handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose } = props;
+  const { playRuleCode, handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose } = props;
   return (
     <View style={styles.ruleContainer}>
-      <Text style={styles.ruleTitle}>规则</Text>
+      <View style={styles.ruleHeader}>
+        <Text style={styles.ruleTitle}>规则</Text>
+        <Text style={styles.ruleDescription}>打法:{playRuleCode}</Text>
+      </View>
       <View style={styles.betOptionsColumn}>
         <View style={[styles.betOption, styles.bankerOption]}>
           <Text style={[styles.betLabel, styles.bankerLabel]}>庄</Text>
@@ -63,6 +67,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#e0e0e0',
+  },
+  ruleHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   ruleTitle: {
     fontSize: 18,
@@ -130,6 +139,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#333',
   },
+
   ruleDescription: {
     fontSize: 14,
     color: '#666',
