@@ -26,7 +26,7 @@ import { RoleProvider } from '../context/RoleContext';
 import { LanguageProvider } from '../context/LanguageContext';
 import { isIOS } from '../utils/platform';
 import { THEME_COLORS } from '../utils/styles';
-import { GameRouteParams } from './Game/types';
+import { GameRouteParams } from './Game/types/common';
 import { useTranslation } from '../hooks/useTranslation';
 
 // 定义导航参数类型

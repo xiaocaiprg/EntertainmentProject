@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { HistoryRecord } from '../types';
-import { groupRecordsByRound, getChoiceDisplayText } from '../utils/historyHelper';
+import { HistoryRecord } from '../../types/CBtypes';
+import { groupRecordsByRound, getChoiceDisplayText } from '../../utils/historyHelper';
 
 interface GameHistoryProps {
   historyRecords: HistoryRecord[];

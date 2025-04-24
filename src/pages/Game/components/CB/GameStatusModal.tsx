@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { GameStatusModalInfo } from '../types';
+import { GameStatusModalInfo } from '../../types/CBtypes';
 
 interface GameStatusModalProps {
   modalInfo: GameStatusModalInfo;
