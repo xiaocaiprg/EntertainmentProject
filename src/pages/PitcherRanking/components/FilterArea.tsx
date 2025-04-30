@@ -1,21 +1,26 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { OverlayModal } from '../../../components/OverlayModal';
 import { THEME_COLORS } from '../../../utils/styles';
 import { useTranslation } from '../../../hooks/useTranslation';
+import { getAddressList } from '../../../api/services/gameService';
+import { AddressInfo } from '../../../interface/Game';
 
 interface FilterAreaProps {
   selectedTimeRange: string;
   onTimeRangeChange: (timeRange: string) => void;
+  selectedLocation: number;
+  onLocationChange: (locationId: number) => void;
 }
 const LOCATION_MODAL_HEIGHT = 30;
 
 export const FilterArea = React.memo((props: FilterAreaProps) => {
-  const { selectedTimeRange, onTimeRangeChange } = props;
+  const { selectedTimeRange, onTimeRangeChange, selectedLocation, onLocationChange } = props;
 
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [filterAreaTop, setFilterAreaTop] = useState(0);
+  const [locations, setLocations] = useState<AddressInfo[]>([]);
 
   const filterAreaRef = useRef<View>(null);
   const { t } = useTranslation();
@@ -31,6 +36,13 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
     ],
     [],
   );
+
+  useEffect(() => {
+    getAddressList({ pageNum: 1, pageSize: 999 }).then((res) => {
+      setLocations(res?.records || []);
+    });
+  }, []);
+
   // 测量筛选区域位置
   useEffect(() => {
     if (filterAreaRef.current && showLocationModal) {
@@ -39,10 +51,23 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
       });
     }
   }, [showLocationModal]);
+
   // 获取当前选中的地点名称
   const selectedLocationName = useMemo(() => {
+    if (selectedLocation > 0 && locations.length > 0) {
+      const selected = locations.find((item) => item.id === selectedLocation);
+      return selected?.name || t('pitcher_ranking.selectLocation');
+    }
     return t('pitcher_ranking.selectLocation');
-  }, [t]);
+  }, [selectedLocation, locations, t]);
+
+  const handleSelectLocation = useCallback(
+    (id?: number) => {
+      id && onLocationChange(id);
+      setShowLocationModal(false);
+    },
+    [onLocationChange],
+  );
 
   return (
     <>
@@ -65,7 +90,7 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      {/* 地点选择弹窗 */}
+
       <OverlayModal
         visible={showLocationModal}
         onClose={() => setShowLocationModal(false)}
@@ -74,7 +99,21 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
         showCloseButton={false}
         backgroundFromTop={filterAreaTop + LOCATION_MODAL_HEIGHT}
       >
-        <View />
+        <ScrollView style={styles.locationListContainer}>
+          {locations.map((location) => (
+            <TouchableOpacity
+              key={location.id}
+              style={[styles.locationItem, selectedLocation === location.id && styles.selectedLocationItem]}
+              onPress={() => handleSelectLocation(location.id)}
+            >
+              <Text
+                style={[styles.locationItemText, selectedLocation === location.id && styles.selectedLocationItemText]}
+              >
+                {location.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </OverlayModal>
     </>
   );
@@ -123,6 +162,30 @@ const styles = StyleSheet.create({
   selectedTimeRangeText: {
     color: THEME_COLORS.primary,
     fontWeight: '500',
+  },
+  locationListContainer: {
+    flex: 1,
+  },
+  locationItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  selectedLocationItem: {
+    backgroundColor: '#f5f5f5',
+  },
+  locationItemText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  selectedLocationItemText: {
+    color: THEME_COLORS.primary,
+    fontWeight: '500',
+  },
+  loadingText: {
+    textAlign: 'center',
+    padding: 20,
+    color: '#666',
   },
 });
 
