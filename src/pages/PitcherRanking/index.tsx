@@ -6,7 +6,7 @@ import { InfoModal } from '../../components/InfoModal';
 import FilterArea from './components/FilterArea';
 import RankingListView from './components/RankingListView';
 import { Nav } from './components/Nav';
-import { RankingTabType, PlayerHitrateRankDto, PlayerKillrateRankDto } from '../../interface/Ranking';
+import { RankingTabType, PlayerHitrateRankDto, PlayerKillrateRankDto, RankSearchParam } from '../../interface/Ranking';
 import { RootStackScreenProps } from '../router';
 import { getPitcherRankingHitRate, getPitcherRankingKillRate } from '../../api/services/rankService';
 
@@ -30,6 +30,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   const [currentTab, setCurrentTab] = useState<RankingTabType>(RankingTabType.HIT_RATE);
 
   const [selectedTimeRange, setSelectedTimeRange] = useState('30');
+  const [selectedLocation, setSelectedLocation] = useState<number>(0);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [hitRateRankData, setHitRateRankData] = useState<PlayerHitrateRankDto[]>([]);
   const [killRateRankData, setKillRateRankData] = useState<PlayerKillrateRankDto[]>([]);
@@ -43,27 +44,37 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   // 获取命中率榜数据
   const fetchHitRateRankingData = useCallback(async () => {
     setLoading(true);
-    const params = {
+    const params: RankSearchParam = {
       rankPeriod: parseInt(selectedTimeRange, 10),
       pageNum: pageNumRef.current,
       pageSize: pageSizeRef.current,
     };
+
+    // 只有当选择了有效地点时才添加地点过滤参数
+    if (selectedLocation > 0) {
+      params.addressId = selectedLocation;
+    }
 
     const result = await getPitcherRankingHitRate(params);
     if (result && result.records) {
       setHitRateRankData(result.records);
     }
     setLoading(false);
-  }, [selectedTimeRange]);
+  }, [selectedTimeRange, selectedLocation]);
 
   // 获取杀数榜数据
   const fetchKillRateRankingData = useCallback(async () => {
     setLoading(true);
-    const params = {
+    const params: RankSearchParam = {
       rankPeriod: parseInt(selectedTimeRange, 10),
       pageNum: pageNumRef.current,
       pageSize: pageSizeRef.current,
     };
+
+    // 只有当选择了有效地点时才添加地点过滤参数
+    if (selectedLocation > 0) {
+      params.addressId = selectedLocation;
+    }
 
     const result = await getPitcherRankingKillRate(params);
     if (result && result.records) {
@@ -71,7 +82,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     }
 
     setLoading(false);
-  }, [selectedTimeRange]);
+  }, [selectedTimeRange, selectedLocation]);
 
   // 初始加载数据
   useEffect(() => {
@@ -119,6 +130,22 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     [currentTab, fetchHitRateRankingData, fetchKillRateRankingData],
   );
 
+  // 地点选择变更
+  const handleLocationChange = useCallback(
+    (locationId: number) => {
+      setSelectedLocation(locationId);
+      // 地点变更时重新获取当前标签的数据
+      if (currentTab === RankingTabType.HIT_RATE) {
+        pageNumRef.current = 1;
+        fetchHitRateRankingData();
+      } else {
+        pageNumRef.current = 1;
+        fetchKillRateRankingData();
+      }
+    },
+    [currentTab, fetchHitRateRankingData, fetchKillRateRankingData],
+  );
+
   // 返回上一页
   const handleBack = useCallback(() => {
     navigation.goBack();
@@ -151,7 +178,12 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
         </ImageBackground>
 
         <View style={styles.contentContainer}>
-          <FilterArea selectedTimeRange={selectedTimeRange} onTimeRangeChange={handleTimeRangeChange} />
+          <FilterArea
+            selectedTimeRange={selectedTimeRange}
+            onTimeRangeChange={handleTimeRangeChange}
+            selectedLocation={selectedLocation}
+            onLocationChange={handleLocationChange}
+          />
 
           <View style={styles.tabContainer}>
             <TouchableOpacity
