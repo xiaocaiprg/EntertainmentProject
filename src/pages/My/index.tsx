@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#6c5ce7',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     backgroundColor: '#6c5ce7',
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#f5f5f5',

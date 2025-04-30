@@ -41,6 +41,22 @@ export const zh = {
     updateRecorder: '更新记录人',
     funding: '出资',
     viewTranscoding: '查看转码',
+    pitcher_ranking: '投手榜',
+  },
+
+  // 榜单相关
+  pitcher_ranking: {
+    title: '投手榜单',
+    hitRateTab: '命中率榜',
+    killCountTab: '杀数榜',
+    hitRate: '命中率',
+    killCount: '杀数',
+    totalGames: '总把数',
+    winCount: '胜数',
+    info: '榜单说明',
+    infoTitle: '投手榜单说明',
+    noData: '暂无榜单数据',
+    selectLocation: '选择地点',
   },
 
   // 设置相关
@@ -172,7 +188,7 @@ export const zh = {
     profitDetails: '利润分配详情',
     loadingDetails: '正在加载详情...',
     noProfitInfo: '暂无利润分配信息',
-    docCompany: '记录公司利润',
+    docCompany: '记录公司',
     investCompany: '投资公司',
     operationCompany: '运营公司',
     playerCompany: '投手公司',

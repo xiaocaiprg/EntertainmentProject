@@ -1,0 +1,129 @@
+import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { OverlayModal } from '../../../components/OverlayModal';
+import { THEME_COLORS } from '../../../utils/styles';
+import { useTranslation } from '../../../hooks/useTranslation';
+
+interface FilterAreaProps {
+  selectedTimeRange: string;
+  onTimeRangeChange: (timeRange: string) => void;
+}
+const LOCATION_MODAL_HEIGHT = 30;
+
+export const FilterArea = React.memo((props: FilterAreaProps) => {
+  const { selectedTimeRange, onTimeRangeChange } = props;
+
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [filterAreaTop, setFilterAreaTop] = useState(0);
+
+  const filterAreaRef = useRef<View>(null);
+  const { t } = useTranslation();
+
+  const timeRangeOptions = useMemo(
+    () => [
+      { id: '1', label: '1天' },
+      { id: '3', label: '3天' },
+      { id: '7', label: '7天' },
+      { id: '30', label: '30天' },
+      { id: '90', label: '90天' },
+      { id: '180', label: '180天' },
+    ],
+    [],
+  );
+  // 测量筛选区域位置
+  useEffect(() => {
+    if (filterAreaRef.current && showLocationModal) {
+      filterAreaRef.current.measure((x, y, width, height, pageX, pageY) => {
+        setFilterAreaTop(pageY);
+      });
+    }
+  }, [showLocationModal]);
+  // 获取当前选中的地点名称
+  const selectedLocationName = useMemo(() => {
+    return t('pitcher_ranking.selectLocation');
+  }, [t]);
+
+  return (
+    <>
+      <View style={styles.filterContainer} ref={filterAreaRef}>
+        <TouchableOpacity style={styles.locationSelector} onPress={() => setShowLocationModal(true)}>
+          <Text style={styles.locationText}>{selectedLocationName}</Text>
+          <Icon name="arrow-drop-down" size={24} color={THEME_COLORS.primary} />
+        </TouchableOpacity>
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.timeRangeContainer}>
+        {timeRangeOptions.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            style={[styles.timeRangeItem, selectedTimeRange === item.id && styles.selectedTimeRangeItem]}
+            onPress={() => onTimeRangeChange(item.id)}
+          >
+            <Text style={[styles.timeRangeText, selectedTimeRange === item.id && styles.selectedTimeRangeText]}>
+              {item.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      {/* 地点选择弹窗 */}
+      <OverlayModal
+        visible={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+        position="top"
+        height={350}
+        showCloseButton={false}
+        backgroundFromTop={filterAreaTop + LOCATION_MODAL_HEIGHT}
+      >
+        <View />
+      </OverlayModal>
+    </>
+  );
+});
+
+const styles = StyleSheet.create({
+  filterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  locationSelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    height: LOCATION_MODAL_HEIGHT,
+  },
+  locationText: {
+    fontSize: 15,
+    color: '#333',
+    fontWeight: '500',
+  },
+  timeRangeContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  timeRangeItem: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginRight: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  selectedTimeRangeItem: {
+    borderBottomColor: THEME_COLORS.primary,
+  },
+  timeRangeText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#666',
+  },
+  selectedTimeRangeText: {
+    color: THEME_COLORS.primary,
+    fontWeight: '500',
+  },
+});
+
+export default FilterArea;

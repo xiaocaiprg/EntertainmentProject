@@ -19,6 +19,7 @@ export enum ModuleType {
   CHANGE_RECORDER_CHALLENGE = 'change_recorder_challenge',
   FUNDRAISING_CHALLENGE = 'fundraising_challenge',
   TURNOVER_QUERY = 'turnover_query',
+  PITCHER_RANKING = 'player_ranking',
 }
 
 // 模块配置类型定义

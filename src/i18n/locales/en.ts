@@ -41,6 +41,22 @@ export const en = {
     updateRecorder: 'Update Recorder',
     funding: 'Funding',
     viewTranscoding: 'View Transcoding',
+    pitcher_ranking: 'Pitcher Ranking',
+  },
+
+  // Ranking related
+  pitcher_ranking: {
+    title: 'Pitcher Ranking',
+    hitRateTab: 'Hit Rate',
+    killCountTab: 'Kill Count',
+    hitRate: 'Hit Rate',
+    killCount: 'Kill Count',
+    totalGames: 'Total Games',
+    winCount: 'Wins',
+    info: 'Ranking Info',
+    infoTitle: 'Ranking Information',
+    noData: 'No pitcher_ranking data',
+    selectLocation: 'Select Location',
   },
 
   // Settings related

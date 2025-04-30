@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 44,
+    height: 40,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: THEME_COLORS.border.light,
