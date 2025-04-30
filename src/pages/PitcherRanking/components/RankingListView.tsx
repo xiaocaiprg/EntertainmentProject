@@ -84,17 +84,15 @@ export const RankingListView = React.memo((props: RankingListViewProps) => {
           </View>
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{item.winInningCount || 0}</Text>
+              <Text style={styles.statValue}>{item.winInningCount || '-'}</Text>
               <Text style={styles.statLabel}>{t('pitcher_ranking.killCount')}</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{item.totalInningCount || 0}</Text>
+              <Text style={styles.statValue}>{item.totalInningCount || '-'}</Text>
               <Text style={styles.statLabel}>{t('pitcher_ranking.totalGames')}</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statValue, styles.profitValue]}>
-                {item.totalProfitStr || (item.totalProfit ? `${item.totalProfit.toFixed(2)}` : '0')}
-              </Text>
+              <Text style={[styles.statValue, styles.profitValue]}>{item.totalProfitStr || '-'}</Text>
               <Text style={styles.statLabel}>{t('pitcher_ranking.totalProfit')}</Text>
             </View>
           </View>
@@ -154,11 +152,10 @@ const styles = StyleSheet.create({
   rankItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 15,
+    padding: 10,
     marginHorizontal: 10,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   rankBadge: {
     width: 30,
