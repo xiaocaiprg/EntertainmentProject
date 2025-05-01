@@ -26,27 +26,14 @@ export const ExistingChallengeScreen = React.memo(() => {
     }
     if (activeRoundId > 0) {
       // 如果有进行中的场次，直接导航到游戏页面，使用reset方法替代navigate
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'Main',
-            state: {
-              routes: [{ name: 'Home' }],
-              index: 0,
-            },
-          },
-          {
-            name: 'Game',
-            params: {
-              challengeId: selectedChallengeId,
-              challengeName: challenge.name,
-              operator: challenge.playPersonName,
-              recorder: challenge.docPersonName,
-              roundId: activeRoundId,
-            },
-          },
-        ],
+      navigation.replace('Game', {
+        challengeId: selectedChallengeId,
+        challengeName: challenge.name,
+        operator: challenge.playPersonName,
+        recorder: challenge.docPersonName,
+        roundId: activeRoundId,
+        baseNumber: challenge.baseNumber,
+        playRuleCode: challenge.playRuleCode,
       });
     } else {
       // 如果没有进行中的场次，则创建新场次
@@ -56,27 +43,14 @@ export const ExistingChallengeScreen = React.memo(() => {
         .then((res) => {
           if (res) {
             // 使用reset方法替代navigate
-            navigation.reset({
-              index: 0,
-              routes: [
-                {
-                  name: 'Main',
-                  state: {
-                    routes: [{ name: 'Home' }],
-                    index: 0,
-                  },
-                },
-                {
-                  name: 'Game',
-                  params: {
-                    challengeId: selectedChallengeId,
-                    challengeName: challenge.name,
-                    operator: challenge.playPersonName,
-                    recorder: challenge.docPersonName,
-                    roundId: res,
-                  },
-                },
-              ],
+            navigation.replace('Game', {
+              challengeId: selectedChallengeId,
+              challengeName: challenge.name,
+              operator: challenge.playPersonName,
+              recorder: challenge.docPersonName,
+              roundId: res,
+              baseNumber: challenge.baseNumber,
+              playRuleCode: challenge.playRuleCode,
             });
           }
         })
@@ -136,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    height: 60,
+    height: 40,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
