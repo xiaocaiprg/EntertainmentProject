@@ -6,6 +6,7 @@ import { THEME_COLORS } from '../../../utils/styles';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { getAddressList } from '../../../api/services/gameService';
 import { AddressInfo } from '../../../interface/Game';
+import { isIOS } from '../../../utils/platform';
 
 interface FilterAreaProps {
   selectedTimeRange: number;
@@ -108,7 +109,7 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
         position="top"
         height={350}
         showCloseButton={false}
-        backgroundFromTop={filterAreaTop + LOCATION_MODAL_HEIGHT}
+        backgroundFromTop={isIOS() ? filterAreaTop + LOCATION_MODAL_HEIGHT : filterAreaTop + LOCATION_MODAL_HEIGHT - 25}
       >
         <ScrollView style={styles.locationListContainer}>
           <TouchableOpacity

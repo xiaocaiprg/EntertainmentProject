@@ -56,7 +56,6 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     };
 
     const res = await getChallengeList(params);
-    console.log('getChallengeList', res);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
