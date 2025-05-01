@@ -28,7 +28,7 @@ export interface ChallengeList {
   total: number;
 }
 
-export interface DocCompanyProfitDto {
+export interface CompanyProfitDto {
   companyCode?: string;
   companyName?: string;
   matchId: number;
@@ -45,18 +45,17 @@ export interface PersonProfitDto {
   profitStr: string;
 }
 export interface GameMatchProfitDto {
-  docCompanyProfitDtoList?: DocCompanyProfitDto[];
+  docCompanyProfitDtoList?: CompanyProfitDto[];
   docCompanyProfit?: number;
   docCompanyProfitStr?: string;
-  investCompanyCode?: string;
-  investCompanyName?: string;
   investCompanyProfit?: number;
   investCompanyProfitStr?: string;
+  investCompanyProfitDtoList?: CompanyProfitDto[];
+  investPersonProfitDtoList?: PersonProfitDto[];
   operationCompanyCode?: string;
   operationCompanyName?: string;
   operationCompanyProfit?: number;
   operationCompanyProfitStr?: string;
-  personProfitDtoList?: PersonProfitDto[];
   playCompanyCode?: string;
   playCompanyName?: string;
   playCompanyProfit?: number;
@@ -85,6 +84,8 @@ export interface GameMatchDto {
   orderNumber?: number;
   playPersonCode?: string;
   playPersonName?: string;
+  baseNumber: number;
+  playRuleCode?: string;
   principal?: number;
   profit?: number;
   profitStr?: string;
@@ -120,6 +121,8 @@ export interface GameRoundDto {
   turnOver: number;
   turnOverStr: string;
   gameInningDto: GameInningDto;
+  baseNumber: number;
+  playRuleCode?: string;
 }
 export interface GamePointDto {
   betNumber: number;
@@ -145,15 +148,16 @@ export interface GameInningDto {
 }
 
 export interface ChallengeCreateParams {
-  addressInfoId?: number;
+  addressInfoId: number;
   contriAmount?: number;
-  gameDate?: string;
+  gameDate: string;
   lossLimit?: number;
   name?: string;
-  operationPersonCode?: string;
   playPersonCode: string;
   principal: number;
   tableNumber?: string;
+  baseNumber: number;
+  playRuleCode?: string;
 }
 
 export interface RoundCreateParams {

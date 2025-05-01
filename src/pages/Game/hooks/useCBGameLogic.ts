@@ -1,18 +1,19 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { RoundStats, BetChoice, HistoryRecord, GameStatusModalInfo, BankerOrPlayerMap } from '../types';
+import { CBRoundStats, HistoryRecord, GameStatusModalInfo } from '../types/CBtypes';
+import { BetChoice, BankerOrPlayerMap } from '../types/common';
 import {
-  getInitialRoundStats,
+  getCBInitialRoundStats,
   shouldAdvanceToNextRound,
   calculateNextRoundBetAmount,
   isAgainInitRound,
   isGameOver,
   updateConsecutiveDemotions,
-} from '../utils/gameLogic';
+} from '../utils/gameCBLogic';
 import { inningCreate } from '../../../api/services/inningService';
 import { updateRoundStatus } from '../../../api/services/roundService';
 import { createHistoryRecord } from '../utils/historyHelper';
 
-export const useGameLogic = () => {
+export const useCBGameLogic = (baseNumber: number) => {
   const [gameStatus, setGameStatus] = useState<'waiting' | 'finished'>('waiting'); // 游戏状态
   const [gameNumber, setGameNumber] = useState(1); // 游戏次数
   const [currentChoice, setCurrentChoice] = useState<BetChoice | undefined>(undefined); // 当前选择
@@ -30,7 +31,7 @@ export const useGameLogic = () => {
     confirmText: '',
     nextRoundInfo: null,
   });
-  const [roundStats, setRoundStats] = useState<RoundStats>(getInitialRoundStats()); // 游戏状态
+  const [roundStats, setRoundStats] = useState<CBRoundStats>(getCBInitialRoundStats(baseNumber)); // 游戏状态，传入baseNumber
   const isSubmittingRef = useRef(false); // 使用ref来标记接口请求状态
 
   // 处理庄押注结果
@@ -164,7 +165,7 @@ export const useGameLogic = () => {
   useEffect(() => {
     const handleGameLogic = async () => {
       if (gameStatus === 'finished') {
-        console.log('游戏状态为finished,轮次信息', roundStats);
+        console.log('CB游戏状态为finished,轮次信息', roundStats);
         // 检查是否游戏结束
         const isGameOverResult = isGameOver(roundStats);
         if (isGameOverResult) {
@@ -178,7 +179,7 @@ export const useGameLogic = () => {
           const isFirstRoundTransition = roundStats.isFirstRound;
 
           // 计算下一轮的押注金额和信息
-          const nextBetAmount = calculateNextRoundBetAmount(roundStats);
+          const nextBetAmount = calculateNextRoundBetAmount(roundStats, baseNumber);
 
           // 显示轮次结束弹窗
           setGameStatusModalInfo({
@@ -201,6 +202,7 @@ export const useGameLogic = () => {
               nextBetAmount,
               isFirstRoundTransition,
               oldRound,
+              baseNumber,
             );
             // 更新为下一轮状态
             newStats.round += 1;
@@ -233,7 +235,7 @@ export const useGameLogic = () => {
       }
     };
     handleGameLogic();
-  }, [gameStatus, roundId, roundStats, updateRound]);
+  }, [gameStatus, roundId, roundStats, updateRound, baseNumber]);
 
   return {
     gameStatus,
