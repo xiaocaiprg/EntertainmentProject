@@ -21,7 +21,7 @@ import { ModuleType } from '../../interface/Role';
 import { useTranslation } from '../../hooks/useTranslation';
 
 const BANNER_HEIGHT = 180;
-const HEADER_HEIGHT = 50;
+const HEADER_HEIGHT = 35;
 const CARD_WIDTH = SCREEN_WIDTH - 40;
 
 export const HomeScreen = React.memo(() => {
@@ -141,6 +141,9 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.TURNOVER_QUERY:
           navigation.navigate('TurnoverQuery');
           break;
+        case ModuleType.PITCHER_RANKING:
+          navigation.navigate('PitcherRanking');
+          break;
         default:
           break;
       }
@@ -249,7 +252,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME_COLORS.primary,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
     color: '#fff',
   },
@@ -348,7 +351,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginBottom: 8,
-    shadowRadius: 2,
   },
   moduleButtonText: {
     color: '#333',
@@ -365,7 +367,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowRadius: 3,
   },
   loginButtonText: {
     color: '#fff',

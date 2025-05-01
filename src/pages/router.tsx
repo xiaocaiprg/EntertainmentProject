@@ -18,6 +18,8 @@ import { MyGamesScreen } from './MyGames/index';
 import { RoundDetailScreen } from './RoundDetail/index';
 import { TurnoverQueryScreen } from './TurnoverQuery/index';
 import { SettingsScreen } from './Settings/index';
+import { AccountSecurity } from './Settings/AccountSecurity';
+import { PitcherRankingScreen } from './PitcherRanking/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -45,6 +47,8 @@ type RootStackParamList = {
   RoundDetail: { matchId: number };
   TurnoverQuery: undefined;
   Settings: undefined;
+  AccountSecurity: undefined;
+  PitcherRanking: undefined;
 };
 
 // 通用导航类型
@@ -127,6 +131,8 @@ function AppNavigator() {
                 <Stack.Screen name="RoundDetail" component={RoundDetailScreen} />
                 <Stack.Screen name="TurnoverQuery" component={TurnoverQueryScreen} />
                 <Stack.Screen name="Settings" component={SettingsScreen} />
+                <Stack.Screen name="AccountSecurity" component={AccountSecurity} />
+                <Stack.Screen name="PitcherRanking" component={PitcherRankingScreen} />
               </Stack.Navigator>
             </RoleProvider>
           </AuthProvider>

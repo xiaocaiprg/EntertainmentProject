@@ -30,7 +30,7 @@ export const NewChallengeScreen = React.memo(() => {
     name: '',
     date: new Date(),
     principal: '',
-    contriAmount: '',
+
     initialBetAmount: INITIAL_BET_AMOUNT, // 默认投注基数
   });
 
@@ -61,7 +61,6 @@ export const NewChallengeScreen = React.memo(() => {
       addressInfoId: formData.locationId,
       gameDate: formData.date ? formatDate(formData.date, 'YYYY-MM-DD') : '',
       principal: parseFloat(formData.principal),
-      contriAmount: formData.contriAmount ? parseFloat(formData.contriAmount) : 0,
       baseNumber: formData.initialBetAmount,
       playRuleCode: formData.challengeType,
     };

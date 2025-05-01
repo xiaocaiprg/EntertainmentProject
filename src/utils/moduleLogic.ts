@@ -44,41 +44,77 @@ export const availableModules: ModuleConfig[] = [
     icon: 'swap-horiz',
     backgroundColor: '#0984e3',
   },
+  {
+    id: '7',
+    title: 'modules.pitcher_ranking',
+    type: ModuleType.PITCHER_RANKING,
+    icon: 'leaderboard',
+    backgroundColor: '#e84393',
+  },
 ];
 
 // 定义角色到模块的映射
 export const roleModuleMappings: RoleModuleMapping[] = [
   {
     role: 'INVESTMENT_ADMIN',
-    moduleTypes: [ModuleType.CHALLENGE_NEW, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHALLENGE_NEW,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+    ],
   },
   {
     role: 'INVESTOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.FUNDRAISING_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.FUNDRAISING_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+    ],
   },
   {
     role: 'RECORDER_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
   },
   {
     role: 'RECORDER',
-    moduleTypes: [ModuleType.CHALLENGE_EXISTING, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHALLENGE_EXISTING,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+    ],
   },
   {
     role: 'PLAY_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
   },
   {
     role: 'PLAYPERSON',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
   },
   {
     role: 'OPERATION_ADMIN',
-    moduleTypes: [ModuleType.CHANGE_RECORDER_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHANGE_RECORDER_CHALLENGE,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+    ],
   },
   {
     role: 'OPERATIONPERSON',
-    moduleTypes: [ModuleType.CHANGE_RECORDER_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHANGE_RECORDER_CHALLENGE,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+    ],
+  },
+  {
+    role: 'VISITOR',
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
   },
 ];
 
