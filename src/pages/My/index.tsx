@@ -72,12 +72,19 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
             />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.name || 'Ika Puspita Sari'}</Text>
-            <Text style={styles.userHandle}>@{user?.name || 'ikapuspitasari8'}</Text>
+            <Text style={styles.userName}>{user?.name || 'User'}</Text>
+            <Text style={styles.userHandle}>@{user?.name || 'User'}</Text>
           </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress}>
-            <Icon name="exit-to-app" size={24} color="#fff" />
-          </TouchableOpacity>
+          <View style={styles.settingsContainer}>
+            <TouchableOpacity style={styles.settingsButton} onPress={handleSettingsPress}>
+              <Icon name="settings" size={24} color="#fff" />
+              <Text style={styles.settingsText}>{t('settings.settings')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.settingsButton} onPress={handleLogoutPress}>
+              <Icon name="exit-to-app" size={24} color="#fff" />
+              <Text style={styles.settingsText}>{t('my.loginout')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         {/*
         <View style={styles.membershipCardWrapper}>
@@ -92,26 +99,15 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         </View>
       </>
     ),
-    [user, handleMyGames, handleLogoutPress, MenuItem, t],
+    [user, handleMyGames, handleLogoutPress, MenuItem, t, handleSettingsPress],
   );
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="default" />
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleSettingsPress}>
-            <Icon name="menu" size={24} color="#fff" />
-          </TouchableOpacity>
-          {/* <TouchableOpacity>
-            <Icon name="notifications" size={24} color="#fff" />
-          </TouchableOpacity> */}
-        </View>
-
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {isLoggedIn ? renderLoggedIn() : renderNotLoggedIn()}
-        </ScrollView>
-      </View>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {isLoggedIn ? renderLoggedIn() : renderNotLoggedIn()}
+      </ScrollView>
     </SafeAreaView>
   );
 });
@@ -122,20 +118,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#6c5ce7',
     paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f3fe',
-  },
-  header: {
-    backgroundColor: '#6c5ce7',
-    paddingHorizontal: 15,
-    paddingVertical: 5,
+  settingsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settingsButton: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 12,
+  },
+  settingsText: {
+    color: '#fff',
+    fontSize: 14,
   },
   content: {
     flex: 1,
+    backgroundColor: '#f5f3fe',
   },
   // 未登录状态的样式
   notLoggedInContainer: {
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     backgroundColor: '#6c5ce7',
     paddingHorizontal: 15,
-    paddingVertical: 5,
+    paddingTop: 20,
+    paddingBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -214,9 +215,6 @@ const styles = StyleSheet.create({
   //   fontWeight: 'bold',
   //   color: '#333',
   // },
-  logoutButton: {
-    padding: 8,
-  },
   // 列表模块样式
   menuContainer: {
     backgroundColor: '#fff',

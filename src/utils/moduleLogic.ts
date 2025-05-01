@@ -112,6 +112,10 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.PITCHER_RANKING,
     ],
   },
+  {
+    role: 'VISITOR',
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+  },
 ];
 
 // 获取用户可访问的模块列表

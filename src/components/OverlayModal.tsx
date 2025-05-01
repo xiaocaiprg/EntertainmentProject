@@ -78,7 +78,9 @@ export const OverlayModal = React.memo((props: OverlayModalProps) => {
     <Modal visible={visible} transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.modalContainer}>
         {backgroundFromTop !== undefined && (
-          <View style={{ height: backgroundFromTop, backgroundColor: 'transparent' }} />
+          <TouchableOpacity activeOpacity={1} onPress={handleClose}>
+            <View style={{ height: backgroundFromTop, backgroundColor: 'transparent' }} />
+          </TouchableOpacity>
         )}
         <TouchableOpacity activeOpacity={1} style={styles.overlayContainer} onPress={handleContainerPress}>
           <Animated.View style={contentContainerStyle}>

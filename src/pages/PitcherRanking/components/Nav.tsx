@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoText: {
+    fontWeight: '700',
     fontSize: 12,
     color: '#fff',
   },

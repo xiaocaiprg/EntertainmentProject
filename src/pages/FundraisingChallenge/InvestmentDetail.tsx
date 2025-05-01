@@ -68,8 +68,8 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     }
 
     // 校验出资额必须为10000的倍数
-    if (amountValue % 10000 !== 0) {
-      Alert.alert('提示', '出资金额必须为10000的倍数');
+    if (amountValue % 100 !== 0) {
+      Alert.alert('提示', '出资金额必须为100的倍数');
       return;
     }
 

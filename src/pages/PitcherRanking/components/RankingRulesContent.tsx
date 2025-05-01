@@ -15,7 +15,7 @@ export const RankingRulesContent = React.memo(() => {
       </View>
       <View style={styles.ruleItem}>
         <Text style={styles.ruleNumber}>3.</Text>
-        <Text style={styles.ruleText}>榜单每日凌晨更新</Text>
+        <Text style={styles.ruleText}>榜单每日凌晨更新前N天数据</Text>
       </View>
     </View>
   );
@@ -24,7 +24,7 @@ export const RankingRulesContent = React.memo(() => {
 const styles = StyleSheet.create({
   ruleItem: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 10,
   },
   ruleNumber: {

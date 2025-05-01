@@ -69,6 +69,21 @@ export const en = {
   settings: {
     settings: 'Settings',
     language: 'Language',
+    accountSecurity: 'Account Security',
+  },
+
+  // accountSecurity
+  accountSecurity: {
+    title: 'Account Security',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm Password',
+    enterNewPassword: 'Enter New Password',
+    confirmNewPassword: 'Confirm New Password',
+    passwordNotMatch: 'Passwords do not match',
+    passwordEmpty: 'Password cannot be empty',
+    submit: 'Submit',
+    success: 'Password changed successfully',
+    failed: 'Failed to change password, please try again',
   },
 
   // Challenge Detail
@@ -151,7 +166,6 @@ export const en = {
     raisedAmount: 'Raised Amount',
     availableAmount: 'Available Amount',
     contributionDetails: 'Contribution Details',
-    contributor: 'Contributor',
     amount: 'Amount',
     noContributionRecords: 'No contribution records',
     challengeDetails: 'Challenge Details',
@@ -162,6 +176,7 @@ export const en = {
     view: 'View',
     fundraisingChallenges: 'Fundraising Challenges',
     noFundraisingChallenges: 'No fundraising challenges',
+    contriRate: 'Contribution Rate',
   },
 
   // My Page
@@ -169,6 +184,7 @@ export const en = {
     membershipBenefits: 'Membership Benefits',
     historyRecord: 'History Records',
     myGames: 'My Games',
+    loginout: 'Logout',
   },
 
   // My Games
@@ -194,11 +210,12 @@ export const en = {
     profitDetails: 'Profit Distribution Details',
     loadingDetails: 'Loading details...',
     noProfitInfo: 'No profit distribution information',
-    docCompany: 'Record Company',
-    investCompany: 'Investment Company',
+    docCompany: 'Record Company(All)',
+    investCompany: 'Investment Company(All)',
     operationCompany: 'Operation Company',
     playerCompany: 'Player Company',
-    investmentCompanyProfitDetails: 'Investment Company Profit Details',
+    investCompanyProfitDetails: 'Investment Company Profit Details',
+    investPersonProfitDetails: 'Investor Profit Details',
     companyProfitDetails: 'Record Company Profit Details',
   },
 };

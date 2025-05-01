@@ -28,7 +28,7 @@ export interface ChallengeList {
   total: number;
 }
 
-export interface DocCompanyProfitDto {
+export interface CompanyProfitDto {
   companyCode?: string;
   companyName?: string;
   matchId: number;
@@ -45,18 +45,17 @@ export interface PersonProfitDto {
   profitStr: string;
 }
 export interface GameMatchProfitDto {
-  docCompanyProfitDtoList?: DocCompanyProfitDto[];
+  docCompanyProfitDtoList?: CompanyProfitDto[];
   docCompanyProfit?: number;
   docCompanyProfitStr?: string;
-  investCompanyCode?: string;
-  investCompanyName?: string;
   investCompanyProfit?: number;
   investCompanyProfitStr?: string;
+  investCompanyProfitDtoList?: CompanyProfitDto[];
+  investPersonProfitDtoList?: PersonProfitDto[];
   operationCompanyCode?: string;
   operationCompanyName?: string;
   operationCompanyProfit?: number;
   operationCompanyProfitStr?: string;
-  personProfitDtoList?: PersonProfitDto[];
   playCompanyCode?: string;
   playCompanyName?: string;
   playCompanyProfit?: number;
@@ -150,7 +149,7 @@ export interface GameInningDto {
 
 export interface ChallengeCreateParams {
   addressInfoId: number;
-  contriAmount: number;
+  contriAmount?: number;
   gameDate: string;
   lossLimit?: number;
   name?: string;

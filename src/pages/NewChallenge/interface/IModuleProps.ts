@@ -35,6 +35,6 @@ export interface ChallengeFormData {
   name: string; // 挑战名称
   date: Date; // 日期
   principal: string; // 本金
-  contriAmount: string; // 出资额
+  // contriAmount: string; // 出资额
   initialBetAmount: number; // 投注基数
 }
