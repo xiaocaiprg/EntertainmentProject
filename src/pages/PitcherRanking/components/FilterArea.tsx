@@ -8,8 +8,8 @@ import { getAddressList } from '../../../api/services/gameService';
 import { AddressInfo } from '../../../interface/Game';
 
 interface FilterAreaProps {
-  selectedTimeRange: string;
-  onTimeRangeChange: (timeRange: string) => void;
+  selectedTimeRange: number;
+  onTimeRangeChange: (timeRange: number) => void;
   selectedLocation: number;
   onLocationChange: (locationId: number) => void;
 }
@@ -27,12 +27,12 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
 
   const timeRangeOptions = useMemo(
     () => [
-      { id: '1', label: '1天' },
-      { id: '3', label: '3天' },
-      { id: '7', label: '7天' },
-      { id: '30', label: '30天' },
-      { id: '90', label: '90天' },
-      { id: '180', label: '180天' },
+      { id: 1, label: '1天' },
+      { id: 3, label: '3天' },
+      { id: 7, label: '7天' },
+      { id: 30, label: '30天' },
+      { id: 90, label: '90天' },
+      { id: 180, label: '180天' },
     ],
     [],
   );
@@ -54,6 +54,12 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
 
   // 获取当前选中的地点名称
   const selectedLocationName = useMemo(() => {
+    if (selectedLocation === -1) {
+      return t('pitcher_ranking.selectLocation');
+    }
+    if (selectedLocation === 0) {
+      return t('pitcher_ranking.allLocations');
+    }
     if (selectedLocation > 0 && locations.length > 0) {
       const selected = locations.find((item) => item.id === selectedLocation);
       return selected?.name || t('pitcher_ranking.selectLocation');
@@ -63,11 +69,16 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
 
   const handleSelectLocation = useCallback(
     (id?: number) => {
-      id && onLocationChange(id);
+      id !== undefined && onLocationChange(id);
       setShowLocationModal(false);
     },
     [onLocationChange],
   );
+
+  const handleSelectAllLocations = useCallback(() => {
+    onLocationChange(0);
+    setShowLocationModal(false);
+  }, [onLocationChange]);
 
   return (
     <>
@@ -100,6 +111,14 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
         backgroundFromTop={filterAreaTop + LOCATION_MODAL_HEIGHT}
       >
         <ScrollView style={styles.locationListContainer}>
+          <TouchableOpacity
+            style={[styles.locationItem, selectedLocation === 0 && styles.selectedLocationItem]}
+            onPress={handleSelectAllLocations}
+          >
+            <Text style={[styles.locationItemText, selectedLocation === 0 && styles.selectedLocationItemText]}>
+              {t('pitcher_ranking.allLocations') || '全部'}
+            </Text>
+          </TouchableOpacity>
           {locations.map((location) => (
             <TouchableOpacity
               key={location.id}

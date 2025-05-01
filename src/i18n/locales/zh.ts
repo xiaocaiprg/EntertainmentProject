@@ -54,9 +54,15 @@ export const zh = {
     totalGames: '总把数',
     winCount: '胜数',
     info: '榜单说明',
-    infoTitle: '投手榜单说明',
+    infoTitle: '榜单说明',
+    killRate: '杀数',
     noData: '暂无榜单数据',
     selectLocation: '选择地点',
+    totalProfit: '上下水',
+    totalTurnOver: '转码',
+    allLocations: '全部地点',
+    company: '公司',
+    personal: '个人',
   },
 
   // 设置相关

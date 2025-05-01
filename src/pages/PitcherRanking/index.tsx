@@ -1,24 +1,38 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  ImageBackground,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import { THEME_COLORS } from '../../utils/styles';
 import { useTranslation } from '../../hooks/useTranslation';
 import { InfoModal } from '../../components/InfoModal';
 import FilterArea from './components/FilterArea';
 import RankingListView from './components/RankingListView';
 import { Nav } from './components/Nav';
-import { RankingTabType, PlayerHitrateRankDto, PlayerKillrateRankDto, RankSearchParam } from '../../interface/Ranking';
+import RankingRulesContent from './components/RankingRulesContent';
+import {
+  RankingTabType,
+  PlayerHitrateRankDto,
+  PlayerKillrateRankDto,
+  RankSearchParam,
+  RankingTypeEnum,
+  RankCompanySearchParam,
+  PlayerCompanyHitrateRankDto,
+  PlayerCompanyKillrateRankDto,
+} from '../../interface/Ranking';
 import { RootStackScreenProps } from '../router';
-import { getPitcherRankingHitRate, getPitcherRankingKillRate } from '../../api/services/rankService';
-
-// 榜单描述说明
-const RANKING_DESCRIPTION = `
-榜单说明：
-1. 命中率 = 胜局数 / 总局数
-2. 杀数 = 胜局数
-3. 数据统计周期为近一个月
-4. 榜单每日更新一次
-5. 最少参与30局才能上榜
-`;
+import {
+  getPitcherRankingHitRate,
+  getPitcherRankingHitRateCompany,
+  getPitcherRankingKillRate,
+  getPitcherRankingKillRateCompany,
+} from '../../api/services/rankService';
 
 // 使用导航堆栈中定义的类型
 type PitcherRankingScreenProps = RootStackScreenProps<'PitcherRanking'>;
@@ -28,161 +42,220 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [currentTab, setCurrentTab] = useState<RankingTabType>(RankingTabType.HIT_RATE);
-
-  const [selectedTimeRange, setSelectedTimeRange] = useState('30');
-  const [selectedLocation, setSelectedLocation] = useState<number>(0);
+  const [rankingType, setRankingType] = useState<RankingTypeEnum>(RankingTypeEnum.PERSONAL);
+  const [selectedTimeRange, setSelectedTimeRange] = useState(7);
+  const [selectedLocation, setSelectedLocation] = useState<number>(-1);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [hitRateRankData, setHitRateRankData] = useState<PlayerHitrateRankDto[]>([]);
   const [killRateRankData, setKillRateRankData] = useState<PlayerKillrateRankDto[]>([]);
+  const [companyHitRateRankData, setCompanyHitRateRankData] = useState<PlayerCompanyHitrateRankDto[]>([]);
+  const [companyKillRateRankData, setCompanyKillRateRankData] = useState<PlayerCompanyKillrateRankDto[]>([]);
+  const [hasMore, setHasMore] = useState(false);
 
   const pageNumRef = useRef(1);
   const pageSizeRef = useRef(20);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const requestIdRef = useRef(0);
 
-  const handleScroll = Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false });
+  const handleScroll = Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+    useNativeDriver: false,
+    listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+      const paddingToBottom = 20;
+      const isCloseToBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
 
-  // 获取命中率榜数据
+      if (isCloseToBottom && !loading && hasMore) {
+        handleLoadMore();
+      }
+    },
+  });
+
   const fetchHitRateRankingData = useCallback(async () => {
     setLoading(true);
+    const currentRequestId = ++requestIdRef.current;
     const params: RankSearchParam = {
-      rankPeriod: parseInt(selectedTimeRange, 10),
+      rankPeriod: selectedTimeRange,
       pageNum: pageNumRef.current,
       pageSize: pageSizeRef.current,
     };
-
-    // 只有当选择了有效地点时才添加地点过滤参数
     if (selectedLocation > 0) {
       params.addressId = selectedLocation;
     }
-
     const result = await getPitcherRankingHitRate(params);
-    if (result && result.records) {
-      setHitRateRankData(result.records);
+    if (currentRequestId === requestIdRef.current) {
+      if (result && result.records) {
+        const isHasMore = result.current < result.pages;
+        setHasMore(isHasMore);
+        setHitRateRankData((prev) => [...prev, ...(result.records || [])]);
+      }
     }
     setLoading(false);
   }, [selectedTimeRange, selectedLocation]);
 
-  // 获取杀数榜数据
   const fetchKillRateRankingData = useCallback(async () => {
     setLoading(true);
+    const currentRequestId = ++requestIdRef.current;
     const params: RankSearchParam = {
-      rankPeriod: parseInt(selectedTimeRange, 10),
+      rankPeriod: selectedTimeRange,
       pageNum: pageNumRef.current,
       pageSize: pageSizeRef.current,
     };
-
-    // 只有当选择了有效地点时才添加地点过滤参数
     if (selectedLocation > 0) {
       params.addressId = selectedLocation;
     }
-
     const result = await getPitcherRankingKillRate(params);
-    if (result && result.records) {
-      setKillRateRankData(result.records);
+    if (currentRequestId === requestIdRef.current) {
+      if (result && result.records) {
+        const isHasMore = result.current < result.pages;
+        setHasMore(isHasMore);
+        setKillRateRankData((prev) => [...prev, ...(result.records || [])]);
+      }
     }
-
     setLoading(false);
   }, [selectedTimeRange, selectedLocation]);
 
-  // 初始加载数据
-  useEffect(() => {
-    // 同时获取两种榜单数据
-    const loadInitialData = async () => {
-      setLoading(true);
-      await fetchHitRateRankingData();
-      setLoading(false);
+  const fetchCompanyHitRateRankingData = useCallback(async () => {
+    setLoading(true);
+    const currentRequestId = ++requestIdRef.current;
+    const params: RankCompanySearchParam = {
+      rankPeriod: selectedTimeRange,
+      orderParam: 'desc',
     };
-    loadInitialData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (selectedLocation > 0) {
+      params.addressId = selectedLocation;
+    }
+    const result = await getPitcherRankingHitRateCompany(params);
+    if (currentRequestId === requestIdRef.current) {
+      if (result?.length) {
+        setCompanyHitRateRankData(result);
+      }
+    }
+    setLoading(false);
+  }, [selectedTimeRange, selectedLocation]);
+  const fetchCompanyKillRateRankingData = useCallback(async () => {
+    setLoading(true);
+    const currentRequestId = ++requestIdRef.current;
+    const params: RankCompanySearchParam = {
+      rankPeriod: selectedTimeRange,
+      orderParam: 'desc',
+    };
+    if (selectedLocation > 0) {
+      params.addressId = selectedLocation;
+    }
+    const result = await getPitcherRankingKillRateCompany(params);
+    if (currentRequestId === requestIdRef.current) {
+      if (result?.length) {
+        setCompanyKillRateRankData(result);
+      }
+    }
+    setLoading(false);
+  }, [selectedTimeRange, selectedLocation]);
 
-  // 切换tab
   const handleTabChange = useCallback(
     (tab: RankingTabType) => {
+      if (tab !== currentTab && rankingType === RankingTypeEnum.PERSONAL) {
+        setHitRateRankData([]);
+        setKillRateRankData([]);
+      }
+      if (tab !== currentTab && rankingType === RankingTypeEnum.COMPANY) {
+        setCompanyHitRateRankData([]);
+        setCompanyKillRateRankData([]);
+      }
       setCurrentTab(tab);
-      setHitRateRankData([]);
-      setKillRateRankData([]);
-      // 每次切换标签都刷新当前标签的数据
-      if (tab === RankingTabType.HIT_RATE) {
-        pageNumRef.current = 1;
-        fetchHitRateRankingData();
-      } else {
-        pageNumRef.current = 1;
-        fetchKillRateRankingData();
-      }
     },
-    [fetchHitRateRankingData, fetchKillRateRankingData],
+    [currentTab, rankingType],
   );
 
-  // 时间范围变更
-  const handleTimeRangeChange = useCallback(
-    (timeRange: string) => {
-      setSelectedTimeRange(timeRange);
-      // 时间范围变更时重新获取当前标签的数据
+  // 切换公司/个人排行榜
+  const handleRankingTypeChange = useCallback(
+    (type: RankingTypeEnum) => {
+      if (rankingType === RankingTypeEnum.COMPANY && type !== rankingType) {
+        setHitRateRankData([]);
+        setKillRateRankData([]);
+      }
+      if (rankingType === RankingTypeEnum.PERSONAL && type !== rankingType) {
+        setCompanyHitRateRankData([]);
+        setCompanyKillRateRankData([]);
+      }
+      setRankingType(type);
+    },
+    [rankingType],
+  );
+
+  const handleLoadMore = useCallback(() => {
+    if (rankingType === RankingTypeEnum.PERSONAL && hasMore && !loading) {
+      pageNumRef.current++;
       if (currentTab === RankingTabType.HIT_RATE) {
-        pageNumRef.current = 1;
         fetchHitRateRankingData();
       } else {
-        pageNumRef.current = 1;
         fetchKillRateRankingData();
       }
-    },
-    [currentTab, fetchHitRateRankingData, fetchKillRateRankingData],
-  );
-
-  // 地点选择变更
-  const handleLocationChange = useCallback(
-    (locationId: number) => {
-      setSelectedLocation(locationId);
-      // 地点变更时重新获取当前标签的数据
+    }
+  }, [rankingType, fetchHitRateRankingData, hasMore, currentTab, fetchKillRateRankingData, loading]);
+  const resetData = useCallback(() => {
+    pageNumRef.current = 1;
+    requestIdRef.current = 0;
+    setHasMore(false);
+    setHitRateRankData([]);
+    setKillRateRankData([]);
+    setCompanyHitRateRankData([]);
+    setCompanyKillRateRankData([]);
+  }, []);
+  useEffect(() => {
+    // 重置请求状态，确保新的筛选条件开始前清空旧的请求ID
+    resetData();
+    if (rankingType === RankingTypeEnum.PERSONAL) {
       if (currentTab === RankingTabType.HIT_RATE) {
-        pageNumRef.current = 1;
         fetchHitRateRankingData();
       } else {
-        pageNumRef.current = 1;
         fetchKillRateRankingData();
       }
-    },
-    [currentTab, fetchHitRateRankingData, fetchKillRateRankingData],
-  );
-
-  // 返回上一页
-  const handleBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
-  // 显示说明弹窗
-  const handleShowInfo = useCallback(() => {
-    setShowInfoModal(true);
-  }, []);
-
-  // 关闭说明弹窗
-  const handleCloseInfo = useCallback(() => {
-    setShowInfoModal(false);
-  }, []);
+    } else {
+      if (currentTab === RankingTabType.HIT_RATE) {
+        fetchCompanyHitRateRankingData();
+      } else {
+        fetchCompanyKillRateRankingData();
+      }
+    }
+  }, [
+    currentTab,
+    selectedTimeRange,
+    selectedLocation,
+    rankingType,
+    fetchCompanyHitRateRankingData,
+    fetchCompanyKillRateRankingData,
+    fetchHitRateRankingData,
+    fetchKillRateRankingData,
+    resetData,
+  ]);
 
   return (
     <View style={styles.container}>
-      <Nav scrollY={scrollY} onBack={handleBack} onShowInfo={handleShowInfo} />
+      <Nav
+        scrollY={scrollY}
+        onBack={() => navigation.goBack()}
+        onShowInfo={() => setShowInfoModal(true)}
+        rankingType={rankingType}
+        onRankingTypeChange={handleRankingTypeChange}
+      />
       <Animated.ScrollView onScroll={handleScroll} scrollEventThrottle={16}>
         {/* 头部背景图片区域 */}
         <ImageBackground
-          source={{ uri: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/rank2.png' }}
+          source={{ uri: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/rank3.png' }}
           style={styles.headerBackgroundImage}
           resizeMode="cover"
         >
           <View style={styles.heroSection}>
-            <Text style={styles.heroTitle}>投手榜</Text>
-            <Text style={styles.updateInfo}>4月27日更新 · 按近7天商户综合人气排序</Text>
+            <Text style={styles.updateInfo}>每日凌晨更新</Text>
           </View>
         </ImageBackground>
 
         <View style={styles.contentContainer}>
           <FilterArea
             selectedTimeRange={selectedTimeRange}
-            onTimeRangeChange={handleTimeRangeChange}
+            onTimeRangeChange={(timeRange) => setSelectedTimeRange(timeRange)}
             selectedLocation={selectedLocation}
-            onLocationChange={handleLocationChange}
+            onLocationChange={(locationId) => setSelectedLocation(locationId)}
           />
 
           <View style={styles.tabContainer}>
@@ -216,8 +289,11 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
           <RankingListView
             loading={loading}
             currentTab={currentTab}
+            rankingType={rankingType}
             hitRateData={hitRateRankData}
             killRateData={killRateRankData}
+            companyHitRateData={companyHitRateRankData}
+            companyKillRateData={companyKillRateRankData}
           />
         </View>
         <View style={styles.bottomSpace} />
@@ -226,8 +302,8 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
       <InfoModal
         visible={showInfoModal}
         title={t('pitcher_ranking.infoTitle')}
-        content={RANKING_DESCRIPTION}
-        onClose={handleCloseInfo}
+        customContent={<RankingRulesContent />}
+        onClose={() => setShowInfoModal(false)}
       />
     </View>
   );
@@ -245,19 +321,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     width: '100%',
-    height: 200,
+    height: 220,
     paddingBottom: 10,
   },
   heroSection: {
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-  },
-  heroTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 10,
   },
   updateInfo: {
     fontSize: 12,

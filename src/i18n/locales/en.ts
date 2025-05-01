@@ -54,9 +54,15 @@ export const en = {
     totalGames: 'Total Games',
     winCount: 'Wins',
     info: 'Ranking Info',
+    killRate: 'Kill Rate',
     infoTitle: 'Ranking Information',
     noData: 'No pitcher_ranking data',
     selectLocation: 'Select Location',
+    totalProfit: 'Total Profit',
+    totalTurnOver: 'Total Turn Over',
+    allLocations: 'All Locations',
+    company: 'Company',
+    personal: 'Personal',
   },
 
   // Settings related

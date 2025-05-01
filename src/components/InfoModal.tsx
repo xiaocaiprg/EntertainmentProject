@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, ReactNode } from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from '../hooks/useTranslation';
@@ -6,12 +6,13 @@ import { useTranslation } from '../hooks/useTranslation';
 interface InfoModalProps {
   visible: boolean;
   title: string;
-  content: string;
+  content?: string;
+  customContent?: ReactNode;
   onClose: () => void;
 }
 
 export const InfoModal = React.memo((props: InfoModalProps) => {
-  const { visible, title, content, onClose } = props;
+  const { visible, title, content, customContent, onClose } = props;
   const { t } = useTranslation();
 
   const handleClose = useCallback(() => {
@@ -19,18 +20,22 @@ export const InfoModal = React.memo((props: InfoModalProps) => {
   }, [onClose]);
 
   const renderContent = useMemo(() => {
+    if (customContent) {
+      return <ScrollView style={styles.contentScroll}>{customContent}</ScrollView>;
+    }
     return (
       <ScrollView style={styles.contentScroll}>
         <Text style={styles.contentText}>{content}</Text>
       </ScrollView>
     );
-  }, [content]);
+  }, [content, customContent]);
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.header}>
+            <View style={{ width: 20 }} />
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Icon name="close" size={24} color="#333" />
@@ -52,21 +57,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
   },
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 10,
     width: '100%',
     maxHeight: '80%',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    padding: 10,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   contentScroll: {
-    marginVertical: 15,
+    marginVertical: 10,
     maxHeight: 300,
   },
   contentText: {
@@ -88,11 +91,12 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   confirmButton: {
-    backgroundColor: '#2089dc',
+    backgroundColor: '#6D5CE7',
     borderRadius: 5,
-    padding: 12,
+    width: '100%',
+    height: 40,
     alignItems: 'center',
-    marginTop: 5,
+    justifyContent: 'center',
   },
   confirmText: {
     color: '#fff',
