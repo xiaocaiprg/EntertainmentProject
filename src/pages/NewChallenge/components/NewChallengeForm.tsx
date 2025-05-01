@@ -8,9 +8,10 @@ import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
-import { ChallengeFormData, DropdownType } from '../interface/IModuleProps';
+import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS, ChallengeType } from '../interface/IModuleProps';
 
 interface NewChallengeFormProps {
+  challengeType: ChallengeType;
   operators: UserResult[];
   locations: AddressInfo[];
   formData: ChallengeFormData;
@@ -19,7 +20,7 @@ interface NewChallengeFormProps {
 }
 
 export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((props: NewChallengeFormProps) => {
-  const { operators, locations, formData, onChange, onConfirm } = props;
+  const { operators, locations, formData, onChange, onConfirm, challengeType } = props;
   // 用于控制当前打开的下拉框
   const [activeDropdown, setActiveDropdown] = useState<DropdownType>(DropdownType.NONE);
 
@@ -37,8 +38,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
       !!formData.operatorCode &&
       formData.locationId > 0 &&
       !!formData.date &&
-      validateNumberInput(formData.principal) > 0 &&
-      validateNumberInput(formData.contriAmount) >= 0
+      validateNumberInput(formData.principal) > 0
     );
   }, [formData]);
 
@@ -56,6 +56,21 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
 
   return (
     <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled">
+      <>
+        <Text style={styles.labelText}>投注基数</Text>
+        <DropdownSelect
+          options={BET_AMOUNT_OPTIONS[challengeType]}
+          selectedValue={formData.initialBetAmount}
+          placeholder="请选择投注基数"
+          onSelect={(value: any) => updateField('initialBetAmount', value)}
+          valueKey="value"
+          labelKey="label"
+          isOpen={activeDropdown === DropdownType.BET_AMOUNT}
+          onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.BET_AMOUNT, isOpen)}
+          zIndex={1900}
+          zIndexInverse={2100}
+        />
+      </>
       <>
         <Text style={styles.labelText}>选择投手</Text>
         <DropdownSelect
@@ -112,13 +127,13 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         placeholder="请输入本金金额"
         hint="本金需要为10000的倍数"
       />
-      <NumberInput
+      {/* <NumberInput
         title="设置出资额(不能大于本金)"
         value={formData.contriAmount}
         onChangeText={(value: any) => updateField('contriAmount', value)}
         placeholder="请输入出资额"
         hint="出资额需要为10000的倍数"
-      />
+      /> */}
       {/*
       <NumberInput
         title="设置止损额"

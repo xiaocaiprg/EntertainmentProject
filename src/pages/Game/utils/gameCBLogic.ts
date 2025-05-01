@@ -1,19 +1,17 @@
-import { RoundStats } from '../types';
+import { CBRoundStats } from '../types/CBtypes';
 import { GameRoundDto } from '../../../interface/Game';
-
-// 初始押注金额
-export const INITIAL_BET_AMOUNT = 3000;
+import { getBetMultiplier } from '../../../constants/betAmounts';
 
 /**
  * 获取初始轮次状态
- * @returns {RoundStats} 初始轮次状态
+ * @returns {CBRoundStats} 初始轮次状态
  */
-export const getInitialRoundStats = (): RoundStats => {
+export const getCBInitialRoundStats = (initialBetAmount: number): CBRoundStats => {
   return {
     round: 1,
     wins: 0,
     losses: 0,
-    betAmount: INITIAL_BET_AMOUNT,
+    betAmount: initialBetAmount,
     gamesPlayed: 0,
     maxGames: Infinity,
     isFirstRound: true,
@@ -29,11 +27,11 @@ export const getInitialRoundStats = (): RoundStats => {
 
 /**
  * 计算是否进入下一轮
- * @param {RoundStats} stats 当前轮次统计
+ * @param {CBRoundStats} stats 当前轮次统计
  * @param {boolean} isGameOverResult  是否结束
  * @returns {boolean} 是否进入下一轮
  */
-export const shouldAdvanceToNextRound = (stats: RoundStats, isGameOverResult: boolean): boolean => {
+export const shouldAdvanceToNextRound = (stats: CBRoundStats, isGameOverResult: boolean): boolean => {
   const netWins = stats.wins - stats.losses;
   if (isGameOverResult) {
     return false;
@@ -52,10 +50,10 @@ export const shouldAdvanceToNextRound = (stats: RoundStats, isGameOverResult: bo
 
 /**
  * 计算是否游戏结束
- * @param {RoundStats} stats 当前轮次统计
+ * @param {CBRoundStats} stats 当前轮次统计
  * @returns {boolean} 是否游戏结束
  */
-export const isGameOver = (stats: RoundStats): boolean => {
+export const isGameOver = (stats: CBRoundStats): boolean => {
   const netLosses = stats.losses - stats.wins; // 净负局数
   // 连续输3次，游戏结束
   if (stats.consecutiveDemotions === 3) {
@@ -81,21 +79,22 @@ export const isGameOver = (stats: RoundStats): boolean => {
 
 /**
  * 计算下一轮的押注金额
- * @param {RoundStats} stats 当前轮次统计
+ * @param {CBRoundStats} stats 当前轮次统计
  * @returns {number} 下一轮的押注金额
  */
-export const calculateNextRoundBetAmount = (stats: RoundStats): number => {
+export const calculateNextRoundBetAmount = (stats: CBRoundStats, baseNumber: number): number => {
+  const multiplier = getBetMultiplier(baseNumber);
   if (stats.isFirstRound) {
-    return INITIAL_BET_AMOUNT + 2000;
+    return baseNumber + 2 * multiplier;
   } else if (stats.isFirstRoundAgain) {
     // 再次进入初始轮的押注规则
     const netWins = stats.wins - stats.losses;
     if (netWins === 3) {
-      // 净胜3局，押注增加2000
-      return stats.betAmount + 2000;
+      // 净胜3局，押注增加2*multiplier
+      return stats.betAmount + 2 * multiplier;
     } else if (netWins === 1) {
-      // 净胜1局，押注增加1000
-      return stats.betAmount + 1000;
+      // 净胜1局，押注增加1*multiplier
+      return stats.betAmount + multiplier;
     }
     return stats.betAmount;
   } else {
@@ -104,14 +103,14 @@ export const calculateNextRoundBetAmount = (stats: RoundStats): number => {
     // 非初始轮都必须玩满3局才能计算
     if (stats.gamesPlayed === 3) {
       if (netWins === 3) {
-        // 净胜3局，押注增加2000
-        return stats.betAmount + 2000;
+        // 净胜3局，押注增加2*multiplier
+        return stats.betAmount + 2 * multiplier;
       } else if (netWins === 1) {
-        // 净胜1局，押注增加1000
-        return stats.betAmount + 1000;
+        // 净胜1局，押注增加1*multiplier
+        return stats.betAmount + multiplier;
       } else if (netLosses === 1) {
-        // 净负1局，押注减少1000
-        return stats.betAmount - 1000;
+        // 净负1局，押注减少1*multiplier
+        return stats.betAmount - multiplier;
       }
     }
     return stats.betAmount; // 未满3局不变
@@ -131,11 +130,12 @@ export const isAgainInitRound = (
   nextBetAmount: number,
   isFirstRound: boolean,
   round: number,
+  baseNumber: number,
 ): boolean => {
   if (isFirstRound) {
     return false;
   }
-  return nextBetAmount === INITIAL_BET_AMOUNT && round > 1;
+  return nextBetAmount === baseNumber && round > 1;
 };
 
 /**
@@ -143,9 +143,9 @@ export const isAgainInitRound = (
  * @param roundData 游戏轮次数据
  * @returns 更新后的游戏统计数据
  */
-export const updateGameStats = (roundData: GameRoundDto): RoundStats => {
+export const updateGameStats = (roundData: GameRoundDto): CBRoundStats => {
   // 初始化游戏统计数据
-  const stats: RoundStats = getInitialRoundStats();
+  const stats: CBRoundStats = getCBInitialRoundStats(roundData.baseNumber);
 
   if (!roundData?.gamePointDtoList?.length) {
     return stats;
@@ -195,7 +195,7 @@ export const updateGameStats = (roundData: GameRoundDto): RoundStats => {
 
   // 根据轮次判断是否为初始轮
   stats.isFirstRound = lastRound === 1;
-  stats.isFirstRoundAgain = stats.betAmount === 3000 && lastRound > 1;
+  stats.isFirstRoundAgain = stats.betAmount === roundData.baseNumber && lastRound > 1;
 
   // 设置最大游戏次数
   if (stats.isFirstRound) {
@@ -244,10 +244,10 @@ export const updateGameStats = (roundData: GameRoundDto): RoundStats => {
 
 /**
  * 更新连续降级次数
- * @param {RoundStats} roundStats 本轮的统计数据
+ * @param {CBRoundStats} roundStats 本轮的统计数据
  * @returns {number} 更新后的连续降级次数
  */
-export const updateConsecutiveDemotions = (roundStats: RoundStats): number => {
+export const updateConsecutiveDemotions = (roundStats: CBRoundStats): number => {
   const netLosses = roundStats.losses - roundStats.wins;
   const netWins = roundStats.wins - roundStats.losses;
   // 只有在第一轮时重置连续降级次数

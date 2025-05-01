@@ -41,12 +41,49 @@ export const zh = {
     updateRecorder: '更新记录人',
     funding: '出资',
     viewTranscoding: '查看转码',
+    pitcher_ranking: '排行榜',
+  },
+
+  // 榜单相关
+  pitcher_ranking: {
+    title: '排行榜单',
+    hitRateTab: '命中率榜',
+    killCountTab: '杀数榜',
+    hitRate: '命中率',
+    killCount: '杀数',
+    totalGames: '总把数',
+    winCount: '胜数',
+    info: '榜单说明',
+    infoTitle: '榜单说明',
+    killRate: '杀数',
+    noData: '暂无榜单数据',
+    selectLocation: '选择地点',
+    totalProfit: '上下水',
+    totalTurnOver: '转码',
+    allLocations: '全部地点',
+    company: '公司',
+    personal: '个人',
   },
 
   // 设置相关
   settings: {
     settings: '设置',
-    language: '语言',
+    language: '语言设置',
+    accountSecurity: '账户安全',
+  },
+
+  // 账户安全
+  accountSecurity: {
+    title: '修改密码',
+    newPassword: '新密码',
+    confirmPassword: '确认密码',
+    enterNewPassword: '请输入新密码',
+    confirmNewPassword: '请再次输入新密码',
+    passwordNotMatch: '两次输入的密码不一致',
+    passwordEmpty: '密码不能为空',
+    submit: '提交',
+    success: '密码修改成功',
+    failed: '密码修改失败，请重试',
   },
 
   // 挑战详情
@@ -129,7 +166,6 @@ export const zh = {
     raisedAmount: '已募资金额',
     availableAmount: '可募资金额',
     contributionDetails: '出资明细',
-    contributor: '出资人',
     amount: '金额',
     noContributionRecords: '暂无出资记录',
     challengeDetails: '挑战详情',
@@ -140,6 +176,7 @@ export const zh = {
     view: '查看',
     fundraisingChallenges: '募资中挑战',
     noFundraisingChallenges: '暂无募资中的挑战',
+    contriRate: '出资比例',
   },
 
   // 我的页面
@@ -147,6 +184,7 @@ export const zh = {
     membershipBenefits: '会员权益',
     historyRecord: '历史记录',
     myGames: '我的挑战',
+    loginout: '退出',
   },
 
   // 我的挑战
@@ -172,11 +210,12 @@ export const zh = {
     profitDetails: '利润分配详情',
     loadingDetails: '正在加载详情...',
     noProfitInfo: '暂无利润分配信息',
-    docCompany: '记录公司利润',
-    investCompany: '投资公司',
+    docCompany: '记录公司(总)',
+    investCompany: '投资公司(总)',
     operationCompany: '运营公司',
     playerCompany: '投手公司',
-    investmentCompanyProfitDetails: '投资公司利润详情',
+    investCompanyProfitDetails: '投资公司利润详情',
+    investPersonProfitDetails: '投资人利润详情',
     companyProfitDetails: '记录公司分配详情',
   },
 };

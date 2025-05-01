@@ -57,9 +57,7 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
               keyExtractor={(item, index) => `${item.id}-${index}`}
               renderItem={({ item }) => (
                 <View style={styles.contributionContent}>
-                  <Text style={styles.contributionName}>
-                    {t('fundraisingChallenge.contributor')}: {item.investPersonName}
-                  </Text>
+                  <Text style={styles.contributionName}>{item.investPersonName}</Text>
                   <Text style={styles.contributionAmount}>
                     {t('fundraisingChallenge.amount')}: {item.amount}
                   </Text>

@@ -56,7 +56,6 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     };
 
     const res = await getChallengeList(params);
-    console.log('getChallengeList', res);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
@@ -287,7 +286,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 44,
+    height: 40,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: THEME_COLORS.border.light,
