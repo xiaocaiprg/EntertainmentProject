@@ -1,10 +1,7 @@
 import { UserResult } from './User';
 import { ContributionDto } from './Contribution';
+import { QueryParams } from './Common';
 
-export interface QueryParams {
-  pageNum: number;
-  pageSize: number;
-}
 export interface UserRecordParams extends QueryParams {
   type?: number;
   companyCode?: string;
@@ -28,10 +25,11 @@ export interface ChallengeList {
   total: number;
 }
 
-export interface CompanyProfitDto {
-  companyCode?: string;
-  companyName?: string;
+export interface ProfitDto {
+  code?: string;
   matchId: number;
+  matchName?: string;
+  name?: string;
   profit: number;
   profitStr: string;
 }
@@ -45,12 +43,12 @@ export interface PersonProfitDto {
   profitStr: string;
 }
 export interface GameMatchProfitDto {
-  docCompanyProfitDtoList?: CompanyProfitDto[];
+  docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfit?: number;
   docCompanyProfitStr?: string;
   investCompanyProfit?: number;
   investCompanyProfitStr?: string;
-  investCompanyProfitDtoList?: CompanyProfitDto[];
+  investCompanyProfitDtoList?: ProfitDto[];
   investPersonProfitDtoList?: PersonProfitDto[];
   operationCompanyCode?: string;
   operationCompanyName?: string;

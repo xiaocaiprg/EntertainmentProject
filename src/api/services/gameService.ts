@@ -8,13 +8,12 @@ import {
   UpdateStatusParams,
   GameMatchDto,
   PageDtoAddressInfo,
-  QueryParams,
   UpdateMatchDocPersonParams,
   GameTurnOverDtoParams,
   GameTurnOverDto,
 } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
-
+import { QueryParams } from '../../interface/Common';
 const PATH = {
   USER_LIST: 'haiyang/business/page',
   ADDRESS_LIST: 'haiyang/addressInfo/page',

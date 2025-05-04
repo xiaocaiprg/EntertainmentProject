@@ -43,7 +43,7 @@ export const GameHistory = React.memo(() => {
       pageNum.current += 1;
       fetchHistoryList();
     }
-  }, [loading, hasMore, pageNum, fetchHistoryList]);
+  }, [loading, hasMore, fetchHistoryList]);
 
   useEffect(() => {
     fetchHistoryList();

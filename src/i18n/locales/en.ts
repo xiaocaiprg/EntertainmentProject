@@ -181,10 +181,50 @@ export const en = {
 
   // My Page
   my: {
-    membershipBenefits: 'Membership Benefits',
     historyRecord: 'History Records',
     myGames: 'My Games',
     loginout: 'Logout',
+    memberCenter: 'Member Center',
+    points: 'Points',
+    gameCoins: 'GameCoins',
+    transfer: 'Transfer',
+    frozenPoints: 'Pending Points',
+    profit: 'Profit',
+  },
+
+  // Frozen Points
+  frozenPoints: {
+    title: 'Pending Points Detail',
+    gameMatch: 'Related Challenge',
+    gameDate: 'Challenge Date',
+    name: 'Challenge Name',
+    principal: 'Principal',
+    playRuleCode: 'PlayRuleCode',
+    noData: 'No pending points data',
+  },
+
+  // Points Transfer
+  pointsTransfer: {
+    title: 'Points Transfer',
+    availablePoints: 'Available Points',
+    transferTo: 'Transfer To',
+    personal: 'Personal',
+    company: 'Company',
+    account: 'Account',
+    points: 'Points',
+    transfer: 'Confirm Transfer',
+    personalAccountPlaceholder: 'Enter personal account',
+    companyAccountPlaceholder: 'Enter company account',
+    personalNamePlaceholder: 'Enter recipient name',
+    companyNamePlaceholder: 'Enter company name',
+    pointsPlaceholder: 'Enter points to transfer',
+    invalidNumber: 'Please enter a valid number',
+    moreThanZero: 'Points must be greater than 0',
+    notEnoughPoints: 'Insufficient points',
+    confirmTitle: 'Confirm Transfer',
+    confirmMessage: 'Transfer {{points}} points, this operation is irreversible, please confirm whether to continue?',
+    success: 'Transfer Successful',
+    successMessage: 'Successfully transferred {{points}} points',
   },
 
   // My Games

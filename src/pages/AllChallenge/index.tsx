@@ -82,7 +82,7 @@ export const AllChallengeScreen = React.memo(() => {
       pageNum.current += 1;
       fetchChallengeList();
     }
-  }, [loading, hasMore, pageNum, fetchChallengeList]);
+  }, [loading, hasMore, fetchChallengeList]);
 
   useEffect(() => {
     fetchChallengeList();

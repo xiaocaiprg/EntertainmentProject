@@ -181,10 +181,51 @@ export const zh = {
 
   // 我的页面
   my: {
-    membershipBenefits: '会员权益',
     historyRecord: '历史记录',
     myGames: '我的挑战',
     loginout: '退出',
+    memberCenter: '会员中心',
+    points: '积分',
+    gameCoins: '比赛币',
+    transfer: '转积分',
+    frozenPoints: '查在途',
+    profit: '盈利',
+  },
+
+  // 在途积分
+  frozenPoints: {
+    title: '在途积分明细',
+    gameMatch: '关联挑战',
+    gameDate: '挑战日期',
+    name: '挑战名称',
+    principal: '挑战本金',
+    playRuleCode: '玩法',
+    noData: '暂无在途积分数据',
+  },
+
+  // 转积分
+  pointsTransfer: {
+    title: '积分',
+    availablePoints: '可用积分',
+    transferTo: '转积分给',
+    personal: '个人',
+    company: '公司',
+    account: '账号',
+    points: '积分数量',
+    transfer: '确认转账',
+    personalAccountPlaceholder: '请输入个人账号',
+    companyAccountPlaceholder: '请输入公司账号',
+    personalNamePlaceholder: '请输入对方姓名',
+    companyNamePlaceholder: '请输入公司名称',
+    pointsPlaceholder: '请输入转账积分数量',
+    invalidNumber: '请输入有效的数字',
+    moreThanZero: '积分必须大于0',
+    notEnoughPoints: '积分不足',
+    confirmTitle: '确认转账',
+    confirmMessage: '转账{{points}}积分,此操作不可撤销,请确认是否继续?',
+    success: '转账成功',
+    successMessage: '已成功转账{{points}}积分',
+    recipient: '收款人',
   },
 
   // 我的挑战
