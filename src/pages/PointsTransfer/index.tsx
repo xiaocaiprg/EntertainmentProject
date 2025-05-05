@@ -17,6 +17,8 @@ import { ConfirmModal } from '../../components/ConfirmModal';
 import { useAuth } from '../../hooks/useAuth';
 import { transferPoint } from '../../api/services/pointService';
 import { TransferPointParams } from '../../interface/Points';
+import { isIOS } from '../../utils/platform';
+import { STATUS_BAR_HEIGHT } from '../../utils/platform';
 
 enum TransferType {
   PERSONAL = 'personal',
@@ -64,6 +66,9 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     }
     if (isNaN(Number(points))) {
       return t('pointsTransfer.invalidNumber');
+    }
+    if (points.includes('.')) {
+      return t('pointsTransfer.integerOnly');
     }
     if (Number(points) <= 0) {
       return t('pointsTransfer.moreThanZero');
@@ -221,6 +226,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f3fe',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   header: {
     flexDirection: 'row',

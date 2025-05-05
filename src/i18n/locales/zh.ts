@@ -215,17 +215,15 @@ export const zh = {
     transfer: '确认转账',
     personalAccountPlaceholder: '请输入个人账号',
     companyAccountPlaceholder: '请输入公司账号',
-    personalNamePlaceholder: '请输入对方姓名',
-    companyNamePlaceholder: '请输入公司名称',
     pointsPlaceholder: '请输入转账积分数量',
     invalidNumber: '请输入有效的数字',
+    integerOnly: '只能输入整数',
     moreThanZero: '积分必须大于0',
     notEnoughPoints: '积分不足',
     confirmTitle: '确认转账',
     confirmMessage: '转账{{points}}积分,此操作不可撤销,请确认是否继续?',
     success: '转账成功',
     successMessage: '已成功转账{{points}}积分',
-    recipient: '收款人',
   },
 
   // 我的挑战
