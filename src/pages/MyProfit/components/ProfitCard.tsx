@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ProfitDto } from '../../../interface/Points';
 
@@ -9,14 +9,6 @@ interface ProfitCardProps {
 export const ProfitCard = React.memo((props: ProfitCardProps) => {
   const { item } = props;
 
-  const formattedProfit = useMemo(() => {
-    if (item.profit >= 0) {
-      return `+${item.profitStr}`;
-    } else {
-      return `-${item.profitStr}`;
-    }
-  }, [item.profit, item.profitStr]);
-
   return (
     <View style={styles.container}>
       <View style={styles.leftContent}>
@@ -24,7 +16,7 @@ export const ProfitCard = React.memo((props: ProfitCardProps) => {
       </View>
       <View style={styles.rightContent}>
         <Text style={{ fontSize: 16, fontWeight: 'bold', color: item.profit >= 0 ? '#2ecc71' : '#e74c3c' }}>
-          {formattedProfit}
+          {item.profitStr}
         </Text>
       </View>
     </View>

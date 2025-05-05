@@ -6,7 +6,6 @@ import { TransferLogDto } from '../../../interface/Points';
 export enum PointType {
   TRANSFER_IN = 1, // 转入
   TRANSFER_OUT = 2, // 转出
-  CHALLENGE_PROFIT = 3, // 挑战利润分配
 }
 
 interface PointCardProps {
@@ -23,14 +22,11 @@ export const PointCard = React.memo((props: PointCardProps) => {
     if (item.type === PointType.TRANSFER_OUT) {
       return '转出';
     }
-    if (item.type === PointType.CHALLENGE_PROFIT) {
-      return '挑战利润分配';
-    }
     return '';
   }, [item.type]);
 
   const isEarnType = React.useMemo(() => {
-    return item.type === PointType.TRANSFER_IN || item.type === PointType.CHALLENGE_PROFIT;
+    return item.type === PointType.TRANSFER_IN;
   }, [item.type]);
 
   const pointDisplay = React.useMemo(() => {
