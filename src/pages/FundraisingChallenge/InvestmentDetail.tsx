@@ -58,10 +58,8 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
       Alert.alert('提示', '请输入有效的出资金额');
       return;
     }
-
     const amountValue = parseFloat(amount);
     const availableAmount = matchDetail?.availableAmount || 0;
-
     if (amountValue > availableAmount) {
       Alert.alert('提示', '出资金额不能超过可出资金额');
       return;
@@ -74,17 +72,19 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     }
 
     setSubmitting(true);
-    const result = await createContribution({
-      matchId,
-      amount: amountValue,
-    });
-    if (result) {
-      setMyContribution(result);
-      setAmount('');
-      fetchChallengeDetail();
-      Alert.alert('成功', '出资成功！');
-    } else {
-      Alert.alert('错误', '出资失败，请稍后重试');
+    try {
+      const result = await createContribution({
+        matchId,
+        amount: amountValue,
+      });
+      if (result) {
+        setMyContribution(result);
+        setAmount('');
+        fetchChallengeDetail();
+        Alert.alert('成功', '出资成功！');
+      }
+    } catch (error: any) {
+      Alert.alert('错误', error?.message);
     }
     setSubmitting(false);
   }, [amount, matchDetail, matchId, fetchChallengeDetail]);
@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 15,
     backgroundColor: '#f5f5f5',
+    marginTop: 5,
   },
   amountHint: {
     marginVertical: 4,

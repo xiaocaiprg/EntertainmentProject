@@ -74,7 +74,7 @@ export const zh = {
 
   // 账户安全
   accountSecurity: {
-    title: '修改密码',
+    title: '账户安全',
     newPassword: '新密码',
     confirmPassword: '确认密码',
     enterNewPassword: '请输入新密码',

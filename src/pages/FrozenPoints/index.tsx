@@ -117,7 +117,7 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+        <TouchableOpacity onPress={handleBackPress}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('frozenPoints.title')}</Text>
@@ -150,12 +150,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
+    paddingBottom: 10,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
-  },
-  backButton: {
-    padding: 10,
   },
   headerTitle: {
     fontSize: 18,

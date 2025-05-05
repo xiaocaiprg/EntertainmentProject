@@ -88,7 +88,7 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
+        <TouchableOpacity onPress={handleGoBack}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>积分明细</Text>
@@ -133,11 +133,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
+    paddingBottom: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
-  },
-  backButton: {
-    padding: 5,
   },
   headerTitle: {
     fontSize: 18,

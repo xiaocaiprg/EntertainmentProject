@@ -33,6 +33,19 @@ export const PointCard = React.memo((props: PointCardProps) => {
     return item.type === PointType.TRANSFER_IN || item.type === PointType.CHALLENGE_PROFIT;
   }, [item.type]);
 
+  const pointDisplay = React.useMemo(() => {
+    let sign = '';
+    if (item.type === PointType.TRANSFER_OUT) {
+      sign = '-';
+    } else if (item.type === PointType.TRANSFER_IN) {
+      sign = '+';
+    } else {
+      sign = item.amount && item.amount > 0 ? '+' : '-';
+    }
+    const absAmount = Math.abs(item.amount ?? 0);
+    return { sign, absAmount };
+  }, [item.type, item.amount]);
+
   // 根据类型决定显示来源还是去向信息
   const renderSourceOrDestination = () => {
     if (item.type === PointType.TRANSFER_IN) {
@@ -64,8 +77,8 @@ export const PointCard = React.memo((props: PointCardProps) => {
         {renderSourceOrDestination()}
       </View>
       <Text style={[styles.recordAmount, isEarnType ? styles.earnAmount : styles.spendAmount]}>
-        {(item.amount ?? 0) >= 0 ? '+' : '-'}
-        {item.amount ?? 0}
+        {pointDisplay.sign}
+        {pointDisplay.absAmount}
       </Text>
     </View>
   );
