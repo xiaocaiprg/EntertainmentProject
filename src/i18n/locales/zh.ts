@@ -13,6 +13,7 @@ export const zh = {
     noData: '暂无数据',
     loading: '加载中...',
     success: '操作成功',
+    submit: '提交',
   },
 
   // 导航和标签
@@ -42,6 +43,31 @@ export const zh = {
     funding: '出资',
     viewTranscoding: '查看转码',
     pitcher_ranking: '排行榜',
+    createRace: '创建比赛',
+  },
+
+  // 创建比赛
+  createRace: {
+    title: '创建比赛',
+    name: '比赛名称',
+    namePlaceholder: '请输入比赛名称',
+    description: '比赛描述',
+    descriptionPlaceholder: '请输入比赛描述',
+    beginDate: '开始时间',
+    endDate: '结束时间',
+    selectDate: '请选择日期时间',
+    playRuleCode: '比赛规则',
+    playRuleCodePlaceholder: '请选择比赛规则',
+    turnOverLimit: '转码限制',
+    turnOverLimitPlaceholder: '请输入转码限制',
+    createSuccess: '比赛创建成功',
+    errors: {
+      nameRequired: '请输入比赛名称',
+      beginDateRequired: '请选择开始时间',
+      endDateRequired: '请选择结束时间',
+      dateRangeInvalid: '结束时间必须晚于开始时间',
+      invalidTurnOverLimit: '转码必须为大于0的数字',
+    },
   },
 
   // 榜单相关

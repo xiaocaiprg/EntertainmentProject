@@ -21,6 +21,7 @@ export enum ModuleType {
   FUNDRAISING_CHALLENGE = 'fundraising_challenge',
   TURNOVER_QUERY = 'turnover_query',
   PITCHER_RANKING = 'player_ranking',
+  CREATE_RACE = 'create_race',
 }
 
 // 模块配置类型定义

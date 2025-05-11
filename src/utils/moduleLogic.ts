@@ -51,6 +51,13 @@ export const availableModules: ModuleConfig[] = [
     icon: 'leaderboard',
     backgroundColor: '#e84393',
   },
+  {
+    id: '8',
+    title: 'modules.createRace',
+    type: ModuleType.CREATE_RACE,
+    icon: 'sports-score',
+    backgroundColor: '#ff6b81',
+  },
 ];
 
 // 定义角色到模块的映射
@@ -110,6 +117,15 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+    ],
+  },
+  {
+    role: 'ADMIN',
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.CREATE_RACE,
     ],
   },
   {

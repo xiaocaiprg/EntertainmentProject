@@ -7,7 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTranslation } from '../hooks/useTranslation';
 
 interface DatePickerProps {
-  title: string;
+  title?: string;
   placeholder?: string;
   format?: string;
   selectedDate: Date;

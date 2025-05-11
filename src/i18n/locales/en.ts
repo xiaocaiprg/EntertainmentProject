@@ -13,6 +13,7 @@ export const en = {
     noData: 'No data available',
     loading: 'Loading...',
     success: 'Success',
+    submit: 'Submit',
   },
 
   // Navigation and Tabs
@@ -35,13 +36,38 @@ export const en = {
 
   // Module Titles
   modules: {
-    challengeNew: 'New Challenge',
+    challengeNew: 'NewChallenge',
     record: 'Record',
-    allChallengeList: 'All Challenges',
-    updateRecorder: 'Update Recorder',
+    allChallengeList: 'AllChallenges',
+    updateRecorder: 'UpdateRecorder',
     funding: 'Funding',
-    viewTranscoding: 'View Transcoding',
-    pitcher_ranking: 'Pitcher Ranking',
+    viewTranscoding: 'ViewTranscoding',
+    pitcher_ranking: 'PitcherRanking',
+    createRace: 'CreateRace',
+  },
+
+  // Create Race
+  createRace: {
+    title: 'Create Race',
+    name: 'Race Name',
+    namePlaceholder: 'Please enter race name',
+    description: 'Race Description',
+    descriptionPlaceholder: 'Please enter race description',
+    beginDate: 'Start Time',
+    endDate: 'End Time',
+    selectDate: 'Please select date and time',
+    playRuleCode: 'Rule Code',
+    playRuleCodePlaceholder: 'Please enter rule',
+    turnOverLimit: 'Turnover Limit',
+    turnOverLimitPlaceholder: 'Please enter turnover limit',
+    createSuccess: 'Race created successfully',
+    errors: {
+      nameRequired: 'Please enter race name',
+      beginDateRequired: 'Please select start time',
+      endDateRequired: 'Please select end time',
+      dateRangeInvalid: 'End time must be later than start time',
+      invalidTurnOverLimit: 'Turnover limit must be a number greater than 0',
+    },
   },
 
   // Ranking related

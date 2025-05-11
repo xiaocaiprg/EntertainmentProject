@@ -24,6 +24,7 @@ import { MyPointsScreen } from './MyPoints/index';
 import { PointsTransferScreen } from './PointsTransfer/index';
 import { FrozenPointsScreen } from './FrozenPoints/index';
 import { MyProfitScreen } from './MyProfit/index';
+import { CreateRaceScreen } from './CreateRace/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -57,6 +58,7 @@ export type RootStackParamList = {
   PointsTransfer: undefined;
   FrozenPoints: undefined;
   MyProfit: undefined;
+  CreateRace: undefined;
 };
 
 // 通用导航类型
@@ -145,6 +147,7 @@ function AppNavigator() {
                 <Stack.Screen name="PointsTransfer" component={PointsTransferScreen} />
                 <Stack.Screen name="FrozenPoints" component={FrozenPointsScreen} />
                 <Stack.Screen name="MyProfit" component={MyProfitScreen} />
+                <Stack.Screen name="CreateRace" component={CreateRaceScreen} />
               </Stack.Navigator>
             </RoleProvider>
           </AuthProvider>
