@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
-import { RacePoolDetailDto } from '../../../interface/Race';
+import { RacePoolPageDto } from '../../../interface/Race';
 
 interface PoolInfoCardProps {
-  poolDetail: RacePoolDetailDto;
+  poolDetail: RacePoolPageDto;
 }
 
 export const PoolInfoCard: React.FC<PoolInfoCardProps> = React.memo(({ poolDetail }) => {

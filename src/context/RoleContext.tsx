@@ -14,6 +14,7 @@ export interface RoleContextType {
   isOperator: boolean;
   isPitcher: boolean;
   isVisitor: boolean;
+  isAdmin: boolean;
 }
 
 // 创建角色上下文
@@ -28,6 +29,7 @@ export const RoleContext = createContext<RoleContextType>({
   isOperator: false,
   isPitcher: false,
   isVisitor: false,
+  isAdmin: false,
 });
 
 // 将后端角色字符串映射到前端UserRole类型
@@ -76,6 +78,7 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const isPlayAdmin = useMemo(() => userRole === 'PLAY_ADMIN', [userRole]);
   const isOperationAdmin = useMemo(() => userRole === 'OPERATION_ADMIN', [userRole]);
   const isVisitor = useMemo(() => userRole === 'VISITOR', [userRole]);
+  const isAdmin = useMemo(() => userRole === 'ADMIN', [userRole]);
 
   // 角色上下文值
   const value = {
@@ -89,6 +92,7 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
     isOperator,
     isPitcher,
     isVisitor,
+    isAdmin,
   };
 
   return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;

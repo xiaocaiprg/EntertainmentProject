@@ -45,6 +45,7 @@ export const zh = {
     pitcher_ranking: '排行榜',
     createRace: '创建比赛',
     allRace: '全部比赛',
+    racePoolList: '奖金池列表',
   },
 
   // 创建比赛
@@ -235,6 +236,8 @@ export const zh = {
   pointsTransfer: {
     title: '积分',
     availablePoints: '可用积分',
+    poolPoints: '奖金池积分',
+    poolName: '奖金池名称',
     transferTo: '转积分给',
     personal: '个人',
     company: '公司',
@@ -284,5 +287,16 @@ export const zh = {
     investCompanyProfitDetails: '投资公司利润详情',
     investPersonProfitDetails: '投资人利润详情',
     companyProfitDetails: '记录公司分配详情',
+  },
+
+  // 奖金池列表
+  racePoolList: {
+    title: '奖金池列表',
+    noData: '暂无奖金池数据',
+    distributePoints: '分配积分',
+    amount: '奖金金额',
+    raceName: '比赛名称',
+    active: '激活',
+    inactive: '未激活',
   },
 };

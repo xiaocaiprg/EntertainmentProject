@@ -45,6 +45,7 @@ export const en = {
     pitcher_ranking: 'PitcherRanking',
     createRace: 'CreateRace',
     allRace: 'AllRaces',
+    racePoolList: 'PrizePoolList',
   },
 
   // Create Race
@@ -235,6 +236,8 @@ export const en = {
   pointsTransfer: {
     title: 'Points Transfer',
     availablePoints: 'Available Points',
+    poolPoints: 'Prize Pool Points',
+    poolName: 'Prize Pool Name',
     transferTo: 'Transfer To',
     personal: 'Personal',
     company: 'Company',
@@ -284,5 +287,16 @@ export const en = {
     investCompanyProfitDetails: 'Investment Company Profit Details',
     investPersonProfitDetails: 'Investor Profit Details',
     companyProfitDetails: 'Record Company Profit Details',
+  },
+
+  // Prize Pool List
+  racePoolList: {
+    title: 'Prize Pool List',
+    noData: 'No prize pool data available',
+    amount: 'Prize Amount',
+    distributePoints: 'Distribute Points',
+    raceName: 'Race Name',
+    active: 'Active',
+    inactive: 'Inactive',
   },
 };

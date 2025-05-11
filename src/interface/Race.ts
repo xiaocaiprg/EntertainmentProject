@@ -49,10 +49,10 @@ export interface RaceDetailDto {
   name: string;
   playRuleCode?: string;
   playRuleName?: string;
-  racePoolDetailDto?: RacePoolDetailDto;
+  racePoolDetailDto?: RacePoolPageDto;
   turnOverLimit?: number;
 }
-export interface RacePoolDetailDto {
+export interface RacePoolPageDto {
   availablePoints?: number;
   code?: string;
   frozenPoints?: number;
@@ -60,4 +60,11 @@ export interface RacePoolDetailDto {
   raceId?: number;
   raceName?: string;
   totalPoints?: number;
+}
+export interface PageDtoRacePoolPageDto {
+  current: number;
+  pages: number;
+  records?: RacePoolPageDto[];
+  size?: number;
+  total?: number;
 }

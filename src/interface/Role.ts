@@ -23,6 +23,7 @@ export enum ModuleType {
   PITCHER_RANKING = 'player_ranking',
   CREATE_RACE = 'create_race',
   ALL_RACE = 'all_race',
+  RACE_POOL_LIST = 'race_pool_list',
 }
 
 // 模块配置类型定义

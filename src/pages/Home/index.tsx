@@ -150,6 +150,9 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.ALL_RACE:
           navigation.navigate('AllRace');
           break;
+        case ModuleType.RACE_POOL_LIST:
+          navigation.navigate('RacePoolList');
+          break;
         default:
           break;
       }

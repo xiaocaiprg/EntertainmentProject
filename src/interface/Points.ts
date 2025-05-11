@@ -2,6 +2,8 @@ export interface TransferPointParams {
   toCode: string;
   toType: number;
   amount: number;
+  fromCode?: string;
+  fromType?: number;
 }
 export interface PageDtoTransferLogDto {
   current: number;

@@ -27,6 +27,7 @@ import { MyProfitScreen } from './MyProfit/index';
 import { CreateRaceScreen } from './CreateRace/index';
 import { AllRaceScreen } from './AllRace/index';
 import { RaceDetailScreen } from './RaceDetail/index';
+import { RacePoolListScreen } from './RacePoolList/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -57,12 +58,13 @@ export type RootStackParamList = {
   AccountSecurity: undefined;
   PitcherRanking: undefined;
   MyPoints: undefined;
-  PointsTransfer: undefined;
+  PointsTransfer: { code?: string; availablePoints?: number; name?: string };
   FrozenPoints: undefined;
   MyProfit: undefined;
   CreateRace: undefined;
   AllRace: undefined;
   RaceDetail: { raceId: number };
+  RacePoolList: undefined;
 };
 
 // 通用导航类型
@@ -154,6 +156,7 @@ function AppNavigator() {
                 <Stack.Screen name="CreateRace" component={CreateRaceScreen} />
                 <Stack.Screen name="AllRace" component={AllRaceScreen} />
                 <Stack.Screen name="RaceDetail" component={RaceDetailScreen} />
+                <Stack.Screen name="RacePoolList" component={RacePoolListScreen} />
               </Stack.Navigator>
             </RoleProvider>
           </AuthProvider>

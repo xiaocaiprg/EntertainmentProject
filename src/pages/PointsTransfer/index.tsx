@@ -26,9 +26,12 @@ enum TransferType {
 }
 type PointsTransferScreenProps = RootStackScreenProps<'PointsTransfer'>;
 export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.memo((props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { name, availablePoints, code } = route?.params || {};
+
+  const isPoolTransfer = useMemo(() => !!code && availablePoints !== undefined, [code, availablePoints]);
 
   const [transferType, setTransferType] = useState<TransferType>(TransferType.PERSONAL);
   const [account, setAccount] = useState('');
@@ -50,15 +53,12 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
   );
 
   const isFormValid = useMemo(() => {
-    return (
-      account.trim() !== '' &&
-      points.trim() !== '' &&
-      !isNaN(Number(points)) &&
-      Number(points) > 0 &&
-      !!user?.availablePoints &&
-      Number(points) <= user.availablePoints
-    );
-  }, [account, points, user?.availablePoints]);
+    const condition = account.trim() !== '' && points.trim() !== '' && !isNaN(Number(points)) && Number(points) > 0;
+    if (isPoolTransfer) {
+      return condition && availablePoints && Number(points) <= availablePoints;
+    }
+    return condition && !!user?.availablePoints && Number(points) <= user.availablePoints;
+  }, [account, points, user?.availablePoints, isPoolTransfer, availablePoints]);
 
   const invalidPointsReason = useMemo(() => {
     if (points.trim() === '') {
@@ -73,11 +73,14 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     if (Number(points) <= 0) {
       return t('pointsTransfer.moreThanZero');
     }
-    if (!user?.availablePoints || Number(points) > user.availablePoints) {
+    if (!isPoolTransfer && (!user?.availablePoints || Number(points) > user.availablePoints)) {
+      return t('pointsTransfer.notEnoughPoints');
+    }
+    if (isPoolTransfer && availablePoints && Number(points) > availablePoints) {
       return t('pointsTransfer.notEnoughPoints');
     }
     return '';
-  }, [points, user?.availablePoints, t]);
+  }, [points, user?.availablePoints, t, isPoolTransfer, availablePoints]);
 
   const handleTransferPress = useCallback(() => {
     if (!isFormValid) {
@@ -88,13 +91,18 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
 
   const handleConfirmTransfer = useCallback(async () => {
     setIsProcessing(true);
-    const params: TransferPointParams = {
+    const transferParams: TransferPointParams = {
       toCode: account,
       toType: transferType === TransferType.PERSONAL ? 1 : 2,
       amount: Number(points),
     };
+    // 如果是从奖金池转账，添加fromCode和fromType参数
+    if (isPoolTransfer && code) {
+      transferParams.fromCode = code;
+      transferParams.fromType = 3;
+    }
     try {
-      const res = await transferPoint(params);
+      const res = await transferPoint(transferParams);
       if (res) {
         setSuccessModalVisible(true);
       }
@@ -104,7 +112,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       setIsProcessing(false);
       setConfirmModalVisible(false);
     }
-  }, [account, points, transferType]);
+  }, [account, points, transferType, isPoolTransfer, code]);
 
   const handleSuccessConfirm = useCallback(() => {
     setSuccessModalVisible(false);
@@ -123,10 +131,30 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       </View>
 
       <ScrollView style={styles.content}>
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>{t('pointsTransfer.availablePoints')}</Text>
-          <Text style={styles.pointsValue}>{user?.availablePoints?.toLocaleString()}</Text>
-        </View>
+        {/* 奖金池积分模块 */}
+        {isPoolTransfer && (
+          <View style={[styles.card, styles.poolCard]}>
+            <View style={styles.infoRow}>
+              <Text style={styles.sectionTitle}>{t('pointsTransfer.poolPoints')}</Text>
+              <Text style={styles.pointsValue}>{availablePoints?.toLocaleString()}</Text>
+            </View>
+
+            {name && (
+              <View style={styles.infoRow}>
+                <Text style={styles.sectionTitle}>{t('pointsTransfer.poolName')}</Text>
+                <Text style={styles.pointsValue}>{name}</Text>
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* 用户积分模块，仅在非奖金池转账时展示 */}
+        {!isPoolTransfer && (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>{t('pointsTransfer.availablePoints')}</Text>
+            <Text style={styles.pointsValue}>{user?.availablePoints?.toLocaleString()}</Text>
+          </View>
+        )}
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('pointsTransfer.transferTo')}</Text>
@@ -155,6 +183,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
               style={styles.input}
               value={account}
               onChangeText={setAccount}
+              placeholderTextColor={'#999'}
               placeholder={
                 transferType === TransferType.PERSONAL
                   ? t('pointsTransfer.personalAccountPlaceholder')
@@ -169,6 +198,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
               style={styles.input}
               value={points}
               onChangeText={setPoints}
+              placeholderTextColor={'#999'}
               placeholder={t('pointsTransfer.pointsPlaceholder')}
               keyboardType="numeric"
             />
@@ -253,6 +283,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
+  poolCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -318,5 +352,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  infoRow: {
+    flexDirection: 'column',
   },
 });
