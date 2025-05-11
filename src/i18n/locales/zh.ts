@@ -293,7 +293,7 @@ export const zh = {
   racePoolList: {
     title: '奖金池列表',
     noData: '暂无奖金池数据',
-    distributePoints: '分配积分',
+    distributePoints: '转积分',
     amount: '奖金金额',
     raceName: '比赛名称',
     active: '激活',

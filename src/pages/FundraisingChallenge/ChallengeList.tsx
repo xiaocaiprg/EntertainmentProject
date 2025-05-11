@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { GameMatchDto } from '../../interface/Game';
+import { GameMatchPageDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
 import { getChallengeList } from '../../api/services/gameService';
 import { ChallengeStatus } from '../../interface/Common';
@@ -15,7 +15,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
   const { onItemPress, onBack } = props;
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
+  const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(10).current;
   const [hasMore, setHasMore] = useState<boolean>(false);
@@ -52,7 +52,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
 
   // 渲染挑战项
   const renderItem = useCallback(
-    (item: GameMatchDto) => {
+    (item: GameMatchPageDto) => {
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => onItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemContent}>

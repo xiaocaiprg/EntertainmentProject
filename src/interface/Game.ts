@@ -17,10 +17,33 @@ export interface RecorderList {
   size: number;
   current: number;
 }
+export interface GameMatchPageDto {
+  addressInfoId?: number;
+  addressName?: string;
+  docPersonCode?: string;
+  docPersonName?: string;
+  gameDate?: string;
+  id?: number;
+  baseNumber: number;
+  createTime?: string;
+  isEnabled: number;
+  name?: string;
+  playPersonCode?: string;
+  playPersonName?: string;
+  playRuleCode?: string;
+  principal?: number;
+  profit?: number;
+  profitStr?: string;
+  raceId?: number;
+  raceName?: string;
+  turnOver?: number;
+  turnOverStr?: string;
+  roundList?: GameRoundDto[];
+}
 export interface ChallengeList {
   current: number;
   pages: number;
-  records?: GameMatchDto[];
+  records?: GameMatchPageDto[];
   size: number;
   total: number;
 }

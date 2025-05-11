@@ -18,12 +18,12 @@ export const PoolInfoCard: React.FC<PoolInfoCardProps> = React.memo(({ poolDetai
         </View>
 
         <View style={styles.poolAmountContainer}>
-          <View style={styles.poolAmountItem}>
+          {/* <View style={styles.poolAmountItem}>
             <Text style={styles.poolAmountValue}>{poolDetail.totalPoints?.toLocaleString() || '-'}</Text>
             <Text style={styles.poolAmountLabel}>总积分</Text>
-          </View>
+          </View> */}
 
-          <View style={styles.poolAmountDivider} />
+          {/* <View style={styles.poolAmountDivider} /> */}
 
           <View style={styles.poolAmountItem}>
             <Text style={[styles.poolAmountValue, styles.availablePoints]}>
@@ -32,16 +32,16 @@ export const PoolInfoCard: React.FC<PoolInfoCardProps> = React.memo(({ poolDetai
             <Text style={styles.poolAmountLabel}>可用积分</Text>
           </View>
 
-          <View style={styles.poolAmountDivider} />
+          {/* <View style={styles.poolAmountDivider} /> */}
 
-          <View style={styles.poolAmountItem}>
+          {/* <View style={styles.poolAmountItem}>
             <Text style={[styles.poolAmountValue, styles.frozenPoints]}>
               {poolDetail.frozenPoints?.toLocaleString() || '-'}
             </Text>
             <Text style={styles.poolAmountLabel}>冻结积分</Text>
-          </View>
+          </View> */}
         </View>
-
+        {/*
         {(poolDetail.availablePoints || 0) > 0 && (
           <View style={styles.progressContainer}>
             <View style={styles.progressBg}>
@@ -61,7 +61,7 @@ export const PoolInfoCard: React.FC<PoolInfoCardProps> = React.memo(({ poolDetai
               {Math.floor(((poolDetail.availablePoints || 0) / (poolDetail.totalPoints || 1)) * 100)}%
             </Text>
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );

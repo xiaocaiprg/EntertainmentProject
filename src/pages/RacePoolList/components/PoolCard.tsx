@@ -26,8 +26,8 @@ export const PoolCard = React.memo((props: PoolCardProps) => {
   }, [onDistribute, pool]);
 
   const isActive = pool.availablePoints && pool.availablePoints > 0;
-  const statusText = isActive ? t('racePoolList.active') : t('racePoolList.inactive');
-  const statusColor = isActive ? '#27ae60' : '#e74c3c';
+  //   const statusText = isActive ? t('racePoolList.active') : t('racePoolList.inactive');
+  //   const statusColor = isActive ? '#27ae60' : '#e74c3c';
 
   return (
     <TouchableOpacity
@@ -39,9 +39,9 @@ export const PoolCard = React.memo((props: PoolCardProps) => {
         <Text style={[styles.title, { color }]} numberOfLines={1}>
           {pool.name}
         </Text>
-        <View style={[styles.statusBadge, { backgroundColor: statusColor }]}>
+        {/* <View style={[styles.statusBadge, { backgroundColor: statusColor }]}>
           <Text style={styles.statusText}>{statusText}</Text>
-        </View>
+        </View> */}
       </View>
 
       <View style={[styles.amountSection, { backgroundColor: `${color}10` }]}>
@@ -49,12 +49,12 @@ export const PoolCard = React.memo((props: PoolCardProps) => {
         <Text style={[styles.amountValue, { color }]}>{pool.totalPoints || 0}</Text>
       </View>
       <View style={styles.footerSection}>
-        <View style={styles.raceNameContainer}>
+        {/* <View style={styles.raceNameContainer}>
           <Text style={styles.raceName}>{t('racePoolList.raceName')}</Text>
           <Text style={[styles.raceNameValue, { color }]} numberOfLines={1}>
             {pool.raceName || '-'}
           </Text>
-        </View>
+        </View> */}
         {isAdmin && (
           <TouchableOpacity
             style={[styles.distributeButton, !isActive && styles.disabledButton]}
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   footerSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderTopWidth: 1,

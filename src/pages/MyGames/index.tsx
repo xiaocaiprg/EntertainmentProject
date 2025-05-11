@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList, getMatchDetail } from '../../api/services/gameService';
 import { ContributionDto } from '../../interface/Contribution';
-import { ChallengeListParams, GameMatchDto, GameMatchProfitDto } from '../../interface/Game';
+import { ChallengeListParams, GameMatchPageDto, GameMatchProfitDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
@@ -33,7 +33,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
   const { isOperationAdmin } = useRole();
   const [loading, setLoading] = useState<boolean>(true);
   const [detailLoading, setDetailLoading] = useState<boolean>(false);
-  const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
+  const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(10);
   const [hasMore, setHasMore] = useState<boolean>(false);
@@ -98,7 +98,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
 
   // 查看利润分配
   const handleViewProfit = useCallback(
-    (item: GameMatchDto) => {
+    (item: GameMatchPageDto) => {
       setProfitModalVisible(true);
       if (item.id) {
         fetchChallengeDetail(item.id);
@@ -109,7 +109,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
 
   // 查看出资详情
   const handleViewContribution = useCallback(
-    (item: GameMatchDto) => {
+    (item: GameMatchPageDto) => {
       setContributionModalVisible(true);
       if (item.id) {
         fetchChallengeDetail(item.id);
@@ -120,7 +120,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
 
   // 查看场次详情
   const handleViewRoundDetail = useCallback(
-    (item: GameMatchDto) => {
+    (item: GameMatchPageDto) => {
       item?.id && navigation.navigate('RoundDetail', { matchId: item.id });
     },
     [navigation],
@@ -129,7 +129,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
   const handleCloseContributionModal = useCallback(() => setContributionModalVisible(false), []);
 
   const renderItem = useCallback(
-    (item: GameMatchDto) => {
+    (item: GameMatchPageDto) => {
       const status = getStatusText(item.isEnabled);
       const showProfitBtn = item.isEnabled === ChallengeStatus.ENDED || item.isEnabled === ChallengeStatus.COMPLETED;
       const isAllRoundEnd = item.roundList?.every((round) => round.isEnabled === ChallengeStatus.ENDED);
