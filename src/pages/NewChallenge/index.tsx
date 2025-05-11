@@ -1,22 +1,23 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { THEME_COLORS } from '../../utils/styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NewChallengeForm } from './components/NewChallengeForm';
 import { getOperatorList, createChallenge, getAddressList } from '../../api/services/gameService';
 import { UserResult } from '../../interface/User';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
-import { AddressInfo } from '../../interface/Game';
+import { AddressInfo, ChallengeCreateParams } from '../../interface/Game';
 import { formatDate } from '../../utils/date';
 import { validateChallengeParams } from './utils/validation';
-import { ChallengeFormData, ChallengeType } from './interface/IModuleProps';
+import { ChallengeFormData } from './interface/IModuleProps';
+import { ChallengeType } from '../../interface/Common';
 import DropdownSelect from '../../components/DropdownSelect';
 import { INITIAL_BET_AMOUNT } from '../../constants/betAmounts';
+import { RootStackScreenProps } from '../router';
 
-export const NewChallengeScreen = React.memo(() => {
-  const navigation = useNavigation<StackNavigationProp<any>>();
+export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> = React.memo((props) => {
+  const { navigation, route } = props;
+  const { raceId } = route.params || {};
 
   const [operatorList, setOperatorList] = useState<UserResult[]>([]);
   const [locationList, setLocationList] = useState<AddressInfo[]>([]);
@@ -30,7 +31,6 @@ export const NewChallengeScreen = React.memo(() => {
     name: '',
     date: new Date(),
     principal: '',
-
     initialBetAmount: INITIAL_BET_AMOUNT, // 默认投注基数
   });
 
@@ -55,7 +55,7 @@ export const NewChallengeScreen = React.memo(() => {
   // 处理确认按钮点击
   const handleConfirm = useCallback(() => {
     // 新增挑战
-    const params = {
+    const params: ChallengeCreateParams = {
       name: formData.name.trim(),
       playPersonCode: formData.operatorCode,
       addressInfoId: formData.locationId,
@@ -71,6 +71,9 @@ export const NewChallengeScreen = React.memo(() => {
       Alert.alert('提示', validation.errorMessage || '表单填写有误');
       return;
     }
+    if (raceId) {
+      params.raceId = raceId;
+    }
     createChallenge(params)
       .then((res) => {
         if (res) {
@@ -82,7 +85,7 @@ export const NewChallengeScreen = React.memo(() => {
         console.log('新增挑战失败', err.message);
         Alert.alert('提示', err.message);
       });
-  }, [formData, navigation]);
+  }, [formData, navigation, raceId]);
 
   // 处理返回按钮点击
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);

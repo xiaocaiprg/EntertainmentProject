@@ -147,6 +147,9 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.CREATE_RACE:
           navigation.navigate('CreateRace');
           break;
+        case ModuleType.ALL_RACE:
+          navigation.navigate('AllRace');
+          break;
         default:
           break;
       }

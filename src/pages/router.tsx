@@ -25,6 +25,8 @@ import { PointsTransferScreen } from './PointsTransfer/index';
 import { FrozenPointsScreen } from './FrozenPoints/index';
 import { MyProfitScreen } from './MyProfit/index';
 import { CreateRaceScreen } from './CreateRace/index';
+import { AllRaceScreen } from './AllRace/index';
+import { RaceDetailScreen } from './RaceDetail/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -41,7 +43,7 @@ export type RootStackParamList = {
   Main: undefined;
   Auth: undefined;
   Game: GameRouteParams;
-  NewChallenge: undefined;
+  NewChallenge: { raceId?: number };
   ExistingChallenge: undefined;
   GameHistory: undefined;
   ChallengeDetail: { matchId: number };
@@ -59,6 +61,8 @@ export type RootStackParamList = {
   FrozenPoints: undefined;
   MyProfit: undefined;
   CreateRace: undefined;
+  AllRace: undefined;
+  RaceDetail: { raceId: number };
 };
 
 // 通用导航类型
@@ -148,6 +152,8 @@ function AppNavigator() {
                 <Stack.Screen name="FrozenPoints" component={FrozenPointsScreen} />
                 <Stack.Screen name="MyProfit" component={MyProfitScreen} />
                 <Stack.Screen name="CreateRace" component={CreateRaceScreen} />
+                <Stack.Screen name="AllRace" component={AllRaceScreen} />
+                <Stack.Screen name="RaceDetail" component={RaceDetailScreen} />
               </Stack.Navigator>
             </RoleProvider>
           </AuthProvider>

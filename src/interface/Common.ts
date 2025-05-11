@@ -6,7 +6,13 @@ export enum ChallengeStatus {
   FUNDRAISING_COMPLETED = 3, // 募资完成
   COMPLETED = 4, // 已完成
 }
-// 添加
+
+// 定义挑战类型枚举
+export enum ChallengeType {
+  NO_PROFIT_LIMIT = 'CB', // 无止盈过关
+  EVEN_BET = 'AA', // 平注
+  // 这里可以添加更多的挑战类型
+}
 export enum UserType {
   RECORDER = 1, // 记录人
   PLAYPERSON = 2, // 投手

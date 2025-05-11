@@ -9,29 +9,24 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { RootStackScreenProps } from '../router';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getChallengeList } from '../../api/services/gameService';
-import { ChallengeListParams, GameMatchDto } from '../../interface/Game';
-import { ChallengeStatus } from '../../interface/Common';
+import { getRaceList } from '../../api/services/raceService';
+import { RaceListParams, RacePageDto, RaceStatus } from '../../interface/Race';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
-import { getStatusText } from '../../public/Game';
+import { getRaceStatusText } from '../../public/Race';
 
 // 状态Tab选项
 const STATUS_TABS = [
-  { label: '全部', value: -1 },
-  { label: '募资中', value: ChallengeStatus.FUNDRAISING },
-  { label: '募资完成', value: ChallengeStatus.FUNDRAISING_COMPLETED },
-  { label: '进行中', value: ChallengeStatus.IN_PROGRESS },
-  { label: '已结束', value: ChallengeStatus.ENDED },
-  { label: '已完成', value: ChallengeStatus.COMPLETED },
+  { label: '全部', value: RaceStatus.ALL },
+  { label: '进行中', value: RaceStatus.IN_PROGRESS },
+  //   { label: '已结束', value: RaceStatus.ENDED },
 ];
 
-export const AllChallengeScreen = React.memo(() => {
-  const navigation = useNavigation();
-  const [activeTab, setActiveTab] = useState<number>(-1); // 默认选中'全部'标签
-  const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
+export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.memo(({ navigation }) => {
+  const [activeTab, setActiveTab] = useState<number>(RaceStatus.ALL); // 默认选中'全部'标签
+  const [raceList, setRaceList] = useState<RacePageDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(5).current;
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,28 +34,28 @@ export const AllChallengeScreen = React.memo(() => {
 
   // 清空列表并重置分页
   const resetList = useCallback(() => {
-    setChallengeList([]);
+    setRaceList([]);
     pageNum.current = 1;
   }, []);
 
-  // 获取挑战列表
-  const fetchChallengeList = useCallback(async () => {
+  // 获取比赛列表
+  const fetchRaceList = useCallback(async () => {
     setLoading(true);
-    const params: ChallengeListParams = {
+    const params: RaceListParams = {
       pageNum: pageNum.current,
       pageSize: pageSize,
     };
 
     // 只有在非全部选项时才传递isEnabledList参数
-    if (activeTab !== -1) {
+    if (activeTab !== RaceStatus.ALL) {
       params.isEnabledList = [activeTab];
     }
 
-    const res = await getChallengeList(params);
+    const res = await getRaceList(params);
     if (res) {
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
-      setChallengeList((prev) => [...prev, ...(res.records || [])]);
+      setRaceList((prev) => [...prev, ...(res.records || [])]);
     }
     setLoading(false);
   }, [pageNum, pageSize, activeTab]);
@@ -80,28 +75,29 @@ export const AllChallengeScreen = React.memo(() => {
   const handleLoadMore = useCallback(() => {
     if (!loading && hasMore) {
       pageNum.current += 1;
-      fetchChallengeList();
+      fetchRaceList();
     }
-  }, [loading, hasMore, fetchChallengeList]);
+  }, [loading, hasMore, fetchRaceList]);
 
   useEffect(() => {
-    fetchChallengeList();
+    fetchRaceList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
-  // 点击挑战项，跳转到详情页
+
+  // 点击比赛项，发起挑战按钮处理
   const handleItemPress = useCallback(
-    (matchId: number | undefined) => {
-      if (matchId) {
-        navigation.navigate('ChallengeDetail', { matchId });
+    (raceId: number | undefined) => {
+      if (raceId) {
+        navigation.navigate('RaceDetail', { raceId });
       }
     },
     [navigation],
   );
 
-  // 渲染挑战项
+  // 渲染比赛项
   const renderItem = useCallback(
-    (item: GameMatchDto) => {
-      const status = getStatusText(item.isEnabled);
+    (item: RacePageDto) => {
+      const status = getRaceStatusText(item.isEnabled || 0);
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemHeader}>
@@ -116,20 +112,20 @@ export const AllChallengeScreen = React.memo(() => {
           <View style={styles.itemContent}>
             <View style={styles.itemLeft}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战时间:</Text>
-                <Text style={styles.value}>{item.gameDate || '-'}</Text>
+                <Text style={styles.label}>开始时间:</Text>
+                <Text style={styles.value}>{item.beginDate || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>地点:</Text>
-                <Text style={styles.value}>{item.addressName || '-'}</Text>
+                <Text style={styles.label}>结束时间:</Text>
+                <Text style={styles.value}>{item.endDate || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>本金:</Text>
-                <Text style={styles.value}>{item.principal || '-'}</Text>
+                <Text style={styles.label}>比赛规则:</Text>
+                <Text style={styles.value}>{item.playRuleName || '-'}</Text>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>投手:</Text>
-                <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+                <Text style={styles.label}>转码限制:</Text>
+                <Text style={styles.value}>{item.turnOverLimit || '-'}</Text>
               </View>
             </View>
             <View style={styles.arrowContainer}>
@@ -178,10 +174,10 @@ export const AllChallengeScreen = React.memo(() => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+        <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>所有挑战</Text>
+        <Text style={styles.headerTitle}>所有比赛</Text>
         <View style={styles.headerRight} />
       </View>
 
@@ -189,18 +185,18 @@ export const AllChallengeScreen = React.memo(() => {
 
       <View style={styles.container}>
         <FlatList
-          data={challengeList}
+          data={raceList}
           renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => `${String(item.id)}_${item.createTime}`}
+          keyExtractor={(item) => `${String(item.id)}_${item.name}`}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           refreshing={loading}
           ListFooterComponent={renderFooter}
           contentContainerStyle={styles.listContent}
         />
-        {challengeList.length === 0 && !loading && (
+        {raceList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无挑战记录</Text>
+            <Text style={styles.emptyText}>暂无比赛记录</Text>
           </View>
         )}
       </View>
@@ -223,9 +219,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: THEME_COLORS.border.light,
     backgroundColor: '#fff',
-  },
-  backButton: {
-    padding: 6,
   },
   headerTitle: {
     fontSize: 18,

@@ -4,7 +4,7 @@ import { DatePicker } from '../../../components/DatePicker';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { FormData } from '../interface/IModuleProps';
 import DropdownSelect from '../../../components/DropdownSelect';
-import { ChallengeType } from '../interface/IModuleProps';
+import { ChallengeType } from '../../../interface/Common';
 
 interface CreateRaceFormProps {
   formData: FormData;
@@ -73,7 +73,7 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
             selectedDate={formData.beginDate ? formData.beginDate : new Date()}
             onDateChange={handleBeginDateChange}
             placeholder={t('createRace.selectDate')}
-            format="YYYY-MM-DD HH:mm:ss"
+            format="YYYY-MM-DD"
             style={{
               datePicker: styles.datePickerButton,
               dateText: styles.dateText,
@@ -90,7 +90,7 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
             selectedDate={formData.endDate ? formData.endDate : new Date()}
             onDateChange={handleEndDateChange}
             placeholder={t('createRace.selectDate')}
-            format="YYYY-MM-DD HH:mm:ss"
+            format="YYYY-MM-DD"
             style={{
               datePicker: styles.datePickerButton,
               dateText: styles.dateText,

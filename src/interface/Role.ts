@@ -22,6 +22,7 @@ export enum ModuleType {
   TURNOVER_QUERY = 'turnover_query',
   PITCHER_RANKING = 'player_ranking',
   CREATE_RACE = 'create_race',
+  ALL_RACE = 'all_race',
 }
 
 // 模块配置类型定义

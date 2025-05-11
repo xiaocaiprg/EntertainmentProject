@@ -58,6 +58,13 @@ export const availableModules: ModuleConfig[] = [
     icon: 'sports-score',
     backgroundColor: '#ff6b81',
   },
+  {
+    id: '9',
+    title: 'modules.allRace',
+    type: ModuleType.ALL_RACE,
+    icon: 'emoji-events',
+    backgroundColor: '#9b59b6',
+  },
 ];
 
 // 定义角色到模块的映射
@@ -69,6 +76,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
     ],
   },
   {
@@ -78,11 +86,12 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.FUNDRAISING_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
     ],
   },
   {
     role: 'RECORDER_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING, ModuleType.ALL_RACE],
   },
   {
     role: 'RECORDER',
@@ -91,15 +100,16 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
     ],
   },
   {
     role: 'PLAY_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING, ModuleType.ALL_RACE],
   },
   {
     role: 'PLAYPERSON',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING, ModuleType.ALL_RACE],
   },
   {
     role: 'OPERATION_ADMIN',
@@ -108,6 +118,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
     ],
   },
   {
@@ -117,6 +128,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
     ],
   },
   {
@@ -126,11 +138,12 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
       ModuleType.CREATE_RACE,
+      ModuleType.ALL_RACE,
     ],
   },
   {
     role: 'VISITOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING, ModuleType.ALL_RACE],
   },
 ];
 

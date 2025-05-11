@@ -44,6 +44,7 @@ export const en = {
     viewTranscoding: 'ViewTranscoding',
     pitcher_ranking: 'PitcherRanking',
     createRace: 'CreateRace',
+    allRace: 'AllRaces',
   },
 
   // Create Race
@@ -67,6 +68,7 @@ export const en = {
       endDateRequired: 'Please select end time',
       dateRangeInvalid: 'End time must be later than start time',
       invalidTurnOverLimit: 'Turnover limit must be a number greater than 0',
+      beginDateInvalid: 'Start time cannot be earlier than current time',
     },
   },
 

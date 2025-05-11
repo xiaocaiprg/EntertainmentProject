@@ -37,12 +37,29 @@ export const validateRaceParams = (formData: FormData): ValidationResult => {
     };
   }
 
+  // 验证开始时间不能小于当前时间
+  if (formData.beginDate) {
+    const beginDate = new Date(formData.beginDate);
+    const currentDate = new Date();
+    // 只比较日期部分，忽略时间
+    const beginDateOnly = new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate());
+    const currentDateOnly = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    if (beginDateOnly < currentDateOnly) {
+      return {
+        isValid: false,
+        errorMessage: 'createRace.errors.beginDateInvalid',
+      };
+    }
+  }
+
   // 验证开始时间和结束时间的关系
   if (formData.beginDate && formData.endDate) {
     const beginDate = new Date(formData.beginDate);
     const endDate = new Date(formData.endDate);
+    const beginDateOnly = new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate());
+    const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
-    if (beginDate >= endDate) {
+    if (beginDateOnly > endDateOnly) {
       return {
         isValid: false,
         errorMessage: 'createRace.errors.dateRangeInvalid',

@@ -44,6 +44,7 @@ export const zh = {
     viewTranscoding: '查看转码',
     pitcher_ranking: '排行榜',
     createRace: '创建比赛',
+    allRace: '全部比赛',
   },
 
   // 创建比赛
@@ -67,6 +68,7 @@ export const zh = {
       endDateRequired: '请选择结束时间',
       dateRangeInvalid: '结束时间必须晚于开始时间',
       invalidTurnOverLimit: '转码必须为大于0的数字',
+      beginDateInvalid: '开始时间不能早于当前时间',
     },
   },
 

@@ -156,6 +156,7 @@ export interface ChallengeCreateParams {
   tableNumber?: string;
   baseNumber: number;
   playRuleCode?: string;
+  raceId?: number;
 }
 
 export interface RoundCreateParams {
