@@ -52,44 +52,45 @@ export const AccountSecurity: React.FC<AccountSecurityScreenProps> = React.memo(
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={goBack}>
-            <Icon name="arrow-back" size={24} color="#111" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('accountSecurity.title')}</Text>
-          <View style={{ width: 24 }} />
+
+      <View style={styles.header}>
+        <TouchableOpacity onPress={goBack}>
+          <Icon name="arrow-back" size={24} color="#111" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t('accountSecurity.title')}</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <View style={styles.contentContainer}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>{t('accountSecurity.newPassword')}</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry
+            value={newPassword}
+            onChangeText={setNewPassword}
+            placeholderTextColor="#999"
+            placeholder={t('accountSecurity.enterNewPassword')}
+          />
         </View>
 
-        <View style={styles.contentContainer}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>{t('accountSecurity.newPassword')}</Text>
-            <TextInput
-              style={styles.input}
-              secureTextEntry
-              value={newPassword}
-              onChangeText={setNewPassword}
-              placeholder={t('accountSecurity.enterNewPassword')}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>{t('accountSecurity.confirmPassword')}</Text>
-            <TextInput
-              style={styles.input}
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              placeholder={t('accountSecurity.confirmNewPassword')}
-            />
-          </View>
-
-          {errorMsg ? <Text style={styles.errorText}>{errorMsg}</Text> : null}
-
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>{t('accountSecurity.submit')}</Text>
-          </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>{t('accountSecurity.confirmPassword')}</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            placeholder={t('accountSecurity.confirmNewPassword')}
+            placeholderTextColor="#999"
+          />
         </View>
+
+        {errorMsg ? <Text style={styles.errorText}>{errorMsg}</Text> : null}
+
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>{t('accountSecurity.submit')}</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -100,11 +101,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f4f4f4',
     paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#f4f4f4',
-    padding: 10,
   },
   header: {
     backgroundColor: '#f4f4f4',
@@ -123,6 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 5,
     padding: 10,
+    marginHorizontal: 10,
     marginBottom: 5,
   },
   inputContainer: {
@@ -139,6 +136,7 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
     borderRadius: 5,
     paddingHorizontal: 10,
+
     backgroundColor: '#f9f9f9',
   },
   errorText: {

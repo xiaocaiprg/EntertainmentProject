@@ -144,6 +144,15 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.PITCHER_RANKING:
           navigation.navigate('PitcherRanking');
           break;
+        case ModuleType.CREATE_RACE:
+          navigation.navigate('CreateRace');
+          break;
+        case ModuleType.ALL_RACE:
+          navigation.navigate('AllRace');
+          break;
+        case ModuleType.RACE_POOL_LIST:
+          navigation.navigate('RacePoolList');
+          break;
         default:
           break;
       }

@@ -42,39 +42,38 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = React.memo((props) 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={goBack}>
-            <Icon name="arrow-back" size={24} color="#111" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('settings.settings')}</Text>
-          <View style={{ width: 24 }} />
-        </View>
-        <View style={styles.contentContainer}>
-          <View style={styles.content}>
-            <Text style={styles.sectionTitle}>{`${t('settings.language')}:`}</Text>
-            <View style={styles.languageOptions}>
-              {languageOptions.map((option) => (
-                <TouchableOpacity
-                  key={option.value}
-                  style={[styles.languageOption, currentLanguage === option.value && styles.selectedLanguage]}
-                  onPress={() => handleChangeLanguage(option.value)}
-                >
-                  <Text style={[styles.languageText, currentLanguage === option.value && styles.selectedLanguageText]}>
-                    {option.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+
+      <View style={styles.header}>
+        <TouchableOpacity onPress={goBack}>
+          <Icon name="arrow-back" size={24} color="#111" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t('settings.settings')}</Text>
+        <View style={{ width: 24 }} />
+      </View>
+      <View style={styles.contentContainer}>
+        <View style={styles.content}>
+          <Text style={styles.sectionTitle}>{`${t('settings.language')}:`}</Text>
+          <View style={styles.languageOptions}>
+            {languageOptions.map((option) => (
+              <TouchableOpacity
+                key={option.value}
+                style={[styles.languageOption, currentLanguage === option.value && styles.selectedLanguage]}
+                onPress={() => handleChangeLanguage(option.value)}
+              >
+                <Text style={[styles.languageText, currentLanguage === option.value && styles.selectedLanguageText]}>
+                  {option.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
-
-          <View style={styles.divider} />
-
-          <TouchableOpacity style={styles.settingItem} onPress={navigateToAccountSecurity}>
-            <Text style={styles.settingItemText}>{t('settings.accountSecurity')}</Text>
-            <Icon name="chevron-right" size={24} color="#666" />
-          </TouchableOpacity>
         </View>
+
+        <View style={styles.divider} />
+
+        <TouchableOpacity style={styles.settingItem} onPress={navigateToAccountSecurity}>
+          <Text style={styles.settingItemText}>{t('settings.accountSecurity')}</Text>
+          <Icon name="chevron-right" size={24} color="#666" />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -85,11 +84,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f4f4f4',
     paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#f4f4f4',
-    padding: 10,
   },
   header: {
     backgroundColor: '#f4f4f4',
@@ -107,6 +101,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: '#fff',
     borderRadius: 5,
+    marginHorizontal: 10,
   },
   content: {
     flexDirection: 'row',
