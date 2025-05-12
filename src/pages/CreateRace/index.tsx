@@ -27,20 +27,18 @@ const getEndDate = () => {
   date.setDate(date.getDate() + 2);
   return date;
 };
-// 初始表单数据
-const initialFormData: FormData = {
-  name: '',
-  description: '',
-  beginDate: new Date(),
-  endDate: getEndDate(),
-  playRuleCode: '',
-  turnOverLimit: '',
-};
 
 export const CreateRaceScreen: React.FC<CreateRaceScreenProps> = React.memo(({ navigation }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    beginDate: new Date(),
+    endDate: getEndDate(),
+    playRuleCode: '',
+    turnOverLimit: '',
+  });
 
   // 处理表单数据变更
   const handleFormChange = useCallback((newData: Partial<FormData>) => {
