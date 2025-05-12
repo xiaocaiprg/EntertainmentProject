@@ -12,7 +12,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList } from '../../api/services/gameService';
-import { ChallengeListParams, GameMatchDto } from '../../interface/Game';
+import { ChallengeListParams, GameMatchPageDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
@@ -31,7 +31,7 @@ const STATUS_TABS = [
 export const AllChallengeScreen = React.memo(() => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState<number>(-1); // 默认选中'全部'标签
-  const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
+  const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(5).current;
   const [loading, setLoading] = useState<boolean>(true);
@@ -82,7 +82,7 @@ export const AllChallengeScreen = React.memo(() => {
       pageNum.current += 1;
       fetchChallengeList();
     }
-  }, [loading, hasMore, pageNum, fetchChallengeList]);
+  }, [loading, hasMore, fetchChallengeList]);
 
   useEffect(() => {
     fetchChallengeList();
@@ -100,7 +100,7 @@ export const AllChallengeScreen = React.memo(() => {
 
   // 渲染挑战项
   const renderItem = useCallback(
-    (item: GameMatchDto) => {
+    (item: GameMatchPageDto) => {
       const status = getStatusText(item.isEnabled);
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 40,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: THEME_COLORS.border.light,
     backgroundColor: '#fff',

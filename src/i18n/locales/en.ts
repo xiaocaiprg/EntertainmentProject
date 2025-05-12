@@ -13,6 +13,7 @@ export const en = {
     noData: 'No data available',
     loading: 'Loading...',
     success: 'Success',
+    submit: 'Submit',
   },
 
   // Navigation and Tabs
@@ -35,13 +36,41 @@ export const en = {
 
   // Module Titles
   modules: {
-    challengeNew: 'New Challenge',
+    challengeNew: 'NewChallenge',
     record: 'Record',
-    allChallengeList: 'All Challenges',
-    updateRecorder: 'Update Recorder',
+    allChallengeList: 'AllChallenges',
+    updateRecorder: 'UpdateRecorder',
     funding: 'Funding',
-    viewTranscoding: 'View Transcoding',
-    pitcher_ranking: 'Pitcher Ranking',
+    viewTranscoding: 'ViewTranscoding',
+    pitcher_ranking: 'PitcherRanking',
+    createRace: 'CreateRace',
+    allRace: 'AllRaces',
+    racePoolList: 'PrizePoolList',
+  },
+
+  // Create Race
+  createRace: {
+    title: 'Create Race',
+    name: 'Race Name',
+    namePlaceholder: 'Please enter race name',
+    description: 'Race Description',
+    descriptionPlaceholder: 'Please enter race description',
+    beginDate: 'Start Time',
+    endDate: 'End Time',
+    selectDate: 'Please select date and time',
+    playRuleCode: 'Rule Code',
+    playRuleCodePlaceholder: 'Please enter rule',
+    turnOverLimit: 'Turnover Limit',
+    turnOverLimitPlaceholder: 'Please enter turnover limit',
+    createSuccess: 'Race created successfully',
+    errors: {
+      nameRequired: 'Please enter race name',
+      beginDateRequired: 'Please select start time',
+      endDateRequired: 'Please select end time',
+      dateRangeInvalid: 'End time must be later than start time',
+      invalidTurnOverLimit: 'Turnover limit must be a number greater than 0',
+      beginDateInvalid: 'Start time cannot be earlier than current time',
+    },
   },
 
   // Ranking related
@@ -181,10 +210,51 @@ export const en = {
 
   // My Page
   my: {
-    membershipBenefits: 'Membership Benefits',
     historyRecord: 'History Records',
     myGames: 'My Games',
     loginout: 'Logout',
+    memberCenter: 'Member Center',
+    points: 'Points',
+    gameCoins: 'GameCoins',
+    transfer: 'Transfer',
+    frozenPoints: 'Pending Points',
+    profit: 'Profit',
+  },
+
+  // Frozen Points
+  frozenPoints: {
+    title: 'Pending Points Detail',
+    gameMatch: 'Related Challenge',
+    gameDate: 'Challenge Date',
+    name: 'Challenge Name',
+    principal: 'Principal',
+    playRuleCode: 'PlayRuleCode',
+    noData: 'No pending points data',
+  },
+
+  // Points Transfer
+  pointsTransfer: {
+    title: 'Points Transfer',
+    availablePoints: 'Available Points',
+    poolPoints: 'Prize Pool Points',
+    poolName: 'Prize Pool Name',
+    transferTo: 'Transfer To',
+    personal: 'Personal',
+    company: 'Company',
+    account: 'Account',
+    points: 'Points',
+    transfer: 'Confirm Transfer',
+    personalAccountPlaceholder: 'Enter personal account',
+    companyAccountPlaceholder: 'Enter company account',
+    pointsPlaceholder: 'Enter points to transfer',
+    invalidNumber: 'Please enter a valid number',
+    integerOnly: 'Only integers allowed',
+    moreThanZero: 'Points must be greater than 0',
+    notEnoughPoints: 'Insufficient points',
+    confirmTitle: 'Confirm Transfer',
+    confirmMessage: 'Transfer {{points}} points, this operation is irreversible, please confirm whether to continue?',
+    success: 'Transfer Successful',
+    successMessage: 'Successfully transferred {{points}} points',
   },
 
   // My Games
@@ -217,5 +287,16 @@ export const en = {
     investCompanyProfitDetails: 'Investment Company Profit Details',
     investPersonProfitDetails: 'Investor Profit Details',
     companyProfitDetails: 'Record Company Profit Details',
+  },
+
+  // Prize Pool List
+  racePoolList: {
+    title: 'Prize Pool List',
+    noData: 'No prize pool data available',
+    amount: 'Prize Amount',
+    distributePoints: 'Distribute Points',
+    raceName: 'Race Name',
+    active: 'Active',
+    inactive: 'Inactive',
   },
 };

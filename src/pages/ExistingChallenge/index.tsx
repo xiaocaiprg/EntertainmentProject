@@ -7,14 +7,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ExistingChallengeForm from './components/ExistingChallengeForm';
 import { getChallengeList } from '../../api/services/gameService';
 import { roundCreate } from '../../api/services/roundService';
-import { GameMatchDto } from '../../interface/Game';
+import { GameMatchPageDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 
 export const ExistingChallengeScreen = React.memo(() => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
+  const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const [selectedChallengeId, setSelectedChallengeId] = useState(-1); // 选择挑战
   const [activeRoundId, setActiveRoundId] = useState(0); // 进行中的场次ID
 

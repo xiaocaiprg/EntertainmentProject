@@ -6,32 +6,31 @@ import { clearTokenSync } from '../utils/storage';
 import { eventEmitter, TOKEN_EXPIRED_EVENT } from '../utils/eventEmitter';
 import { useNavigation } from '@react-navigation/native';
 
-// 认证提供者组件属性
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-// 认证提供者组件
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserResult | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [initCheckLogin, setInitCheckLogin] = useState<boolean>(true);
   const navigation = useNavigation();
 
+  const checkUserStatus = async () => {
+    try {
+      const res = await getUserStatus();
+      res && setUser(res);
+      setIsLoggedIn(!!res);
+    } catch {
+      setUser(null);
+      setIsLoggedIn(false);
+    } finally {
+      setInitCheckLogin(false);
+    }
+  };
+
   // 初始化时检查登录状态
   useEffect(() => {
-    const checkUserStatus = async () => {
-      try {
-        const res = await getUserStatus();
-        res && setUser(res);
-        setIsLoggedIn(!!res);
-      } catch {
-        setUser(null);
-        setIsLoggedIn(false);
-      } finally {
-        setInitCheckLogin(false);
-      }
-    };
     checkUserStatus();
   }, []);
 
@@ -76,6 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initCheckLogin,
     login,
     logout,
+    checkUserStatus,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -27,7 +27,7 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           <Text style={styles.sectionTitle}>{t('myGames.investCompanyProfitDetails')}</Text>
           {profitData.investCompanyProfitDtoList.map((company, index) => (
             <View key={index} style={styles.profitItem}>
-              <Text style={styles.profitLabel}>{company.companyName}</Text>
+              <Text style={styles.profitLabel}>{company.name}</Text>
               <Text style={styles.profitValue}>{company.profitStr}</Text>
             </View>
           ))}
@@ -67,7 +67,7 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           <Text style={styles.sectionTitle}>{t('myGames.companyProfitDetails')}</Text>
           {profitData.docCompanyProfitDtoList.map((company, index) => (
             <View key={index} style={styles.profitItem}>
-              <Text style={styles.profitLabel}>{company.companyName}</Text>
+              <Text style={styles.profitLabel}>{company.name}</Text>
               <Text style={styles.profitValue}>{company.profitStr}</Text>
             </View>
           ))}

@@ -1,10 +1,7 @@
 import { UserResult } from './User';
 import { ContributionDto } from './Contribution';
+import { QueryParams } from './Common';
 
-export interface QueryParams {
-  pageNum: number;
-  pageSize: number;
-}
 export interface UserRecordParams extends QueryParams {
   type?: number;
   companyCode?: string;
@@ -20,18 +17,42 @@ export interface RecorderList {
   size: number;
   current: number;
 }
+export interface GameMatchPageDto {
+  addressInfoId?: number;
+  addressName?: string;
+  docPersonCode?: string;
+  docPersonName?: string;
+  gameDate?: string;
+  id?: number;
+  baseNumber: number;
+  createTime?: string;
+  isEnabled: number;
+  name?: string;
+  playPersonCode?: string;
+  playPersonName?: string;
+  playRuleCode?: string;
+  principal?: number;
+  profit?: number;
+  profitStr?: string;
+  raceId?: number;
+  raceName?: string;
+  turnOver?: number;
+  turnOverStr?: string;
+  roundList?: GameRoundDto[];
+}
 export interface ChallengeList {
   current: number;
   pages: number;
-  records?: GameMatchDto[];
+  records?: GameMatchPageDto[];
   size: number;
   total: number;
 }
 
-export interface CompanyProfitDto {
-  companyCode?: string;
-  companyName?: string;
+export interface ProfitDto {
+  code?: string;
   matchId: number;
+  matchName?: string;
+  name?: string;
   profit: number;
   profitStr: string;
 }
@@ -45,12 +66,12 @@ export interface PersonProfitDto {
   profitStr: string;
 }
 export interface GameMatchProfitDto {
-  docCompanyProfitDtoList?: CompanyProfitDto[];
+  docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfit?: number;
   docCompanyProfitStr?: string;
   investCompanyProfit?: number;
   investCompanyProfitStr?: string;
-  investCompanyProfitDtoList?: CompanyProfitDto[];
+  investCompanyProfitDtoList?: ProfitDto[];
   investPersonProfitDtoList?: PersonProfitDto[];
   operationCompanyCode?: string;
   operationCompanyName?: string;
@@ -158,6 +179,7 @@ export interface ChallengeCreateParams {
   tableNumber?: string;
   baseNumber: number;
   playRuleCode?: string;
+  raceId?: number;
 }
 
 export interface RoundCreateParams {

@@ -13,6 +13,7 @@ export const zh = {
     noData: '暂无数据',
     loading: '加载中...',
     success: '操作成功',
+    submit: '提交',
   },
 
   // 导航和标签
@@ -42,6 +43,34 @@ export const zh = {
     funding: '出资',
     viewTranscoding: '查看转码',
     pitcher_ranking: '排行榜',
+    createRace: '创建比赛',
+    allRace: '全部比赛',
+    racePoolList: '奖金池列表',
+  },
+
+  // 创建比赛
+  createRace: {
+    title: '创建比赛',
+    name: '比赛名称',
+    namePlaceholder: '请输入比赛名称',
+    description: '比赛描述',
+    descriptionPlaceholder: '请输入比赛描述',
+    beginDate: '开始时间',
+    endDate: '结束时间',
+    selectDate: '请选择日期时间',
+    playRuleCode: '比赛规则',
+    playRuleCodePlaceholder: '请选择比赛规则',
+    turnOverLimit: '转码限制',
+    turnOverLimitPlaceholder: '请输入转码限制',
+    createSuccess: '比赛创建成功',
+    errors: {
+      nameRequired: '请输入比赛名称',
+      beginDateRequired: '请选择开始时间',
+      endDateRequired: '请选择结束时间',
+      dateRangeInvalid: '结束时间必须晚于开始时间',
+      invalidTurnOverLimit: '转码必须为大于0的数字',
+      beginDateInvalid: '开始时间不能早于当前时间',
+    },
   },
 
   // 榜单相关
@@ -74,7 +103,7 @@ export const zh = {
 
   // 账户安全
   accountSecurity: {
-    title: '修改密码',
+    title: '账户安全',
     newPassword: '新密码',
     confirmPassword: '确认密码',
     enterNewPassword: '请输入新密码',
@@ -181,10 +210,51 @@ export const zh = {
 
   // 我的页面
   my: {
-    membershipBenefits: '会员权益',
     historyRecord: '历史记录',
     myGames: '我的挑战',
     loginout: '退出',
+    memberCenter: '会员中心',
+    points: '积分',
+    gameCoins: '比赛币',
+    transfer: '转积分',
+    frozenPoints: '查在途',
+    profit: '盈利',
+  },
+
+  // 在途积分
+  frozenPoints: {
+    title: '在途积分明细',
+    gameMatch: '关联挑战',
+    gameDate: '挑战日期',
+    name: '挑战名称',
+    principal: '挑战本金',
+    playRuleCode: '玩法',
+    noData: '暂无在途积分数据',
+  },
+
+  // 转积分
+  pointsTransfer: {
+    title: '积分',
+    availablePoints: '可用积分',
+    poolPoints: '奖金池积分',
+    poolName: '奖金池名称',
+    transferTo: '转积分给',
+    personal: '个人',
+    company: '公司',
+    account: '账号',
+    points: '积分数量',
+    transfer: '确认转账',
+    personalAccountPlaceholder: '请输入个人账号',
+    companyAccountPlaceholder: '请输入公司账号',
+    pointsPlaceholder: '请输入转账积分数量',
+    invalidNumber: '请输入有效的数字',
+    integerOnly: '只能输入整数',
+    moreThanZero: '积分必须大于0',
+    notEnoughPoints: '积分不足',
+    confirmTitle: '确认转账',
+    confirmMessage: '转账{{points}}积分,此操作不可撤销,请确认是否继续?',
+    success: '转账成功',
+    successMessage: '已成功转账{{points}}积分',
   },
 
   // 我的挑战
@@ -217,5 +287,16 @@ export const zh = {
     investCompanyProfitDetails: '投资公司利润详情',
     investPersonProfitDetails: '投资人利润详情',
     companyProfitDetails: '记录公司分配详情',
+  },
+
+  // 奖金池列表
+  racePoolList: {
+    title: '奖金池列表',
+    noData: '暂无奖金池数据',
+    distributePoints: '转积分',
+    amount: '奖金金额',
+    raceName: '比赛名称',
+    active: '激活',
+    inactive: '未激活',
   },
 };

@@ -51,6 +51,27 @@ export const availableModules: ModuleConfig[] = [
     icon: 'leaderboard',
     backgroundColor: '#e84393',
   },
+  {
+    id: '8',
+    title: 'modules.createRace',
+    type: ModuleType.CREATE_RACE,
+    icon: 'sports-score',
+    backgroundColor: '#ff6b81',
+  },
+  {
+    id: '9',
+    title: 'modules.allRace',
+    type: ModuleType.ALL_RACE,
+    icon: 'emoji-events',
+    backgroundColor: '#9b59b6',
+  },
+  {
+    id: '10',
+    title: 'modules.racePoolList',
+    type: ModuleType.RACE_POOL_LIST,
+    icon: 'attach-money',
+    backgroundColor: '#00cec9',
+  },
 ];
 
 // 定义角色到模块的映射
@@ -62,6 +83,8 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
     ],
   },
   {
@@ -71,11 +94,19 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.FUNDRAISING_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
     ],
   },
   {
     role: 'RECORDER_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'RECORDER',
@@ -84,15 +115,29 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
     ],
   },
   {
     role: 'PLAY_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'PLAYPERSON',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'OPERATION_ADMIN',
@@ -101,6 +146,8 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
     ],
   },
   {
@@ -110,11 +157,30 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.ALL_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
+  },
+  {
+    role: 'ADMIN',
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.CREATE_RACE,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
     ],
   },
   {
     role: 'VISITOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
 ];
 

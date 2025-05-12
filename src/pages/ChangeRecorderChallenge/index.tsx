@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList, getRecorderList, updateMatchDocPerson } from '../../api/services/gameService';
-import { GameMatchDto, UserRecordParams } from '../../interface/Game';
+import { GameMatchPageDto, UserRecordParams } from '../../interface/Game';
 import { ChallengeStatus, UserType } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
@@ -26,7 +26,7 @@ type ChangeRecorderChallengeScreenProps = RootStackScreenProps<'ChangeRecorderCh
 
 export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProps> = React.memo(({ navigation }) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [challengeList, setChallengeList] = useState<GameMatchDto[]>([]);
+  const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [recorderList, setRecorderList] = useState<UserResult[]>([]);
@@ -151,7 +151,7 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
 
   // 渲染挑战项
   const renderItem = useCallback(
-    (item: GameMatchDto) => <ChallengeCard item={item} onEditPress={openRecorderModal} />,
+    (item: GameMatchPageDto) => <ChallengeCard item={item} onEditPress={openRecorderModal} />,
     [openRecorderModal],
   );
 
@@ -170,7 +170,7 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
         <FlatList
           data={challengeList}
           renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => `${String(item.id)}_${item.createTime}`}
+          keyExtractor={(item) => `${String(item.id)}`}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           refreshing={loading}
