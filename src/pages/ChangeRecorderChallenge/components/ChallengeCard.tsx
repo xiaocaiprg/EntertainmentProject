@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { GameMatchDto } from '../../../interface/Game';
+import { GameMatchPageDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
 import { ChallengeStatus } from '../../../interface/Common';
 import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ChallengeCardProps {
-  item: GameMatchDto;
+  item: GameMatchPageDto;
   onEditPress: (challengeId: number | undefined) => void;
 }
 

@@ -1,0 +1,350 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import { RootStackScreenProps } from '../router';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { getRaceDetail } from '../../api/services/raceService';
+import { RaceDetailDto } from '../../interface/Race';
+import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
+import { THEME_COLORS } from '../../utils/styles';
+import { getRaceStatusText } from '../../public/Race';
+import { useRole } from '../../hooks/useRole';
+import { PoolInfoCard } from './components/PoolInfoCard';
+
+export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = React.memo(({ navigation, route }) => {
+  const { raceId } = route.params;
+  const [raceDetail, setRaceDetail] = useState<RaceDetailDto | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { isInvestmentManager } = useRole();
+
+  // 获取比赛详情数据
+  const fetchRaceDetail = useCallback(async () => {
+    setLoading(true);
+    const res = await getRaceDetail(String(raceId));
+    if (res) {
+      setRaceDetail(res);
+    }
+    setLoading(false);
+  }, [raceId]);
+
+  useEffect(() => {
+    fetchRaceDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 返回按钮处理
+  const handleBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  // 发起挑战
+  const handleStartChallenge = useCallback(() => {
+    if (isInvestmentManager) {
+      navigation.navigate('NewChallenge', { raceId });
+    }
+  }, [navigation, raceId, isInvestmentManager]);
+
+  // 渲染比赛状态标签
+  const renderStatusTag = useCallback((status: number | undefined) => {
+    const statusInfo = getRaceStatusText(status || 0);
+    return (
+      <View style={[styles.statusTag, { backgroundColor: statusInfo.color + '20' }]}>
+        <Text style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</Text>
+      </View>
+    );
+  }, []);
+
+  // 渲染加载中状态
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={handleBack}>
+            <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>比赛详情</Text>
+          <View style={styles.headerRight} />
+        </View>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={THEME_COLORS.primary} />
+          <Text style={styles.loadingText}>加载中...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={handleBack}>
+          <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>比赛详情</Text>
+        <View style={styles.headerRight} />
+      </View>
+
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        {raceDetail ? (
+          <>
+            <View style={styles.detailCard}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.raceName} numberOfLines={1} ellipsizeMode="tail">
+                  {raceDetail.name || '-'}
+                </Text>
+                {renderStatusTag(raceDetail.isEnabled)}
+              </View>
+
+              <View style={styles.infoSection}>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>开始时间:</Text>
+                  <Text style={styles.value}>{raceDetail.beginDate || '-'}</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>结束时间:</Text>
+                  <Text style={styles.value}>{raceDetail.endDate || '-'}</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>比赛规则:</Text>
+                  <Text style={styles.value}>{raceDetail.playRuleName || '-'}</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>转码限制:</Text>
+                  <Text style={styles.value}>{raceDetail.turnOverLimit || '-'}</Text>
+                </View>
+              </View>
+
+              {raceDetail.description && (
+                <View style={styles.descriptionSection}>
+                  <Text style={styles.descriptionTitle}>比赛描述</Text>
+                  <Text style={styles.descriptionContent}>{raceDetail.description}</Text>
+                </View>
+              )}
+
+              {raceDetail.racePoolDetailDto && <PoolInfoCard poolDetail={raceDetail.racePoolDetailDto} />}
+            </View>
+
+            {isInvestmentManager && (
+              <TouchableOpacity
+                style={[styles.actionButton, !isInvestmentManager && styles.disabledButton]}
+                onPress={handleStartChallenge}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.actionButtonText}>发起挑战</Text>
+              </TouchableOpacity>
+            )}
+          </>
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>未找到比赛信息</Text>
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+});
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 40,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: THEME_COLORS.border.light,
+    backgroundColor: '#fff',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: THEME_COLORS.text.primary,
+  },
+  headerRight: {
+    width: 30,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  contentContainer: {
+    padding: 10,
+  },
+  detailCard: {
+    backgroundColor: THEME_COLORS.cardBackground,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: THEME_COLORS.border.light,
+    marginBottom: 5,
+    padding: 10,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: THEME_COLORS.border.light,
+  },
+  raceName: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: THEME_COLORS.text.primary,
+    flex: 1,
+  },
+  statusTag: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  infoSection: {
+    paddingTop: 8,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  label: {
+    fontSize: 14,
+    color: THEME_COLORS.text.secondary,
+    width: 80,
+  },
+  value: {
+    fontSize: 14,
+    color: THEME_COLORS.text.primary,
+    flex: 1,
+  },
+  descriptionSection: {
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: THEME_COLORS.border.light,
+  },
+  descriptionTitle: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: THEME_COLORS.text.primary,
+    marginBottom: 8,
+  },
+  descriptionContent: {
+    fontSize: 14,
+    color: THEME_COLORS.text.secondary,
+    lineHeight: 20,
+  },
+  poolSection: {
+    display: 'none',
+  },
+  poolTitle: {
+    display: 'none',
+  },
+  poolCard: {
+    display: 'none',
+  },
+  poolHeader: {
+    display: 'none',
+  },
+  poolName: {
+    display: 'none',
+  },
+  poolCode: {
+    display: 'none',
+  },
+  poolAmountContainer: {
+    display: 'none',
+  },
+  poolAmountItem: {
+    display: 'none',
+  },
+  poolAmountValue: {
+    display: 'none',
+  },
+  poolAmountLabel: {
+    display: 'none',
+  },
+  poolAmountDivider: {
+    display: 'none',
+  },
+  frozenPoints: {
+    display: 'none',
+  },
+  availablePoints: {
+    display: 'none',
+  },
+  progressContainer: {
+    display: 'none',
+  },
+  progressBg: {
+    display: 'none',
+  },
+  progressBar: {
+    display: 'none',
+  },
+  progressText: {
+    display: 'none',
+  },
+  poolInfoRow: {
+    display: 'none',
+  },
+  poolInfoItem: {
+    display: 'none',
+  },
+  poolInfoLabel: {
+    display: 'none',
+  },
+  poolInfoValue: {
+    display: 'none',
+  },
+  actionButton: {
+    backgroundColor: THEME_COLORS.primary,
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  actionButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: THEME_COLORS.text.light,
+    marginTop: 10,
+  },
+  emptyContainer: {
+    padding: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: THEME_COLORS.text.light,
+  },
+});

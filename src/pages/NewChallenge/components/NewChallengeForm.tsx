@@ -8,8 +8,8 @@ import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
-import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS, ChallengeType } from '../interface/IModuleProps';
-
+import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS } from '../interface/IModuleProps';
+import { ChallengeType } from '../../../interface/Common';
 interface NewChallengeFormProps {
   challengeType: ChallengeType;
   operators: UserResult[];

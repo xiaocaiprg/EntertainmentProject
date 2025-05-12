@@ -20,6 +20,14 @@ import { TurnoverQueryScreen } from './TurnoverQuery/index';
 import { SettingsScreen } from './Settings/index';
 import { AccountSecurity } from './Settings/AccountSecurity';
 import { PitcherRankingScreen } from './PitcherRanking/index';
+import { MyPointsScreen } from './MyPoints/index';
+import { PointsTransferScreen } from './PointsTransfer/index';
+import { FrozenPointsScreen } from './FrozenPoints/index';
+import { MyProfitScreen } from './MyProfit/index';
+import { CreateRaceScreen } from './CreateRace/index';
+import { AllRaceScreen } from './AllRace/index';
+import { RaceDetailScreen } from './RaceDetail/index';
+import { RacePoolListScreen } from './RacePoolList/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -32,11 +40,11 @@ import { GameRouteParams } from './Game/types/common';
 import { useTranslation } from '../hooks/useTranslation';
 
 // 定义导航参数类型
-type RootStackParamList = {
+export type RootStackParamList = {
   Main: undefined;
   Auth: undefined;
   Game: GameRouteParams;
-  NewChallenge: undefined;
+  NewChallenge: { raceId?: number };
   ExistingChallenge: undefined;
   GameHistory: undefined;
   ChallengeDetail: { matchId: number };
@@ -49,6 +57,14 @@ type RootStackParamList = {
   Settings: undefined;
   AccountSecurity: undefined;
   PitcherRanking: undefined;
+  MyPoints: undefined;
+  PointsTransfer: { code?: string; availablePoints?: number; name?: string };
+  FrozenPoints: undefined;
+  MyProfit: undefined;
+  CreateRace: undefined;
+  AllRace: undefined;
+  RaceDetail: { raceId: number };
+  RacePoolList: undefined;
 };
 
 // 通用导航类型
@@ -133,6 +149,14 @@ function AppNavigator() {
                 <Stack.Screen name="Settings" component={SettingsScreen} />
                 <Stack.Screen name="AccountSecurity" component={AccountSecurity} />
                 <Stack.Screen name="PitcherRanking" component={PitcherRankingScreen} />
+                <Stack.Screen name="MyPoints" component={MyPointsScreen} />
+                <Stack.Screen name="PointsTransfer" component={PointsTransferScreen} />
+                <Stack.Screen name="FrozenPoints" component={FrozenPointsScreen} />
+                <Stack.Screen name="MyProfit" component={MyProfitScreen} />
+                <Stack.Screen name="CreateRace" component={CreateRaceScreen} />
+                <Stack.Screen name="AllRace" component={AllRaceScreen} />
+                <Stack.Screen name="RaceDetail" component={RaceDetailScreen} />
+                <Stack.Screen name="RacePoolList" component={RacePoolListScreen} />
               </Stack.Navigator>
             </RoleProvider>
           </AuthProvider>

@@ -3,15 +3,14 @@ export interface UserParams {
   password: string;
 }
 export interface UserResult {
-  agentId?: number;
   code: string;
-  createTime?: string;
   id?: number;
-  integral?: number;
   name?: string;
-  orderNumber?: number;
-  password?: string;
-  phone?: string;
   role?: string;
   companyCode?: string;
+  availablePoints: number;
+  frozenPoints: number;
+  totalPoints: number;
+  profit: number;
+  profitStr: string;
 }
