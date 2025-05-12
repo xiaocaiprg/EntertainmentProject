@@ -1,17 +1,16 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import CustomText from '../../../components/CustomText';
-import { RoundStats } from '../types';
-
+import { CBRoundStats } from '../../types/CBtypes';
+import CustomText from '../../../../components/CustomText';
 interface GameInfoProps {
   gameName: string;
   operator: string;
   recorder: string;
-  roundStats: RoundStats;
+  cbRoundStats: CBRoundStats;
 }
 
 export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
-  const { gameName, operator, roundStats, recorder } = props;
+  const { gameName, operator, cbRoundStats, recorder } = props;
   const {
     round,
     wins,
@@ -24,7 +23,7 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
     roundTurnOverStr,
     challengeProfitStr,
     challengeTurnOverStr,
-  } = roundStats;
+  } = cbRoundStats;
   // 获取轮次描述
   const getRoundDescription = () => {
     if (isFirstRound) {

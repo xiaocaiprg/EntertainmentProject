@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTranslation } from '../hooks/useTranslation';
-import CustomText from './CustomText';
+import { mergeStyles } from '../utils/styles';
 
 interface DropdownSelectProps {
   options: any[];
@@ -16,6 +16,7 @@ interface DropdownSelectProps {
   onStateChange?: (isOpen: boolean) => void;
   zIndex?: number;
   zIndexInverse?: number;
+  style?: Partial<Record<keyof typeof styles, ViewStyle | TextStyle>>;
 }
 
 export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: DropdownSelectProps) => {
@@ -32,10 +33,14 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
     onStateChange,
     zIndex = 1000,
     zIndexInverse = 1000,
+    style,
   } = props;
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(selectedValue);
+
+  // 使用mergeStyles合并样式
+  const mergedStyles = useMemo(() => mergeStyles(styles, style), [style]);
 
   // 使用外部状态控制本地状态
   useEffect(() => {
@@ -70,7 +75,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
   );
 
   return (
-    <View style={[styles.selectContainer, { zIndex, elevation: zIndex }]}>
+    <View style={[mergedStyles.selectContainer, { zIndex, elevation: zIndex }]}>
       <DropDownPicker
         open={open}
         value={value}
@@ -84,12 +89,10 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
         setValue={setValue}
         onChangeValue={handleValueChange}
         placeholder={placeholder}
-        style={styles.dropdown}
-        renderListItem={(props) => {
-          return <CustomText style={styles.optionItem}>{props.label}</CustomText>;
-        }}
-        textStyle={styles.dropdownText}
-        listItemLabelStyle={styles.optionText}
+        style={mergedStyles.dropdown}
+        textStyle={mergedStyles.dropdownText}
+        listItemLabelStyle={mergedStyles.optionText}
+        listItemContainerStyle={mergedStyles.optionItem}
         maxHeight={200}
         scrollViewProps={{
           nestedScrollEnabled: true,
@@ -97,9 +100,9 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
           persistentScrollbar: true,
         }}
         listMode="SCROLLVIEW"
-        dropDownContainerStyle={styles.optionsList}
-        listMessageContainerStyle={styles.emptyContainer}
-        listMessageTextStyle={styles.emptyText}
+        dropDownContainerStyle={mergedStyles.optionsList}
+        listMessageContainerStyle={mergedStyles.emptyContainer}
+        listMessageTextStyle={mergedStyles.emptyText}
         translation={{
           NOTHING_TO_SHOW: t('common.noData'),
         }}
@@ -118,7 +121,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   dropdown: {
-    height: 44,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,

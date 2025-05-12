@@ -4,6 +4,8 @@ export interface ContributionDto {
   matchId: number;
   investPersonName: string;
   investPersonCode?: string;
+  contriRate?: number;
+  contriRateStr?: string;
 }
 
 export interface ContributionCreateParams {

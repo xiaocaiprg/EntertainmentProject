@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import CustomText from '../../../components/CustomText';
 
 interface GameRuleProps {
+  playRuleCode: string;
   handleBankerWin: () => void;
   handleBankerLose: () => void;
   handlePlayerWin: () => void;
@@ -11,13 +11,16 @@ interface GameRuleProps {
 }
 
 export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProps) => {
-  const { handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose } = props;
+  const { playRuleCode, handleBankerWin, handleBankerLose, handlePlayerWin, handlePlayerLose } = props;
   return (
     <View style={styles.ruleContainer}>
-      <CustomText style={styles.ruleTitle}>规则</CustomText>
+      <View style={styles.ruleHeader}>
+        <Text style={styles.ruleTitle}>规则</Text>
+        <Text style={styles.ruleDescription}>打法:{playRuleCode}</Text>
+      </View>
       <View style={styles.betOptionsColumn}>
         <View style={[styles.betOption, styles.bankerOption]}>
-          <CustomText style={[styles.betLabel, styles.bankerLabel]}>庄</CustomText>
+          <Text style={[styles.betLabel, styles.bankerLabel]}>庄</Text>
           <View style={styles.buttonsContainer}>
             <View style={styles.buttonWithLabel}>
               <TouchableOpacity style={styles.button} onPress={handleBankerWin}>
@@ -33,7 +36,7 @@ export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProp
         </View>
 
         <View style={[styles.betOption, styles.playerOption]}>
-          <CustomText style={[styles.betLabel, styles.playerLabel]}>闲</CustomText>
+          <Text style={[styles.betLabel, styles.playerLabel]}>闲</Text>
 
           <View style={styles.buttonsContainer}>
             <View style={styles.buttonWithLabel}>
@@ -50,7 +53,7 @@ export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProp
         </View>
       </View>
 
-      <CustomText style={styles.ruleDescription}>点击"+"表示赢，点击"-"表示输</CustomText>
+      <Text style={styles.ruleDescription}>点击"+"表示赢，点击"-"表示输</Text>
     </View>
   );
 });
@@ -64,6 +67,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#e0e0e0',
+  },
+  ruleHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   ruleTitle: {
     fontSize: 18,
@@ -131,6 +139,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#333',
   },
+
   ruleDescription: {
     fontSize: 14,
     color: '#666',

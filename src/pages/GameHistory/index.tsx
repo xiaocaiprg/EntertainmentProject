@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, SafeAr
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList } from '../../api/services/gameService';
-import { GameMatchDto } from '../../interface/Game';
+import { GameMatchPageDto } from '../../interface/Game';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { getStatusText } from '../../public/Game';
 import CustomText from '../../components/CustomText';
@@ -11,7 +11,7 @@ import CustomText from '../../components/CustomText';
 export const GameHistory = React.memo(() => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [historyList, setHistoryList] = useState<GameMatchDto[]>([]);
+  const [historyList, setHistoryList] = useState<GameMatchPageDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(5).current;
   const [hasMore, setHasMore] = useState<boolean>(false);
@@ -35,7 +35,7 @@ export const GameHistory = React.memo(() => {
       pageNum.current += 1;
       fetchHistoryList();
     }
-  }, [loading, hasMore, pageNum, fetchHistoryList]);
+  }, [loading, hasMore, fetchHistoryList]);
 
   useEffect(() => {
     fetchHistoryList();
@@ -52,7 +52,7 @@ export const GameHistory = React.memo(() => {
   );
 
   const renderItem = useCallback(
-    (item: GameMatchDto) => {
+    (item: GameMatchPageDto) => {
       const status = getStatusText(item.isEnabled);
 
       return (
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 44,
+    height: 40,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',

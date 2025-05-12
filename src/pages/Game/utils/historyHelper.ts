@@ -1,4 +1,5 @@
-import { HistoryRecord, BetChoice, BetChoiceMap } from '../types';
+import { HistoryRecord } from '../types/CBtypes';
+import { BetChoice, BetChoiceMap } from '../types/common';
 import { GameInningDto, GamePointDto, GameRoundDto } from '../../../interface/Game';
 
 /**

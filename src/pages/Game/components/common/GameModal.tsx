@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { View, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import CustomText from '../../../components/CustomText';
-import { BetChoice, BetChoiceMap } from '../types';
+import { BetChoice, BetChoiceMap } from '../../types/common';
+import CustomText from '../../../../components/CustomText';
 
 interface GameModalProps {
   visible: boolean;

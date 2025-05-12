@@ -1,15 +1,19 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Image, Text } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from '../../hooks/useTranslation';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
+import { MemberBenefits } from './components/MemberBenefits';
+import { PointsCard } from './components/PointsCard';
+import { ActionArea } from './components/ActionArea';
+import useFocusRefresh from '../../hooks/useFocusRefresh';
 import CustomText from '../../components/CustomText';
 
 export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
   const { t } = useTranslation();
-  const { user, isLoggedIn, logout } = useAuth();
+  const { user, isLoggedIn, logout, checkUserStatus } = useAuth();
 
   const handleLoginPress = useCallback(() => {
     navigation.navigate('Auth');
@@ -30,6 +34,10 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
   const handleLogoutPress = useCallback(async () => {
     await logout();
   }, [logout]);
+
+  const handleMyPoints = useCallback(() => {
+    navigation.navigate('MyPoints');
+  }, [navigation]);
 
   // 列表项组件
   const MenuItem = useCallback(
@@ -73,46 +81,44 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
             />
           </View>
           <View style={styles.userInfo}>
-            <CustomText style={styles.userName}>{user?.name || 'Ika Puspita Sari'}</CustomText>
-            <CustomText style={styles.userHandle}>@{user?.name || 'ikapuspitasari8'}</CustomText>
+            <Text style={styles.userName}>{user?.name || 'User'}</Text>
+            <Text style={styles.userHandle}>{user?.code || 'code'}</Text>
           </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress}>
-            <Icon name="exit-to-app" size={24} color="#fff" />
-          </TouchableOpacity>
+          <View style={styles.settingsContainer}>
+            <TouchableOpacity style={styles.settingsButton} onPress={handleSettingsPress}>
+              <Icon name="settings" size={24} color="#fff" />
+              <Text style={styles.settingsText}>{t('settings.settings')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.settingsButton} onPress={handleLogoutPress}>
+              <Icon name="exit-to-app" size={24} color="#fff" />
+              <Text style={styles.settingsText}>{t('my.loginout')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        {/*
-        <View style={styles.membershipCardWrapper}>
-          <View style={styles.membershipCard}>
-            <CustomText style={styles.membershipLabel}>{t('my.membershipBenefits')}</CustomText>
-          </View>
-        </View> */}
 
-        <View style={styles.menuContainer}>
-          {/* <MenuItem icon="history" title={t('my.historyRecord')} onPress={handleHistoryPress} /> */}
-          <MenuItem icon="playlist-play" title={t('my.myGames')} onPress={handleMyGames} />
+        <View style={styles.cardContainer}>
+          {user && <MemberBenefits user={user} navigation={navigation} />}
+          {user && <PointsCard user={user} onPointsPress={handleMyPoints} />}
+          <ActionArea navigation={navigation} />
+          <View style={styles.menuContainer}>
+            {/* <MenuItem icon="history" title={t('my.historyRecord')} onPress={handleHistoryPress} /> */}
+            <MenuItem icon="playlist-play" title={t('my.myGames')} onPress={handleMyGames} />
+          </View>
         </View>
       </>
     ),
-    [user, handleMyGames, handleLogoutPress, MenuItem, t],
+    [user, handleMyGames, handleLogoutPress, MenuItem, t, navigation, handleSettingsPress, handleMyPoints],
   );
 
+  useFocusRefresh(() => {
+    checkUserStatus();
+  });
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="default" />
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleSettingsPress}>
-            <Icon name="menu" size={24} color="#fff" />
-          </TouchableOpacity>
-          {/* <TouchableOpacity>
-            <Icon name="notifications" size={24} color="#fff" />
-          </TouchableOpacity> */}
-        </View>
-
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {isLoggedIn ? renderLoggedIn() : renderNotLoggedIn()}
-        </ScrollView>
-      </View>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {isLoggedIn ? renderLoggedIn() : renderNotLoggedIn()}
+      </ScrollView>
     </SafeAreaView>
   );
 });
@@ -123,20 +129,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#6c5ce7',
     paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f3fe',
-  },
-  header: {
-    backgroundColor: '#6c5ce7',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  settingsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settingsButton: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 12,
+  },
+  settingsText: {
+    color: '#fff',
+    fontSize: 14,
   },
   content: {
     flex: 1,
+    backgroundColor: '#f5f3fe',
   },
   // 未登录状态的样式
   notLoggedInContainer: {
@@ -167,7 +177,8 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     backgroundColor: '#6c5ce7',
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 30,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -194,39 +205,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(255, 255, 255, 0.8)',
   },
-  // membershipCardWrapper: {
-  //   marginTop: -40,
-  //   marginHorizontal: 15,
-  //   zIndex: 1,
-  // },
-  // membershipCard: {
-  //   backgroundColor: '#fff',
-  //   borderRadius: 15,
-  //   padding: 20,
-  //   shadowColor: '#000',
-  //   shadowOffset: { width: 0, height: 2 },
-  //   shadowOpacity: 0.1,
-  //   shadowRadius: 8,
-  //   elevation: 5,
-  // },
-
-  // membershipLabel: {
-  //   fontSize: 16,
-  //   fontWeight: 'bold',
-  //   color: '#333',
-  // },
-  logoutButton: {
-    padding: 8,
+  cardContainer: {
+    backgroundColor: '#f5f3fe',
   },
-  // 列表模块样式
   menuContainer: {
     backgroundColor: '#fff',
     borderRadius: 15,
+    marginHorizontal: 10,
+    marginBottom: 10,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#f5f5f5',

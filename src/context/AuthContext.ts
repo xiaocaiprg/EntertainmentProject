@@ -7,6 +7,7 @@ export interface AuthContextType {
   initCheckLogin: boolean;
   login: (params: UserParams) => Promise<boolean>;
   logout: () => Promise<void>;
+  checkUserStatus: () => Promise<void>;
 }
 
 export const AuthContext = React.createContext<AuthContextType>({
@@ -15,4 +16,5 @@ export const AuthContext = React.createContext<AuthContextType>({
   initCheckLogin: true,
   login: async () => false,
   logout: async () => {},
+  checkUserStatus: async () => {},
 });

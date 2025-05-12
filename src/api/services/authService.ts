@@ -5,6 +5,7 @@ import { ApiResponse } from '../../interface/IModuleProps';
 export const PATH = {
   LOGIN: 'haiyang/business/login',
   LOGIN_STATUS: 'haiyang/business/token',
+  CHANGE_PASSWORD: 'haiyang/business/password/change',
 };
 
 export const userlogin = (params: UserParams): Promise<UserResult> => {
@@ -23,6 +24,15 @@ export const getUserStatus = (): Promise<UserResult> => {
       return res.data;
     } else {
       throw new Error(res.msg || '获取用户信息失败');
+    }
+  });
+};
+export const changePassword = (password: string): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.CHANGE_PASSWORD, { password }).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
     }
   });
 };

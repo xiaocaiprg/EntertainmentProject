@@ -60,33 +60,33 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
       Alert.alert('提示', '请输入有效的出资金额');
       return;
     }
-
     const amountValue = parseFloat(amount);
     const availableAmount = matchDetail?.availableAmount || 0;
-
     if (amountValue > availableAmount) {
       Alert.alert('提示', '出资金额不能超过可出资金额');
       return;
     }
 
     // 校验出资额必须为10000的倍数
-    if (amountValue % 10000 !== 0) {
-      Alert.alert('提示', '出资金额必须为10000的倍数');
+    if (amountValue % 100 !== 0) {
+      Alert.alert('提示', '出资金额必须为100的倍数');
       return;
     }
 
     setSubmitting(true);
-    const result = await createContribution({
-      matchId,
-      amount: amountValue,
-    });
-    if (result) {
-      setMyContribution(result);
-      setAmount('');
-      fetchChallengeDetail();
-      Alert.alert('成功', '出资成功！');
-    } else {
-      Alert.alert('错误', '出资失败，请稍后重试');
+    try {
+      const result = await createContribution({
+        matchId,
+        amount: amountValue,
+      });
+      if (result) {
+        setMyContribution(result);
+        setAmount('');
+        fetchChallengeDetail();
+        Alert.alert('成功', '出资成功！');
+      }
+    } catch (error: any) {
+      Alert.alert('错误', error?.message);
     }
     setSubmitting(false);
   }, [amount, matchDetail, matchId, fetchChallengeDetail]);
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 44,
+    height: 40,
     backgroundColor: '#fff',
     paddingHorizontal: 12,
     borderBottomWidth: 1,
@@ -319,6 +319,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 15,
     backgroundColor: '#f5f5f5',
+    marginTop: 5,
   },
   amountHint: {
     marginVertical: 4,

@@ -20,12 +20,12 @@ export const ChallengeDetailCard: React.FC<ChallengeDetailCardProps> = React.mem
   return (
     <View style={styles.detailCard}>
       <CustomText style={styles.detailCardTitle}>{t('fundraisingChallenge.challengeDetails')}</CustomText>
+      <View style={styles.detailItem}>
+        <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.challengeName')}:</CustomText>
+        <CustomText style={styles.detailValue}>{matchDetail.name || '-'}</CustomText>
+      </View>
       <View style={styles.detailRow}>
         <View style={styles.detailColumn}>
-          <View style={styles.detailItem}>
-            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.challengeName')}:</CustomText>
-            <CustomText style={styles.detailValue}>{matchDetail.name || '-'}</CustomText>
-          </View>
           <View style={styles.detailItem}>
             <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.time')}:</CustomText>
             <CustomText style={styles.detailValue}>{matchDetail.gameDate || '-'}</CustomText>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontSize: 14,
     color: '#999',
-    width: 70,
+    width: 80,
   },
   detailValue: {
     fontSize: 14,

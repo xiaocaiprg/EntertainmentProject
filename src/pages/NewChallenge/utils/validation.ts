@@ -21,16 +21,6 @@ export const validateChallengeParams = (
   if (params.principal === undefined || params.principal <= 0 || params.principal % 10000 !== 0) {
     return { isValid: false, errorMessage: '请输入有效的本金金额(需要10000的倍数)' };
   }
-  if (
-    params.contriAmount === undefined ||
-    params.contriAmount < 0 ||
-    (params.contriAmount > 0 && params.contriAmount % 10000 !== 0)
-  ) {
-    return { isValid: false, errorMessage: '请输入有效的出资额(需要10000的倍数)' };
-  }
-  if (params.contriAmount > params.principal) {
-    return { isValid: false, errorMessage: '出资额不能大于本金' };
-  }
   return { isValid: true };
 };
 

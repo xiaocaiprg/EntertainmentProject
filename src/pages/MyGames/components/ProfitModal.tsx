@@ -17,17 +17,36 @@ interface ProfitModalProps {
 export const ProfitModal = React.memo((props: ProfitModalProps) => {
   const { visible, onClose, profit, loading = false } = props;
   const { t } = useTranslation();
-
-  const renderPersonMyGames = useCallback(
+  const renderInvestCompanyProfit = useCallback(
     (profitData: GameMatchProfitDto) => {
-      if (!profitData.personProfitDtoList || profitData.personProfitDtoList.length === 0) {
+      if (!profitData.investCompanyProfitDtoList || profitData.investCompanyProfitDtoList.length === 0) {
         return null;
       }
       return (
         <>
           <View style={styles.divider} />
-          <CustomText style={styles.sectionTitle}>{t('myGames.investmentCompanyProfitDetails')}</CustomText>
-          {profitData.personProfitDtoList.map((person, index) => (
+          <CustomText style={styles.sectionTitle}>{t('myGames.investCompanyProfitDetails')}</CustomText>
+          {profitData.investCompanyProfitDtoList.map((company, index) => (
+            <View key={index} style={styles.profitItem}>
+              <CustomText style={styles.profitLabel}>{company.name}</CustomText>
+              <CustomText style={styles.profitValue}>{company.profitStr}</CustomText>
+            </View>
+          ))}
+        </>
+      );
+    },
+    [t],
+  );
+  const renderInvestPersonMyGames = useCallback(
+    (profitData: GameMatchProfitDto) => {
+      if (!profitData.investPersonProfitDtoList || profitData.investPersonProfitDtoList.length === 0) {
+        return null;
+      }
+      return (
+        <>
+          <View style={styles.divider} />
+          <CustomText style={styles.sectionTitle}>{t('myGames.investPersonProfitDetails')}</CustomText>
+          {profitData.investPersonProfitDtoList.map((person, index) => (
             <View key={index} style={styles.profitItem}>
               <CustomText style={styles.profitLabel}>{person.investPersonName}</CustomText>
               <CustomText style={styles.profitValue}>{person.profitStr}</CustomText>
@@ -38,7 +57,6 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     },
     [t],
   );
-
   const renderDocCompanyProfit = useCallback(
     (profitData: GameMatchProfitDto) => {
       if (!profitData.docCompanyProfitDtoList || profitData.docCompanyProfitDtoList.length === 0) {
@@ -50,7 +68,7 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           <CustomText style={styles.sectionTitle}>{t('myGames.companyProfitDetails')}</CustomText>
           {profitData.docCompanyProfitDtoList.map((company, index) => (
             <View key={index} style={styles.profitItem}>
-              <CustomText style={styles.profitLabel}>{company.companyName}</CustomText>
+              <CustomText style={styles.profitLabel}>{company.name}</CustomText>
               <CustomText style={styles.profitValue}>{company.profitStr}</CustomText>
             </View>
           ))}
@@ -82,14 +100,12 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     return (
       <View style={styles.profitContent}>
         <View style={styles.profitItem}>
-          <CustomText style={styles.profitLabel}>{`${t('myGames.docCompany')}`}</CustomText>
-          <CustomText style={styles.profitValue}>{profit.docCompanyProfitStr}</CustomText>
+          <CustomText style={styles.profitLabel}>{`${t('myGames.investCompany')}`}</CustomText>
+          <CustomText style={styles.profitValue}>{profit.investCompanyProfitStr}</CustomText>
         </View>
         <View style={styles.profitItem}>
-          <CustomText style={styles.profitLabel}>{`${t('myGames.investCompany')}:${
-            profit.investCompanyName
-          }`}</CustomText>
-          <CustomText style={styles.profitValue}>{profit.investCompanyProfitStr}</CustomText>
+          <CustomText style={styles.profitLabel}>{`${t('myGames.docCompany')}`}</CustomText>
+          <CustomText style={styles.profitValue}>{profit.docCompanyProfitStr}</CustomText>
         </View>
         <View style={styles.profitItem}>
           <CustomText style={styles.profitLabel}>{`${t('myGames.operationCompany')}:${
@@ -103,11 +119,12 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           }`}</CustomText>
           <CustomText style={styles.profitValue}>{profit.playCompanyProfitStr}</CustomText>
         </View>
-        {renderPersonMyGames(profit)}
+        {renderInvestCompanyProfit(profit)}
+        {renderInvestPersonMyGames(profit)}
         {renderDocCompanyProfit(profit)}
       </View>
     );
-  }, [loading, profit, renderPersonMyGames, renderDocCompanyProfit, t]);
+  }, [loading, profit, renderInvestPersonMyGames, renderDocCompanyProfit, renderInvestCompanyProfit, t]);
 
   return (
     <SlideModal visible={visible} onClose={onClose} title={t('myGames.profitDetails')}>

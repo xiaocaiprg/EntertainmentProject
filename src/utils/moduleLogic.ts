@@ -44,41 +44,143 @@ export const availableModules: ModuleConfig[] = [
     icon: 'swap-horiz',
     backgroundColor: '#0984e3',
   },
+  {
+    id: '7',
+    title: 'modules.pitcher_ranking',
+    type: ModuleType.PITCHER_RANKING,
+    icon: 'leaderboard',
+    backgroundColor: '#e84393',
+  },
+  {
+    id: '8',
+    title: 'modules.createRace',
+    type: ModuleType.CREATE_RACE,
+    icon: 'sports-score',
+    backgroundColor: '#ff6b81',
+  },
+  {
+    id: '9',
+    title: 'modules.allRace',
+    type: ModuleType.ALL_RACE,
+    icon: 'emoji-events',
+    backgroundColor: '#9b59b6',
+  },
+  {
+    id: '10',
+    title: 'modules.racePoolList',
+    type: ModuleType.RACE_POOL_LIST,
+    icon: 'attach-money',
+    backgroundColor: '#00cec9',
+  },
 ];
 
 // 定义角色到模块的映射
 export const roleModuleMappings: RoleModuleMapping[] = [
   {
     role: 'INVESTMENT_ADMIN',
-    moduleTypes: [ModuleType.CHALLENGE_NEW, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHALLENGE_NEW,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'INVESTOR',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.FUNDRAISING_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.FUNDRAISING_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'RECORDER_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'RECORDER',
-    moduleTypes: [ModuleType.CHALLENGE_EXISTING, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHALLENGE_EXISTING,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'PLAY_ADMIN',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'PLAYPERSON',
-    moduleTypes: [ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'OPERATION_ADMIN',
-    moduleTypes: [ModuleType.CHANGE_RECORDER_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHANGE_RECORDER_CHALLENGE,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
   {
     role: 'OPERATIONPERSON',
-    moduleTypes: [ModuleType.CHANGE_RECORDER_CHALLENGE, ModuleType.ALL_CHALLENGE, ModuleType.TURNOVER_QUERY],
+    moduleTypes: [
+      ModuleType.CHANGE_RECORDER_CHALLENGE,
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
+  },
+  {
+    role: 'ADMIN',
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.CREATE_RACE,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
+  },
+  {
+    role: 'VISITOR',
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
   },
 ];
 

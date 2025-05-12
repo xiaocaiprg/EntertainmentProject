@@ -31,15 +31,6 @@ export const isAndroid = (): boolean => {
 };
 
 /**
- * 获取页面头部高度（包含状态栏）
- * @param {number} headerHeight 页面头部高度（不含状态栏）
- * @returns {number} 总高度
- */
-export const getHeaderTotalHeight = (headerHeight: number = 60): number => {
-  return headerHeight + getStatusBarHeight();
-};
-
-/**
  * 获取当前设备方向
  * @returns {string} 'portrait' | 'landscape'
  */

@@ -42,11 +42,12 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
         <CustomText style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</CustomText>
         {selectedContribution.map((item, index) => (
           <View key={`${item.id}-${index}`} style={styles.contributionContent}>
-            <CustomText style={styles.contributionName}>
-              {t('fundraisingChallenge.contributor')}: {item.investPersonName}
-            </CustomText>
+            <CustomText style={styles.contributionName}>{item.investPersonName}</CustomText>
             <CustomText style={styles.contributionAmount}>
               {t('fundraisingChallenge.amount')}: {item.amount}
+            </CustomText>
+            <CustomText style={styles.contributionAmount}>
+              {t('fundraisingChallenge.contriRate')}: {item.contriRateStr}
             </CustomText>
           </View>
         ))}
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   contributionContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 8,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#f5f5f5',
     marginBottom: 2,

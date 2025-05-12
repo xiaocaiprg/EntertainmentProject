@@ -2,15 +2,17 @@ import React, { useCallback } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { STATUS_BAR_HEIGHT } from '../../../utils/platform';
-import CustomText from '../../../components/CustomText';
+import { STATUS_BAR_HEIGHT } from '../../../../utils/platform';
+import CustomText from '../../../../components/CustomText';
 
 interface GameHeaderProps {
   title: string;
   navigation?: StackNavigationProp<any>;
 }
 
-export const GameHeader: React.FC<GameHeaderProps> = React.memo(({ title, navigation }) => {
+export const GameHeader: React.FC<GameHeaderProps> = React.memo((props) => {
+  const { title, navigation } = props;
+
   const handleGoBack = useCallback(() => {
     navigation?.goBack();
   }, [navigation]);

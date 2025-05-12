@@ -1,6 +1,16 @@
-import React, { useCallback } from 'react';
-import { View, StyleSheet, Modal, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import {
+  View,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  ActivityIndicator,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
+import { mergeStyles } from '../utils/styles';
 import CustomText from './CustomText';
 
 interface ConfirmModalProps {
@@ -13,6 +23,7 @@ interface ConfirmModalProps {
   onConfirm?: () => void;
   isProcessing?: boolean;
   customContent?: React.ReactNode;
+  style?: Partial<Record<keyof typeof styles, ViewStyle | TextStyle>>;
 }
 
 export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
@@ -27,7 +38,11 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
     onConfirm,
     isProcessing = false,
     customContent,
+    style,
   } = props;
+
+  // 使用mergeStyles合并样式
+  const mergedStyles = useMemo(() => mergeStyles(styles, style), [style]);
 
   // 处理背景点击，阻止事件冒泡
   const handleModalPress = useCallback((e: any) => {
@@ -37,38 +52,46 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
       <TouchableWithoutFeedback onPress={onCancel}>
-        <View style={styles.modalContainer}>
+        <View style={mergedStyles.modalContainer}>
           <TouchableWithoutFeedback onPress={handleModalPress}>
-            <View style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <CustomText style={styles.modalTitle}>{title}</CustomText>
+            <View style={mergedStyles.modalContent}>
+              <View style={mergedStyles.modalHeader}>
+                <CustomText style={mergedStyles.modalTitle}>{title}</CustomText>
               </View>
-              <View style={styles.modalBody}>
-                <CustomText style={styles.modalMessage}>{message}</CustomText>
-                {customContent && <View style={styles.customContent}>{customContent}</View>}
+              <View style={mergedStyles.modalBody}>
+                <CustomText style={mergedStyles.modalMessage}>{message}</CustomText>
+                {customContent && <View style={mergedStyles.customContent}>{customContent}</View>}
               </View>
-              <View style={styles.modalFooter}>
+              <View style={mergedStyles.modalFooter}>
                 {onCancel && (
                   <TouchableOpacity
-                    style={[styles.modalButton, styles.cancelButton, isProcessing && styles.disabledButton]}
+                    style={[
+                      mergedStyles.modalButton,
+                      mergedStyles.cancelButton,
+                      isProcessing && mergedStyles.disabledButton,
+                    ]}
                     onPress={onCancel}
                     disabled={isProcessing}
                   >
-                    <CustomText style={[styles.cancelButtonText, isProcessing && styles.disabledText]}>
+                    <CustomText style={[mergedStyles.cancelButtonText, isProcessing && mergedStyles.disabledText]}>
                       {cancelText}
                     </CustomText>
                   </TouchableOpacity>
                 )}
                 {onConfirm && (
                   <TouchableOpacity
-                    style={[styles.modalButton, styles.confirmButton, isProcessing && styles.disabledButton]}
+                    style={[
+                      mergedStyles.modalButton,
+                      mergedStyles.confirmButton,
+                      isProcessing && mergedStyles.disabledButton,
+                    ]}
                     onPress={onConfirm}
                     disabled={isProcessing}
                   >
                     {isProcessing ? (
                       <ActivityIndicator size="small" color="#fff" />
                     ) : (
-                      <CustomText style={[styles.confirmButtonText, isProcessing && styles.disabledText]}>
+                      <CustomText style={[mergedStyles.confirmButtonText, isProcessing && mergedStyles.disabledText]}>
                         {confirmText}
                       </CustomText>
                     )}

@@ -8,18 +8,14 @@ const PATH = {
   CONTRIBUTION_DELETE: 'haiyang/contribution/delete',
 };
 
-export const createContribution = (params: ContributionCreateParams): Promise<ContributionDto | null> => {
-  return post<ApiResponse<ContributionDto>>(PATH.CONTRIBUTION_CREATE, params)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
+export const createContribution = (params: ContributionCreateParams): Promise<ContributionDto> => {
+  return post<ApiResponse<ContributionDto>>(PATH.CONTRIBUTION_CREATE, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };
 
 export const getContributionDetail = (matchId: number): Promise<ContributionDto | null> => {
