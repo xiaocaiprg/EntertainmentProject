@@ -129,7 +129,6 @@ export const en = {
     detail: 'Challenge Details',
     endChallenge: 'End Challenge',
     endSuccess: 'Challenge ended successfully',
-    endFailed: 'Operation failed, please try again',
     confirmEnd: 'Confirm End Challenge',
     confirmEndMessage: 'Are you sure you want to end this challenge? This action cannot be undone.',
     confirmEndAction: 'Confirm End',
@@ -142,6 +141,15 @@ export const en = {
     recorder: 'Recorder',
     waterProfit: 'WaterProfit',
     turnover: 'Turnover',
+    statisticsInfo: 'Statistics',
+    totalCount: 'Total Count',
+    totalWinCount: 'Total Wins',
+    totalLoseCount: 'Total Losses',
+    hitRate: 'Hit Rate',
+    bankerWinCount: 'Banker Wins',
+    bankerLoseCount: 'Banker Losses',
+    dealerWinCount: 'Dealer Wins',
+    dealerLoseCount: 'Dealer Losses',
   },
 
   // Round Detail

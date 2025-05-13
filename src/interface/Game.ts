@@ -23,7 +23,7 @@ export interface GameMatchPageDto {
   docPersonCode?: string;
   docPersonName?: string;
   gameDate?: string;
-  id?: number;
+  id: number;
   baseNumber: number;
   createTime?: string;
   isEnabled: number;
@@ -58,7 +58,6 @@ export interface ProfitDto {
 }
 
 export interface PersonProfitDto {
-  id?: number;
   investPersonCode?: string;
   investPersonName?: string;
   matchId: number;
@@ -66,12 +65,12 @@ export interface PersonProfitDto {
   profitStr: string;
 }
 export interface GameMatchProfitDto {
-  docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfit?: number;
+  docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfitStr?: string;
   investCompanyProfit?: number;
-  investCompanyProfitStr?: string;
   investCompanyProfitDtoList?: ProfitDto[];
+  investCompanyProfitStr?: string;
   investPersonProfitDtoList?: PersonProfitDto[];
   operationCompanyCode?: string;
   operationCompanyName?: string;
@@ -81,6 +80,20 @@ export interface GameMatchProfitDto {
   playCompanyName?: string;
   playCompanyProfit?: number;
   playCompanyProfitStr?: string;
+  racePoolProfit?: ProfitDto;
+}
+export interface GameMatchStatisticDto {
+  bankerLoseCount?: number;
+  bankerWinCount?: number;
+  dealerLoseCount?: number;
+  dealerWinCount?: number;
+  hitRate?: number;
+  hitRateStr?: string;
+  profit?: number;
+  totalCount?: number;
+  totalLoseCount?: number;
+  totalWinCount?: number;
+  turnOver?: number;
 }
 
 export interface GameMatchDto {
@@ -113,15 +126,18 @@ export interface GameMatchDto {
   roundList?: GameRoundDto[];
   turnOver?: number;
   turnOverStr?: string;
+  gameMatchStatisticDto?: GameMatchStatisticDto;
 }
 
 export interface GameRoundDto {
   addressInfoId?: number;
   addressName?: string;
+  baseNumber: number;
   createTime?: string;
   docPersonCode?: string;
   docPersonName?: string;
   faultGameInningDtoList?: GameInningDto[];
+  gameInningDto: GameInningDto;
   gamePointDtoList?: GamePointDto[];
   id: number;
   investPersonCode?: string;
@@ -141,9 +157,6 @@ export interface GameRoundDto {
   totalTurnOverStr: string;
   turnOver: number;
   turnOverStr: string;
-  gameInningDto: GameInningDto;
-  baseNumber: number;
-  playRuleCode?: string;
 }
 export interface GamePointDto {
   betNumber: number;

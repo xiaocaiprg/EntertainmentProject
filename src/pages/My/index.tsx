@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Image, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from '../../hooks/useTranslation';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { MemberBenefits } from './components/MemberBenefits';
+import CustomText from '../../components/CustomText';
 import { PointsCard } from './components/PointsCard';
 import { ActionArea } from './components/ActionArea';
 import useFocusRefresh from '../../hooks/useFocusRefresh';
@@ -45,7 +46,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         <View style={styles.menuIconContainer}>
           <Icon name={icon} size={24} color="#6c5ce7" />
         </View>
-        <Text style={styles.menuItemText}>{title}</Text>
+        <CustomText style={styles.menuItemText}>{title}</CustomText>
         <Icon name="chevron-right" size={24} color="#bdc3c7" />
       </TouchableOpacity>
     ),
@@ -57,9 +58,9 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     () => (
       <View style={styles.notLoggedInContainer}>
         <FontAwesome name="user-circle" size={100} color="#bdc3c7" />
-        <Text style={styles.loginText}>{t('auth.loginToViewProfile')}</Text>
+        <CustomText style={styles.loginText}>{t('auth.loginToViewProfile')}</CustomText>
         <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-          <Text style={styles.loginButtonText}>{t('auth.login')}</Text>
+          <CustomText style={styles.loginButtonText}>{t('auth.login')}</CustomText>
         </TouchableOpacity>
       </View>
     ),
@@ -80,17 +81,17 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
             />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.name || 'User'}</Text>
-            <Text style={styles.userHandle}>{user?.code || 'code'}</Text>
+            <CustomText style={styles.userName}>{user?.name || 'User'}</CustomText>
+            <CustomText style={styles.userHandle}>{user?.code || 'code'}</CustomText>
           </View>
           <View style={styles.settingsContainer}>
             <TouchableOpacity style={styles.settingsButton} onPress={handleSettingsPress}>
               <Icon name="settings" size={24} color="#fff" />
-              <Text style={styles.settingsText}>{t('settings.settings')}</Text>
+              <CustomText style={styles.settingsText}>{t('settings.settings')}</CustomText>
             </TouchableOpacity>
             <TouchableOpacity style={styles.settingsButton} onPress={handleLogoutPress}>
               <Icon name="exit-to-app" size={24} color="#fff" />
-              <Text style={styles.settingsText}>{t('my.loginout')}</Text>
+              <CustomText style={styles.settingsText}>{t('my.loginout')}</CustomText>
             </TouchableOpacity>
           </View>
         </View>

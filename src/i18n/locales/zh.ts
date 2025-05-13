@@ -129,7 +129,6 @@ export const zh = {
     detail: '挑战详情',
     endChallenge: '结束挑战',
     endSuccess: '挑战已成功结束',
-    endFailed: '操作失败，请重试',
     confirmEnd: '确认结束挑战',
     confirmEndMessage: '确定要结束该挑战吗？此操作不可撤销。',
     confirmEndAction: '确认结束',
@@ -142,6 +141,15 @@ export const zh = {
     recorder: '记录人',
     waterProfit: '上下水',
     turnover: '转码',
+    statisticsInfo: '统计信息',
+    totalCount: '总数',
+    totalWinCount: '总胜',
+    totalLoseCount: '总负',
+    hitRate: '命中率',
+    bankerWinCount: '庄赢',
+    bankerLoseCount: '庄输',
+    dealerWinCount: '闲赢',
+    dealerLoseCount: '闲输',
   },
 
   // 场次详情

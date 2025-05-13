@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTranslation } from '../../../../hooks/useTranslation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import CustomText from '../../../../components/CustomText';
 
 interface ActionAreaProps {
   navigation: any;
@@ -22,11 +23,11 @@ export const ActionArea = React.memo((props: ActionAreaProps) => {
     <View style={styles.ActionAreaWrapper}>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleTransferPress}>
         <Icon name="sync-alt" size={24} color="#6c5ce7" />
-        <Text style={styles.ActionAreaItemLabel}>{t('my.transfer')}</Text>
+        <CustomText style={styles.ActionAreaItemLabel}>{t('my.transfer')}</CustomText>
       </TouchableOpacity>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleFrozenPointsPress}>
         <Icon name="manage-search" size={24} color="#6c5ce7" />
-        <Text style={styles.ActionAreaItemLabel}>{t('my.frozenPoints')}</Text>
+        <CustomText style={styles.ActionAreaItemLabel}>{t('my.frozenPoints')}</CustomText>
       </TouchableOpacity>
     </View>
   );
