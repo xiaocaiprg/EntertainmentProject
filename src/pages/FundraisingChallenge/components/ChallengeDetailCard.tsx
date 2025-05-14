@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { GameMatchDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
 import { useTranslation } from '../../../hooks/useTranslation';
-
+import CustomText from '../../../components/CustomText';
 interface ChallengeDetailCardProps {
   matchDetail: GameMatchDto | null;
 }
@@ -18,38 +18,42 @@ export const ChallengeDetailCard: React.FC<ChallengeDetailCardProps> = React.mem
 
   return (
     <View style={styles.detailCard}>
-      <Text style={styles.detailCardTitle}>{t('fundraisingChallenge.challengeDetails')}</Text>
+      <CustomText style={styles.detailCardTitle}>{t('fundraisingChallenge.challengeDetails')}</CustomText>
       <View style={styles.detailItem}>
-        <Text style={styles.detailLabel}>{t('fundraisingChallenge.challengeName')}:</Text>
-        <Text style={styles.detailValue}>{matchDetail.name || '-'}</Text>
+        <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.challengeName')}:</CustomText>
+        <CustomText style={styles.detailValue}>{matchDetail.name || '-'}</CustomText>
       </View>
       <View style={styles.detailRow}>
         <View style={styles.detailColumn}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>{t('fundraisingChallenge.time')}:</Text>
-            <Text style={styles.detailValue}>{matchDetail.gameDate || '-'}</Text>
+            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.time')}:</CustomText>
+            <CustomText style={styles.detailValue}>{matchDetail.gameDate || '-'}</CustomText>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>{t('fundraisingChallenge.location')}:</Text>
-            <Text style={styles.detailValue}>{matchDetail.addressName || '-'}</Text>
+            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.location')}:</CustomText>
+            <CustomText style={styles.detailValue}>{matchDetail.addressName || '-'}</CustomText>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>{t('fundraisingChallenge.pitcher')}:</Text>
-            <Text style={styles.detailValue}>{matchDetail.playPersonName || '-'}</Text>
+            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.pitcher')}:</CustomText>
+            <CustomText style={styles.detailValue}>{matchDetail.playPersonName || '-'}</CustomText>
           </View>
         </View>
         <View style={styles.detailColumnRight}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>{t('fundraisingChallenge.principal')}:</Text>
-            <Text style={[styles.detailValue, styles.amountValue]}>{matchDetail.principal || '-'}</Text>
+            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.principal')}:</CustomText>
+            <CustomText style={[styles.detailValue, styles.amountValue]}>{matchDetail.principal || '-'}</CustomText>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>{t('fundraisingChallenge.raisedAmount')}:</Text>
-            <Text style={[styles.detailValue, styles.amountValue]}>{matchDetail.contributedAmount || '-'}</Text>
+            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.raisedAmount')}:</CustomText>
+            <CustomText style={[styles.detailValue, styles.amountValue]}>
+              {matchDetail.contributedAmount || '-'}
+            </CustomText>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>{t('fundraisingChallenge.availableAmount')}:</Text>
-            <Text style={[styles.detailValue, styles.availableAmount]}>{matchDetail.availableAmount || '0'}</Text>
+            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.availableAmount')}:</CustomText>
+            <CustomText style={[styles.detailValue, styles.availableAmount]}>
+              {matchDetail.availableAmount || '0'}
+            </CustomText>
           </View>
         </View>
       </View>
