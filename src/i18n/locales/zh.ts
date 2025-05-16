@@ -32,6 +32,11 @@ export const zh = {
   // 首页
   home: {
     functionMenu: '功能菜单',
+    peakRecordTitle: '最高纪录',
+    challengeGroup: '挑战管理',
+    managementGroup: '数据查看',
+    raceGroup: '比赛管理',
+    hotActivities: '热门活动',
   },
 
   // 模块标题
@@ -306,5 +311,18 @@ export const zh = {
     raceName: '比赛名称',
     active: '激活',
     inactive: '未激活',
+  },
+
+  // 峰值记录
+  peakRecord: {
+    title: '系统最高纪录',
+    gameName: '挑战名称',
+    gameDate: '挑战日期',
+    location: '地点',
+    playRule: '玩法',
+    pitcher: '投手',
+    count: '把数',
+    profit: '上下水',
+    turnOver: '转码',
   },
 };

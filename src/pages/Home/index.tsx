@@ -9,7 +9,7 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { STATUS_BAR_HEIGHT, SCREEN_WIDTH } from '../../utils/platform';
@@ -19,10 +19,13 @@ import { useRole } from '../../hooks/useRole';
 import { getUserAccessibleModules } from '../../utils/moduleLogic';
 import { ModuleType } from '../../interface/Role';
 import { useTranslation } from '../../hooks/useTranslation';
+import LinearGradient from 'react-native-linear-gradient';
+import { PeakRecordPromo } from './components/PeakRecordPromo';
+import { HotActivities } from './components/HotActivities';
 
-const BANNER_HEIGHT = 180;
+const BANNER_HEIGHT = 150;
 const HEADER_HEIGHT = 35;
-const CARD_WIDTH = SCREEN_WIDTH - 40;
+const CARD_WIDTH = SCREEN_WIDTH - 30;
 
 export const HomeScreen = React.memo(() => {
   const { t } = useTranslation();
@@ -41,18 +44,70 @@ export const HomeScreen = React.memo(() => {
       {
         id: 1,
         image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/chess.jpg',
+        title: '精彩对局',
+        subtitle: '参与最新挑战赛事',
       },
       {
         id: 2,
         image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/puzzle.jpg',
+        title: '策略制胜',
+        subtitle: '查看最新玩法规则',
       },
       {
         id: 3,
         image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/macao.jpg',
+        title: '澳门风采',
+        subtitle: '感受独特氛围',
       },
     ],
     [],
   );
+
+  // 功能图标数据
+  const moduleIcons = useMemo(() => {
+    return {
+      [ModuleType.CHALLENGE_NEW]: {
+        icon: 'plus-circle',
+        gradient: ['#4e54c8', '#8f94fb'],
+      },
+      [ModuleType.CHALLENGE_EXISTING]: {
+        icon: 'clipboard-list',
+        gradient: ['#11998e', '#38ef7d'],
+      },
+      [ModuleType.ALL_CHALLENGE]: {
+        icon: 'list-alt',
+        gradient: ['#f46b45', '#eea849'],
+      },
+      [ModuleType.CHANGE_RECORDER_CHALLENGE]: {
+        icon: 'exchange-alt',
+        gradient: ['#614385', '#516395'],
+      },
+      [ModuleType.FUNDRAISING_CHALLENGE]: {
+        icon: 'hand-holding-usd',
+        gradient: ['#fc4a1a', '#f7b733'],
+      },
+      [ModuleType.TURNOVER_QUERY]: {
+        icon: 'search-dollar',
+        gradient: ['#12c2e9', '#c471ed'],
+      },
+      [ModuleType.PITCHER_RANKING]: {
+        icon: 'trophy',
+        gradient: ['#b24592', '#f15f79'],
+      },
+      [ModuleType.CREATE_RACE]: {
+        icon: 'plus-square',
+        gradient: ['#2193b0', '#6dd5ed'],
+      },
+      [ModuleType.ALL_RACE]: {
+        icon: 'flag-checkered',
+        gradient: ['#ee9ca7', '#ffdde1'],
+      },
+      [ModuleType.RACE_POOL_LIST]: {
+        icon: 'coins',
+        gradient: ['#396afc', '#2948ff'],
+      },
+    };
+  }, []);
 
   // 自动轮播效果
   useEffect(() => {
@@ -92,6 +147,10 @@ export const HomeScreen = React.memo(() => {
             <View key={index} style={styles.bannerCardContainer}>
               <View style={styles.bannerCard}>
                 <Image source={{ uri: banner.image }} style={styles.bannerImage} resizeMode="cover" />
+                <View style={styles.bannerTextOverlay}>
+                  <Text style={styles.bannerTitle}>{banner.title}</Text>
+                  <Text style={styles.bannerSubtitle}>{banner.subtitle}</Text>
+                </View>
               </View>
             </View>
           ))}
@@ -162,26 +221,87 @@ export const HomeScreen = React.memo(() => {
 
   // 根据模块配置渲染模块
   const renderModules = useCallback(() => {
+    // 分组模块
+    const moduleGroups = [
+      {
+        title: t('home.challengeGroup'),
+        modules: accessibleModules.filter((m) =>
+          [
+            ModuleType.CHALLENGE_NEW,
+            ModuleType.CHALLENGE_EXISTING,
+            ModuleType.ALL_CHALLENGE,
+            ModuleType.CHANGE_RECORDER_CHALLENGE,
+            ModuleType.FUNDRAISING_CHALLENGE,
+            ModuleType.CREATE_RACE,
+            ModuleType.ALL_RACE,
+            ModuleType.RACE_POOL_LIST,
+          ].includes(m.type),
+        ),
+      },
+      {
+        title: t('home.managementGroup'),
+        modules: accessibleModules.filter((m) =>
+          [ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING].includes(m.type),
+        ),
+      },
+      // {
+      //   title: t('home.raceGroup'),
+      //   modules: accessibleModules.filter((m) =>
+      //     [ModuleType.CREATE_RACE, ModuleType.ALL_RACE, ModuleType.RACE_POOL_LIST].includes(m.type),
+      //   ),
+      // },
+    ];
+
+    // 构建图标名称映射
+    const getIconName = (moduleType: ModuleType) => {
+      const iconMap: Record<ModuleType, string> = {
+        [ModuleType.CHALLENGE_NEW]: 'plus-circle',
+        [ModuleType.CHALLENGE_EXISTING]: 'clipboard-list',
+        [ModuleType.ALL_CHALLENGE]: 'list-alt',
+        [ModuleType.CHANGE_RECORDER_CHALLENGE]: 'exchange-alt',
+        [ModuleType.FUNDRAISING_CHALLENGE]: 'hand-holding-usd',
+        [ModuleType.TURNOVER_QUERY]: 'search-dollar',
+        [ModuleType.PITCHER_RANKING]: 'trophy',
+        [ModuleType.CREATE_RACE]: 'plus-square',
+        [ModuleType.ALL_RACE]: 'flag-checkered',
+        [ModuleType.RACE_POOL_LIST]: 'coins',
+      };
+
+      return iconMap[moduleType] || 'star';
+    };
+
     return (
       <View style={styles.modulesContainer}>
-        <Text style={styles.sectionTitle}>{t('home.functionMenu')}</Text>
-        <View style={styles.moduleGrid}>
-          {accessibleModules.map((module) => (
-            <TouchableOpacity
-              key={module.id}
-              onPress={() => handleModulePress(module.type)}
-              style={styles.moduleWrapper}
-            >
-              <View style={[styles.moduleButton, { backgroundColor: module.backgroundColor }]}>
-                <Icon name={module.icon} size={28} color="#fff" />
+        {moduleGroups.map(
+          (group, groupIndex) =>
+            group.modules.length > 0 && (
+              <View key={groupIndex}>
+                <Text style={styles.groupTitle}>{group.title}</Text>
+                <View style={styles.moduleGrid}>
+                  {group.modules.map((module) => (
+                    <TouchableOpacity
+                      key={module.id}
+                      onPress={() => handleModulePress(module.type)}
+                      style={styles.moduleWrapper}
+                    >
+                      <LinearGradient
+                        colors={moduleIcons[module.type]?.gradient}
+                        style={styles.moduleButton}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                      >
+                        <FontAwesome5 name={getIconName(module.type)} size={20} color="#fff" solid />
+                      </LinearGradient>
+                      <Text style={styles.moduleButtonText}>{t(module.title)}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
-              <Text style={styles.moduleButtonText}>{t(module.title)}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+            ),
+        )}
       </View>
     );
-  }, [accessibleModules, handleModulePress, t]);
+  }, [accessibleModules, handleModulePress, moduleIcons, t]);
 
   // 渲染认证状态相关内容
   const renderAuthContent = useCallback(() => {
@@ -197,16 +317,24 @@ export const HomeScreen = React.memo(() => {
     // 身份验证已完成，且用户未登录，显示登录按钮
     if (!isLoggedIn) {
       return (
-        <TouchableOpacity
+        <LinearGradient
+          colors={['#4e54c8', '#8f94fb']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           style={styles.loginButton}
-          onPress={() => {
-            navigation.navigate('Auth', {
-              returnScreen: 'Home',
-            });
-          }}
         >
-          <Text style={styles.loginButtonText}>{t('common.goLogin')}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Auth', {
+                returnScreen: 'Home',
+              });
+            }}
+            style={styles.loginButtonInner}
+          >
+            <FontAwesome5 name="sign-in-alt" size={20} color="#fff" style={{ marginRight: 10 }} />
+            <Text style={styles.loginButtonText}>{t('common.goLogin')}</Text>
+          </TouchableOpacity>
+        </LinearGradient>
       );
     }
     // 用户已登录，不显示任何内容
@@ -228,13 +356,17 @@ export const HomeScreen = React.memo(() => {
       <StatusBar translucent backgroundColor={THEME_COLORS.primary} barStyle="light-content" />
 
       {/* 固定头部 */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>俊龍娛樂</Text>
-      </View>
+      <LinearGradient colors={['#764ba2', '#667eea']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
+        <View style={styles.headerContent}>
+          <Text style={styles.headerTitle}>俊龍娛樂</Text>
+        </View>
+      </LinearGradient>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {bannerContent()}
         <View style={styles.contentContainer}>
+          <PeakRecordPromo navigation={navigation} />
+          <HotActivities />
           {renderModules()}
           {renderAuthContent()}
         </View>
@@ -246,7 +378,7 @@ export const HomeScreen = React.memo(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f9fa',
   },
   header: {
     position: 'relative',
@@ -255,10 +387,12 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: 'row',
     alignItems: 'center',
+    height: HEADER_HEIGHT + STATUS_BAR_HEIGHT,
+  },
+  headerContent: {
+    flex: 1,
     paddingTop: STATUS_BAR_HEIGHT,
     paddingHorizontal: 20,
-    height: HEADER_HEIGHT + STATUS_BAR_HEIGHT,
-    backgroundColor: THEME_COLORS.primary,
   },
   headerTitle: {
     fontSize: 18,
@@ -267,10 +401,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f9fa',
   },
   contentContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f9fa',
   },
   bannerContainer: {
     position: 'relative',
@@ -297,20 +431,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 16,
+    padding: 10,
     backgroundColor: 'rgba(0,0,0,0.4)',
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
   },
   bannerTitle: {
     color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '600',
     marginBottom: 4,
   },
   bannerSubtitle: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: '500',
   },
   paginationWrap: {
@@ -332,16 +466,20 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginHorizontal: 4,
   },
+  groupTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 10,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: '#333',
-    marginBottom: 15,
-    marginLeft: 15,
-    marginTop: 10,
+    marginBottom: 10,
   },
   modulesContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   moduleGrid: {
     flexDirection: 'row',
@@ -349,8 +487,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   moduleWrapper: {
-    width: '25%',
-    marginBottom: 20,
+    width: 60,
+    marginRight: 10,
+    marginBottom: 10,
     alignItems: 'center',
   },
   moduleButton: {
@@ -360,6 +499,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginBottom: 8,
+    elevation: 3,
   },
   moduleButtonText: {
     color: '#333',
@@ -370,10 +510,13 @@ const styles = StyleSheet.create({
   loginButton: {
     marginHorizontal: 20,
     marginTop: 20,
-    backgroundColor: THEME_COLORS.primary,
+    borderRadius: 25,
+    elevation: 3,
+  },
+  loginButtonInner: {
+    flexDirection: 'row',
     paddingVertical: 14,
     paddingHorizontal: 30,
-    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
   },

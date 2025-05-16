@@ -32,6 +32,11 @@ export const en = {
   // Home
   home: {
     functionMenu: 'Function Menu',
+    peakRecordTitle: 'System Records',
+    challengeGroup: 'Challenge Management',
+    managementGroup: 'System Management',
+    raceGroup: 'Race Related',
+    hotActivities: 'Hot Activities',
   },
 
   // Module Titles
@@ -306,5 +311,19 @@ export const en = {
     raceName: 'Race Name',
     active: 'Active',
     inactive: 'Inactive',
+  },
+
+  // Peak Record
+  peakRecord: {
+    title: 'System Records',
+    gameName: 'Game Name',
+    gameDate: 'Game Date',
+    location: 'Location',
+    playRule: 'Play Rule',
+    pitcher: 'Pitcher',
+    recorder: 'Recorder',
+    count: 'Count',
+    profit: 'Profit',
+    turnOver: 'Turn Over',
   },
 };
