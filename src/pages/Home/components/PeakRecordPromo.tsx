@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { StackNavigationProp } from '@react-navigation/stack';
+import CustomText from '../../../components/CustomText';
 
 interface PeakRecordPromoProps {
   navigation: StackNavigationProp<any>;
@@ -28,7 +29,7 @@ export const PeakRecordPromo = React.memo((props: PeakRecordPromoProps) => {
         <View style={styles.peakRecordContainer}>
           <FontAwesome5 name="crown" size={15} color="#fff" style={styles.peakRecordIcon} />
           <View style={styles.peakRecordTextContainer}>
-            <Text style={styles.peakRecordTitle}>{t('home.peakRecordTitle')}</Text>
+            <CustomText style={styles.peakRecordTitle}>{t('home.peakRecordTitle')}</CustomText>
           </View>
           <FontAwesome5 name="chevron-right" size={15} color="#fff" />
         </View>

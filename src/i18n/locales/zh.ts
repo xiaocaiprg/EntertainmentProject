@@ -311,6 +311,12 @@ export const zh = {
     raceName: '比赛名称',
     active: '激活',
     inactive: '未激活',
+    createPoolTitle: '创建新的奖金池',
+    poolNamePlaceholder: '请输入奖金池名称',
+    poolDescriptionPlaceholder: '请输入奖金池描述 (可选)',
+    submit: '提交',
+    createSuccess: '奖金池创建成功!',
+    enterPoolName: '请输入奖金池名称。',
   },
 
   // 峰值记录

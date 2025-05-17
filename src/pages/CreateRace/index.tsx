@@ -1,14 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
@@ -18,6 +9,7 @@ import { createRace } from '../../api/services/raceService';
 import { RootStackScreenProps } from '../router';
 import { validateRaceParams, formDataToParams } from './utils';
 import { FormData } from './interface/IModuleProps';
+import CustomText from '../../components/CustomText';
 
 // 使用导航堆栈中定义的类型
 type CreateRaceScreenProps = RootStackScreenProps<'CreateRace'>;
@@ -82,7 +74,7 @@ export const CreateRaceScreen: React.FC<CreateRaceScreenProps> = React.memo(({ n
         <TouchableOpacity onPress={handleGoBack}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('createRace.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('createRace.title')}</CustomText>
         <View style={styles.placeholder} />
       </View>
       <CreateRaceForm formData={formData} onChange={handleFormChange} />
@@ -94,7 +86,7 @@ export const CreateRaceScreen: React.FC<CreateRaceScreenProps> = React.memo(({ n
         {loading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={styles.submitButtonText}>{t('common.submit')}</Text>
+          <CustomText style={styles.submitButtonText}>{t('common.submit')}</CustomText>
         )}
       </TouchableOpacity>
     </SafeAreaView>
@@ -104,7 +96,7 @@ export const CreateRaceScreen: React.FC<CreateRaceScreenProps> = React.memo(({ n
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: THEME_COLORS.background,
+    backgroundColor: '#fff',
     paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
   },
   header: {

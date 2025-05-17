@@ -1,5 +1,11 @@
 import { get, post } from '../request';
-import { CreateRaceParams, PageDtoRacePageDto, PageDtoRacePoolPageDto, RaceDetailDto } from '../../interface/Race';
+import {
+  CreateRaceParams,
+  CreateRacePoolParams,
+  PageDtoRacePageDto,
+  PageDtoRacePoolPageDto,
+  RaceDetailDto,
+} from '../../interface/Race';
 import { ApiResponse } from '../../interface/IModuleProps';
 import { QueryParams } from '../../interface/Common';
 
@@ -8,10 +14,20 @@ export const PATH = {
   RACE_LIST: 'haiyang/race/page',
   RACE_DETAIL: 'haiyang/race/',
   RACE_POOL_LIST: 'haiyang/racePool/page',
+  CREATE_RACE_POOL: 'haiyang/racePool/create',
 };
 
 export const createRace = (params: CreateRaceParams): Promise<string> => {
   return post<ApiResponse<string>>(PATH.CREATE_RACE, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
+};
+export const createRacePool = (params: CreateRacePoolParams): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.CREATE_RACE_POOL, params).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {

@@ -304,13 +304,19 @@ export const en = {
 
   // Prize Pool List
   racePoolList: {
-    title: 'Prize Pool List',
-    noData: 'No prize pool data available',
+    title: 'Race Pools',
+    noData: 'No race pools available.',
     amount: 'Prize Amount',
     distributePoints: 'Distribute Points',
     raceName: 'Race Name',
     active: 'Active',
     inactive: 'Inactive',
+    createPoolTitle: 'Create New Race Pool',
+    poolNamePlaceholder: 'Enter pool name',
+    poolDescriptionPlaceholder: 'Enter pool description (optional)',
+    submit: 'Submit',
+    createSuccess: 'Race pool created successfully!',
+    enterPoolName: 'Please enter the race pool name.',
   },
 
   // Peak Record

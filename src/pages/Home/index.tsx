@@ -1,14 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  StatusBar,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -22,6 +13,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import LinearGradient from 'react-native-linear-gradient';
 import { PeakRecordPromo } from './components/PeakRecordPromo';
 import { HotActivities } from './components/HotActivities';
+import CustomText from '../../components/CustomText';
 
 const BANNER_HEIGHT = 150;
 const HEADER_HEIGHT = 35;
@@ -148,8 +140,8 @@ export const HomeScreen = React.memo(() => {
               <View style={styles.bannerCard}>
                 <Image source={{ uri: banner.image }} style={styles.bannerImage} resizeMode="cover" />
                 <View style={styles.bannerTextOverlay}>
-                  <Text style={styles.bannerTitle}>{banner.title}</Text>
-                  <Text style={styles.bannerSubtitle}>{banner.subtitle}</Text>
+                  <CustomText style={styles.bannerTitle}>{banner.title}</CustomText>
+                  <CustomText style={styles.bannerSubtitle}>{banner.subtitle}</CustomText>
                 </View>
               </View>
             </View>
@@ -276,7 +268,7 @@ export const HomeScreen = React.memo(() => {
           (group, groupIndex) =>
             group.modules.length > 0 && (
               <View key={groupIndex}>
-                <Text style={styles.groupTitle}>{group.title}</Text>
+                <CustomText style={styles.groupTitle}>{group.title}</CustomText>
                 <View style={styles.moduleGrid}>
                   {group.modules.map((module) => (
                     <TouchableOpacity
@@ -292,7 +284,7 @@ export const HomeScreen = React.memo(() => {
                       >
                         <FontAwesome5 name={getIconName(module.type)} size={20} color="#fff" solid />
                       </LinearGradient>
-                      <Text style={styles.moduleButtonText}>{t(module.title)}</Text>
+                      <CustomText style={styles.moduleButtonText}>{t(module.title)}</CustomText>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -310,7 +302,7 @@ export const HomeScreen = React.memo(() => {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>{t('common.verifying')}</Text>
+          <CustomText style={styles.loadingText}>{t('common.verifying')}</CustomText>
         </View>
       );
     }
@@ -332,7 +324,7 @@ export const HomeScreen = React.memo(() => {
             style={styles.loginButtonInner}
           >
             <FontAwesome5 name="sign-in-alt" size={20} color="#fff" style={{ marginRight: 10 }} />
-            <Text style={styles.loginButtonText}>{t('common.goLogin')}</Text>
+            <CustomText style={styles.loginButtonText}>{t('common.goLogin')}</CustomText>
           </TouchableOpacity>
         </LinearGradient>
       );
@@ -358,7 +350,7 @@ export const HomeScreen = React.memo(() => {
       {/* 固定头部 */}
       <LinearGradient colors={['#764ba2', '#667eea']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
         <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>俊龍娛樂</Text>
+          <CustomText style={styles.headerTitle}>俊龍娛樂</CustomText>
         </View>
       </LinearGradient>
 

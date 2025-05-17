@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { DatePicker } from '../../../components/DatePicker';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { FormData } from '../interface/IModuleProps';
 import DropdownSelect from '../../../components/DropdownSelect';
 import { ChallengeType } from '../../../interface/Common';
+import CustomText from '../../../components/CustomText';
+import CustomTextInput from '../../../components/CustomTextInput';
 
 interface CreateRaceFormProps {
   formData: FormData;
@@ -53,10 +55,10 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
     >
       <View style={styles.formContainer}>
         <View style={styles.formItem}>
-          <Text style={styles.label}>
-            {t('createRace.name')} <Text style={{ color: '#F91B00' }}>*</Text>
-          </Text>
-          <TextInput
+          <CustomText style={styles.label}>
+            {t('createRace.name')} <CustomText style={{ color: '#F91B00' }}>*</CustomText>
+          </CustomText>
+          <CustomTextInput
             style={styles.input}
             value={formData.name}
             onChangeText={(value) => onChange({ name: value })}
@@ -66,9 +68,9 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
         </View>
 
         <View style={styles.formItem}>
-          <Text style={styles.label}>
-            {t('createRace.beginDate')} <Text style={{ color: '#F91B00' }}>*</Text>
-          </Text>
+          <CustomText style={styles.label}>
+            {t('createRace.beginDate')} <CustomText style={{ color: '#F91B00' }}>*</CustomText>
+          </CustomText>
           <DatePicker
             selectedDate={formData.beginDate ? formData.beginDate : new Date()}
             onDateChange={handleBeginDateChange}
@@ -83,9 +85,9 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
         </View>
 
         <View style={styles.formItem}>
-          <Text style={styles.label}>
-            {t('createRace.endDate')} <Text style={{ color: '#F91B00' }}>*</Text>
-          </Text>
+          <CustomText style={styles.label}>
+            {t('createRace.endDate')} <CustomText style={{ color: '#F91B00' }}>*</CustomText>
+          </CustomText>
           <DatePicker
             selectedDate={formData.endDate ? formData.endDate : new Date()}
             onDateChange={handleEndDateChange}
@@ -100,7 +102,7 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
         </View>
 
         <View style={styles.formItem}>
-          <Text style={styles.label}>{t('createRace.playRuleCode')}</Text>
+          <CustomText style={styles.label}>{t('createRace.playRuleCode')}</CustomText>
           <DropdownSelect
             options={RULE_CODE_OPTIONS}
             selectedValue={formData.playRuleCode}
@@ -123,8 +125,8 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
         </View>
 
         <View style={styles.formItem}>
-          <Text style={styles.label}>{t('createRace.turnOverLimit')}</Text>
-          <TextInput
+          <CustomText style={styles.label}>{t('createRace.turnOverLimit')}</CustomText>
+          <CustomTextInput
             style={styles.input}
             value={formData.turnOverLimit}
             onChangeText={(value) => onChange({ turnOverLimit: value })}
@@ -135,8 +137,8 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
         </View>
 
         <View style={styles.formItem}>
-          <Text style={styles.label}>{t('createRace.description')}</Text>
-          <TextInput
+          <CustomText style={styles.label}>{t('createRace.description')}</CustomText>
+          <CustomTextInput
             style={[styles.input, styles.textArea]}
             value={formData.description}
             onChangeText={(value) => onChange({ description: value })}
@@ -155,6 +157,7 @@ export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {
 const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 0,
+    backgroundColor: '#FAF8F7',
   },
   scrollViewContent: {
     flexGrow: 0,
