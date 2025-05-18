@@ -58,6 +58,7 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
                 <View key={`${item.id}-${index}`} style={styles.contributionItem}>
                   <CustomText style={styles.contributionName}>出资人: {item.investPersonName}</CustomText>
                   <CustomText style={styles.contributionAmount}>金额: {item.amount}</CustomText>
+                  <CustomText style={styles.contributionAmount}>出资比例: {item.contriRateStr}</CustomText>
                 </View>
               ))}
             </ScrollView>

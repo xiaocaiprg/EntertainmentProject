@@ -237,11 +237,10 @@ export const zh = {
   // 在途积分
   frozenPoints: {
     title: '在途积分明细',
-    gameMatch: '关联挑战',
     gameDate: '挑战日期',
+    amount: '冻结积分',
     name: '挑战名称',
-    principal: '挑战本金',
-    playRuleCode: '玩法',
+    playPersonName: '投手',
     noData: '暂无在途积分数据',
   },
 
@@ -254,6 +253,7 @@ export const zh = {
     transferTo: '转积分给',
     personal: '个人',
     company: '公司',
+    pool: '奖金池',
     account: '账号',
     points: '积分数量',
     transfer: '确认转账',
@@ -268,6 +268,9 @@ export const zh = {
     confirmMessage: '转账{{points}}积分,此操作不可撤销,请确认是否继续?',
     success: '转账成功',
     successMessage: '已成功转账{{points}}积分',
+    poolSelect: '选择奖金池',
+    poolSelectPlaceholder: '请选择奖金池',
+    availablePoolPoints: '奖金池已有积分',
   },
 
   // 我的挑战

@@ -16,7 +16,7 @@ interface ChallengeItemProps {
   onPressItem: (item: GameMatchSimpleDto) => void;
 }
 
-const ChallengeItem: React.FC<ChallengeItemProps> = React.memo(({ item, onPressItem }) => {
+const ChallengeItem: React.FC<ChallengeItemProps> = React.memo(({ item, index, onPressItem }) => {
   const statusInfo = getStatusText(item.isEnabled);
 
   return (
@@ -25,6 +25,11 @@ const ChallengeItem: React.FC<ChallengeItemProps> = React.memo(({ item, onPressI
         <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
           {item.name || '-'}
         </CustomText>
+        {index < 3 && (
+          <CustomText style={[styles.itemName, { color: '#F56301' }]} numberOfLines={1} ellipsizeMode="tail">
+            No.{index + 1}
+          </CustomText>
+        )}
         <View style={[styles.statusTag, { backgroundColor: statusInfo.color + '20' }]}>
           <CustomText style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</CustomText>
         </View>
@@ -80,8 +85,8 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
 
   return (
     <View style={styles.listContentContainer}>
-      {challenges.map((challengeItem) => (
-        <ChallengeItem key={String(challengeItem.id)} item={challengeItem} onPressItem={onPressItem} />
+      {challenges.map((challengeItem, index) => (
+        <ChallengeItem key={String(challengeItem.id)} item={challengeItem} index={index} onPressItem={onPressItem} />
       ))}
     </View>
   );

@@ -1,6 +1,6 @@
 import { post } from '../request';
 import { QueryParams } from '../../interface/Common';
-import { PageDtoTransferLogDto, GameMatch, TransferPointParams, PageDtoProfitDto } from '../../interface/Points';
+import { PageDtoTransferLogDto, FrozeningDto, TransferPointParams, PageDtoProfitDto } from '../../interface/Points';
 import { ApiResponse } from '../../interface/IModuleProps';
 
 export const PATH = {
@@ -23,8 +23,8 @@ export const getPointDetail = (params: QueryParams): Promise<PageDtoTransferLogD
       return null;
     });
 };
-export const getFrozenList = (params: QueryParams): Promise<GameMatch[] | null> => {
-  return post<ApiResponse<GameMatch[]>>(PATH.GET_FROZEN_LIST, params)
+export const getFrozenList = (): Promise<FrozeningDto[] | null> => {
+  return post<ApiResponse<FrozeningDto[]>>(PATH.GET_FROZEN_LIST)
     .then((res) => {
       if (res.code === 200) {
         return res.data;

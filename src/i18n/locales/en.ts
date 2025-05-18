@@ -237,11 +237,9 @@ export const en = {
   // Frozen Points
   frozenPoints: {
     title: 'Pending Points Detail',
-    gameMatch: 'Related Challenge',
     gameDate: 'Challenge Date',
     name: 'Challenge Name',
-    principal: 'Principal',
-    playRuleCode: 'PlayRuleCode',
+    amount: 'Amount',
     noData: 'No pending points data',
   },
 
@@ -254,6 +252,7 @@ export const en = {
     transferTo: 'Transfer To',
     personal: 'Personal',
     company: 'Company',
+    pool: 'Prize Pool',
     account: 'Account',
     points: 'Points',
     transfer: 'Confirm Transfer',
@@ -268,6 +267,9 @@ export const en = {
     confirmMessage: 'Transfer {{points}} points, this operation is irreversible, please confirm whether to continue?',
     success: 'Transfer Successful',
     successMessage: 'Successfully transferred {{points}} points',
+    poolSelect: 'Select Prize Pool',
+    poolSelectPlaceholder: 'Please select a prize pool',
+    availablePoolPoints: 'Available Prize Pool Points',
   },
 
   // My Games

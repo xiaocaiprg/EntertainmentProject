@@ -170,7 +170,7 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
 
             {raceDetail?.gameMatchSimpleDtoList?.length && (
               <View style={styles.challengeSection}>
-                <CustomText style={styles.sectionTitle}>挑战列表</CustomText>
+                <CustomText style={styles.sectionTitle}>上下水排名</CustomText>
                 <ChallengeList challenges={raceDetail.gameMatchSimpleDtoList} onPressItem={handleChallengePress} />
               </View>
             )}
