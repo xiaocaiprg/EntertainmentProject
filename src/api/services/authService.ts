@@ -38,7 +38,7 @@ export const changePassword = (password: string): Promise<string> => {
 };
 export const getSetting = async (): Promise<any> => {
   try {
-    const response = await fetch('https://junlong.biz/image/apk_version.json');
+    const response = await fetch('https://junlongpro.com/image/apk_version.json');
     const data = await response.json();
     return data;
   } catch (error) {
