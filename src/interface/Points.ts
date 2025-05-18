@@ -35,6 +35,8 @@ export interface FrozeningDto {
   name: string;
   playPersonCode: string;
   playPersonName: string;
+  addressName: string;
+  addressInfoId: number;
 }
 
 export interface PageDtoProfitDto {

@@ -191,6 +191,11 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
             <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
             </CustomText>
+            {item.raceName && (
+              <CustomText style={[styles.itemName, { fontSize: 14 }]} numberOfLines={1} ellipsizeMode="tail">
+                {t('myGames.race')}: {item.raceName}
+              </CustomText>
+            )}
             <View style={[styles.statusTag, { backgroundColor: status.color + '20' }]}>
               <CustomText style={[styles.statusText, { color: status.color }]}>{status.text}</CustomText>
             </View>
@@ -409,10 +414,10 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
   },
   itemName: {
+    flex: 1,
     fontSize: 14,
     fontWeight: '500',
     color: THEME_COLORS.text.primary,
-    flex: 1,
   },
   statusTag: {
     paddingHorizontal: 8,

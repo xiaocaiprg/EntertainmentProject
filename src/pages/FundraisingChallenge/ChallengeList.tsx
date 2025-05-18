@@ -57,28 +57,44 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => onItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemContent}>
-            <View style={styles.itemLeft}>
+            <View style={styles.itemTop}>
               <View style={styles.itemRow}>
-                <CustomText style={styles.label}>挑战名称:</CustomText>
-                <CustomText style={styles.value}>{item.name || '-'}</CustomText>
-              </View>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>挑战时间:</CustomText>
-                <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
-              </View>
-              {item.raceName ? (
-                <View style={styles.itemRow}>
-                  <CustomText style={styles.label}>比赛名称:</CustomText>
-                  <CustomText style={styles.value}>{item.raceName || '-'}</CustomText>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>挑战名称:</CustomText>
+                  <CustomText style={styles.value}>{item.name || '-'}</CustomText>
                 </View>
-              ) : null}
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>地点:</CustomText>
-                <CustomText style={styles.value}>{item.addressName || '-'}</CustomText>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>挑战时间:</CustomText>
+                  <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
+                </View>
               </View>
               <View style={styles.itemRow}>
-                <CustomText style={styles.label}>投手:</CustomText>
-                <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
+                {item.raceName ? (
+                  <View style={styles.itemSubRow}>
+                    <CustomText style={styles.label}>比赛名称:</CustomText>
+                    <CustomText style={styles.value}>{item.raceName || '-'}</CustomText>
+                  </View>
+                ) : null}
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>地点:</CustomText>
+                  <CustomText style={styles.value}>{item.addressName || '-'}</CustomText>
+                </View>
+              </View>
+              <View style={styles.itemRow}>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>本金:</CustomText>
+                  <CustomText style={styles.value}>{item.principal || '-'}</CustomText>
+                </View>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>投手:</CustomText>
+                  <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
+                </View>
+              </View>
+              <View style={styles.itemRow}>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>打法:</CustomText>
+                  <CustomText style={styles.value}>{item.playRuleName || '-'}</CustomText>
+                </View>
               </View>
             </View>
             <TouchableOpacity style={styles.investButton} onPress={() => onItemPress(item.id)} activeOpacity={0.7}>
@@ -177,17 +193,21 @@ const styles = StyleSheet.create({
   },
   itemContent: {
     padding: 10,
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'flex-end',
-    justifyContent: 'space-between',
   },
-  itemLeft: {
-    flex: 1,
+  itemTop: {
+    width: '100%',
   },
   itemRow: {
     flexDirection: 'row',
     marginBottom: 6,
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  itemSubRow: {
+    flex: 1,
+    flexDirection: 'row',
   },
   label: {
     fontSize: 14,
@@ -198,7 +218,6 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 14,
     color: '#333',
-    flex: 1,
   },
   investButton: {
     backgroundColor: THEME_COLORS.primary,

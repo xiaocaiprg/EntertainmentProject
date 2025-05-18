@@ -31,6 +31,7 @@ export interface GameMatchPageDto {
   playPersonCode?: string;
   playPersonName?: string;
   playRuleCode?: string;
+  playRuleName?: string;
   principal?: number;
   profit?: number;
   profitStr?: string;

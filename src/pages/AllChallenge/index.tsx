@@ -100,6 +100,11 @@ export const AllChallengeScreen = React.memo(() => {
             <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
             </CustomText>
+            {item?.raceName && (
+              <CustomText numberOfLines={1} style={[styles.itemName, { fontSize: 14 }]}>
+                比赛:{item.raceName || '-'}
+              </CustomText>
+            )}
             <View style={[styles.statusTag, { backgroundColor: status.color + '20' }]}>
               <CustomText style={[styles.statusText, { color: status.color }]}>{status.text}</CustomText>
             </View>
@@ -131,15 +136,16 @@ export const AllChallengeScreen = React.memo(() => {
                   <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
                 </>
               </View>
-              {item?.raceName ? (
-                <View style={styles.itemRow}>
-                  <CustomText style={styles.label}>比赛:</CustomText>
+              <View style={styles.itemRow}>
+                <>
+                  <CustomText style={styles.label}>打法:</CustomText>
                   <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
-                    {item.raceName || '-'}
+                    {item.playRuleName || '-'}
                   </CustomText>
-                </View>
-              ) : null}
+                </>
+              </View>
             </View>
+
             <View style={styles.arrowContainer}>
               <Icon name="chevron-right" size={20} color="#bbb" />
             </View>

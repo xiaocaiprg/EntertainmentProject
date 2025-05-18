@@ -58,13 +58,16 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
             <Text style={styles.itemText}>
               {t('frozenPoints.amount')}: {item.amount}
             </Text>
+            <Text style={styles.itemText}>
+              {t('frozenPoints.playPersonName')}: {item.playPersonName || '-'}
+            </Text>
           </View>
           <View style={styles.itemDetail}>
             <Text style={styles.itemText}>
               {t('frozenPoints.gameDate')}: {item.gameDate}
             </Text>
             <Text style={styles.itemText}>
-              {t('frozenPoints.playPersonName')}: {item.playPersonName || '-'}
+              {t('frozenPoints.addressName')}: {item.addressName || '-'}
             </Text>
           </View>
         </View>

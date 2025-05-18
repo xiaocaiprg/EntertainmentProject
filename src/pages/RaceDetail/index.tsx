@@ -132,15 +132,11 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
                   <CustomText style={styles.label}>转码限制:</CustomText>
                   <CustomText style={styles.value}>{raceDetail.turnOverLimit || '-'}</CustomText>
                 </View>
-              </View>
-
-              {raceDetail.description && (
-                <View style={styles.descriptionSection}>
-                  <CustomText style={styles.descriptionTitle}>比赛描述</CustomText>
-                  <CustomText style={styles.descriptionContent}>{raceDetail.description}</CustomText>
+                <View style={styles.infoRow}>
+                  <CustomText style={styles.label}>比赛描述:</CustomText>
+                  <CustomText style={styles.value}>{raceDetail.description || '-'}</CustomText>
                 </View>
-              )}
-
+              </View>
               {raceDetail.racePoolDetailDto && <PoolInfoCard poolDetail={raceDetail.racePoolDetailDto} />}
             </View>
 
@@ -264,22 +260,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: THEME_COLORS.text.primary,
     flex: 1,
-  },
-  descriptionSection: {
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: THEME_COLORS.border.light,
-  },
-  descriptionTitle: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: THEME_COLORS.text.primary,
-    marginBottom: 8,
-  },
-  descriptionContent: {
-    fontSize: 14,
-    color: THEME_COLORS.text.secondary,
-    lineHeight: 20,
   },
   actionButton: {
     backgroundColor: THEME_COLORS.primary,

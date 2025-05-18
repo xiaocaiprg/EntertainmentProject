@@ -135,28 +135,27 @@ export const RacePoolListScreen: React.FC<RootStackScreenProps<'RacePoolList'>> 
         <View style={styles.headerRight} />
       </View>
 
-      <View style={styles.container}>
-        {isAdmin && (
-          <TouchableOpacity onPress={handleOpenCreateModal} style={styles.createButtonContainer}>
-            <CustomText style={styles.createButtonText}>{t('racePoolList.createPoolTitle')}</CustomText>
-          </TouchableOpacity>
-        )}
-        <FlatList
-          data={poolList}
-          renderItem={renderPoolItem}
-          keyExtractor={(item, index) => `pool-${item.code || index}`}
-          contentContainerStyle={styles.listContent}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.1}
-          refreshing={loading}
-          ListFooterComponent={renderFooter}
-        />
-        {poolList.length === 0 && !loading && (
-          <View style={styles.emptyContainer}>
-            <CustomText style={styles.emptyText}>{t('racePoolList.noData')}</CustomText>
-          </View>
-        )}
-      </View>
+      {isAdmin && (
+        <TouchableOpacity onPress={handleOpenCreateModal} style={styles.createButtonContainer}>
+          <CustomText style={styles.createButtonText}>{t('racePoolList.createPoolTitle')}</CustomText>
+        </TouchableOpacity>
+      )}
+      <FlatList
+        data={poolList}
+        renderItem={renderPoolItem}
+        keyExtractor={(item, index) => `pool-${item.code || index}`}
+        contentContainerStyle={styles.listContent}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.1}
+        refreshing={loading}
+        ListFooterComponent={renderFooter}
+      />
+      {poolList.length === 0 && !loading && (
+        <View style={styles.emptyContainer}>
+          <CustomText style={styles.emptyText}>{t('racePoolList.noData')}</CustomText>
+        </View>
+      )}
+
       {modalVisible ? (
         <CreateRacePoolModal onClose={handleCloseCreateModal} onSuccess={() => fetchPoolList(true)} />
       ) : null}
@@ -188,10 +187,6 @@ const styles = StyleSheet.create({
   headerRight: {
     width: 36,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   listContent: {
     padding: 10,
   },
@@ -222,12 +217,14 @@ const styles = StyleSheet.create({
   },
   createButtonContainer: {
     backgroundColor: THEME_COLORS.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginHorizontal: 10,
-    marginBottom: 10,
+    justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 8,
+    marginTop: 10,
+    width: 150,
+    height: 40,
+    alignSelf: 'flex-end',
+    marginRight: 10,
   },
   createButtonText: {
     color: '#fff',
