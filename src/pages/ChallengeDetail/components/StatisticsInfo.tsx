@@ -72,21 +72,20 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     marginBottom: 6,
   },
   statsItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
   },
   label: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#666',
     marginRight: 3,
   },
   value: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#333',
     fontWeight: '500',
   },
