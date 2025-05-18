@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginBottom: 8,
-    elevation: 3,
   },
   moduleButtonText: {
     color: '#333',

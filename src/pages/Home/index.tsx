@@ -491,7 +491,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginBottom: 8,
-    elevation: 3,
   },
   moduleButtonText: {
     color: '#333',
@@ -503,7 +502,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 20,
     borderRadius: 25,
-    elevation: 3,
   },
   loginButtonInner: {
     flexDirection: 'row',
