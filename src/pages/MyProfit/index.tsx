@@ -98,7 +98,8 @@ export const MyProfitScreen: React.FC<MyProfitScreenProps> = React.memo((props) 
       <View style={styles.profitSummary}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
           <Text style={styles.totalText}>总盈利:</Text>
-          <Text style={styles.totalProfit}> {user?.profitStr}</Text>
+          <Text style={styles.totalProfit}>{user?.profitStr}</Text>
+          <Text style={styles.totalText}>(HKD)</Text>
         </View>
       </View>
       <View style={{ flex: 1 }}>

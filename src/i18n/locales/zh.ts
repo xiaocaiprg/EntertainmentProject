@@ -140,8 +140,9 @@ export const zh = {
     noDetail: '暂无挑战详情',
     roundInfo: '场次信息',
     challengeName: '挑战名称',
-    location: '挑战地点',
-    time: '挑战时间',
+    location: '地点',
+    time: '时间',
+    currency: '币种',
     pitcher: '投手',
     recorder: '记录人',
     waterProfit: '上下水',
@@ -238,7 +239,7 @@ export const zh = {
   frozenPoints: {
     title: '在途积分明细',
     gameDate: '挑战日期',
-    amount: '冻结积分',
+    amount: '冻结金额',
     addressName: '地点',
     name: '挑战名称',
     playPersonName: '投手',
@@ -334,6 +335,7 @@ export const zh = {
     pitcher: '投手',
     count: '把数',
     profit: '上下水',
+    currency: '币种',
     turnOver: '转码',
   },
 };

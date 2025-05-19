@@ -33,6 +33,7 @@ export interface FrozeningDto {
   gameDate: string;
   id: number;
   name: string;
+  currency: string;
   playPersonCode: string;
   playPersonName: string;
   addressName: string;
@@ -50,6 +51,7 @@ export interface PageDtoProfitDto {
 export interface ProfitDto {
   code?: string;
   matchId: number;
+  currency: string;
   matchName?: string;
   name?: string;
   profit: number;

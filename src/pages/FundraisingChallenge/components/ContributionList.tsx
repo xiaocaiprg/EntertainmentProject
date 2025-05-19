@@ -26,7 +26,9 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.title}>{t('fundraisingChallenge.fundraisingInfo')}</CustomText>
+      <CustomText style={styles.title}>
+        {t('fundraisingChallenge.fundraisingInfo') + `(${matchDetail?.currency || ''})`}
+      </CustomText>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
           <CustomText style={styles.label}>{t('fundraisingChallenge.principal')}</CustomText>

@@ -143,6 +143,12 @@ export const AllChallengeScreen = React.memo(() => {
                     {item.playRuleName || '-'}
                   </CustomText>
                 </>
+                <>
+                  <CustomText style={styles.label}>币种:</CustomText>
+                  <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
+                    {item.currency || '-'}
+                  </CustomText>
+                </>
               </View>
             </View>
 

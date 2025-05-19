@@ -142,6 +142,7 @@ export const en = {
     challengeName: 'ChallengeName',
     location: 'Location',
     time: 'Time',
+    currency: 'Currency',
     pitcher: 'Pitcher',
     recorder: 'Recorder',
     waterProfit: 'WaterProfit',
@@ -334,6 +335,7 @@ export const en = {
     recorder: 'Recorder',
     count: 'Count',
     profit: 'Profit',
+    currency: 'Currency',
     turnOver: 'Turn Over',
   },
 };

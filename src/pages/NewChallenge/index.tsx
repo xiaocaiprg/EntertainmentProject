@@ -9,10 +9,9 @@ import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { AddressInfo, ChallengeCreateParams } from '../../interface/Game';
 import { formatDate } from '../../utils/date';
 import { validateChallengeParams } from './utils/validation';
-import { ChallengeFormData } from './interface/IModuleProps';
+import { ChallengeFormData, CurrencyType } from './interface/IModuleProps';
 import { ChallengeType } from '../../interface/Common';
 import DropdownSelect from '../../components/DropdownSelect';
-import { INITIAL_BET_AMOUNT } from '../../constants/betAmounts';
 import { RootStackScreenProps } from '../router';
 
 export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> = React.memo((props) => {
@@ -31,7 +30,8 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     name: '',
     date: new Date(),
     principal: '',
-    initialBetAmount: INITIAL_BET_AMOUNT, // 默认投注基数
+    initialBetAmount: -1, // 默认投注基数
+    currency: CurrencyType.HKD, // 默认币种为HKD
   });
 
   // 处理表单数据变更
@@ -63,6 +63,7 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       principal: parseFloat(formData.principal),
       baseNumber: formData.initialBetAmount,
       playRuleCode: formData.challengeType,
+      currency: formData.currency,
     };
 
     // 校验参数

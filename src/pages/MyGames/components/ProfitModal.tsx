@@ -10,11 +10,12 @@ interface ProfitModalProps {
   visible: boolean;
   onClose: () => void;
   profit: GameMatchProfitDto | null;
+  currency?: string;
   loading?: boolean;
 }
 
 export const ProfitModal = React.memo((props: ProfitModalProps) => {
-  const { visible, onClose, profit, loading = false } = props;
+  const { visible, onClose, profit, currency, loading = false } = props;
   const { t } = useTranslation();
   const renderInvestCompanyProfit = useCallback(
     (profitData: GameMatchProfitDto) => {
@@ -126,7 +127,11 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
   }, [loading, profit, renderInvestPersonMyGames, renderDocCompanyProfit, renderInvestCompanyProfit, t]);
 
   return (
-    <SlideModal visible={visible} onClose={onClose} title={t('myGames.profitDetails')}>
+    <SlideModal
+      visible={visible}
+      onClose={onClose}
+      title={t('myGames.profitDetails') + `${currency && `(${currency})`}`}
+    >
       {renderContent()}
     </SlideModal>
   );

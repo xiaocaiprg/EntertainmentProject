@@ -10,11 +10,12 @@ interface ContributionModalProps {
   visible: boolean;
   onClose: () => void;
   selectedContribution: ContributionDto[];
+  currency?: string;
   loading?: boolean;
 }
 
 export const ContributionModal = React.memo((props: ContributionModalProps) => {
-  const { visible, onClose, selectedContribution, loading = false } = props;
+  const { visible, onClose, selectedContribution, currency, loading = false } = props;
   const { t } = useTranslation();
 
   const renderContent = useCallback(() => {
@@ -55,7 +56,11 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
   }, [loading, selectedContribution, t]);
 
   return (
-    <SlideModal visible={visible} onClose={onClose} title={t('fundraisingChallenge.contributionDetails')}>
+    <SlideModal
+      visible={visible}
+      onClose={onClose}
+      title={t('fundraisingChallenge.contributionDetails') + `${currency && `(${currency})`}`}
+    >
       {renderContent()}
     </SlideModal>
   );

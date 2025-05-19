@@ -61,23 +61,31 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
               <View style={styles.itemRow}>
                 <View style={styles.itemSubRow}>
                   <CustomText style={styles.label}>挑战名称:</CustomText>
-                  <CustomText style={styles.value}>{item.name || '-'}</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.name || '-'}
+                  </CustomText>
                 </View>
                 <View style={styles.itemSubRow}>
                   <CustomText style={styles.label}>挑战时间:</CustomText>
-                  <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.gameDate || '-'}
+                  </CustomText>
                 </View>
               </View>
               <View style={styles.itemRow}>
                 {item.raceName ? (
                   <View style={styles.itemSubRow}>
                     <CustomText style={styles.label}>比赛名称:</CustomText>
-                    <CustomText style={styles.value}>{item.raceName || '-'}</CustomText>
+                    <CustomText style={styles.value} numberOfLines={1}>
+                      {item.raceName || '-'}
+                    </CustomText>
                   </View>
                 ) : null}
                 <View style={styles.itemSubRow}>
                   <CustomText style={styles.label}>地点:</CustomText>
-                  <CustomText style={styles.value}>{item.addressName || '-'}</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.addressName || '-'}
+                  </CustomText>
                 </View>
               </View>
               <View style={styles.itemRow}>
@@ -93,7 +101,15 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
               <View style={styles.itemRow}>
                 <View style={styles.itemSubRow}>
                   <CustomText style={styles.label}>打法:</CustomText>
-                  <CustomText style={styles.value}>{item.playRuleName || '-'}</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.playRuleName || '-'}
+                  </CustomText>
+                </View>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>币种:</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.currency || '-'}
+                  </CustomText>
                 </View>
               </View>
             </View>
@@ -218,6 +234,7 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 14,
     color: '#333',
+    flex: 1,
   },
   investButton: {
     backgroundColor: THEME_COLORS.primary,

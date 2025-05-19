@@ -28,6 +28,7 @@ export interface GameMatchPageDto {
   createTime?: string;
   isEnabled: number;
   name?: string;
+  currency?: string;
   playPersonCode?: string;
   playPersonName?: string;
   playRuleCode?: string;
@@ -53,6 +54,7 @@ export interface ProfitDto {
   code?: string;
   matchId: number;
   matchName?: string;
+  currency?: string;
   name?: string;
   profit: number;
   profitStr: string;
@@ -119,6 +121,7 @@ export interface GameMatchDto {
   orderNumber?: number;
   playPersonCode?: string;
   playPersonName?: string;
+  currency?: string;
   baseNumber: number;
   playRuleCode?: string;
   principal?: number;
@@ -192,6 +195,7 @@ export interface ChallengeCreateParams {
   principal: number;
   tableNumber?: string;
   baseNumber: number;
+  currency?: string;
   playRuleCode?: string;
   raceId?: number;
 }

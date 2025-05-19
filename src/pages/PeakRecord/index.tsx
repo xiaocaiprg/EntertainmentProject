@@ -55,7 +55,7 @@ export const PeakRecordScreen: React.FC<RootStackScreenProps<'PeakRecord'>> = Re
       // 卡片标题
       const cardTitle = type === 'profit' ? t('peakRecord.profit') : t('peakRecord.count');
       // 卡片值
-      const cardValue = type === 'profit' ? data.profitStr : String(data.count);
+      const cardValue = type === 'profit' ? data.profitStr + `(${data.currency})` : String(data.count);
 
       return (
         <View style={styles.cardOuterContainer}>

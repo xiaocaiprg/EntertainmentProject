@@ -132,6 +132,12 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
                 <CustomText style={styles.value}>{matchDetail.turnOverStr || '-'}</CustomText>
               </View>
             </View>
+            <View style={styles.infoColumn}>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('challengeDetail.currency')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.currency || '-'}</CustomText>
+              </View>
+            </View>
           </View>
         </View>
         {showFundraisingInfo && <FundraisingInfo matchDetail={matchDetail} />}

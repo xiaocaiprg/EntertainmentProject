@@ -60,6 +60,10 @@ export const RacePeakRecordCard: React.FC<RacePeakRecordCardProps> = React.memo(
             <CustomText style={styles.infoLabel}>{t('peakRecord.turnOver')}:</CustomText>
             <CustomText style={styles.infoValue}>{matchData.turnOverStr || '--'}</CustomText>
           </View>
+          <View style={styles.infoRow}>
+            <CustomText style={styles.infoLabel}>{t('peakRecord.currency')}:</CustomText>
+            <CustomText style={styles.infoValue}>{matchData.currency || '--'}</CustomText>
+          </View>
         </View>
       </LinearGradient>
     </View>
