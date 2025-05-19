@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { ContributionDto } from '../../../interface/Contribution';
 import { THEME_COLORS } from '../../../utils/styles';
 import { GameMatchDto } from '../../../interface/Game';
 import { useTranslation } from '../../../hooks/useTranslation';
-
+import CustomText from '../../../components/CustomText';
 interface ContributionListProps {
   contributions: ContributionDto[] | undefined;
   matchDetail: GameMatchDto | null;
@@ -26,19 +26,19 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t('fundraisingChallenge.fundraisingInfo')}</Text>
+      <CustomText style={styles.title}>{t('fundraisingChallenge.fundraisingInfo')}</CustomText>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>{t('fundraisingChallenge.principal')}</Text>
-          <Text style={styles.value}>{matchDetail.principal || '-'}</Text>
+          <CustomText style={styles.label}>{t('fundraisingChallenge.principal')}</CustomText>
+          <CustomText style={styles.value}>{matchDetail.principal || '-'}</CustomText>
         </View>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>{t('fundraisingChallenge.raisedAmount')}</Text>
-          <Text style={styles.valueHighlight}>{matchDetail.contributedAmount || '0'}</Text>
+          <CustomText style={styles.label}>{t('fundraisingChallenge.raisedAmount')}</CustomText>
+          <CustomText style={styles.valueHighlight}>{matchDetail.contributedAmount || '0'}</CustomText>
         </View>
         <View style={styles.infoItem}>
-          <Text style={styles.label}>{t('fundraisingChallenge.availableAmount')}</Text>
-          <Text style={styles.valueAvailable}>{matchDetail.availableAmount || '0'}</Text>
+          <CustomText style={styles.label}>{t('fundraisingChallenge.availableAmount')}</CustomText>
+          <CustomText style={styles.valueAvailable}>{matchDetail.availableAmount || '0'}</CustomText>
         </View>
       </View>
 
@@ -46,21 +46,24 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
         <View style={styles.progressBg}>
           <View style={[styles.progressBar, { width: `${percentage}%` }]} />
         </View>
-        <Text style={styles.progressText}>{percentage}%</Text>
+        <CustomText style={styles.progressText}>{percentage}%</CustomText>
       </View>
       {contributions && contributions.length > 0 ? (
         <View>
-          <Text style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</Text>
+          <CustomText style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</CustomText>
           <View style={styles.listContainer}>
             <FlatList
               data={contributions}
               keyExtractor={(item, index) => `${item.id}-${index}`}
               renderItem={({ item }) => (
                 <View style={styles.contributionContent}>
-                  <Text style={styles.contributionName}>{item.investPersonName}</Text>
-                  <Text style={styles.contributionAmount}>
+                  <CustomText style={styles.contributionName}>{item.investPersonName}</CustomText>
+                  <CustomText style={styles.contributionAmount}>
                     {t('fundraisingChallenge.amount')}: {item.amount}
-                  </Text>
+                  </CustomText>
+                  <CustomText style={styles.contributionAmount}>
+                    {t('fundraisingChallenge.contriRate')}: {item.contriRateStr}
+                  </CustomText>
                 </View>
               )}
               style={styles.flatList}
@@ -72,7 +75,7 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
         </View>
       ) : (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</Text>
+          <CustomText style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</CustomText>
         </View>
       )}
     </View>

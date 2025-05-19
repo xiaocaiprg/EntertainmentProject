@@ -32,6 +32,11 @@ export const zh = {
   // 首页
   home: {
     functionMenu: '功能菜单',
+    peakRecordTitle: '最高纪录',
+    challengeGroup: '挑战管理',
+    managementGroup: '数据查看',
+    raceGroup: '比赛管理',
+    hotActivities: '热门活动',
   },
 
   // 模块标题
@@ -129,7 +134,6 @@ export const zh = {
     detail: '挑战详情',
     endChallenge: '结束挑战',
     endSuccess: '挑战已成功结束',
-    endFailed: '操作失败，请重试',
     confirmEnd: '确认结束挑战',
     confirmEndMessage: '确定要结束该挑战吗？此操作不可撤销。',
     confirmEndAction: '确认结束',
@@ -142,6 +146,15 @@ export const zh = {
     recorder: '记录人',
     waterProfit: '上下水',
     turnover: '转码',
+    statisticsInfo: '统计信息',
+    totalCount: '总数',
+    totalWinCount: '总胜',
+    totalLoseCount: '总负',
+    hitRate: '命中率',
+    bankerWinCount: '庄赢',
+    bankerLoseCount: '庄输',
+    dealerWinCount: '闲赢',
+    dealerLoseCount: '闲输',
   },
 
   // 场次详情
@@ -224,11 +237,11 @@ export const zh = {
   // 在途积分
   frozenPoints: {
     title: '在途积分明细',
-    gameMatch: '关联挑战',
     gameDate: '挑战日期',
+    amount: '冻结积分',
+    addressName: '地点',
     name: '挑战名称',
-    principal: '挑战本金',
-    playRuleCode: '玩法',
+    playPersonName: '投手',
     noData: '暂无在途积分数据',
   },
 
@@ -241,6 +254,7 @@ export const zh = {
     transferTo: '转积分给',
     personal: '个人',
     company: '公司',
+    pool: '奖金池',
     account: '账号',
     points: '积分数量',
     transfer: '确认转账',
@@ -255,6 +269,9 @@ export const zh = {
     confirmMessage: '转账{{points}}积分,此操作不可撤销,请确认是否继续?',
     success: '转账成功',
     successMessage: '已成功转账{{points}}积分',
+    poolSelect: '选择奖金池',
+    poolSelectPlaceholder: '请选择奖金池',
+    availablePoolPoints: '奖金池已有积分',
   },
 
   // 我的挑战
@@ -277,6 +294,7 @@ export const zh = {
     recorder: '记录',
     waterProfit: '挑战上下水',
     turnover: '挑战转码',
+    race: '比赛',
     profitDetails: '利润分配详情',
     loadingDetails: '正在加载详情...',
     noProfitInfo: '暂无利润分配信息',
@@ -298,5 +316,24 @@ export const zh = {
     raceName: '比赛名称',
     active: '激活',
     inactive: '未激活',
+    createPoolTitle: '创建新的奖金池',
+    poolNamePlaceholder: '请输入奖金池名称',
+    poolDescriptionPlaceholder: '请输入奖金池描述 (可选)',
+    submit: '提交',
+    createSuccess: '奖金池创建成功!',
+    enterPoolName: '请输入奖金池名称。',
+  },
+
+  // 峰值记录
+  peakRecord: {
+    title: '系统最高纪录',
+    gameName: '挑战名称',
+    gameDate: '挑战日期',
+    location: '地点',
+    playRule: '玩法',
+    pitcher: '投手',
+    count: '把数',
+    profit: '上下水',
+    turnOver: '转码',
   },
 };

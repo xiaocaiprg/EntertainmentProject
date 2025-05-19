@@ -1,4 +1,5 @@
 import { QueryParams } from './Common';
+import { GameMatchSimpleDto, PeakRecordDto } from './Ranking';
 
 export interface CreateRaceParams {
   beginDate: string;
@@ -7,6 +8,10 @@ export interface CreateRaceParams {
   name: string;
   playRuleCode?: string;
   turnOverLimit?: number;
+}
+export interface CreateRacePoolParams {
+  name: string;
+  description?: string;
 }
 
 // 比赛状态枚举
@@ -51,6 +56,8 @@ export interface RaceDetailDto {
   playRuleName?: string;
   racePoolDetailDto?: RacePoolPageDto;
   turnOverLimit?: number;
+  gameMatchSimpleDtoList?: GameMatchSimpleDto[];
+  peakRecordDto?: PeakRecordDto;
 }
 export interface RacePoolPageDto {
   availablePoints?: number;

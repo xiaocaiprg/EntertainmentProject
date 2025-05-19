@@ -32,6 +32,11 @@ export const en = {
   // Home
   home: {
     functionMenu: 'Function Menu',
+    peakRecordTitle: 'System Records',
+    challengeGroup: 'Challenge Management',
+    managementGroup: 'System Management',
+    raceGroup: 'Race Related',
+    hotActivities: 'Hot Activities',
   },
 
   // Module Titles
@@ -129,7 +134,6 @@ export const en = {
     detail: 'Challenge Details',
     endChallenge: 'End Challenge',
     endSuccess: 'Challenge ended successfully',
-    endFailed: 'Operation failed, please try again',
     confirmEnd: 'Confirm End Challenge',
     confirmEndMessage: 'Are you sure you want to end this challenge? This action cannot be undone.',
     confirmEndAction: 'Confirm End',
@@ -142,6 +146,15 @@ export const en = {
     recorder: 'Recorder',
     waterProfit: 'WaterProfit',
     turnover: 'Turnover',
+    statisticsInfo: 'Statistics',
+    totalCount: 'Total Count',
+    totalWinCount: 'Total Wins',
+    totalLoseCount: 'Total Losses',
+    hitRate: 'Hit Rate',
+    bankerWinCount: 'Banker Wins',
+    bankerLoseCount: 'Banker Losses',
+    dealerWinCount: 'Dealer Wins',
+    dealerLoseCount: 'Dealer Losses',
   },
 
   // Round Detail
@@ -224,11 +237,10 @@ export const en = {
   // Frozen Points
   frozenPoints: {
     title: 'Pending Points Detail',
-    gameMatch: 'Related Challenge',
     gameDate: 'Challenge Date',
     name: 'Challenge Name',
-    principal: 'Principal',
-    playRuleCode: 'PlayRuleCode',
+    addressName: 'Location',
+    amount: 'Amount',
     noData: 'No pending points data',
   },
 
@@ -241,6 +253,7 @@ export const en = {
     transferTo: 'Transfer To',
     personal: 'Personal',
     company: 'Company',
+    pool: 'Prize Pool',
     account: 'Account',
     points: 'Points',
     transfer: 'Confirm Transfer',
@@ -255,6 +268,9 @@ export const en = {
     confirmMessage: 'Transfer {{points}} points, this operation is irreversible, please confirm whether to continue?',
     success: 'Transfer Successful',
     successMessage: 'Successfully transferred {{points}} points',
+    poolSelect: 'Select Prize Pool',
+    poolSelectPlaceholder: 'Please select a prize pool',
+    availablePoolPoints: 'Available Prize Pool Points',
   },
 
   // My Games
@@ -277,6 +293,7 @@ export const en = {
     recorder: 'Recorder',
     waterProfit: 'Challenge Water Profit',
     turnover: 'Challenge Turnover',
+    race: 'Race',
     profitDetails: 'Profit Distribution Details',
     loadingDetails: 'Loading details...',
     noProfitInfo: 'No profit distribution information',
@@ -291,12 +308,32 @@ export const en = {
 
   // Prize Pool List
   racePoolList: {
-    title: 'Prize Pool List',
-    noData: 'No prize pool data available',
+    title: 'Race Pools',
+    noData: 'No race pools available.',
     amount: 'Prize Amount',
     distributePoints: 'Distribute Points',
     raceName: 'Race Name',
     active: 'Active',
     inactive: 'Inactive',
+    createPoolTitle: 'Create New Race Pool',
+    poolNamePlaceholder: 'Enter pool name',
+    poolDescriptionPlaceholder: 'Enter pool description (optional)',
+    submit: 'Submit',
+    createSuccess: 'Race pool created successfully!',
+    enterPoolName: 'Please enter the race pool name.',
+  },
+
+  // Peak Record
+  peakRecord: {
+    title: 'System Records',
+    gameName: 'Game Name',
+    gameDate: 'Game Date',
+    location: 'Location',
+    playRule: 'Play Rule',
+    pitcher: 'Pitcher',
+    recorder: 'Recorder',
+    count: 'Count',
+    profit: 'Profit',
+    turnOver: 'Turn Over',
   },
 };

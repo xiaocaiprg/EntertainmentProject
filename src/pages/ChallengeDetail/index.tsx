@@ -1,25 +1,22 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getMatchDetail, updateMatchStatus } from '../../api/services/gameService';
+import { getMatchDetail } from '../../api/services/gameService';
 import { GameMatchDto, GameRoundDto } from '../../interface/Game';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { ChallengeStatus } from '../../interface/Common';
-import { useRole } from '../../hooks/useRole';
-import { THEME_COLORS } from '../../utils/styles';
-import ConfirmModal from '../../components/ConfirmModal';
+import CustomText from '../../components/CustomText';
 import { RoundItem } from './components/RoundItem';
 import { FundraisingInfo } from './components/FundraisingInfo';
+import { StatisticsInfo } from './components/StatisticsInfo';
 import { RootStackScreenProps } from '../router';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -30,9 +27,6 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
   const { matchId } = route.params;
   const [loading, setLoading] = useState<boolean>(true);
   const [matchDetail, setMatchDetail] = useState<GameMatchDto | null>(null);
-  const [processing, setProcessing] = useState<boolean>(false);
-  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
-  const { isInvestmentManager } = useRole();
   const { t } = useTranslation();
 
   const fetchMatchDetail = useCallback(async () => {
@@ -50,33 +44,6 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
   const handleBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
-
-  // 显示结束挑战确认弹窗
-  const showEndChallengeConfirm = useCallback(() => {
-    setConfirmModalVisible(true);
-  }, []);
-
-  // 隐藏结束挑战确认弹窗
-  const hideEndChallengeConfirm = useCallback(() => {
-    setConfirmModalVisible(false);
-  }, []);
-
-  // 确认结束挑战
-  const confirmEndChallenge = useCallback(async () => {
-    setProcessing(true);
-    const result = await updateMatchStatus({
-      id: matchId,
-      isEnabled: ChallengeStatus.ENDED, // 设置为已结束状态
-    });
-    if (result) {
-      fetchMatchDetail();
-      Alert.alert(t('common.success'), t('challengeDetail.endSuccess'));
-    } else {
-      Alert.alert(t('common.error'), t('challengeDetail.endFailed'));
-    }
-    setProcessing(false);
-    setConfirmModalVisible(false);
-  }, [matchId, fetchMatchDetail, t]);
 
   // 获取状态文本和颜色
   const getStatusInfo = useCallback(
@@ -97,16 +64,6 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
       }
     },
     [t],
-  );
-
-  // 判断挑战是否可以结束
-  const canEndChallenge = useMemo(
-    () =>
-      isInvestmentManager &&
-      (matchDetail?.isEnabled === ChallengeStatus.IN_PROGRESS ||
-        matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING ||
-        matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING_COMPLETED),
-    [isInvestmentManager, matchDetail?.isEnabled],
   );
 
   // 获取当前状态信息
@@ -134,74 +91,65 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
           <View style={styles.infoRow}>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.challengeName')}:</Text>
-                <Text style={styles.value} numberOfLines={1}>
+                <CustomText style={styles.label}>{t('challengeDetail.challengeName')}:</CustomText>
+                <CustomText style={styles.value} numberOfLines={1}>
                   {matchDetail.name || '-'}
-                </Text>
+                </CustomText>
                 <View style={styles.statusContainer}>
                   <View style={[styles.statusTag, { backgroundColor: `${statusInfo.color}20` }]}>
-                    <Text style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</Text>
+                    <CustomText style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</CustomText>
                   </View>
                 </View>
               </View>
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.recorder')}:</Text>
-                <Text style={styles.value}>{matchDetail.docPersonName || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.recorder')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.docPersonName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.pitcher')}:</Text>
-                <Text style={styles.value}>{matchDetail.playPersonName || '-'}</Text>
-              </View>
-            </View>
-            <View style={styles.infoColumn}>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.location')}:</Text>
-                <Text style={styles.value}>{matchDetail.addressName || '-'}</Text>
-              </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.time')}:</Text>
-                <Text style={styles.value}>{matchDetail.gameDate || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.pitcher')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.playPersonName || '-'}</CustomText>
               </View>
             </View>
             <View style={styles.infoColumn}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.waterProfit')}:</Text>
-                <Text style={styles.value}>{matchDetail.profitStr || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.location')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.addressName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>{t('challengeDetail.turnover')}:</Text>
-                <Text style={styles.value}>{matchDetail.turnOverStr || '-'}</Text>
+                <CustomText style={styles.label}>{t('challengeDetail.time')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.gameDate || '-'}</CustomText>
+              </View>
+            </View>
+            <View style={styles.infoColumn}>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('challengeDetail.waterProfit')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.profitStr || '-'}</CustomText>
+              </View>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('challengeDetail.turnover')}:</CustomText>
+                <CustomText style={styles.value}>{matchDetail.turnOverStr || '-'}</CustomText>
               </View>
             </View>
           </View>
         </View>
         {showFundraisingInfo && <FundraisingInfo matchDetail={matchDetail} />}
-        {canEndChallenge && (
-          <View style={styles.endChallengeContainer}>
-            <TouchableOpacity style={styles.endChallengeButton} onPress={showEndChallengeConfirm} disabled={processing}>
-              <Icon name="stop-circle" size={18} color="#fff" style={styles.endButtonIcon} />
-              <Text style={styles.endChallengeButtonText}>{t('challengeDetail.endChallenge')}</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+
+        {matchDetail?.gameMatchStatisticDto ? (
+          <>
+            <CustomText style={styles.sectionTitle}>{t('challengeDetail.statisticsInfo')}</CustomText>
+            <StatisticsInfo gameMatchStatisticDto={matchDetail.gameMatchStatisticDto} />
+          </>
+        ) : null}
+
         {matchDetail?.roundList?.length ? (
-          <Text style={styles.sectionTitle}>{t('challengeDetail.roundInfo')}</Text>
+          <CustomText style={styles.sectionTitle}>{t('challengeDetail.roundInfo')}</CustomText>
         ) : null}
         <View style={styles.roundsContainer}>{matchDetail.roundList?.map(renderRound)}</View>
       </ScrollView>
     );
-  }, [
-    matchDetail,
-    statusInfo,
-    canEndChallenge,
-    processing,
-    showEndChallengeConfirm,
-    renderRound,
-    showFundraisingInfo,
-    t,
-  ]);
+  }, [matchDetail, statusInfo, renderRound, showFundraisingInfo, t]);
 
   const renderContent = useCallback(() => {
     if (loading) {
@@ -218,7 +166,7 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
 
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>{t('challengeDetail.noDetail')}</Text>
+        <CustomText style={styles.emptyText}>{t('challengeDetail.noDetail')}</CustomText>
       </View>
     );
   }, [loading, matchDetail, renderMatchDetail, t]);
@@ -230,20 +178,10 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('challengeDetail.detail')}</Text>
+        <CustomText style={styles.headerTitle}>{t('challengeDetail.detail')}</CustomText>
         <View style={styles.headerRight} />
       </View>
       {renderContent()}
-      <ConfirmModal
-        visible={confirmModalVisible}
-        title={t('challengeDetail.confirmEnd')}
-        message={t('challengeDetail.confirmEndMessage')}
-        cancelText={t('common.cancel')}
-        confirmText={t('challengeDetail.confirmEndAction')}
-        onCancel={hideEndChallengeConfirm}
-        onConfirm={confirmEndChallenge}
-        isProcessing={processing}
-      />
     </SafeAreaView>
   );
 });
@@ -350,27 +288,6 @@ const styles = StyleSheet.create({
   },
   roundsContainer: {
     marginBottom: 16,
-  },
-  endChallengeContainer: {
-    marginBottom: 10,
-  },
-  endChallengeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: THEME_COLORS.danger,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 4,
-    justifyContent: 'center',
-    width: '100%',
-  },
-  endChallengeButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  endButtonIcon: {
-    marginRight: 4,
   },
 });
 

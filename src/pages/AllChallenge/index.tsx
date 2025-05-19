@@ -1,16 +1,8 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import CustomText from '../../components/CustomText';
 import { getChallengeList } from '../../api/services/gameService';
 import { ChallengeListParams, GameMatchPageDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
@@ -33,7 +25,7 @@ export const AllChallengeScreen = React.memo(() => {
   const [activeTab, setActiveTab] = useState<number>(-1); // 默认选中'全部'标签
   const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const pageNum = useRef<number>(1);
-  const pageSize = useRef<number>(5).current;
+  const pageSize = useRef<number>(10).current;
   const [loading, setLoading] = useState<boolean>(true);
   const [hasMore, setHasMore] = useState<boolean>(false);
 
@@ -105,33 +97,55 @@ export const AllChallengeScreen = React.memo(() => {
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemHeader}>
-            <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
-            </Text>
+            </CustomText>
+            {item?.raceName && (
+              <CustomText numberOfLines={1} style={[styles.itemName, { fontSize: 14 }]}>
+                比赛:{item.raceName || '-'}
+              </CustomText>
+            )}
             <View style={[styles.statusTag, { backgroundColor: status.color + '20' }]}>
-              <Text style={[styles.statusText, { color: status.color }]}>{status.text}</Text>
+              <CustomText style={[styles.statusText, { color: status.color }]}>{status.text}</CustomText>
             </View>
           </View>
 
           <View style={styles.itemContent}>
             <View style={styles.itemLeft}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战时间:</Text>
-                <Text style={styles.value}>{item.gameDate || '-'}</Text>
+                <>
+                  <CustomText style={styles.label}>时间:</CustomText>
+                  <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
+                    {item.gameDate || '-'}
+                  </CustomText>
+                </>
+                <>
+                  <CustomText style={styles.label}>本金:</CustomText>
+                  <CustomText style={styles.value}>{item.principal || '-'}</CustomText>
+                </>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>地点:</Text>
-                <Text style={styles.value}>{item.addressName || '-'}</Text>
+                <>
+                  <CustomText style={styles.label}>地点:</CustomText>
+                  <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
+                    {item.addressName || '-'}
+                  </CustomText>
+                </>
+                <>
+                  <CustomText style={styles.label}>投手:</CustomText>
+                  <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
+                </>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>本金:</Text>
-                <Text style={styles.value}>{item.principal || '-'}</Text>
-              </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>投手:</Text>
-                <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+                <>
+                  <CustomText style={styles.label}>打法:</CustomText>
+                  <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
+                    {item.playRuleName || '-'}
+                  </CustomText>
+                </>
               </View>
             </View>
+
             <View style={styles.arrowContainer}>
               <Icon name="chevron-right" size={20} color="#bbb" />
             </View>
@@ -150,7 +164,7 @@ export const AllChallengeScreen = React.memo(() => {
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <Text style={styles.footerText}>加载中...</Text>
+        <CustomText style={styles.footerText}>加载中...</CustomText>
       </View>
     );
   }, [loading]);
@@ -166,7 +180,9 @@ export const AllChallengeScreen = React.memo(() => {
       <View style={styles.tabsContainer}>
         {STATUS_TABS.map((tab) => (
           <TouchableOpacity key={tab.value} style={styles.tabItem} onPress={() => handleTabChange(tab.value)}>
-            <Text style={[styles.tabText, activeTab === tab.value && styles.activeTabText]}>{tab.label}</Text>
+            <CustomText style={[styles.tabText, activeTab === tab.value && styles.activeTabText]}>
+              {tab.label}
+            </CustomText>
             <View style={[styles.tabLine, activeTab === tab.value && styles.activeTabLine]} />
           </TouchableOpacity>
         ))}
@@ -181,7 +197,7 @@ export const AllChallengeScreen = React.memo(() => {
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>所有挑战</Text>
+        <CustomText style={styles.headerTitle}>所有挑战</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -200,7 +216,7 @@ export const AllChallengeScreen = React.memo(() => {
         />
         {challengeList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无挑战记录</Text>
+            <CustomText style={styles.emptyText}>暂无挑战记录</CustomText>
           </View>
         )}
       </View>
@@ -274,7 +290,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME_COLORS.cardBackground,
     paddingHorizontal: 12,
     paddingTop: 10,
-    paddingBottom: 2,
+    paddingBottom: 6,
     marginBottom: 5,
     borderWidth: 1,
     borderColor: THEME_COLORS.border.light,
@@ -313,17 +329,16 @@ const styles = StyleSheet.create({
   },
   itemRow: {
     flexDirection: 'row',
-    marginBottom: 8,
+    marginBottom: 5,
   },
   label: {
     fontSize: 14,
     color: THEME_COLORS.text.secondary,
-    width: 80,
+    width: 50,
   },
   value: {
     fontSize: 14,
     color: THEME_COLORS.text.primary,
-    flex: 1,
   },
   arrowContainer: {
     justifyContent: 'center',

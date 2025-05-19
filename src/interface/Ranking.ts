@@ -91,3 +91,30 @@ export interface PlayerCompanyHitrateRankDto {
   totalInningCount?: number;
   winInningCount?: number;
 }
+export interface PeakRecordDto {
+  maxInningCountMatch: GameMatchSimpleDto;
+  maxProfitMatch: GameMatchSimpleDto;
+}
+export interface GameMatchSimpleDto {
+  addressInfoId: number;
+  addressName: string;
+  baseNumber: number;
+  count: number;
+  docPersonCode: string;
+  docPersonName: string;
+  gameDate: string;
+  id: number;
+  isEnabled: number;
+  name: string;
+  playPersonCode: string;
+  playPersonName: string;
+  playRuleCode: string;
+  playRuleName: string;
+  principal: number;
+  profit: number;
+  profitStr: string;
+  raceId: number;
+  raceName: string;
+  turnOver: number;
+  turnOverStr: string;
+}

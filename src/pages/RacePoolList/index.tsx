@@ -1,14 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  StatusBar,
-  TouchableOpacity,
-  SafeAreaView,
-} from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, StatusBar, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useTranslation } from '../../hooks/useTranslation';
 import { getRacePoolList } from '../../api/services/raceService';
 import { PoolCard } from './components/PoolCard';
@@ -19,6 +10,8 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { useRole } from '../../hooks/useRole';
 import useFocusRefresh from '../../hooks/useFocusRefresh';
+import { CreateRacePoolModal } from './components/CreateRacePoolModal';
+import CustomText from '../../components/CustomText';
 
 // 奖金池卡片颜色配置
 const POOL_COLORS = [
@@ -40,6 +33,7 @@ export const RacePoolListScreen: React.FC<RootStackScreenProps<'RacePoolList'>> 
   const [loading, setLoading] = useState<boolean>(true);
   const [poolList, setPoolList] = useState<RacePoolPageDto[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { isAdmin } = useRole();
 
   const pageNumRef = useRef<number>(1);
@@ -98,6 +92,14 @@ export const RacePoolListScreen: React.FC<RootStackScreenProps<'RacePoolList'>> 
     navigation.goBack();
   }, [navigation]);
 
+  const handleOpenCreateModal = useCallback(() => {
+    setModalVisible(true);
+  }, []);
+
+  const handleCloseCreateModal = useCallback(() => {
+    setModalVisible(false);
+  }, []);
+
   // 渲染每个奖金池项
   const renderPoolItem = useCallback(
     ({ item, index }: { item: RacePoolPageDto; index: number }) => {
@@ -117,7 +119,7 @@ export const RacePoolListScreen: React.FC<RootStackScreenProps<'RacePoolList'>> 
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <Text style={styles.footerText}>加载中...</Text>
+        <CustomText style={styles.footerText}>加载中...</CustomText>
       </View>
     );
   }, [loading]);
@@ -129,27 +131,34 @@ export const RacePoolListScreen: React.FC<RootStackScreenProps<'RacePoolList'>> 
         <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('racePoolList.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('racePoolList.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
-      <View style={styles.container}>
-        <FlatList
-          data={poolList}
-          renderItem={renderPoolItem}
-          keyExtractor={(item, index) => `pool-${item.raceId || index}`}
-          contentContainerStyle={styles.listContent}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.1}
-          refreshing={loading}
-          ListFooterComponent={renderFooter}
-        />
-        {poolList.length === 0 && !loading && (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>{t('racePoolList.noData')}</Text>
-          </View>
-        )}
-      </View>
+      {isAdmin && (
+        <TouchableOpacity onPress={handleOpenCreateModal} style={styles.createButtonContainer}>
+          <CustomText style={styles.createButtonText}>{t('racePoolList.createPoolTitle')}</CustomText>
+        </TouchableOpacity>
+      )}
+      <FlatList
+        data={poolList}
+        renderItem={renderPoolItem}
+        keyExtractor={(item, index) => `pool-${item.code || index}`}
+        contentContainerStyle={styles.listContent}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.1}
+        refreshing={loading}
+        ListFooterComponent={renderFooter}
+      />
+      {poolList.length === 0 && !loading && (
+        <View style={styles.emptyContainer}>
+          <CustomText style={styles.emptyText}>{t('racePoolList.noData')}</CustomText>
+        </View>
+      )}
+
+      {modalVisible ? (
+        <CreateRacePoolModal onClose={handleCloseCreateModal} onSuccess={() => fetchPoolList(true)} />
+      ) : null}
     </SafeAreaView>
   );
 });
@@ -178,10 +187,6 @@ const styles = StyleSheet.create({
   headerRight: {
     width: 36,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   listContent: {
     padding: 10,
   },
@@ -209,5 +214,21 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
     color: THEME_COLORS.text.light,
+  },
+  createButtonContainer: {
+    backgroundColor: THEME_COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    marginTop: 10,
+    width: 150,
+    height: 40,
+    alignSelf: 'flex-end',
+    marginRight: 10,
+  },
+  createButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
