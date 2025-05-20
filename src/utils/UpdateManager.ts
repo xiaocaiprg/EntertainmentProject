@@ -30,7 +30,7 @@ class UpdateManager {
 
       // 创建更新对象
       this.updateAPK = new UpdateAPK({
-        apkVersionUrl: 'https://junlong.biz/image/apk_version.json',
+        apkVersionUrl: 'https://junlongpro.com/image/apk_version.json',
         fileProviderAuthority: 'com.entertainmentproject.provider',
         // 使用应用缓存目录，无需存储权限
         downloadDestDirectory: downloadDir,
