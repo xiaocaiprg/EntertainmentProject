@@ -8,8 +8,9 @@ import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
-import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS } from '../interface/IModuleProps';
+import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS, CURRENCY_OPTIONS } from '../interface/IModuleProps';
 import { ChallengeType } from '../../../interface/Common';
+
 interface NewChallengeFormProps {
   challengeType: ChallengeType;
   operators: UserResult[];
@@ -38,7 +39,8 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
       !!formData.operatorCode &&
       formData.locationId > 0 &&
       !!formData.date &&
-      validateNumberInput(formData.principal) > 0
+      validateNumberInput(formData.principal) > 0 &&
+      !!formData.currency
     );
   }, [formData]);
 
@@ -69,6 +71,21 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
           onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.BET_AMOUNT, isOpen)}
           zIndex={1900}
           zIndexInverse={2100}
+        />
+      </>
+      <>
+        <Text style={styles.labelText}>币种</Text>
+        <DropdownSelect
+          options={CURRENCY_OPTIONS}
+          selectedValue={formData.currency}
+          placeholder="请选择币种"
+          onSelect={(value: any) => updateField('currency', value)}
+          valueKey="value"
+          labelKey="label"
+          isOpen={activeDropdown === DropdownType.CURRENCY}
+          onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.CURRENCY, isOpen)}
+          zIndex={1800}
+          zIndexInverse={2200}
         />
       </>
       <>

@@ -16,7 +16,7 @@ export const ProfitCard = React.memo((props: ProfitCardProps) => {
       </View>
       <View style={styles.rightContent}>
         <Text style={{ fontSize: 16, fontWeight: 'bold', color: item.profit >= 0 ? '#2ecc71' : '#e74c3c' }}>
-          {item.profitStr}
+          {item.profitStr} {item.currency && `(${item.currency})`}
         </Text>
       </View>
     </View>

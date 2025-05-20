@@ -104,6 +104,7 @@ export interface GameMatchSimpleDto {
   docPersonName: string;
   gameDate: string;
   id: number;
+  currency: string;
   isEnabled: number;
   name: string;
   playPersonCode: string;

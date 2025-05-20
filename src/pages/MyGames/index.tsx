@@ -46,6 +46,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
   const [selectedContribution, setSelectedContribution] = useState<ContributionDto[]>([]);
   const [selectedProfit, setSelectedProfit] = useState<GameMatchProfitDto | null>(null);
+  const [currency, setCurrency] = useState<string>('');
   const lastFetchedMatchId = useRef<number>(-1);
 
   // 获取已完成的挑战列表
@@ -96,6 +97,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     if (detailData) {
       setSelectedProfit(detailData.gameMatchProfitDto || null);
       setSelectedContribution(detailData.contributionDtoList || []);
+      setCurrency(detailData.currency || '');
       lastFetchedMatchId.current = matchId;
     }
     setDetailLoading(false);
@@ -335,6 +337,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
       <ProfitModal
         visible={profitModalVisible}
         onClose={handleCloseProfitModal}
+        currency={currency}
         profit={selectedProfit}
         loading={detailLoading}
       />
@@ -342,6 +345,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
       <ContributionModal
         visible={contributionModalVisible}
         onClose={handleCloseContributionModal}
+        currency={currency}
         selectedContribution={selectedContribution}
         loading={detailLoading}
       />

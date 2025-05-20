@@ -49,6 +49,10 @@ const ChallengeItem: React.FC<ChallengeItemProps> = React.memo(({ item, index, o
               <CustomText style={styles.label}>玩法:</CustomText>
               <CustomText style={styles.value}>{item.playRuleName || '-'}</CustomText>
             </View>
+            <View style={styles.itemInfoRow}>
+              <CustomText style={styles.label}>币种:</CustomText>
+              <CustomText style={styles.value}>{item.currency || '-'}</CustomText>
+            </View>
           </View>
           <View style={styles.itemInfoContainer}>
             <View style={styles.itemInfoRow}>

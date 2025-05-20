@@ -157,7 +157,9 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
   const renderInvestForm = useCallback(() => {
     return (
       <View style={styles.investFormCard}>
-        <CustomText style={styles.cardTitle}>出资金额</CustomText>
+        <CustomText style={styles.cardTitle}>
+          出资金额 {matchDetail?.currency && `(${matchDetail?.currency})`}
+        </CustomText>
         <TextInput
           style={styles.amountInput}
           value={amount}
@@ -181,7 +183,15 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
         </TouchableOpacity>
       </View>
     );
-  }, [amount, handleAmountChange, handleInvest, isAvailableForInvest, matchDetail?.availableAmount, submitting]);
+  }, [
+    amount,
+    handleAmountChange,
+    handleInvest,
+    isAvailableForInvest,
+    matchDetail?.availableAmount,
+    matchDetail?.currency,
+    submitting,
+  ]);
 
   if (loading) {
     return (
