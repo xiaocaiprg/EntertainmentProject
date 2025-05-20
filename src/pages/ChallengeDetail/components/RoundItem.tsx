@@ -101,12 +101,12 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   label: {
-    fontSize: 15,
+    fontSize: 13,
     color: '#666',
     marginRight: 5,
   },
   value: {
-    fontSize: 15,
+    fontSize: 13,
     color: '#333',
   },
   pointsContainer: {
