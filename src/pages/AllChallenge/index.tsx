@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CustomText from '../../components/CustomText';
+import { useTranslation } from '../../hooks/useTranslation';
 import { getChallengeList } from '../../api/services/gameService';
 import { ChallengeListParams, GameMatchPageDto } from '../../interface/Game';
 import { ChallengeStatus } from '../../interface/Common';
@@ -10,24 +11,27 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getStatusText } from '../../public/Game';
 
-// 状态Tab选项
-const STATUS_TABS = [
-  { label: '全部', value: -1 },
-  { label: '募资中', value: ChallengeStatus.FUNDRAISING },
-  { label: '募资完成', value: ChallengeStatus.FUNDRAISING_COMPLETED },
-  { label: '进行中', value: ChallengeStatus.IN_PROGRESS },
-  { label: '已结束', value: ChallengeStatus.ENDED },
-  { label: '已完成', value: ChallengeStatus.COMPLETED },
-];
-
 export const AllChallengeScreen = React.memo(() => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<number>(-1); // 默认选中'全部'标签
   const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(10).current;
   const [loading, setLoading] = useState<boolean>(true);
   const [hasMore, setHasMore] = useState<boolean>(false);
+
+  const STATUS_TABS = useMemo(
+    () => [
+      { label: t('allChallenge.tabs.all'), value: -1 },
+      { label: t('allChallenge.tabs.fundraising'), value: ChallengeStatus.FUNDRAISING },
+      { label: t('allChallenge.tabs.fundraisingCompleted'), value: ChallengeStatus.FUNDRAISING_COMPLETED },
+      { label: t('allChallenge.tabs.inProgress'), value: ChallengeStatus.IN_PROGRESS },
+      { label: t('allChallenge.tabs.ended'), value: ChallengeStatus.ENDED },
+      { label: t('allChallenge.tabs.completed'), value: ChallengeStatus.COMPLETED },
+    ],
+    [t],
+  );
 
   // 清空列表并重置分页
   const resetList = useCallback(() => {
@@ -80,6 +84,7 @@ export const AllChallengeScreen = React.memo(() => {
     fetchChallengeList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
+
   // 点击挑战项，跳转到详情页
   const handleItemPress = useCallback(
     (matchId: number | undefined) => {
@@ -102,7 +107,7 @@ export const AllChallengeScreen = React.memo(() => {
             </CustomText>
             {item?.raceName && (
               <CustomText numberOfLines={1} style={[styles.itemName, { fontSize: 14 }]}>
-                比赛:{item.raceName || '-'}
+                {item.raceName || '-'}
               </CustomText>
             )}
             <View style={[styles.statusTag, { backgroundColor: status.color + '20' }]}>
@@ -114,37 +119,37 @@ export const AllChallengeScreen = React.memo(() => {
             <View style={styles.itemLeft}>
               <View style={styles.itemRow}>
                 <>
-                  <CustomText style={styles.label}>时间:</CustomText>
+                  <CustomText style={styles.label}>{t('allChallenge.time')}:</CustomText>
                   <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
                     {item.gameDate || '-'}
                   </CustomText>
                 </>
                 <>
-                  <CustomText style={styles.label}>本金:</CustomText>
+                  <CustomText style={styles.label}>{t('allChallenge.principal')}:</CustomText>
                   <CustomText style={styles.value}>{item.principal || '-'}</CustomText>
                 </>
               </View>
               <View style={styles.itemRow}>
                 <>
-                  <CustomText style={styles.label}>地点:</CustomText>
+                  <CustomText style={styles.label}>{t('allChallenge.location')}:</CustomText>
                   <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
                     {item.addressName || '-'}
                   </CustomText>
                 </>
                 <>
-                  <CustomText style={styles.label}>投手:</CustomText>
+                  <CustomText style={styles.label}>{t('allChallenge.pitcher')}:</CustomText>
                   <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
                 </>
               </View>
               <View style={styles.itemRow}>
                 <>
-                  <CustomText style={styles.label}>打法:</CustomText>
+                  <CustomText style={styles.label}>{t('allChallenge.playRule')}:</CustomText>
                   <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
                     {item.playRuleName || '-'}
                   </CustomText>
                 </>
                 <>
-                  <CustomText style={styles.label}>币种:</CustomText>
+                  <CustomText style={styles.label}>{t('allChallenge.currency')}:</CustomText>
                   <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
                     {item.currency || '-'}
                   </CustomText>
@@ -159,7 +164,7 @@ export const AllChallengeScreen = React.memo(() => {
         </TouchableOpacity>
       );
     },
-    [handleItemPress],
+    [handleItemPress, t],
   );
 
   // 渲染列表底部加载状态
@@ -170,10 +175,10 @@ export const AllChallengeScreen = React.memo(() => {
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <CustomText style={styles.footerText}>加载中...</CustomText>
+        <CustomText style={styles.footerText}>{t('allChallenge.loading')}</CustomText>
       </View>
     );
-  }, [loading]);
+  }, [loading, t]);
 
   // 返回按钮处理
   const handleBack = useCallback(() => {
@@ -194,7 +199,7 @@ export const AllChallengeScreen = React.memo(() => {
         ))}
       </View>
     );
-  }, [activeTab, handleTabChange]);
+  }, [activeTab, handleTabChange, STATUS_TABS]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -203,7 +208,7 @@ export const AllChallengeScreen = React.memo(() => {
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <CustomText style={styles.headerTitle}>所有挑战</CustomText>
+        <CustomText style={styles.headerTitle}>{t('allChallenge.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -222,7 +227,7 @@ export const AllChallengeScreen = React.memo(() => {
         />
         {challengeList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <CustomText style={styles.emptyText}>暂无挑战记录</CustomText>
+            <CustomText style={styles.emptyText}>{t('allChallenge.noData')}</CustomText>
           </View>
         )}
       </View>

@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity, Text } from 'react-native';
+import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import CustomText from '../../components/CustomText';
 import { THEME_COLORS } from '../../utils/styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ExistingChallengeForm from './components/ExistingChallengeForm';
@@ -81,7 +82,7 @@ export const ExistingChallengeScreen = React.memo(() => {
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>查询已有挑战</Text>
+        <CustomText style={styles.headerTitle}>查询已有挑战</CustomText>
         <View style={styles.placeholder} />
       </View>
       <View style={styles.content}>

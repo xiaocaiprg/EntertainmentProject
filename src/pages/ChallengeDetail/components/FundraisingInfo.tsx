@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import CustomText from '../../../components/CustomText';
 import { GameMatchDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface FundraisingInfoProps {
   matchDetail: GameMatchDto | null;
@@ -10,6 +11,7 @@ interface FundraisingInfoProps {
 
 export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props) => {
   const { matchDetail } = props;
+  const { t } = useTranslation();
 
   const percentage = useMemo(() => {
     const contributedAmount = matchDetail?.contributedAmount || 0;
@@ -26,18 +28,18 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
   }
   return (
     <View style={styles.container}>
-      <CustomText style={styles.title}>募资信息</CustomText>
+      <CustomText style={styles.title}>{t('challengeDetail.fundraisingInfo')}</CustomText>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <CustomText style={styles.label}>本金</CustomText>
+          <CustomText style={styles.label}>{t('challengeDetail.principal')}</CustomText>
           <CustomText style={styles.value}>{matchDetail.principal || '-'}</CustomText>
         </View>
         <View style={styles.infoItem}>
-          <CustomText style={styles.label}>已募资金额</CustomText>
+          <CustomText style={styles.label}>{t('challengeDetail.raisedAmount')}</CustomText>
           <CustomText style={styles.valueHighlight}>{matchDetail.contributedAmount || '0'}</CustomText>
         </View>
         <View style={styles.infoItem}>
-          <CustomText style={styles.label}>可募资金额</CustomText>
+          <CustomText style={styles.label}>{t('challengeDetail.availableAmount')}</CustomText>
           <CustomText style={styles.valueAvailable}>{matchDetail.availableAmount || '0'}</CustomText>
         </View>
       </View>
@@ -51,14 +53,20 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
 
       {hasContributions && (
         <View>
-          <CustomText style={styles.contributionTitle}>出资明细</CustomText>
+          <CustomText style={styles.contributionTitle}>{t('challengeDetail.contributionDetails')}</CustomText>
           <View style={styles.listContainer}>
             <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
               {matchDetail.contributionDtoList?.map((item, index) => (
                 <View key={`${item.id}-${index}`} style={styles.contributionItem}>
-                  <CustomText style={styles.contributionName}>出资人: {item.investPersonName}</CustomText>
-                  <CustomText style={styles.contributionAmount}>金额: {item.amount}</CustomText>
-                  <CustomText style={styles.contributionAmount}>出资比例: {item.contriRateStr}</CustomText>
+                  <CustomText style={styles.contributionName}>
+                    {t('challengeDetail.investor')}: {item.investPersonName}
+                  </CustomText>
+                  <CustomText style={styles.contributionAmount}>
+                    {t('challengeDetail.amount')}: {item.amount}
+                  </CustomText>
+                  <CustomText style={styles.contributionAmount}>
+                    {t('challengeDetail.contriRate')}: {item.contriRateStr}
+                  </CustomText>
                 </View>
               ))}
             </ScrollView>

@@ -1,20 +1,12 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, FlatList, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from '../../hooks/useTranslation';
 import { RootStackScreenProps } from '../router';
 import { getFrozenList } from '../../api/services/pointService';
 import { FrozeningDto } from '../../interface/Points';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
+import CustomText from '../../components/CustomText';
 
 type FrozenPointsScreenProps = RootStackScreenProps<'FrozenPoints'>;
 
@@ -50,25 +42,25 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
       return (
         <View style={styles.itemContainer}>
           <View style={styles.itemHeader}>
-            <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name}
-            </Text>
+            </CustomText>
           </View>
           <View style={styles.itemDetail}>
-            <Text style={styles.itemText}>
+            <CustomText style={styles.itemText}>
               {t('frozenPoints.amount')}: {item.amount} {item.currency && `(${item.currency})`}
-            </Text>
-            <Text style={styles.itemText}>
+            </CustomText>
+            <CustomText style={styles.itemText}>
               {t('frozenPoints.playPersonName')}: {item.playPersonName || '-'}
-            </Text>
+            </CustomText>
           </View>
           <View style={styles.itemDetail}>
-            <Text style={styles.itemText}>
+            <CustomText style={styles.itemText}>
               {t('frozenPoints.gameDate')}: {item.gameDate}
-            </Text>
-            <Text style={styles.itemText}>
+            </CustomText>
+            <CustomText style={styles.itemText}>
               {t('frozenPoints.addressName')}: {item.addressName || '-'}
-            </Text>
+            </CustomText>
           </View>
         </View>
       );
@@ -84,7 +76,7 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
     return (
       <View style={styles.footer}>
         <ActivityIndicator size="small" color="#999" />
-        <Text style={styles.footerText}>{t('common.loading')}</Text>
+        <CustomText style={styles.footerText}>{t('common.loading')}</CustomText>
       </View>
     );
   }, [loading, t]);
@@ -96,7 +88,7 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
     }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>{t('frozenPoints.noData')}</Text>
+        <CustomText style={styles.emptyText}>{t('frozenPoints.noData')}</CustomText>
       </View>
     );
   }, [loading, t]);
@@ -108,7 +100,7 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
         <TouchableOpacity onPress={handleBackPress}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('frozenPoints.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('frozenPoints.title')}</CustomText>
         <View style={{ width: 24 }} />
       </View>
 

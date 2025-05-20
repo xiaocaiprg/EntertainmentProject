@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity, Text } from 'react-native';
 import { THEME_COLORS } from '../../utils/styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -21,6 +21,9 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
   const [operatorList, setOperatorList] = useState<UserResult[]>([]);
   const [locationList, setLocationList] = useState<AddressInfo[]>([]);
   const [selectedChallengeType, setSelectedChallengeType] = useState<ChallengeType | ''>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const lastSubmitTimeRef = useRef<number>(0);
+  const throttleDelayRef = useRef<number>(1000); // 1秒的节流延迟
 
   // 使用单一状态管理表单数据
   const [formData, setFormData] = useState<ChallengeFormData>({
@@ -52,8 +55,23 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     }));
   }, []);
 
-  // 处理确认按钮点击
+  // 使用节流控制的提交函数
   const handleConfirm = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastSubmit = now - lastSubmitTimeRef.current;
+
+    // 如果距离上次提交的时间小于节流延迟，或者当前正在提交中，则直接返回
+    if (timeSinceLastSubmit < throttleDelayRef.current || isSubmitting) {
+      console.log('节流控制：拒绝重复提交', timeSinceLastSubmit);
+      return;
+    }
+
+    // 更新最后提交时间
+    lastSubmitTimeRef.current = now;
+
+    // 设置提交状态
+    setIsSubmitting(true);
+
     // 新增挑战
     const params: ChallengeCreateParams = {
       name: formData.name.trim(),
@@ -70,11 +88,13 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     const validation = validateChallengeParams(params);
     if (!validation.isValid) {
       Alert.alert('提示', validation.errorMessage || '表单填写有误');
+      setIsSubmitting(false);
       return;
     }
     if (raceId) {
       params.raceId = raceId;
     }
+
     createChallenge(params)
       .then((res) => {
         if (res) {
@@ -85,8 +105,12 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       .catch((err) => {
         console.log('新增挑战失败', err.message);
         Alert.alert('提示', err.message);
+      })
+      .finally(() => {
+        // 请求完成后，重置提交状态
+        setIsSubmitting(false);
       });
-  }, [formData, navigation, raceId]);
+  }, [formData, navigation, raceId, isSubmitting]);
 
   // 处理返回按钮点击
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);

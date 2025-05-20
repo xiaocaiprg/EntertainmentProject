@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchPageDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
 import { ChallengeStatus } from '../../../interface/Common';
 import { useTranslation } from '../../../hooks/useTranslation';
-
+import CustomText from '../../../components/CustomText';
 interface ChallengeCardProps {
   item: GameMatchPageDto;
   onEditPress: (challengeId: number | undefined) => void;
@@ -55,34 +55,32 @@ export const ChallengeCard = React.memo((props: ChallengeCardProps) => {
   return (
     <View style={styles.itemContainer}>
       <View style={styles.itemHeader}>
-        <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+        <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
           {item.name || '-'}
-        </Text>
+        </CustomText>
         <View style={[styles.statusTag, { backgroundColor: statusInfo.style.backgroundColor }]}>
-          <Text style={[styles.statusText, { color: statusInfo.style.textColor }]}>{statusInfo.statusText}</Text>
+          <CustomText style={[styles.statusText, { color: statusInfo.style.textColor }]}>
+            {statusInfo.statusText}
+          </CustomText>
         </View>
       </View>
       <View style={styles.itemContent}>
         <View style={styles.itemLeft}>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>{t('challenge.createTime')}:</Text>
-            <Text style={styles.value}>{item.createTime || '-'}</Text>
+            <CustomText style={styles.label}>{t('challenge.location')}:</CustomText>
+            <CustomText style={styles.value}>{item.addressName || '-'}</CustomText>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>{t('challenge.location')}:</Text>
-            <Text style={styles.value}>{item.addressName || '-'}</Text>
+            <CustomText style={styles.label}>{t('challenge.time')}:</CustomText>
+            <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>{t('challenge.time')}:</Text>
-            <Text style={styles.value}>{item.gameDate || '-'}</Text>
+            <CustomText style={styles.label}>{t('challenge.pitcher')}:</CustomText>
+            <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
           </View>
           <View style={styles.itemRow}>
-            <Text style={styles.label}>{t('challenge.pitcher')}:</Text>
-            <Text style={styles.value}>{item.playPersonName || '-'}</Text>
-          </View>
-          <View style={styles.itemRow}>
-            <Text style={styles.label}>{t('challenge.recorder')}:</Text>
-            <Text style={styles.value}>{item.docPersonName || '-'}</Text>
+            <CustomText style={styles.label}>{t('challenge.recorder')}:</CustomText>
+            <CustomText style={styles.value}>{item.docPersonName || '-'}</CustomText>
           </View>
         </View>
         <TouchableOpacity style={styles.editButton} onPress={handleEditPress} activeOpacity={0.7}>
