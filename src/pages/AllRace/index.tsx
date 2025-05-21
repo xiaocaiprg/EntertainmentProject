@@ -1,30 +1,24 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import { RootStackScreenProps } from '../router';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getRaceList } from '../../api/services/raceService';
 import { RaceListParams, RacePageDto, RaceStatus } from '../../interface/Race';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
+import CustomText from '../../components/CustomText';
 import { THEME_COLORS } from '../../utils/styles';
 import { getRaceStatusText } from '../../public/Race';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // 状态Tab选项
 const STATUS_TABS = [
-  { label: '全部', value: RaceStatus.ALL },
-  { label: '进行中', value: RaceStatus.IN_PROGRESS },
+  { label: 'all', value: RaceStatus.ALL },
+  { label: 'inProgress', value: RaceStatus.IN_PROGRESS },
   //   { label: '已结束', value: RaceStatus.ENDED },
 ];
 
 export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.memo(({ navigation }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<number>(RaceStatus.ALL); // 默认选中'全部'标签
   const [raceList, setRaceList] = useState<RacePageDto[]>([]);
   const pageNum = useRef<number>(1);
@@ -101,31 +95,31 @@ export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.me
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemHeader}>
-            <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
-            </Text>
+            </CustomText>
             <View style={[styles.statusTag, { backgroundColor: status.color + '20' }]}>
-              <Text style={[styles.statusText, { color: status.color }]}>{status.text}</Text>
+              <CustomText style={[styles.statusText, { color: status.color }]}>{status.text}</CustomText>
             </View>
           </View>
 
           <View style={styles.itemContent}>
             <View style={styles.itemLeft}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>开始时间:</Text>
-                <Text style={styles.value}>{item.beginDate || '-'}</Text>
+                <CustomText style={styles.label}>{t('allRace.startTime')}:</CustomText>
+                <CustomText style={styles.value}>{item.beginDate || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>结束时间:</Text>
-                <Text style={styles.value}>{item.endDate || '-'}</Text>
+                <CustomText style={styles.label}>{t('allRace.endTime')}:</CustomText>
+                <CustomText style={styles.value}>{item.endDate || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>比赛规则:</Text>
-                <Text style={styles.value}>{item.playRuleName || '-'}</Text>
+                <CustomText style={styles.label}>{t('allRace.raceRule')}:</CustomText>
+                <CustomText style={styles.value}>{item.playRuleName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>转码限制:</Text>
-                <Text style={styles.value}>{item.turnOverLimit || '-'}</Text>
+                <CustomText style={styles.label}>{t('allRace.turnOverLimit')}:</CustomText>
+                <CustomText style={styles.value}>{item.turnOverLimit || '-'}</CustomText>
               </View>
             </View>
             <View style={styles.arrowContainer}>
@@ -135,7 +129,7 @@ export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.me
         </TouchableOpacity>
       );
     },
-    [handleItemPress],
+    [handleItemPress, t],
   );
 
   // 渲染列表底部加载状态
@@ -146,10 +140,10 @@ export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.me
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <Text style={styles.footerText}>加载中...</Text>
+        <CustomText style={styles.footerText}>{t('allRace.loading')}</CustomText>
       </View>
     );
-  }, [loading]);
+  }, [loading, t]);
 
   // 返回按钮处理
   const handleBack = useCallback(() => {
@@ -162,13 +156,15 @@ export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.me
       <View style={styles.tabsContainer}>
         {STATUS_TABS.map((tab) => (
           <TouchableOpacity key={tab.value} style={styles.tabItem} onPress={() => handleTabChange(tab.value)}>
-            <Text style={[styles.tabText, activeTab === tab.value && styles.activeTabText]}>{tab.label}</Text>
+            <CustomText style={[styles.tabText, activeTab === tab.value && styles.activeTabText]}>
+              {t(`allRace.tabs.${tab.label}`)}
+            </CustomText>
             <View style={[styles.tabLine, activeTab === tab.value && styles.activeTabLine]} />
           </TouchableOpacity>
         ))}
       </View>
     );
-  }, [activeTab, handleTabChange]);
+  }, [activeTab, handleTabChange, t]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -177,7 +173,7 @@ export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.me
         <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>所有比赛</Text>
+        <CustomText style={styles.headerTitle}>{t('allRace.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -196,7 +192,7 @@ export const AllRaceScreen: React.FC<RootStackScreenProps<'AllRace'>> = React.me
         />
         {raceList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无比赛记录</Text>
+            <CustomText style={styles.emptyText}>{t('allRace.noData')}</CustomText>
           </View>
         )}
       </View>

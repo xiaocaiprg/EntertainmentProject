@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import DropdownSelect from '../../../components/DropdownSelect';
 import { THEME_COLORS } from '../../../utils/styles';
 import { GameMatchDto, GameRoundDto } from '../../../interface/Game';
 import { getRoundList } from '../../../api/services/roundService';
-
+import CustomText from '../../../components/CustomText';
 interface ExistingChallengeFormProps {
   challenges: GameMatchDto[];
   selectedChallengeId: number;
@@ -88,26 +88,26 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
       return (
         <View style={styles.roundItem}>
           <View style={styles.roundInfo}>
-            <Text style={styles.roundName}>{`场次${item.orderNumber || ''}`}</Text>
+            <CustomText style={styles.roundName}>{`场次${item.orderNumber || ''}`}</CustomText>
             <View style={[styles.statusBadge, isActive ? styles.activeBadge : styles.inactiveBadge]}>
-              <Text style={[styles.statusBadgeText, isActive ? styles.activeText : styles.inactiveText]}>
+              <CustomText style={[styles.statusBadgeText, isActive ? styles.activeText : styles.inactiveText]}>
                 {isActive ? '进行中' : '已结束'}
-              </Text>
+              </CustomText>
             </View>
           </View>
-          {item.playPersonName && <Text style={styles.roundDetail}>投手: {item.playPersonName}</Text>}
-          {item.addressName && <Text style={styles.roundDetail}>地点: {item.addressName}</Text>}
+          {item.playPersonName && <CustomText style={styles.roundDetail}>投手: {item.playPersonName}</CustomText>}
+          {item.addressName && <CustomText style={styles.roundDetail}>地点: {item.addressName}</CustomText>}
         </View>
       );
     }, []);
     // 渲染场次列表
     const renderRoundsList = useCallback(() => {
       if (loading) {
-        return <Text style={styles.loadingText}>加载中...</Text>;
+        return <CustomText style={styles.loadingText}>加载中...</CustomText>;
       }
 
       if (sortedRounds.length === 0) {
-        return <Text style={styles.emptyText}>暂无场次记录</Text>;
+        return <CustomText style={styles.emptyText}>暂无场次记录</CustomText>;
       }
 
       return (
@@ -132,7 +132,7 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
         />
         {selectedChallengeId > 0 && (
           <View style={styles.roundsContainer}>
-            <Text style={styles.roundsTitle}>场次列表</Text>
+            <CustomText style={styles.roundsTitle}>场次列表</CustomText>
             {renderRoundsList()}
           </View>
         )}
@@ -144,7 +144,7 @@ export const ExistingChallengeForm: React.FC<ExistingChallengeFormProps> = React
           onPress={onConfirm}
           disabled={isConfirmDisabled}
         >
-          <Text style={styles.confirmButtonText}>{getConfirmButtonText}</Text>
+          <CustomText style={styles.confirmButtonText}>{getConfirmButtonText}</CustomText>
         </TouchableOpacity>
       </View>
     );

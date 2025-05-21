@@ -60,13 +60,13 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
             <View style={styles.itemTop}>
               <View style={styles.itemRow}>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>挑战名称:</CustomText>
+                  <CustomText style={styles.label}>挑战:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.name || '-'}
                   </CustomText>
                 </View>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>挑战时间:</CustomText>
+                  <CustomText style={styles.label}>时间:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.gameDate || '-'}
                   </CustomText>
@@ -75,7 +75,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
               <View style={styles.itemRow}>
                 {item.raceName ? (
                   <View style={styles.itemSubRow}>
-                    <CustomText style={styles.label}>比赛名称:</CustomText>
+                    <CustomText style={styles.label}>比赛:</CustomText>
                     <CustomText style={styles.value} numberOfLines={1}>
                       {item.raceName || '-'}
                     </CustomText>
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#999',
     marginRight: 8,
-    width: 80,
+    width: 40,
   },
   value: {
     fontSize: 14,
