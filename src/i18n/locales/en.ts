@@ -265,6 +265,12 @@ export const en = {
     transfer: 'Transfer',
     frozenPoints: 'Pending Points',
     profit: 'Profit',
+    oneClickSettlement: 'One-Click Settlement',
+    settlementConfirmTitle: 'Confirm Settlement',
+    settlementConfirmMessage:
+      'Are you sure you want to proceed with one-click settlement? This operation is irreversible.',
+    settlementSuccess: 'Settlement successful',
+    settlementFailed: 'Settlement failed, please try again',
   },
 
   // Frozen Points

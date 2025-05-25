@@ -265,6 +265,11 @@ export const zh = {
     transfer: '转积分',
     frozenPoints: '查在途',
     profit: '盈利',
+    oneClickSettlement: '一键结算转码',
+    settlementConfirmTitle: '确认结算',
+    settlementConfirmMessage: '确定要进行一键结算转码吗？此操作不可撤销。',
+    settlementSuccess: '结算成功',
+    settlementFailed: '结算失败，请重试',
   },
 
   // 在途积分

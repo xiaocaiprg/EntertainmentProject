@@ -8,6 +8,7 @@ export const PATH = {
   GET_FROZEN_LIST: 'haiyang/frozen/list',
   TRANSFER_POINT: 'haiyang/transfer',
   GET_PROFIT_LIST: 'haiyang/business/profit/page',
+  TURNOVER_PROCESS: 'haiyang/turnover/process',
 };
 
 export const getPointDetail = (params: QueryParams): Promise<PageDtoTransferLogDto | null> => {
@@ -57,4 +58,13 @@ export const getProfitList = (params: QueryParams): Promise<PageDtoProfitDto | n
     .catch(() => {
       return null;
     });
+};
+export const turnoverProcess = (): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.TURNOVER_PROCESS).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };
