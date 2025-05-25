@@ -1,5 +1,5 @@
 import { get, post } from '../request';
-import { UserResult, UserParams } from '../../interface/User';
+import { UserResult, UserParams, UserDetailParams, LoginResultDto } from '../../interface/User';
 import { ApiResponse } from '../../interface/IModuleProps';
 import { APP_VERSION_URL } from '../../utils/UpdateManager';
 
@@ -7,6 +7,7 @@ export const PATH = {
   LOGIN: 'haiyang/business/login',
   LOGIN_STATUS: 'haiyang/business/token',
   CHANGE_PASSWORD: 'haiyang/business/password/change',
+  GET_USER_DETAIL: 'haiyang/business/detail',
 };
 
 export const userlogin = (params: UserParams): Promise<UserResult> => {
@@ -46,4 +47,17 @@ export const getSetting = async (): Promise<any> => {
     console.error('获取设置失败:', error);
     return null;
   }
+};
+export const getUserDetail = async (params: UserDetailParams): Promise<LoginResultDto | null> => {
+  return post<ApiResponse<LoginResultDto>>(PATH.GET_USER_DETAIL, params)
+    .then((res) => {
+      if (res.code === 200) {
+        return res.data;
+      } else {
+        throw new Error(res.msg);
+      }
+    })
+    .catch(() => {
+      return null;
+    });
 };

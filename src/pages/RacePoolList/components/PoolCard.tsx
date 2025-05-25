@@ -71,6 +71,9 @@ export const PoolCard = React.memo((props: PoolCardProps) => {
         <CustomText style={[styles.title, { color }]} numberOfLines={1}>
           {pool.name}
         </CustomText>
+        <CustomText style={styles.statusText} numberOfLines={1}>
+          {pool.isEnabled === RacePoolStatus.ENABLED ? t('racePoolList.active') : t('racePoolList.inactive')}
+        </CustomText>
       </View>
 
       <View style={[styles.amountSection, { backgroundColor: `${color}10` }]}>
@@ -85,7 +88,7 @@ export const PoolCard = React.memo((props: PoolCardProps) => {
               onPress={handleToggleStatus}
             >
               <CustomText style={styles.statusButtonText}>
-                {pool.isEnabled === RacePoolStatus.ENABLED ? t('racePoolList.inactive') : t('racePoolList.active')}
+                {pool.isEnabled === RacePoolStatus.ENABLED ? t('racePoolList.close') : t('racePoolList.open')}
               </CustomText>
             </TouchableOpacity>
 
@@ -138,8 +141,8 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    color: 'white',
     fontWeight: '500',
+    color: '#111',
   },
   amountSection: {
     alignItems: 'center',

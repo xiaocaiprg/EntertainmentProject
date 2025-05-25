@@ -22,6 +22,8 @@ import DropdownSelect from '../../components/DropdownSelect';
 import { getRacePoolListAll } from '../../api/services/raceService';
 import { RacePoolPageDto } from '../../interface/Race';
 import CustomText from '../../components/CustomText';
+import { getUserDetail } from '../../api/services/authService';
+import { LoginResultDto } from '../../interface/User';
 
 enum TransferType {
   PERSONAL = 'personal',
@@ -48,6 +50,8 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
   const [selectedPoolCode, setSelectedPoolCode] = useState<string>('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoadingPools, setIsLoadingPools] = useState(false);
+  const [recipientDetail, setRecipientDetail] = useState<LoginResultDto | null>(null);
+  const [isLoadingRecipient, setIsLoadingRecipient] = useState(false);
 
   useEffect(() => {
     const fetchPoolList = async () => {
@@ -91,6 +95,25 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     return poolList.find((pool) => pool.code === selectedPoolCode);
   }, [poolList, selectedPoolCode]);
 
+  const confirmMessage = useMemo(() => {
+    if (transferType === TransferType.POOL) {
+      const poolName = selectedPool?.name;
+      return t('pointsTransfer.confirmDetailedMessage', {
+        code: selectedPoolCode,
+        name: poolName,
+        points,
+      });
+    } else if (recipientDetail) {
+      return t('pointsTransfer.confirmDetailedMessage', {
+        code: account,
+        name: recipientDetail.name,
+        points,
+      });
+    } else {
+      return t('pointsTransfer.confirmMessage', { points });
+    }
+  }, [transferType, selectedPool, selectedPoolCode, recipientDetail, account, points, t]);
+
   const isFormValid = useMemo(() => {
     const condition = points.trim() !== '' && !isNaN(Number(points)) && Number(points) > 0;
     const userCondition = !!user?.availablePoints && Number(points) <= user.availablePoints;
@@ -128,12 +151,25 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     return '';
   }, [points, user?.availablePoints, t, isPoolTransfer, availablePoints]);
 
-  const handleTransferPress = useCallback(() => {
+  const handleTransferPress = useCallback(async () => {
     if (!isFormValid) {
       return;
     }
+
+    // 如果是转给个人或公司，获取接收方详情
+    if (transferType !== TransferType.POOL) {
+      setIsLoadingRecipient(true);
+      const detail = await getUserDetail({
+        code: account,
+        type: transferType === TransferType.PERSONAL ? 1 : 2,
+      });
+      if (detail) {
+        setRecipientDetail(detail);
+      }
+      setIsLoadingRecipient(false);
+    }
     setConfirmModalVisible(true);
-  }, [isFormValid]);
+  }, [isFormValid, transferType, account]);
 
   const handleConfirmTransfer = useCallback(async () => {
     setIsProcessing(true);
@@ -316,11 +352,13 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         </View>
 
         <TouchableOpacity
-          style={[styles.submitButton, !isFormValid && styles.submitButtonDisabled]}
+          style={[styles.submitButton, (!isFormValid || isLoadingRecipient) && styles.submitButtonDisabled]}
           onPress={handleTransferPress}
-          disabled={!isFormValid}
+          disabled={!isFormValid || isLoadingRecipient}
         >
-          <CustomText style={styles.submitButtonText}>{t('pointsTransfer.transfer')}</CustomText>
+          <CustomText style={styles.submitButtonText}>
+            {isLoadingRecipient ? t('common.loading') : t('pointsTransfer.transfer')}
+          </CustomText>
         </TouchableOpacity>
       </ScrollView>
 
@@ -328,7 +366,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       <ConfirmModal
         visible={confirmModalVisible}
         title={t('pointsTransfer.confirmTitle')}
-        message={t('pointsTransfer.confirmMessage', { points })}
+        message={confirmMessage}
         cancelText={t('common.cancel')}
         confirmText={t('common.confirm')}
         onCancel={() => setConfirmModalVisible(false)}

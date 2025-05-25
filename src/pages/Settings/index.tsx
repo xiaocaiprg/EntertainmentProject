@@ -15,6 +15,7 @@ interface LanguageOption {
 
 const languageOptions: LanguageOption[] = [
   { value: 'zh', label: '中文' },
+  { value: 'zhHant', label: '繁體中文' },
   { value: 'en', label: 'English' },
 ];
 
@@ -153,26 +154,27 @@ const styles = StyleSheet.create({
   },
   languageOptions: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   languageOption: {
-    width: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
-    paddingVertical: 5,
-    borderRadius: 25,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 12,
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#e0e0e0',
+    marginHorizontal: 4,
   },
   selectedLanguage: {
     backgroundColor: '#6c5ce7',
     borderColor: '#6c5ce7',
   },
   languageText: {
-    fontSize: 15,
+    fontSize: 13,
     color: '#333',
+    textAlign: 'center',
   },
   selectedLanguageText: {
     color: '#fff',
