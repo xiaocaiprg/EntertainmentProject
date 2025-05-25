@@ -177,9 +177,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     (item: GameMatchPageDto) => {
       const status = getStatusText(item.isEnabled);
       const showProfitBtn = item.isEnabled === ChallengeStatus.ENDED || item.isEnabled === ChallengeStatus.COMPLETED;
-      const isAllRoundEnd = item.roundList?.every((round) => round.isEnabled === ChallengeStatus.ENDED);
-      const showRestartBtn = item.isEnabled === ChallengeStatus.IN_PROGRESS && isAllRoundEnd && isOperationAdmin;
-      const showEditBetBtn = item.isEnabled === ChallengeStatus.IN_PROGRESS && isOperationAdmin;
+      const showEditBtn = item.isEnabled === ChallengeStatus.IN_PROGRESS && isOperationAdmin;
       // 判断挑战是否可以结束
       const canEndChallenge =
         isInvestmentManager &&
@@ -245,25 +243,16 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
                 <CustomText style={styles.buttonText}>{t('challengeDetail.endChallenge')}</CustomText>
               </TouchableOpacity>
             )}
-            {showRestartBtn && (
+            {showEditBtn && (
               <TouchableOpacity
                 style={[styles.actionButton, styles.restartButton]}
                 onPress={() => handleViewRoundDetail(item)}
               >
                 <Icon name="refresh" size={12} color="#fff" style={styles.buttonIcon} />
-                <CustomText style={styles.buttonText}>{t('myGames.restart')}</CustomText>
+                <CustomText style={styles.buttonText}>{t('myGames.edit')}</CustomText>
               </TouchableOpacity>
             )}
 
-            {showEditBetBtn && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.editBetButton]}
-                onPress={() => handleViewRoundDetail(item)}
-              >
-                <Icon name="edit" size={12} color="#fff" style={styles.buttonIcon} />
-                <CustomText style={styles.buttonText}>{t('myGames.editBet')}</CustomText>
-              </TouchableOpacity>
-            )}
             {showProfitBtn && (
               <TouchableOpacity style={styles.actionButton} onPress={() => handleViewProfit(item)}>
                 <CustomText style={styles.buttonText}>{t('myGames.viewProfit')}</CustomText>

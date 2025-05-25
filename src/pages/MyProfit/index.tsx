@@ -1,14 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, FlatList, ActivityIndicator } from 'react-native';
+import CustomText from '../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { RootStackScreenProps } from '../router';
@@ -61,7 +53,7 @@ export const MyProfitScreen: React.FC<MyProfitScreenProps> = React.memo((props) 
     return (
       <View style={styles.footer}>
         <ActivityIndicator size="small" color="#999" />
-        <Text style={styles.footerText}>加载中...</Text>
+        <CustomText style={styles.footerText}>加载中...</CustomText>
       </View>
     );
   }, [loading]);
@@ -72,7 +64,7 @@ export const MyProfitScreen: React.FC<MyProfitScreenProps> = React.memo((props) 
     }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>暂无数据</Text>
+        <CustomText style={styles.emptyText}>暂无数据</CustomText>
       </View>
     );
   }, [loading]);
@@ -91,15 +83,15 @@ export const MyProfitScreen: React.FC<MyProfitScreenProps> = React.memo((props) 
         <TouchableOpacity onPress={handleGoBack}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>盈利明细</Text>
+        <CustomText style={styles.headerTitle}>盈利明细</CustomText>
         <View style={{ width: 24, opacity: 0 }} />
       </View>
 
       <View style={styles.profitSummary}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-          <Text style={styles.totalText}>总盈利:</Text>
-          <Text style={styles.totalProfit}>{user?.profitStr}</Text>
-          <Text style={styles.totalText}>(HKD)</Text>
+          <CustomText style={styles.totalText}>总盈利:</CustomText>
+          <CustomText style={styles.totalProfit}>{user?.profitStr}</CustomText>
+          <CustomText style={styles.totalText}>(HKD)</CustomText>
         </View>
       </View>
       <View style={{ flex: 1 }}>

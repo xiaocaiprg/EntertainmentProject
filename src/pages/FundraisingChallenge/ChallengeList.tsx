@@ -60,13 +60,13 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
             <View style={styles.itemTop}>
               <View style={styles.itemRow}>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>挑战:</CustomText>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.challenge')}:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.name || '-'}
                   </CustomText>
                 </View>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>时间:</CustomText>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.time')}:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.gameDate || '-'}
                   </CustomText>
@@ -75,14 +75,14 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
               <View style={styles.itemRow}>
                 {item.raceName ? (
                   <View style={styles.itemSubRow}>
-                    <CustomText style={styles.label}>比赛:</CustomText>
+                    <CustomText style={styles.label}>{t('fundraisingChallenge.race')}:</CustomText>
                     <CustomText style={styles.value} numberOfLines={1}>
                       {item.raceName || '-'}
                     </CustomText>
                   </View>
                 ) : null}
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>地点:</CustomText>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.location')}:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.addressName || '-'}
                   </CustomText>
@@ -90,23 +90,23 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
               </View>
               <View style={styles.itemRow}>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>本金:</CustomText>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.principal')}:</CustomText>
                   <CustomText style={styles.value}>{item.principal || '-'}</CustomText>
                 </View>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>投手:</CustomText>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.pitcher')}:</CustomText>
                   <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
                 </View>
               </View>
               <View style={styles.itemRow}>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>打法:</CustomText>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.playRule')}:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.playRuleName || '-'}
                   </CustomText>
                 </View>
                 <View style={styles.itemSubRow}>
-                  <CustomText style={styles.label}>币种:</CustomText>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.currency')}:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.currency || '-'}
                   </CustomText>
@@ -114,13 +114,13 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
               </View>
             </View>
             <TouchableOpacity style={styles.investButton} onPress={() => onItemPress(item.id)} activeOpacity={0.7}>
-              <CustomText style={styles.investButtonText}>出资</CustomText>
+              <CustomText style={styles.investButtonText}>{t('fundraisingChallenge.invest')}</CustomText>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
       );
     },
-    [onItemPress],
+    [onItemPress, t],
   );
 
   // 渲染列表底部加载状态

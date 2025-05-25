@@ -40,17 +40,17 @@ export const ChallengeDetailCard: React.FC<ChallengeDetailCardProps> = React.mem
         </View>
         <View style={styles.detailColumnRight}>
           <View style={styles.detailItem}>
-            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.principal')}:</CustomText>
+            <CustomText style={styles.longLabel}>{t('fundraisingChallenge.principal')}:</CustomText>
             <CustomText style={[styles.detailValue, styles.amountValue]}>{matchDetail.principal || '-'}</CustomText>
           </View>
           <View style={styles.detailItem}>
-            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.raisedAmount')}:</CustomText>
+            <CustomText style={styles.longLabel}>{t('fundraisingChallenge.raisedAmount')}:</CustomText>
             <CustomText style={[styles.detailValue, styles.amountValue]}>
               {matchDetail.contributedAmount || '-'}
             </CustomText>
           </View>
           <View style={styles.detailItem}>
-            <CustomText style={styles.detailLabel}>{t('fundraisingChallenge.availableAmount')}:</CustomText>
+            <CustomText style={styles.longLabel}>{t('fundraisingChallenge.availableAmount')}:</CustomText>
             <CustomText style={[styles.detailValue, styles.availableAmount]}>
               {matchDetail.availableAmount || '0'}
             </CustomText>
@@ -93,6 +93,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   detailLabel: {
+    fontSize: 14,
+    color: '#999',
+    width: 50,
+  },
+  longLabel: {
     fontSize: 14,
     color: '#999',
     width: 80,

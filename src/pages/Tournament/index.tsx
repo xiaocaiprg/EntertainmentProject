@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
+import CustomText from '../../components/CustomText';
 
 interface Tournament {
   id: number;
@@ -72,20 +73,20 @@ export const TournamentScreen = React.memo(() => {
     <TouchableOpacity key={tournament.id} style={styles.tournamentCard}>
       <Image source={{ uri: tournament.image }} style={styles.tournamentImage} />
       <View style={styles.tournamentInfo}>
-        <Text style={styles.tournamentTitle}>{tournament.title}</Text>
+        <CustomText style={styles.tournamentTitle}>{tournament.title}</CustomText>
         <View style={styles.tournamentMeta}>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(tournament.status) }]}>
-            <Text style={styles.statusText}>{tournament.status}</Text>
+            <CustomText style={styles.statusText}>{tournament.status}</CustomText>
           </View>
-          <Text style={styles.tournamentDetail}>{tournament.endTime}</Text>
+          <CustomText style={styles.tournamentDetail}>{tournament.endTime}</CustomText>
         </View>
         <View style={styles.tournamentStats}>
-          <Text style={styles.tournamentDetail}>
+          <CustomText style={styles.tournamentDetail}>
             <Icon name="people" size={14} color="#666" /> {tournament.participants}人参与
-          </Text>
-          <Text style={styles.tournamentDetail}>
+          </CustomText>
+          <CustomText style={styles.tournamentDetail}>
             <Icon name="card-giftcard" size={14} color="#666" /> {tournament.prize}
-          </Text>
+          </CustomText>
         </View>
       </View>
     </TouchableOpacity>
@@ -109,11 +110,11 @@ export const TournamentScreen = React.memo(() => {
   const renderLeaderboardItem = (player: LeaderboardPlayer, index: number) => (
     <View key={player.rank} style={styles.leaderboardItem}>
       <View style={styles.rankContainer}>
-        <Text style={[styles.rankText, index < 3 ? styles.topRank : null]}>{player.rank}</Text>
+        <CustomText style={[styles.rankText, index < 3 ? styles.topRank : null]}>{player.rank}</CustomText>
       </View>
       <Image source={{ uri: player.avatar }} style={styles.playerAvatar} />
-      <Text style={styles.playerName}>{player.name}</Text>
-      <Text style={styles.playerScore}>{player.score}</Text>
+      <CustomText style={styles.playerName}>{player.name}</CustomText>
+      <CustomText style={styles.playerScore}>{player.score}</CustomText>
     </View>
   );
 
@@ -121,23 +122,23 @@ export const TournamentScreen = React.memo(() => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>赛事</Text>
+          <CustomText style={styles.headerTitle}>赛事</CustomText>
         </View>
         <ScrollView style={styles.content}>
           {/* 赛事列表 */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>热门赛事</Text>
+            <CustomText style={styles.sectionTitle}>热门赛事</CustomText>
             <View style={styles.tournamentList}>{tournaments.map(renderTournamentItem)}</View>
           </View>
 
           {/* 排行榜 */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>排行榜</Text>
+            <CustomText style={styles.sectionTitle}>排行榜</CustomText>
             <View style={styles.leaderboardContainer}>
               <View style={styles.leaderboardHeader}>
-                <Text style={styles.leaderboardHeaderText}>排名</Text>
-                <Text style={[styles.leaderboardHeaderText, styles.playerNameHeader]}>玩家</Text>
-                <Text style={styles.leaderboardHeaderText}>积分</Text>
+                <CustomText style={styles.leaderboardHeaderText}>排名</CustomText>
+                <CustomText style={[styles.leaderboardHeaderText, styles.playerNameHeader]}>玩家</CustomText>
+                <CustomText style={styles.leaderboardHeaderText}>积分</CustomText>
               </View>
               {leaderboard.map(renderLeaderboardItem)}
             </View>

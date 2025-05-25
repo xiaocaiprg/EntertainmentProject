@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
 import { FilterProps, QueryCondition } from '../interface/ITurnoverQuery';
 import { DatePicker } from '../../../components/DatePicker';
+import CustomText from '../../../components/CustomText';
 import { formatDate } from '../../../utils/date';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SlideModal } from '../../../components/SlideModal';
@@ -84,7 +85,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
             style={[styles.selectorItem, selectedCompanyCode === company.code && styles.selectorItemSelected]}
             onPress={() => handleCompanySelect(company.code)}
           >
-            <Text style={styles.selectorItemText}>{company.name}</Text>
+            <CustomText style={styles.selectorItemText}>{company.name}</CustomText>
             {selectedCompanyCode === company.code && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
           </TouchableOpacity>
         ))}
@@ -99,7 +100,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
           style={[styles.selectorItem, !selectedPersonCode && styles.selectorItemSelected]}
           onPress={() => handlePersonSelect('')}
         >
-          <Text style={styles.selectorItemText}>不选择</Text>
+          <CustomText style={styles.selectorItemText}>不选择</CustomText>
           {!selectedPersonCode && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
         </TouchableOpacity>
 
@@ -109,7 +110,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
             style={[styles.selectorItem, selectedPersonCode === person.code && styles.selectorItemSelected]}
             onPress={() => handlePersonSelect(person.code)}
           >
-            <Text style={styles.selectorItemText}>{person.name}</Text>
+            <CustomText style={styles.selectorItemText}>{person.name}</CustomText>
             {selectedPersonCode === person.code && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
           </TouchableOpacity>
         ))}
@@ -125,9 +126,9 @@ export const FilterComponent = React.memo((props: FilterProps) => {
             style={[styles.filterItem, styles.companySelector]}
             onPress={() => setCompanyModalOpen(true)}
           >
-            <Text style={styles.filterText} numberOfLines={1}>
+            <CustomText style={styles.filterText} numberOfLines={1}>
               {selectedCompanyName}
-            </Text>
+            </CustomText>
             <Icon name="arrow-drop-down" size={20} color="#666" />
           </TouchableOpacity>
           <TouchableOpacity
@@ -135,21 +136,21 @@ export const FilterComponent = React.memo((props: FilterProps) => {
             onPress={() => selectedCompanyCode && setPersonModalOpen(true)}
             disabled={!selectedCompanyCode}
           >
-            <Text style={styles.filterText} numberOfLines={1}>
+            <CustomText style={styles.filterText} numberOfLines={1}>
               {selectedPersonName}
-            </Text>
+            </CustomText>
             <Icon name="arrow-drop-down" size={20} color="#666" />
           </TouchableOpacity>
         </View>
         <View style={styles.filterRow}>
           <View style={[styles.dateContainer, { marginRight: 5 }]}>
-            <Text style={styles.dateLabel}>开始时间:</Text>
+            <CustomText style={styles.dateLabel}>开始时间:</CustomText>
             <View style={styles.datePickerWrapper}>
               <DatePicker title="" selectedDate={startDate} onDateChange={setStartDate} format="YYYY-MM-DD" />
             </View>
           </View>
           <View style={styles.dateContainer}>
-            <Text style={styles.dateLabel}>结束时间:</Text>
+            <CustomText style={styles.dateLabel}>结束时间:</CustomText>
             <View style={styles.datePickerWrapper}>
               <DatePicker title="" selectedDate={endDate} onDateChange={setEndDate} format="YYYY-MM-DD" />
             </View>
@@ -172,7 +173,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
         onPress={handleSubmit}
         disabled={!selectedCompanyCode}
       >
-        <Text style={styles.submitButtonText}>查询</Text>
+        <CustomText style={styles.submitButtonText}>查询</CustomText>
       </TouchableOpacity>
       <SlideModal visible={companyModalOpen} title="选择公司" onClose={() => setCompanyModalOpen(false)}>
         {renderCompanyList()}

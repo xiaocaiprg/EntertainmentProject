@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity, Text } from 'react-native';
+import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity } from 'react-native';
 import { THEME_COLORS } from '../../utils/styles';
+import CustomText from '../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NewChallengeForm } from './components/NewChallengeForm';
 import { getOperatorList, createChallenge, getAddressList } from '../../api/services/gameService';
@@ -141,28 +142,30 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
         <TouchableOpacity onPress={handleGoBack}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>新增挑战</Text>
+        <CustomText style={styles.headerTitle}>新增挑战</CustomText>
         <View style={styles.placeholder} />
       </View>
       <View style={styles.content}>
         <View style={styles.stepContainer}>
           <View style={styles.stepNumberContainer}>
             <View style={styles.stepNumberActive}>
-              <Text style={styles.stepNumberText}>1</Text>
+              <CustomText style={styles.stepNumberText}>1</CustomText>
             </View>
             <View style={[styles.stepLine, selectedChallengeType ? styles.stepLineActive : {}]} />
             <View style={[styles.stepNumber, selectedChallengeType ? styles.stepNumberActive : {}]}>
-              <Text style={styles.stepNumberText}>2</Text>
+              <CustomText style={styles.stepNumberText}>2</CustomText>
             </View>
           </View>
           <View style={styles.stepLabelContainer}>
-            <Text style={[styles.stepLabel, styles.stepLabelActive]}>选择打法</Text>
-            <Text style={[styles.stepLabel, selectedChallengeType ? styles.stepLabelActive : {}]}>填写挑战信息</Text>
+            <CustomText style={[styles.stepLabel, styles.stepLabelActive]}>选择打法</CustomText>
+            <CustomText style={[styles.stepLabel, selectedChallengeType ? styles.stepLabelActive : {}]}>
+              填写挑战信息
+            </CustomText>
           </View>
         </View>
 
         <View style={styles.challengeTypeContainer}>
-          <Text style={styles.labelText}>选择打法</Text>
+          <CustomText style={styles.labelText}>选择打法</CustomText>
           <DropdownSelect
             options={challengeTypes}
             selectedValue={selectedChallengeType}
@@ -187,8 +190,8 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
         ) : (
           <View style={styles.instructionContainer}>
             <Icon name="arrow-upward" size={48} color={THEME_COLORS.primary} />
-            <Text style={styles.instructionText}>请先选择打法</Text>
-            <Text style={styles.instructionSubText}>选择后将显示相应的挑战表单</Text>
+            <CustomText style={styles.instructionText}>请先选择打法</CustomText>
+            <CustomText style={styles.instructionSubText}>选择后将显示相应的挑战表单</CustomText>
           </View>
         )}
       </View>

@@ -6,7 +6,10 @@ export enum ChallengeStatus {
   FUNDRAISING_COMPLETED = 3, // 募资完成
   COMPLETED = 4, // 已完成
 }
-
+export enum RoundStatus {
+  ENDED = 0, // 已结束
+  IN_PROGRESS = 1, // 进行中
+}
 // 定义挑战类型枚举
 export enum ChallengeType {
   NO_PROFIT_LIMIT = 'CB', // 无止盈过关

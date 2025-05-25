@@ -15,4 +15,17 @@ declare module 'rn-update-apk' {
     constructor(options: UpdateAPKOptions);
     checkUpdate(): void;
   }
+
+  export interface VersionInfo {
+    hasUpdate: boolean;
+    currentVersion: string;
+    remoteVersion?: string;
+    error?: string;
+  }
+
+  export class UpdateManager {
+    checkVersionInfo(): Promise<VersionInfo>;
+    checkUpdate(): void;
+    isDownloadingUpdate(): boolean;
+  }
 }

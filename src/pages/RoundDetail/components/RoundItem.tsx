@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import CustomText from '../../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameRoundDto } from '../../../interface/Game';
-import { ChallengeStatus } from '../../../interface/Common';
 import { THEME_COLORS } from '../../../utils/styles';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { InningList } from './InningList';
@@ -10,36 +10,37 @@ import { InningList } from './InningList';
 interface RoundItemProps {
   item: GameRoundDto;
   index: number;
+  showRestartBtn?: boolean;
   onRestartConfirm: (roundId: number) => void;
   onRefresh: () => void;
 }
 
 export const RoundItem: React.FC<RoundItemProps> = React.memo((props) => {
-  const { item, index, onRestartConfirm, onRefresh } = props;
+  const { item, index, onRestartConfirm, onRefresh, showRestartBtn } = props;
   const { t } = useTranslation();
 
-  const showRestartButton = index === 0 && item?.isEnabled === ChallengeStatus.ENDED;
+  const showRestartButton = index === 0 && showRestartBtn;
 
   return (
     <View style={styles.roundItem}>
       <View style={styles.roundHeader}>
-        <Text style={styles.roundTitle}>
+        <CustomText style={styles.roundTitle}>
           {t('roundDetail.round')} {item.orderNumber}
-        </Text>
-        <Text style={styles.createTime}>
+        </CustomText>
+        <CustomText style={styles.createTime}>
           {t('roundDetail.createTime')}: {item.createTime || '-'}
-        </Text>
+        </CustomText>
       </View>
 
       <View style={styles.roundContent}>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>{t('roundDetail.roundWaterInfo')}:</Text>
-          <Text style={styles.infoValue}>{item.profitStr || '-'}</Text>
+          <CustomText style={styles.infoLabel}>{t('roundDetail.roundWaterInfo')}:</CustomText>
+          <CustomText style={styles.infoValue}>{item.profitStr || '-'}</CustomText>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>{t('roundDetail.roundTranscoding')}:</Text>
-          <Text style={styles.infoValue}>{item.turnOverStr || '-'}</Text>
+          <CustomText style={styles.infoLabel}>{t('roundDetail.roundTranscoding')}:</CustomText>
+          <CustomText style={styles.infoValue}>{item.turnOverStr || '-'}</CustomText>
         </View>
       </View>
 
@@ -47,7 +48,7 @@ export const RoundItem: React.FC<RoundItemProps> = React.memo((props) => {
         {showRestartButton && (
           <TouchableOpacity style={styles.restartButton} onPress={() => onRestartConfirm(item.id)}>
             <Icon name="refresh" size={16} color="#fff" style={styles.buttonIcon} />
-            <Text style={styles.buttonText}>{t('roundDetail.restartRound')}</Text>
+            <CustomText style={styles.buttonText}>{t('roundDetail.restartRound')}</CustomText>
           </TouchableOpacity>
         )}
       </View>

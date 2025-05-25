@@ -40,7 +40,6 @@ export interface GameMatchPageDto {
   raceName?: string;
   turnOver?: number;
   turnOverStr?: string;
-  roundList?: GameRoundDto[];
 }
 export interface ChallengeList {
   current: number;
@@ -143,6 +142,8 @@ export interface GameRoundDto {
   faultGameInningDtoList?: GameInningDto[];
   gameInningDto: GameInningDto;
   gamePointDtoList?: GamePointDto[];
+  playRuleName?: string;
+  playRuleCode?: string;
   id: number;
   investPersonCode?: string;
   investPersonName?: string;
@@ -183,6 +184,17 @@ export interface GameInningDto {
   playPersonCode?: string;
   result?: number; // 结果：1赢2输
   roundId?: number;
+}
+export interface GameRoundSimpleDto {
+  gameInningDto: GameInningDto;
+  profit: number;
+  profitStr: string;
+  totalProfit: number;
+  totalProfitStr: string;
+  totalTurnOver: number;
+  totalTurnOverStr: string;
+  turnOver: number;
+  turnOverStr: string;
 }
 
 export interface ChallengeCreateParams {

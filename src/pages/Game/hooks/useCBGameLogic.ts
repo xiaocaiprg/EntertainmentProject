@@ -79,7 +79,7 @@ export const useCBGameLogic = (baseNumber: number) => {
     // 创建并添加历史记录
     if (currentChoice) {
       const newRecord = createHistoryRecord(
-        inningResult.gameInningDto.id,
+        inningResult.gameInningDto?.id || new Date().getTime(),
         roundStats.round,
         gameNumber,
         currentChoice,
@@ -100,6 +100,7 @@ export const useCBGameLogic = (baseNumber: number) => {
       // 更新连续负局计数
       newStats.consecutiveLosses += 1;
     }
+    console.log('newStats', newStats);
     // 更新连续输的次数
     newStats.consecutiveDemotions = updateConsecutiveDemotions(newStats);
     newStats.roundProfitStr = inningResult?.profitStr;
@@ -107,6 +108,7 @@ export const useCBGameLogic = (baseNumber: number) => {
     newStats.challengeProfitStr = inningResult?.totalProfitStr;
     newStats.challengeTurnOverStr = inningResult?.totalTurnOverStr;
     setRoundStats(newStats);
+
     // 关闭确认对话框
     setConfirmModalVisible(false);
     // 设置游戏状态为已完成

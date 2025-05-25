@@ -345,7 +345,7 @@ export const HomeScreen = React.memo(() => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent backgroundColor={THEME_COLORS.primary} barStyle="light-content" />
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
       {/* 固定头部 */}
       <LinearGradient colors={['#764ba2', '#667eea']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>

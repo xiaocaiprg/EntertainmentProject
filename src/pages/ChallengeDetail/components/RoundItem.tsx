@@ -28,11 +28,11 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
         </CustomText>
         <View style={styles.itemRow}>
           <CustomText style={styles.label}>{t('challengeDetail.roundWaterInfo')}:</CustomText>
-          <CustomText style={styles.value}>{round.profitStr || '-'}</CustomText>
+          <CustomText style={[styles.value, { fontSize: 14 }]}>{round.profitStr || '-'}</CustomText>
         </View>
         <View style={styles.itemRow}>
           <CustomText style={styles.label}>{t('challengeDetail.roundTranscoding')}:</CustomText>
-          <CustomText style={styles.value}>{round.turnOverStr || '-'}</CustomText>
+          <CustomText style={[styles.value, { fontSize: 14 }]}>{round.turnOverStr || '-'}</CustomText>
         </View>
         <CustomText style={styles.roundStatus}>
           {round.isEnabled === 1 ? t('challengeDetail.inProgress') : t('challengeDetail.ended')}

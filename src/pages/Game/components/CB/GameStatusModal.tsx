@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import CustomText from '../../../../components/CustomText';
 import { GameStatusModalInfo } from '../../types/CBtypes';
 
 interface GameStatusModalProps {
@@ -36,24 +37,24 @@ export const GameStatusModal: React.FC<GameStatusModalProps> = React.memo((props
     if (isGameOver) {
       return (
         <View style={styles.messageContainer}>
-          <Text style={styles.modalMessage}>已结束本场！</Text>
+          <CustomText style={styles.modalMessage}>已结束本场！</CustomText>
         </View>
       );
     } else if (nextRoundInfo) {
       return (
         <View style={styles.messageContainer}>
-          <Text style={styles.modalMessage}>
+          <CustomText style={styles.modalMessage}>
             第{nextRoundInfo.currentRound}轮结束，即将进入第{nextRoundInfo.nextRound}轮
-          </Text>
-          <Text style={styles.betAmountText}>
-            下一轮押注金额：<Text style={styles.highlightText}>{nextRoundInfo.nextBetAmount}</Text> 元
-          </Text>
+          </CustomText>
+          <CustomText style={styles.betAmountText}>
+            下一轮押注金额：<CustomText style={styles.highlightText}>{nextRoundInfo.nextBetAmount}</CustomText> 元
+          </CustomText>
         </View>
       );
     } else if (roundId) {
       return (
         <View style={styles.messageContainer}>
-          <Text style={styles.modalMessage}>{`状态异常，请根据本场编号:${roundId}联系管理员`}</Text>
+          <CustomText style={styles.modalMessage}>{`状态异常，请根据本场编号:${roundId}联系管理员`}</CustomText>
         </View>
       );
     }
@@ -65,11 +66,11 @@ export const GameStatusModal: React.FC<GameStatusModalProps> = React.memo((props
     <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={handleConfirm}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>{title}</Text>
+          <CustomText style={styles.modalTitle}>{title}</CustomText>
           {renderContent()}
           <View style={styles.modalButtons}>
             <TouchableOpacity style={styles.fullWidthButton} onPress={handleConfirm}>
-              <Text style={styles.confirmModalButtonText}>{confirmText}</Text>
+              <CustomText style={styles.confirmModalButtonText}>{confirmText}</CustomText>
             </TouchableOpacity>
           </View>
         </View>

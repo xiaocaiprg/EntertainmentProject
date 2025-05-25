@@ -1,6 +1,7 @@
 import { get, post } from '../request';
 import { UserResult, UserParams } from '../../interface/User';
 import { ApiResponse } from '../../interface/IModuleProps';
+import { APP_VERSION_URL } from '../../utils/UpdateManager';
 
 export const PATH = {
   LOGIN: 'haiyang/business/login',
@@ -38,7 +39,7 @@ export const changePassword = (password: string): Promise<string> => {
 };
 export const getSetting = async (): Promise<any> => {
   try {
-    const response = await fetch('https://junlongpro.com/image/apk_version.json');
+    const response = await fetch(APP_VERSION_URL);
     const data = await response.json();
     return data;
   } catch (error) {

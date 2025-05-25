@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -13,6 +13,7 @@ import { QueryCondition } from './interface/ITurnoverQuery';
 import { UserType } from '../../interface/Common';
 import { GameTurnOverDto } from '../../interface/Game';
 import { Company } from '../../interface/Company';
+import CustomText from '../../components/CustomText';
 
 // 用户类型选项
 const userTypeOptions = [
@@ -58,9 +59,9 @@ export const TurnoverQueryScreen = React.memo(() => {
             style={[styles.tabItem, currentUserType === option.value && styles.tabItemActive]}
             onPress={() => handleUserTypeChange(option.value)}
           >
-            <Text style={[styles.tabText, currentUserType === option.value && styles.tabTextActive]}>
+            <CustomText style={[styles.tabText, currentUserType === option.value && styles.tabTextActive]}>
               {option.label}
-            </Text>
+            </CustomText>
           </TouchableOpacity>
         ))}
       </View>
@@ -95,7 +96,7 @@ export const TurnoverQueryScreen = React.memo(() => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>查看转码</Text>
+        <CustomText style={styles.headerTitle}>查看转码</CustomText>
         <View style={styles.headerRight} />
       </View>
       {renderCategoryTabs()}

@@ -20,11 +20,10 @@ export interface CBGameProps {
   recorder: string;
   baseNumber: number;
   navigation: any;
-  playRuleCode: string;
 }
 
 export const CBGame: React.FC<CBGameProps> = React.memo((props) => {
-  const { challengeName, operator, roundId, recorder, baseNumber, navigation, playRuleCode } = props;
+  const { challengeName, operator, roundId, recorder, baseNumber, navigation } = props;
 
   const {
     currentChoice,
@@ -53,6 +52,7 @@ export const CBGame: React.FC<CBGameProps> = React.memo((props) => {
   const [endRoundModalVisible, setEndRoundModalVisible] = useState(false);
   // 添加删除上一局确认弹窗状态
   const [deleteLastInningModalVisible, setDeleteLastInningModalVisible] = useState(false);
+  const [playRuleName, setPlayRuleName] = useState('');
 
   useEffect(() => {
     setRoundId(roundId);
@@ -60,6 +60,7 @@ export const CBGame: React.FC<CBGameProps> = React.memo((props) => {
       // 加载场次详情数据
       getRoundDetail(roundId).then((roundData) => {
         if (roundData) {
+          setPlayRuleName(roundData.playRuleName || '');
           const records = convertToHistoryRecords(roundData).reverse();
           setHistoryRecords(records);
           const updatedStats = updateGameStats(roundData);
@@ -176,7 +177,7 @@ export const CBGame: React.FC<CBGameProps> = React.memo((props) => {
       <View style={styles.content}>
         <GameInfo gameName={challengeName} operator={operator} recorder={recorder} cbRoundStats={roundStats} />
         <GameRule
-          playRuleCode={playRuleCode}
+          playRuleName={playRuleName}
           handleBankerWin={handleBankerWin}
           handleBankerLose={handleBankerLose}
           handlePlayerWin={handlePlayerWin}

@@ -73,7 +73,10 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
 
   // 判断是否显示募资信息
   const showFundraisingInfo = useMemo(() => {
-    return matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING;
+    return (
+      matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING ||
+      matchDetail?.isEnabled === ChallengeStatus.FUNDRAISING_COMPLETED
+    );
   }, [matchDetail]);
 
   const renderRound = useCallback((round: GameRoundDto, index: number) => {

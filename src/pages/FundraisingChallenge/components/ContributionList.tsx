@@ -53,27 +53,25 @@ export const ContributionList: React.FC<ContributionListProps> = React.memo((pro
       {contributions && contributions.length > 0 ? (
         <View>
           <CustomText style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</CustomText>
-          <View style={styles.listContainer}>
-            <FlatList
-              data={contributions}
-              keyExtractor={(item, index) => `${item.id}-${index}`}
-              renderItem={({ item }) => (
-                <View style={styles.contributionContent}>
-                  <CustomText style={styles.contributionName}>{item.investPersonName}</CustomText>
-                  <CustomText style={styles.contributionAmount}>
-                    {t('fundraisingChallenge.amount')}: {item.amount}
-                  </CustomText>
-                  <CustomText style={styles.contributionAmount}>
-                    {t('fundraisingChallenge.contriRate')}: {item.contriRateStr}
-                  </CustomText>
-                </View>
-              )}
-              style={styles.flatList}
-              contentContainerStyle={styles.flatListContent}
-              showsVerticalScrollIndicator={true}
-              nestedScrollEnabled={true}
-            />
-          </View>
+          <FlatList
+            data={contributions}
+            keyExtractor={(item, index) => `${item.id}-${index}`}
+            renderItem={({ item }) => (
+              <View style={styles.contributionContent}>
+                <CustomText style={styles.contributionName}>{item.investPersonName}</CustomText>
+                <CustomText style={styles.contributionAmount}>
+                  {t('fundraisingChallenge.amount')}: {item.amount}
+                </CustomText>
+                <CustomText style={styles.contributionAmount}>
+                  {t('fundraisingChallenge.contriRate')}: {item.contriRateStr}
+                </CustomText>
+              </View>
+            )}
+            style={styles.flatList}
+            contentContainerStyle={styles.flatListContent}
+            showsVerticalScrollIndicator={true}
+            nestedScrollEnabled={true}
+          />
         </View>
       ) : (
         <View style={styles.emptyContainer}>
@@ -153,9 +151,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#666',
     marginBottom: 4,
-  },
-  listContainer: {
-    height: 120, // 固定高度
   },
   flatList: {
     backgroundColor: '#fff',

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import CustomText from '../../../../components/CustomText';
 import { CBRoundStats } from '../../types/CBtypes';
 interface GameInfoProps {
   gameName: string;
@@ -49,58 +50,60 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
   return (
     <View style={styles.infoContainer}>
       <View style={styles.header}>
-        <Text style={styles.gameName} numberOfLines={1}>
+        <CustomText style={styles.gameName} numberOfLines={1}>
           {gameName}
-        </Text>
-        <Text style={styles.operator}>记录人: {recorder}</Text>
-        <Text style={styles.operator}>投手: {operator}</Text>
+        </CustomText>
+        <CustomText style={styles.operator}>记录人: {recorder}</CustomText>
+        <CustomText style={styles.operator}>投手: {operator}</CustomText>
       </View>
       <View style={styles.gridContainer}>
         <View style={styles.infoLine}>
           <View style={styles.infoLineItem}>
-            <Text style={styles.label}>本挑战上下水:</Text>
-            <Text style={[styles.value, { color: getProfitColor(challengeProfitStr) }]}>{challengeProfitStr}</Text>
+            <CustomText style={styles.label}>本挑战上下水:</CustomText>
+            <CustomText style={[styles.value, { color: getProfitColor(challengeProfitStr) }]}>
+              {challengeProfitStr}
+            </CustomText>
           </View>
           <View style={styles.infoLineItem}>
-            <Text style={styles.label}>本挑战转码:</Text>
-            <Text style={styles.value}>{challengeTurnOverStr}</Text>
+            <CustomText style={styles.label}>本挑战转码:</CustomText>
+            <CustomText style={styles.value}>{challengeTurnOverStr}</CustomText>
           </View>
         </View>
         <View style={styles.infoLine}>
           <View style={styles.infoLineItem}>
-            <Text style={styles.label}>本场上下水:</Text>
-            <Text style={[styles.value, { color: getProfitColor(roundProfitStr) }]}>{roundProfitStr}</Text>
+            <CustomText style={styles.label}>本场上下水:</CustomText>
+            <CustomText style={[styles.value, { color: getProfitColor(roundProfitStr) }]}>{roundProfitStr}</CustomText>
           </View>
           <View style={styles.infoLineItem}>
-            <Text style={styles.label}>本场转码:</Text>
-            <Text style={styles.value}>{roundTurnOverStr}</Text>
+            <CustomText style={styles.label}>本场转码:</CustomText>
+            <CustomText style={styles.value}>{roundTurnOverStr}</CustomText>
           </View>
         </View>
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
-            <Text style={styles.label}>当前轮次:</Text>
-            <Text style={styles.value}>{getRoundDescription()}</Text>
+            <CustomText style={styles.label}>当前轮次:</CustomText>
+            <CustomText style={styles.value}>{getRoundDescription()}</CustomText>
           </View>
           <View style={styles.infoItem}>
-            <Text style={styles.label}>押注金额:</Text>
-            <Text style={styles.value}>{betAmount}元</Text>
+            <CustomText style={styles.label}>押注金额:</CustomText>
+            <CustomText style={styles.value}>{betAmount}元</CustomText>
           </View>
         </View>
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
-            <Text style={styles.label}>赢:</Text>
-            <Text style={[styles.value, styles.winValue]}>{wins}</Text>
+            <CustomText style={styles.label}>赢:</CustomText>
+            <CustomText style={[styles.value, styles.winValue]}>{wins}</CustomText>
           </View>
 
           <View style={styles.infoItem}>
-            <Text style={styles.label}>输:</Text>
-            <Text style={[styles.value, styles.loseValue]}>{losses}</Text>
+            <CustomText style={styles.label}>输:</CustomText>
+            <CustomText style={[styles.value, styles.loseValue]}>{losses}</CustomText>
           </View>
           <View style={styles.infoItem}>
-            <Text style={styles.label}>进度:</Text>
-            <Text style={styles.value}>
+            <CustomText style={styles.label}>进度:</CustomText>
+            <CustomText style={styles.value}>
               {gamesPlayed} / {maxGames === Infinity ? '∞' : maxGames}
-            </Text>
+            </CustomText>
           </View>
         </View>
       </View>

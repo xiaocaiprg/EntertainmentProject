@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { RacePoolPageDto } from '../../../interface/Race';
 import { useTranslation } from '../../../hooks/useTranslation';
+import CustomText from '../../../components/CustomText';
 
 interface PoolCardProps {
   pool: RacePoolPageDto;
@@ -36,24 +37,24 @@ export const PoolCard = React.memo((props: PoolCardProps) => {
       activeOpacity={0.8}
     >
       <View style={styles.header}>
-        <Text style={[styles.title, { color }]} numberOfLines={1}>
+        <CustomText style={[styles.title, { color }]} numberOfLines={1}>
           {pool.name}
-        </Text>
+        </CustomText>
         {/* <View style={[styles.statusBadge, { backgroundColor: statusColor }]}>
-          <Text style={styles.statusText}>{statusText}</Text>
+          <CustomText style={styles.statusText}>{statusText}</CustomText>
         </View> */}
       </View>
 
       <View style={[styles.amountSection, { backgroundColor: `${color}10` }]}>
-        <Text style={styles.amountLabel}>{t('racePoolList.amount')}</Text>
-        <Text style={[styles.amountValue, { color }]}>{pool.totalPoints || 0}</Text>
+        <CustomText style={styles.amountLabel}>{t('racePoolList.amount')}</CustomText>
+        <CustomText style={[styles.amountValue, { color }]}>{pool.totalPoints || 0}</CustomText>
       </View>
       <View style={styles.footerSection}>
         {/* <View style={styles.raceNameContainer}>
-          <Text style={styles.raceName}>{t('racePoolList.raceName')}</Text>
-          <Text style={[styles.raceNameValue, { color }]} numberOfLines={1}>
+          <CustomText style={styles.raceName}>{t('racePoolList.raceName')}</CustomText>
+          <CustomText style={[styles.raceNameValue, { color }]} numberOfLines={1}>
             {pool.raceName || '-'}
-          </Text>
+          </CustomText>
         </View> */}
         {isAdmin && (
           <TouchableOpacity
@@ -61,7 +62,7 @@ export const PoolCard = React.memo((props: PoolCardProps) => {
             onPress={handleDistribute}
             disabled={!isActive}
           >
-            <Text style={styles.distributeButtonText}>{t('racePoolList.distributePoints')}</Text>
+            <CustomText style={styles.distributeButtonText}>{t('racePoolList.distributePoints')}</CustomText>
           </TouchableOpacity>
         )}
       </View>

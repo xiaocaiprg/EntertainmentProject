@@ -15,6 +15,7 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getRaceStatusText } from '../../public/Race';
 import { useRole } from '../../hooks/useRole';
+import { useTranslation } from '../../hooks/useTranslation';
 import { PoolInfoCard } from './components/PoolInfoCard';
 import { ChallengeList } from './components/ChallengeList';
 import { RacePeakRecordCard } from './components/RacePeakRecordCard';
@@ -27,6 +28,7 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
   const [raceDetail, setRaceDetail] = useState<RaceDetailDto | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { isInvestmentManager } = useRole();
+  const { t } = useTranslation();
 
   // 获取比赛详情数据
   const fetchRaceDetail = useCallback(async () => {
@@ -82,12 +84,12 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
           <TouchableOpacity onPress={handleBack}>
             <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
           </TouchableOpacity>
-          <CustomText style={styles.headerTitle}>比赛详情</CustomText>
+          <CustomText style={styles.headerTitle}>{t('raceDetail.title')}</CustomText>
           <View style={styles.headerRight} />
         </View>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <CustomText style={styles.loadingText}>加载中...</CustomText>
+          <CustomText style={styles.loadingText}>{t('raceDetail.loading')}</CustomText>
         </View>
       </SafeAreaView>
     );
@@ -100,7 +102,7 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
         <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <CustomText style={styles.headerTitle}>比赛详情</CustomText>
+        <CustomText style={styles.headerTitle}>{t('raceDetail.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -117,23 +119,23 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
 
               <View style={styles.infoSection}>
                 <View style={styles.infoRow}>
-                  <CustomText style={styles.label}>开始时间:</CustomText>
+                  <CustomText style={styles.label}>{t('raceDetail.startTime')}:</CustomText>
                   <CustomText style={styles.value}>{raceDetail.beginDate || '-'}</CustomText>
                 </View>
                 <View style={styles.infoRow}>
-                  <CustomText style={styles.label}>结束时间:</CustomText>
+                  <CustomText style={styles.label}>{t('raceDetail.endTime')}:</CustomText>
                   <CustomText style={styles.value}>{raceDetail.endDate || '-'}</CustomText>
                 </View>
                 <View style={styles.infoRow}>
-                  <CustomText style={styles.label}>比赛规则:</CustomText>
+                  <CustomText style={styles.label}>{t('raceDetail.raceRule')}:</CustomText>
                   <CustomText style={styles.value}>{raceDetail.playRuleName || '-'}</CustomText>
                 </View>
                 <View style={styles.infoRow}>
-                  <CustomText style={styles.label}>转码限制:</CustomText>
+                  <CustomText style={styles.label}>{t('raceDetail.turnOverLimit')}:</CustomText>
                   <CustomText style={styles.value}>{raceDetail.turnOverLimit || '-'}</CustomText>
                 </View>
                 <View style={styles.infoRow}>
-                  <CustomText style={styles.label}>比赛描述:</CustomText>
+                  <CustomText style={styles.label}>{t('raceDetail.description')}:</CustomText>
                   <CustomText style={styles.value}>{raceDetail.description || '-'}</CustomText>
                 </View>
               </View>
@@ -146,7 +148,7 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
                 onPress={handleStartChallenge}
                 activeOpacity={0.7}
               >
-                <CustomText style={styles.actionButtonText}>发起挑战</CustomText>
+                <CustomText style={styles.actionButtonText}>{t('raceDetail.startChallenge')}</CustomText>
               </TouchableOpacity>
             )}
 
@@ -166,14 +168,14 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
 
             {raceDetail?.gameMatchSimpleDtoList?.length && (
               <View style={styles.challengeSection}>
-                <CustomText style={styles.sectionTitle}>上下水排名</CustomText>
+                <CustomText style={styles.sectionTitle}>{t('raceDetail.profitRanking')}</CustomText>
                 <ChallengeList challenges={raceDetail.gameMatchSimpleDtoList} onPressItem={handleChallengePress} />
               </View>
             )}
           </>
         ) : (
           <View style={styles.emptyContainer}>
-            <CustomText style={styles.emptyText}>未找到比赛信息</CustomText>
+            <CustomText style={styles.emptyText}>{t('raceDetail.noRaceInfo')}</CustomText>
           </View>
         )}
       </ScrollView>

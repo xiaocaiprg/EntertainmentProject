@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Modal, View, StyleSheet, ActivityIndicator } from 'react-native';
+import CustomText from './CustomText';
 
 interface DownloadProgressModalProps {
   visible: boolean;
@@ -11,11 +12,11 @@ const DownloadProgressModal: React.FC<DownloadProgressModalProps> = ({ visible, 
     <Modal transparent animationType="fade" visible={visible}>
       <View style={styles.modalContainer}>
         <View style={styles.progressContainer}>
-          <Text style={styles.title}>正在下载更新</Text>
+          <CustomText style={styles.title}>正在下载更新</CustomText>
           <View style={styles.progressWrapper}>
             <View style={[styles.progressBar, { width: `${progress}%` }]} />
           </View>
-          <Text style={styles.progressText}>{`${progress}%`}</Text>
+          <CustomText style={styles.progressText}>{`${progress}%`}</CustomText>
           <ActivityIndicator size="small" color="#0066cc" style={styles.activityIndicator} />
         </View>
       </View>

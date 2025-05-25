@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Animated,
@@ -33,6 +32,7 @@ import {
   getPitcherRankingKillRate,
   getPitcherRankingKillRateCompany,
 } from '../../api/services/rankService';
+import CustomText from '../../components/CustomText';
 
 // 使用导航堆栈中定义的类型
 type PitcherRankingScreenProps = RootStackScreenProps<'PitcherRanking'>;
@@ -246,7 +246,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
           resizeMode="cover"
         >
           <View style={styles.heroSection}>
-            <Text style={styles.updateInfo}>每日凌晨更新</Text>
+            <CustomText style={styles.updateInfo}>每日凌晨更新</CustomText>
           </View>
         </ImageBackground>
 
@@ -267,22 +267,22 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
               ]}
               onPress={() => handleTabChange(RankingTabType.HIT_RATE)}
             >
-              <Text
+              <CustomText
                 style={[styles.tabButtonText, currentTab === RankingTabType.HIT_RATE && styles.activeTabButtonText]}
               >
                 {t('pitcher_ranking.hitRateTab')}
-              </Text>
+              </CustomText>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.tabButton, currentTab === RankingTabType.KILL_COUNT && styles.activeTabButton]}
               onPress={() => handleTabChange(RankingTabType.KILL_COUNT)}
             >
-              <Text
+              <CustomText
                 style={[styles.tabButtonText, currentTab === RankingTabType.KILL_COUNT && styles.activeTabButtonText]}
               >
                 {t('pitcher_ranking.killCountTab')}
-              </Text>
+              </CustomText>
             </TouchableOpacity>
           </View>
 

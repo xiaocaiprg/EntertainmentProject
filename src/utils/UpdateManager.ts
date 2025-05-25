@@ -8,6 +8,7 @@ import { isAndroid } from './platform';
 export const APP_DOWNLOADING_EVENT = 'app_downloading_event';
 export const APP_DOWNLOAD_COMPLETE_EVENT = 'app_download_complete_event';
 export const APP_DOWNLOAD_PROGRESS_EVENT = 'app_download_progress_event';
+export const APP_VERSION_URL = 'https://junlongpro.com/image/apk_version.json';
 
 class UpdateManager {
   private updateAPK: UpdateAPK | null = null;
@@ -27,7 +28,7 @@ class UpdateManager {
       console.log('下载目录:', downloadDir);
 
       this.updateAPK = new UpdateAPK({
-        apkVersionUrl: 'https://junlongpro.com/image/apk_version.json',
+        apkVersionUrl: APP_VERSION_URL,
         fileProviderAuthority: 'com.entertainmentproject.provider',
         downloadDestDirectory: downloadDir,
         needUpdateApp: (confirmUpdate: (isUpdate: boolean) => void) => {
@@ -92,24 +93,44 @@ class UpdateManager {
     }
   }
 
+  // 检查版本信息
+  async checkVersionInfo(): Promise<{
+    hasUpdate: boolean;
+    currentVersion: string;
+    remoteVersion?: string;
+    error?: string;
+  }> {
+    if (!isAndroid()) {
+      return { hasUpdate: false, currentVersion: this.currentVersionName, error: '仅支持Android平台' };
+    }
+    try {
+      const response = await fetch(`${APP_VERSION_URL}?t=${Date.now()}`);
+      const json = await response.json();
+      const remoteVersionCode = parseInt(json.versionCode);
+      const remoteVersionName = json.versionName || json.versionCode;
+      return {
+        hasUpdate: remoteVersionCode > this.currentVersionCode,
+        currentVersion: this.currentVersionName,
+        remoteVersion: remoteVersionName,
+      };
+    } catch (error) {
+      return { hasUpdate: false, currentVersion: this.currentVersionName, error: '检查更新失败' };
+    }
+  }
+
   // 主动检查更新（带版本号判断）
   checkUpdate(): void {
     if (!isAndroid() || !this.updateAPK) {
       return;
     }
 
-    ToastAndroid.show('正在检查更新...', ToastAndroid.SHORT);
-
-    fetch(`https://junlongpro.com/image/apk_version.json?t=${Date.now()}`)
+    fetch(`${APP_VERSION_URL}?t=${Date.now()}`)
       .then((res) => res.json())
       .then((json) => {
         const remoteVersionCode = parseInt(json.versionCode);
         console.log(`当前版本: ${this.currentVersionCode}, 远程版本: ${remoteVersionCode}`);
-
         if (remoteVersionCode > this.currentVersionCode) {
           this.updateAPK?.checkUpdate(); // 正常触发更新流程
-        } else {
-          ToastAndroid.show('当前已是最新版本', ToastAndroid.SHORT);
         }
       })
       .catch((err) => {

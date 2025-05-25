@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import CustomText from '../../../components/CustomText';
 import { THEME_COLORS } from '../../../utils/styles';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { PlayerCompanyHitrateRankDto } from '../../../interface/Ranking';
@@ -32,23 +33,23 @@ export const CompanyHitRateCard = React.memo((props: CompanyHitRateCardProps) =>
   return (
     <View style={styles.rankItem}>
       <View style={[styles.rankBadge, rankClass]}>
-        <Text style={styles.rankText}>{rank}</Text>
+        <CustomText style={styles.rankText}>{rank}</CustomText>
       </View>
       <View style={styles.companyInfo}>
-        <Text style={styles.companyName}>{item.companyName || ''}</Text>
+        <CustomText style={styles.companyName}>{item.companyName || ''}</CustomText>
       </View>
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{item.hitRateStr}</Text>
-          <Text style={styles.statLabel}>{t('pitcher_ranking.hitRate')}</Text>
+          <CustomText style={styles.statValue}>{item.hitRateStr}</CustomText>
+          <CustomText style={styles.statLabel}>{t('pitcher_ranking.hitRate')}</CustomText>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{item.totalInningCount || 0}</Text>
-          <Text style={styles.statLabel}>{t('pitcher_ranking.totalGames')}</Text>
+          <CustomText style={styles.statValue}>{item.totalInningCount || 0}</CustomText>
+          <CustomText style={styles.statLabel}>{t('pitcher_ranking.totalGames')}</CustomText>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{item.winInningCount || 0}</Text>
-          <Text style={styles.statLabel}>{t('pitcher_ranking.winCount')}</Text>
+          <CustomText style={styles.statValue}>{item.winInningCount || 0}</CustomText>
+          <CustomText style={styles.statLabel}>{t('pitcher_ranking.winCount')}</CustomText>
         </View>
       </View>
     </View>

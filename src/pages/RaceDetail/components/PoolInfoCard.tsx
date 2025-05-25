@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
 import { RacePoolPageDto } from '../../../interface/Race';
+import { useTranslation } from '../../../hooks/useTranslation';
 import CustomText from '../../../components/CustomText';
 
 interface PoolInfoCardProps {
@@ -9,11 +10,12 @@ interface PoolInfoCardProps {
 }
 
 export const PoolInfoCard: React.FC<PoolInfoCardProps> = React.memo(({ poolDetail }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.poolCard}>
-      <CustomText style={styles.poolTitle}>奖金池</CustomText>
+      <CustomText style={styles.poolTitle}>{t('racePoolList.title')}</CustomText>
       <View style={styles.poolAmountItem}>
-        <CustomText style={styles.poolAmountLabel}>可用积分:</CustomText>
         <CustomText style={[styles.poolAmountValue, styles.availablePoints]}>
           {poolDetail.availablePoints?.toLocaleString() || '-'}
         </CustomText>
@@ -47,10 +49,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: THEME_COLORS.text.primary,
-  },
-  poolAmountLabel: {
-    fontSize: 12,
-    color: THEME_COLORS.text.secondary,
   },
   availablePoints: {
     color: THEME_COLORS.success,

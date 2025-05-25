@@ -20,7 +20,7 @@ export const RacePeakRecordCard: React.FC<RacePeakRecordCardProps> = React.memo(
 
   const gradientColors = recordType === 'profit' ? ['#4776E6', '#8E54E9'] : ['#2193b0', '#6dd5ed'];
 
-  const cardTitle = recordType === 'profit' ? '最大上下水' : '最多把数';
+  const cardTitle = recordType === 'profit' ? t('peakRecord.maxProfit') : t('peakRecord.maxCount');
   const cardValue = recordType === 'profit' ? matchData.profitStr : String(matchData.count);
 
   return (

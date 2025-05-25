@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, TextInput, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from '../../hooks/useTranslation';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { RootStackScreenProps } from '../router';
 import { changePassword } from '../../api/services/authService';
 import { useAuth } from '../../hooks/useAuth';
+import CustomText from '../../components/CustomText';
 
 // 使用导航堆栈中定义的类型
 type AccountSecurityScreenProps = RootStackScreenProps<'AccountSecurity'>;
@@ -57,13 +58,13 @@ export const AccountSecurity: React.FC<AccountSecurityScreenProps> = React.memo(
         <TouchableOpacity onPress={goBack}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('accountSecurity.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('accountSecurity.title')}</CustomText>
         <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.contentContainer}>
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>{t('accountSecurity.newPassword')}</Text>
+          <CustomText style={styles.label}>{t('accountSecurity.newPassword')}</CustomText>
           <TextInput
             style={styles.input}
             secureTextEntry
@@ -75,7 +76,7 @@ export const AccountSecurity: React.FC<AccountSecurityScreenProps> = React.memo(
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>{t('accountSecurity.confirmPassword')}</Text>
+          <CustomText style={styles.label}>{t('accountSecurity.confirmPassword')}</CustomText>
           <TextInput
             style={styles.input}
             secureTextEntry
@@ -86,10 +87,10 @@ export const AccountSecurity: React.FC<AccountSecurityScreenProps> = React.memo(
           />
         </View>
 
-        {errorMsg ? <Text style={styles.errorText}>{errorMsg}</Text> : null}
+        {errorMsg ? <CustomText style={styles.errorText}>{errorMsg}</CustomText> : null}
 
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>{t('accountSecurity.submit')}</Text>
+          <CustomText style={styles.submitButtonText}>{t('accountSecurity.submit')}</CustomText>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

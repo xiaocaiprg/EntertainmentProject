@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   TextInput,
@@ -22,6 +21,7 @@ import { STATUS_BAR_HEIGHT } from '../../utils/platform';
 import DropdownSelect from '../../components/DropdownSelect';
 import { getRacePoolListAll } from '../../api/services/raceService';
 import { RacePoolPageDto } from '../../interface/Race';
+import CustomText from '../../components/CustomText';
 
 enum TransferType {
   PERSONAL = 'personal',
@@ -169,10 +169,10 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     if (transferType === TransferType.POOL) {
       return (
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>{t('pointsTransfer.poolSelect')}</Text>
+          <CustomText style={styles.label}>{t('pointsTransfer.poolSelect')}</CustomText>
           {isLoadingPools ? (
             <View style={styles.loadingContainer}>
-              <Text style={styles.loadingText}>{t('common.loading')}</Text>
+              <CustomText style={styles.loadingText}>{t('common.loading')}</CustomText>
             </View>
           ) : (
             <>
@@ -199,8 +199,8 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
               />
               {selectedPool?.code && (
                 <View style={styles.poolInfoRow}>
-                  <Text style={styles.poolInfoLabel}>{t('pointsTransfer.availablePoolPoints')}</Text>
-                  <Text style={styles.poolInfoValue}>{selectedPool.availablePoints?.toLocaleString()}</Text>
+                  <CustomText style={styles.poolInfoLabel}>{t('pointsTransfer.availablePoolPoints')}</CustomText>
+                  <CustomText style={styles.poolInfoValue}>{selectedPool.availablePoints?.toLocaleString()}</CustomText>
                 </View>
               )}
             </>
@@ -210,7 +210,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     }
     return (
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>{t('pointsTransfer.account')}</Text>
+        <CustomText style={styles.label}>{t('pointsTransfer.account')}</CustomText>
         <TextInput
           style={styles.input}
           value={account}
@@ -243,7 +243,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('pointsTransfer.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('pointsTransfer.title')}</CustomText>
         <View style={{ width: 24 }} />
       </View>
 
@@ -251,13 +251,13 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         {isPoolTransfer && (
           <View style={[styles.card, styles.poolCard]}>
             <View style={styles.infoRow}>
-              <Text style={styles.sectionTitle}>{t('pointsTransfer.poolPoints')}</Text>
-              <Text style={styles.pointsValue}>{availablePoints?.toLocaleString()}</Text>
+              <CustomText style={styles.sectionTitle}>{t('pointsTransfer.poolPoints')}</CustomText>
+              <CustomText style={styles.pointsValue}>{availablePoints?.toLocaleString()}</CustomText>
             </View>
             {name && (
               <View style={styles.infoRow}>
-                <Text style={styles.sectionTitle}>{t('pointsTransfer.poolName')}</Text>
-                <Text style={styles.pointsValue}>{name}</Text>
+                <CustomText style={styles.sectionTitle}>{t('pointsTransfer.poolName')}</CustomText>
+                <CustomText style={styles.pointsValue}>{name}</CustomText>
               </View>
             )}
           </View>
@@ -266,43 +266,43 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         {/* 用户积分模块，仅在非奖金池转账时展示 */}
         {!isPoolTransfer && (
           <View style={styles.card}>
-            <Text style={styles.sectionTitle}>{t('pointsTransfer.availablePoints')}</Text>
-            <Text style={styles.pointsValue}>{user?.availablePoints?.toLocaleString()}</Text>
+            <CustomText style={styles.sectionTitle}>{t('pointsTransfer.availablePoints')}</CustomText>
+            <CustomText style={styles.pointsValue}>{user?.availablePoints?.toLocaleString()}</CustomText>
           </View>
         )}
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>{t('pointsTransfer.transferTo')}</Text>
+          <CustomText style={styles.sectionTitle}>{t('pointsTransfer.transferTo')}</CustomText>
           <View style={styles.typeSelector}>
             <TouchableOpacity
               style={[styles.typeButton, transferType === TransferType.PERSONAL && styles.typeButtonActive]}
               onPress={() => handleTypeChange(TransferType.PERSONAL)}
             >
-              <Text style={[styles.typeText, transferType === TransferType.PERSONAL && styles.typeTextActive]}>
+              <CustomText style={[styles.typeText, transferType === TransferType.PERSONAL && styles.typeTextActive]}>
                 {t('pointsTransfer.personal')}
-              </Text>
+              </CustomText>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.typeButton, transferType === TransferType.COMPANY && styles.typeButtonActive]}
               onPress={() => handleTypeChange(TransferType.COMPANY)}
             >
-              <Text style={[styles.typeText, transferType === TransferType.COMPANY && styles.typeTextActive]}>
+              <CustomText style={[styles.typeText, transferType === TransferType.COMPANY && styles.typeTextActive]}>
                 {t('pointsTransfer.company')}
-              </Text>
+              </CustomText>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.typeButton, transferType === TransferType.POOL && styles.typeButtonActive]}
               onPress={() => handleTypeChange(TransferType.POOL)}
             >
-              <Text style={[styles.typeText, transferType === TransferType.POOL && styles.typeTextActive]}>
+              <CustomText style={[styles.typeText, transferType === TransferType.POOL && styles.typeTextActive]}>
                 {t('pointsTransfer.pool')}
-              </Text>
+              </CustomText>
             </TouchableOpacity>
           </View>
           {renderSelect()}
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>{t('pointsTransfer.points')}</Text>
+            <CustomText style={styles.label}>{t('pointsTransfer.points')}</CustomText>
             <TextInput
               style={styles.input}
               value={points}
@@ -311,7 +311,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
               placeholder={t('pointsTransfer.pointsPlaceholder')}
               keyboardType="numeric"
             />
-            {invalidPointsReason ? <Text style={styles.errorText}>{invalidPointsReason}</Text> : null}
+            {invalidPointsReason ? <CustomText style={styles.errorText}>{invalidPointsReason}</CustomText> : null}
           </View>
         </View>
 
@@ -320,7 +320,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
           onPress={handleTransferPress}
           disabled={!isFormValid}
         >
-          <Text style={styles.submitButtonText}>{t('pointsTransfer.transfer')}</Text>
+          <CustomText style={styles.submitButtonText}>{t('pointsTransfer.transfer')}</CustomText>
         </TouchableOpacity>
       </ScrollView>
 

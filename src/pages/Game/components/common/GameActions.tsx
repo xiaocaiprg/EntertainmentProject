@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import CustomText from '../../../../components/CustomText';
 
 interface GameActionsProps {
   onEndRound: () => void;
@@ -21,11 +22,11 @@ export const GameActions: React.FC<GameActionsProps> = React.memo((props) => {
     <View style={styles.actionsContainer}>
       {/* 删除上一局按钮 */}
       <TouchableOpacity style={styles.actionButton} onPress={handleDeleteLastInning}>
-        <Text style={styles.actionButtonText}>删除上一把</Text>
+        <CustomText style={styles.actionButtonText}>删除上一把</CustomText>
       </TouchableOpacity>
       {/* 结束本场按钮 */}
       <TouchableOpacity style={[styles.actionButton, styles.endRoundButton]} onPress={handleEndRound}>
-        <Text style={styles.actionButtonText}>结束本场</Text>
+        <CustomText style={styles.actionButtonText}>结束本场</CustomText>
       </TouchableOpacity>
     </View>
   );

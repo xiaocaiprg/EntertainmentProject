@@ -1,14 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, FlatList, ActivityIndicator } from 'react-native';
+import CustomText from '../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { RootStackScreenProps } from '../router';
@@ -61,7 +53,7 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
     return (
       <View style={styles.footer}>
         <ActivityIndicator size="small" color="#999" />
-        <Text style={styles.footerText}>加载中...</Text>
+        <CustomText style={styles.footerText}>加载中...</CustomText>
       </View>
     );
   }, [loading]);
@@ -72,7 +64,7 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
     }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>暂无数据</Text>
+        <CustomText style={styles.emptyText}>暂无数据</CustomText>
       </View>
     );
   }, [loading]);
@@ -91,18 +83,18 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
         <TouchableOpacity onPress={handleGoBack}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>积分明细</Text>
+        <CustomText style={styles.headerTitle}>积分明细</CustomText>
         <View style={{ width: 24, opacity: 0 }} />
       </View>
 
       <View style={styles.pointsSummary}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-          <Text style={styles.availText}>可用:</Text>
-          <Text style={styles.availablePoints}> {user?.availablePoints.toLocaleString()}</Text>
+          <CustomText style={styles.availText}>可用:</CustomText>
+          <CustomText style={styles.availablePoints}> {user?.availablePoints.toLocaleString()}</CustomText>
         </View>
         <View style={styles.pointsSummaryItem}>
-          <Text style={styles.frozenPoints}>在途:</Text>
-          <Text style={styles.frozenPoints}>{user?.frozenPoints}</Text>
+          <CustomText style={styles.frozenPoints}>在途:</CustomText>
+          <CustomText style={styles.frozenPoints}>{user?.frozenPoints}</CustomText>
         </View>
       </View>
       <View style={{ flex: 1 }}>

@@ -4,6 +4,7 @@ import { GameMatchSimpleDto } from '../../../interface/Ranking';
 import { THEME_COLORS } from '../../../utils/styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getStatusText } from '../../../public/Game';
+import { useTranslation } from '../../../hooks/useTranslation';
 import CustomText from '../../../components/CustomText';
 
 interface ChallengeListProps {
@@ -13,10 +14,12 @@ interface ChallengeListProps {
 
 interface ChallengeItemProps {
   item: GameMatchSimpleDto;
+  index: number;
   onPressItem: (item: GameMatchSimpleDto) => void;
 }
 
 const ChallengeItem: React.FC<ChallengeItemProps> = React.memo(({ item, index, onPressItem }) => {
+  const { t } = useTranslation();
   const statusInfo = getStatusText(item.isEnabled);
 
   return (
@@ -38,33 +41,33 @@ const ChallengeItem: React.FC<ChallengeItemProps> = React.memo(({ item, index, o
         <View style={styles.itemContent}>
           <View style={styles.itemInfoContainer}>
             <View style={styles.itemInfoRow}>
-              <CustomText style={styles.label}>日期:</CustomText>
+              <CustomText style={styles.label}>{t('raceDetail.challengeDate')}:</CustomText>
               <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
             </View>
             <View style={styles.itemInfoRow}>
-              <CustomText style={styles.label}>地点:</CustomText>
+              <CustomText style={styles.label}>{t('raceDetail.challengeLocation')}:</CustomText>
               <CustomText style={styles.value}>{item.addressName || '-'}</CustomText>
             </View>
             <View style={styles.itemInfoRow}>
-              <CustomText style={styles.label}>玩法:</CustomText>
+              <CustomText style={styles.label}>{t('raceDetail.challengePlayRule')}:</CustomText>
               <CustomText style={styles.value}>{item.playRuleName || '-'}</CustomText>
             </View>
             <View style={styles.itemInfoRow}>
-              <CustomText style={styles.label}>币种:</CustomText>
+              <CustomText style={styles.label}>{t('raceDetail.challengeCurrency')}:</CustomText>
               <CustomText style={styles.value}>{item.currency || '-'}</CustomText>
             </View>
           </View>
           <View style={styles.itemInfoContainer}>
             <View style={styles.itemInfoRow}>
-              <CustomText style={styles.label}>投手:</CustomText>
+              <CustomText style={styles.label}>{t('raceDetail.challengePitcher')}:</CustomText>
               <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
             </View>
             <View style={styles.itemInfoRow}>
-              <CustomText style={styles.label}>上下水:</CustomText>
+              <CustomText style={styles.label}>{t('raceDetail.challengeProfit')}:</CustomText>
               <CustomText style={styles.profitValue}>{item.profitStr}</CustomText>
             </View>
             <View style={styles.itemInfoRow}>
-              <CustomText style={styles.label}>转码:</CustomText>
+              <CustomText style={styles.label}>{t('raceDetail.challengeTurnover')}:</CustomText>
               <CustomText style={styles.profitValue}>{item.turnOverStr}</CustomText>
             </View>
           </View>
@@ -78,11 +81,12 @@ const ChallengeItem: React.FC<ChallengeItemProps> = React.memo(({ item, index, o
 
 export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) => {
   const { challenges, onPressItem } = props;
+  const { t } = useTranslation();
 
   if (!challenges || challenges.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <CustomText style={styles.emptyText}>暂无挑战信息</CustomText>
+        <CustomText style={styles.emptyText}>{t('raceDetail.noChallengeInfo')}</CustomText>
       </View>
     );
   }
