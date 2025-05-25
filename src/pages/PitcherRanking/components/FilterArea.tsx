@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { OverlayModal } from '../../../components/OverlayModal';
 import { THEME_COLORS } from '../../../utils/styles';
@@ -7,6 +7,7 @@ import { useTranslation } from '../../../hooks/useTranslation';
 import { getAddressList } from '../../../api/services/gameService';
 import { AddressInfo } from '../../../interface/Game';
 import { isIOS } from '../../../utils/platform';
+import CustomText from '../../../components/CustomText';
 
 interface FilterAreaProps {
   selectedTimeRange: number;
@@ -85,7 +86,7 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
     <>
       <View style={styles.filterContainer} ref={filterAreaRef}>
         <TouchableOpacity style={styles.locationSelector} onPress={() => setShowLocationModal(true)}>
-          <Text style={styles.locationText}>{selectedLocationName}</Text>
+          <CustomText style={styles.locationText}>{selectedLocationName}</CustomText>
           <Icon name="arrow-drop-down" size={24} color={THEME_COLORS.primary} />
         </TouchableOpacity>
       </View>
@@ -96,9 +97,9 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
             style={[styles.timeRangeItem, selectedTimeRange === item.id && styles.selectedTimeRangeItem]}
             onPress={() => onTimeRangeChange(item.id)}
           >
-            <Text style={[styles.timeRangeText, selectedTimeRange === item.id && styles.selectedTimeRangeText]}>
+            <CustomText style={[styles.timeRangeText, selectedTimeRange === item.id && styles.selectedTimeRangeText]}>
               {item.label}
-            </Text>
+            </CustomText>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -116,9 +117,9 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
             style={[styles.locationItem, selectedLocation === 0 && styles.selectedLocationItem]}
             onPress={handleSelectAllLocations}
           >
-            <Text style={[styles.locationItemText, selectedLocation === 0 && styles.selectedLocationItemText]}>
+            <CustomText style={[styles.locationItemText, selectedLocation === 0 && styles.selectedLocationItemText]}>
               {t('pitcher_ranking.allLocations') || '全部'}
-            </Text>
+            </CustomText>
           </TouchableOpacity>
           {locations.map((location) => (
             <TouchableOpacity
@@ -126,11 +127,11 @@ export const FilterArea = React.memo((props: FilterAreaProps) => {
               style={[styles.locationItem, selectedLocation === location.id && styles.selectedLocationItem]}
               onPress={() => handleSelectLocation(location.id)}
             >
-              <Text
+              <CustomText
                 style={[styles.locationItemText, selectedLocation === location.id && styles.selectedLocationItemText]}
               >
                 {location.name}
-              </Text>
+              </CustomText>
             </TouchableOpacity>
           ))}
         </ScrollView>

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Modal, TouchableOpacity, StyleSheet } from 'react-native';
 import { BetChoice, BetChoiceMap } from '../../types/common';
+import CustomText from '../../../../components/CustomText';
 
 interface GameModalProps {
   visible: boolean;
@@ -44,14 +45,14 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
   const getModalMessage = useCallback(() => {
     if (!currentChoice) {
       if (message) {
-        return <Text style={[styles.modalMessage, { color: '#EB1D04' }]}>{message}</Text>;
+        return <CustomText style={[styles.modalMessage, { color: '#EB1D04' }]}>{message}</CustomText>;
       }
-      return <Text style={styles.modalMessage}>未知错误</Text>;
+      return <CustomText style={styles.modalMessage}>未知错误</CustomText>;
     }
     return (
-      <Text style={styles.modalMessage}>
-        您选择了<Text style={styles.bankerText}>{BetChoiceMap[currentChoice]}</Text>，确认提交吗？
-      </Text>
+      <CustomText style={styles.modalMessage}>
+        您选择了<CustomText style={styles.bankerText}>{BetChoiceMap[currentChoice]}</CustomText>，确认提交吗？
+      </CustomText>
     );
   }, [currentChoice, message]);
 
@@ -59,7 +60,7 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
     <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={handleCancel}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>{title}</Text>
+          <CustomText style={styles.modalTitle}>{title}</CustomText>
           {getModalMessage()}
           <View style={styles.modalButtons}>
             {isFullWidthButton ? (
@@ -68,7 +69,9 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
                 onPress={handleConfirm}
                 disabled={isSubmitting}
               >
-                <Text style={[styles.confirmModalButtonText, isSubmitting && styles.disabledText]}>{confirmText}</Text>
+                <CustomText style={[styles.confirmModalButtonText, isSubmitting && styles.disabledText]}>
+                  {confirmText}
+                </CustomText>
               </TouchableOpacity>
             ) : (
               <>
@@ -78,7 +81,9 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
                     onPress={handleCancel}
                     disabled={isSubmitting}
                   >
-                    <Text style={[styles.cancelButtonText, isSubmitting && styles.disabledText]}>{cancelText}</Text>
+                    <CustomText style={[styles.cancelButtonText, isSubmitting && styles.disabledText]}>
+                      {cancelText}
+                    </CustomText>
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity
@@ -86,9 +91,9 @@ export const GameModal: React.FC<GameModalProps> = React.memo((props) => {
                   onPress={handleConfirm}
                   disabled={isSubmitting}
                 >
-                  <Text style={[styles.confirmModalButtonText, isSubmitting && styles.disabledText]}>
+                  <CustomText style={[styles.confirmModalButtonText, isSubmitting && styles.disabledText]}>
                     {confirmText}
-                  </Text>
+                  </CustomText>
                 </TouchableOpacity>
               </>
             )}

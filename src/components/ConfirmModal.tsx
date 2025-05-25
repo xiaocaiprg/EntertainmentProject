@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Modal,
   TouchableOpacity,
@@ -11,6 +10,7 @@ import {
   TextStyle,
 } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
+import CustomText from './CustomText';
 import { mergeStyles } from '../utils/styles';
 
 interface ConfirmModalProps {
@@ -56,10 +56,10 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
           <TouchableWithoutFeedback onPress={handleModalPress}>
             <View style={mergedStyles.modalContent}>
               <View style={mergedStyles.modalHeader}>
-                <Text style={mergedStyles.modalTitle}>{title}</Text>
+                <CustomText style={mergedStyles.modalTitle}>{title}</CustomText>
               </View>
               <View style={mergedStyles.modalBody}>
-                <Text style={mergedStyles.modalMessage}>{message}</Text>
+                <CustomText style={mergedStyles.modalMessage}>{message}</CustomText>
                 {customContent && <View style={mergedStyles.customContent}>{customContent}</View>}
               </View>
               <View style={mergedStyles.modalFooter}>
@@ -73,9 +73,9 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
                     onPress={onCancel}
                     disabled={isProcessing}
                   >
-                    <Text style={[mergedStyles.cancelButtonText, isProcessing && mergedStyles.disabledText]}>
+                    <CustomText style={[mergedStyles.cancelButtonText, isProcessing && mergedStyles.disabledText]}>
                       {cancelText}
-                    </Text>
+                    </CustomText>
                   </TouchableOpacity>
                 )}
                 {onConfirm && (
@@ -91,9 +91,9 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
                     {isProcessing ? (
                       <ActivityIndicator size="small" color="#fff" />
                     ) : (
-                      <Text style={[mergedStyles.confirmButtonText, isProcessing && mergedStyles.disabledText]}>
+                      <CustomText style={[mergedStyles.confirmButtonText, isProcessing && mergedStyles.disabledText]}>
                         {confirmText}
-                      </Text>
+                      </CustomText>
                     )}
                   </TouchableOpacity>
                 )}

@@ -1,15 +1,16 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Alert, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
 import { getMatchDetail } from '../../api/services/gameService';
 import { createContribution, getContributionDetail, deleteContribution } from '../../api/services/contributionService';
 import { ContributionDto } from '../../interface/Contribution';
+import { useTranslation } from '../../hooks/useTranslation';
 import { ChallengeDetailCard } from './components/ChallengeDetailCard';
 import { ContributionList } from './components/ContributionList';
 import ConfirmModal from '../../components/ConfirmModal';
-
+import CustomText from '../../components/CustomText';
 interface InvestmentDetailProps {
   matchId: number;
   onBack: () => void;
@@ -17,6 +18,7 @@ interface InvestmentDetailProps {
 
 export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((props) => {
   const { matchId, onBack } = props;
+  const { t } = useTranslation();
   const [matchDetail, setMatchDetail] = useState<GameMatchDto | null>(null);
   const [myContribution, setMyContribution] = useState<ContributionDto | null>(null);
   const [amount, setAmount] = useState<string>('');
@@ -55,19 +57,19 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
   // 处理出资
   const handleInvest = useCallback(async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      Alert.alert('提示', '请输入有效的出资金额');
+      Alert.alert(t('fundraisingChallenge.hint'), t('fundraisingChallenge.invalidAmount'));
       return;
     }
     const amountValue = parseFloat(amount);
     const availableAmount = matchDetail?.availableAmount || 0;
     if (amountValue > availableAmount) {
-      Alert.alert('提示', '出资金额不能超过可出资金额');
+      Alert.alert(t('fundraisingChallenge.hint'), t('fundraisingChallenge.amountExceedsLimit'));
       return;
     }
 
     // 校验出资额必须为10000的倍数
     if (amountValue % 100 !== 0) {
-      Alert.alert('提示', '出资金额必须为100的倍数');
+      Alert.alert(t('fundraisingChallenge.hint'), t('fundraisingChallenge.amountMustBeMultiple'));
       return;
     }
 
@@ -81,13 +83,13 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
         setMyContribution(result);
         setAmount('');
         fetchChallengeDetail();
-        Alert.alert('成功', '出资成功！');
+        Alert.alert(t('fundraisingChallenge.success'), t('fundraisingChallenge.investSuccess'));
       }
     } catch (error: any) {
-      Alert.alert('错误', error?.message);
+      Alert.alert(t('fundraisingChallenge.error'), error?.message);
     }
     setSubmitting(false);
-  }, [amount, matchDetail, matchId, fetchChallengeDetail]);
+  }, [amount, matchDetail, matchId, fetchChallengeDetail, t]);
 
   // 打开删除确认模态框
   const handleShowDeleteModal = useCallback(() => {
@@ -110,13 +112,13 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     if (result) {
       fetchChallengeDetail();
       fetchMyContributionDetail();
-      Alert.alert('成功', '出资已删除');
+      Alert.alert(t('fundraisingChallenge.success'), t('fundraisingChallenge.deleteSuccess'));
     } else {
-      Alert.alert('错误', '删除出资失败，请稍后重试');
+      Alert.alert(t('fundraisingChallenge.error'), t('fundraisingChallenge.deleteError'));
     }
     setSubmitting(false);
     setShowDeleteModal(false);
-  }, [myContribution?.id, fetchChallengeDetail, fetchMyContributionDetail]);
+  }, [myContribution?.id, fetchChallengeDetail, fetchMyContributionDetail, t]);
 
   // 判断是否可以投资
   const isAvailableForInvest = useMemo(
@@ -137,8 +139,8 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     return (
       <View style={styles.myContributionCard}>
         <View style={styles.myContributionInfo}>
-          <Text style={styles.cardTitle}>我的出资:</Text>
-          <Text style={styles.myContributionAmount}>{myContribution?.amount}</Text>
+          <CustomText style={styles.cardTitle}>{t('fundraisingChallenge.myContribution')}:</CustomText>
+          <CustomText style={styles.myContributionAmount}>{myContribution?.amount}</CustomText>
         </View>
 
         {canDeleteContribution ? (
@@ -146,27 +148,31 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
             {submitting ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text style={styles.deleteButtonText}>删除</Text>
+              <CustomText style={styles.deleteButtonText}>{t('fundraisingChallenge.delete')}</CustomText>
             )}
           </TouchableOpacity>
         ) : null}
       </View>
     );
-  }, [myContribution?.amount, canDeleteContribution, handleShowDeleteModal, submitting]);
+  }, [myContribution?.amount, canDeleteContribution, handleShowDeleteModal, submitting, t]);
 
   const renderInvestForm = useCallback(() => {
     return (
       <View style={styles.investFormCard}>
-        <Text style={styles.cardTitle}>出资金额</Text>
+        <CustomText style={styles.cardTitle}>
+          {t('fundraisingChallenge.investAmount')} {matchDetail?.currency && `(${matchDetail?.currency})`}
+        </CustomText>
         <TextInput
           style={styles.amountInput}
           value={amount}
           onChangeText={handleAmountChange}
-          placeholder="请输入出资金额"
+          placeholder={t('fundraisingChallenge.enterAmount')}
           placeholderTextColor="#999"
           keyboardType="numeric"
         />
-        <Text style={styles.amountHint}>可出资金额：{matchDetail?.availableAmount || 0}</Text>
+        <CustomText style={styles.amountHint}>
+          {t('fundraisingChallenge.availableAmountLabel')}：{matchDetail?.availableAmount || 0}
+        </CustomText>
 
         <TouchableOpacity
           style={[styles.investSubmitButton, !isAvailableForInvest && styles.disabledButton]}
@@ -176,18 +182,27 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
           {submitting ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.investSubmitButtonText}>确认出资</Text>
+            <CustomText style={styles.investSubmitButtonText}>{t('fundraisingChallenge.confirmInvest')}</CustomText>
           )}
         </TouchableOpacity>
       </View>
     );
-  }, [amount, handleAmountChange, handleInvest, isAvailableForInvest, matchDetail?.availableAmount, submitting]);
+  }, [
+    t,
+    amount,
+    handleAmountChange,
+    handleInvest,
+    isAvailableForInvest,
+    matchDetail?.availableAmount,
+    matchDetail?.currency,
+    submitting,
+  ]);
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-        <Text style={styles.loadingText}>加载中...</Text>
+        <CustomText style={styles.loadingText}>{t('fundraisingChallenge.loading')}</CustomText>
       </View>
     );
   }
@@ -198,7 +213,7 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.detailTitle}>挑战出资</Text>
+        <CustomText style={styles.detailTitle}>挑战出资</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -252,7 +267,7 @@ const styles = StyleSheet.create({
   },
   detailContent: {
     flex: 1,
-    padding: 15,
+    padding: 10,
   },
   loadingContainer: {
     flex: 1,

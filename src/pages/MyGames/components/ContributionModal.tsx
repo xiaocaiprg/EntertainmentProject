@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { ContributionDto } from '../../../interface/Contribution';
 import { THEME_COLORS } from '../../../utils/styles';
+import CustomText from '../../../components/CustomText';
 import { SlideModal } from '../../../components/SlideModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from '../../../hooks/useTranslation';
@@ -10,11 +11,12 @@ interface ContributionModalProps {
   visible: boolean;
   onClose: () => void;
   selectedContribution: ContributionDto[];
+  currency?: string;
   loading?: boolean;
 }
 
 export const ContributionModal = React.memo((props: ContributionModalProps) => {
-  const { visible, onClose, selectedContribution, loading = false } = props;
+  const { visible, onClose, selectedContribution, currency, loading = false } = props;
   const { t } = useTranslation();
 
   const renderContent = useCallback(() => {
@@ -22,7 +24,7 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>{t('myGames.loadingDetails')}</Text>
+          <CustomText style={styles.loadingText}>{t('myGames.loadingDetails')}</CustomText>
         </View>
       );
     }
@@ -31,23 +33,23 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
       return (
         <View style={styles.emptyContainer}>
           <Icon name="info" size={40} color="#ccc" />
-          <Text style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</Text>
+          <CustomText style={styles.emptyText}>{t('fundraisingChallenge.noContributionRecords')}</CustomText>
         </View>
       );
     }
 
     return (
       <View style={styles.contentContainer}>
-        <Text style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</Text>
+        <CustomText style={styles.contributionTitle}>{t('fundraisingChallenge.contributionDetails')}</CustomText>
         {selectedContribution.map((item, index) => (
           <View key={`${item.id}-${index}`} style={styles.contributionContent}>
-            <Text style={styles.contributionName}>{item.investPersonName}</Text>
-            <Text style={styles.contributionAmount}>
+            <CustomText style={styles.contributionName}>{item.investPersonName}</CustomText>
+            <CustomText style={styles.contributionAmount}>
               {t('fundraisingChallenge.amount')}: {item.amount}
-            </Text>
-            <Text style={styles.contributionAmount}>
+            </CustomText>
+            <CustomText style={styles.contributionAmount}>
               {t('fundraisingChallenge.contriRate')}: {item.contriRateStr}
-            </Text>
+            </CustomText>
           </View>
         ))}
       </View>
@@ -55,7 +57,11 @@ export const ContributionModal = React.memo((props: ContributionModalProps) => {
   }, [loading, selectedContribution, t]);
 
   return (
-    <SlideModal visible={visible} onClose={onClose} title={t('fundraisingChallenge.contributionDetails')}>
+    <SlideModal
+      visible={visible}
+      onClose={onClose}
+      title={t('fundraisingChallenge.contributionDetails') + `${currency && `(${currency})`}`}
+    >
       {renderContent()}
     </SlideModal>
   );

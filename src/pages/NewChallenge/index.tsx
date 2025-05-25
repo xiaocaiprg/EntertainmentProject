@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { Alert, StyleSheet, SafeAreaView, StatusBar, View, TouchableOpacity } from 'react-native';
 import { THEME_COLORS } from '../../utils/styles';
+import CustomText from '../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NewChallengeForm } from './components/NewChallengeForm';
 import { getOperatorList, createChallenge, getAddressList } from '../../api/services/gameService';
@@ -9,10 +10,9 @@ import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { AddressInfo, ChallengeCreateParams } from '../../interface/Game';
 import { formatDate } from '../../utils/date';
 import { validateChallengeParams } from './utils/validation';
-import { ChallengeFormData } from './interface/IModuleProps';
+import { ChallengeFormData, CurrencyType } from './interface/IModuleProps';
 import { ChallengeType } from '../../interface/Common';
 import DropdownSelect from '../../components/DropdownSelect';
-import { INITIAL_BET_AMOUNT } from '../../constants/betAmounts';
 import { RootStackScreenProps } from '../router';
 
 export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> = React.memo((props) => {
@@ -22,6 +22,9 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
   const [operatorList, setOperatorList] = useState<UserResult[]>([]);
   const [locationList, setLocationList] = useState<AddressInfo[]>([]);
   const [selectedChallengeType, setSelectedChallengeType] = useState<ChallengeType | ''>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const lastSubmitTimeRef = useRef<number>(0);
+  const throttleDelayRef = useRef<number>(1000); // 1秒的节流延迟
 
   // 使用单一状态管理表单数据
   const [formData, setFormData] = useState<ChallengeFormData>({
@@ -31,7 +34,8 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     name: '',
     date: new Date(),
     principal: '',
-    initialBetAmount: INITIAL_BET_AMOUNT, // 默认投注基数
+    initialBetAmount: -1, // 默认投注基数
+    currency: CurrencyType.HKD, // 默认币种为HKD
   });
 
   // 处理表单数据变更
@@ -52,8 +56,23 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     }));
   }, []);
 
-  // 处理确认按钮点击
+  // 使用节流控制的提交函数
   const handleConfirm = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastSubmit = now - lastSubmitTimeRef.current;
+
+    // 如果距离上次提交的时间小于节流延迟，或者当前正在提交中，则直接返回
+    if (timeSinceLastSubmit < throttleDelayRef.current || isSubmitting) {
+      console.log('节流控制：拒绝重复提交', timeSinceLastSubmit);
+      return;
+    }
+
+    // 更新最后提交时间
+    lastSubmitTimeRef.current = now;
+
+    // 设置提交状态
+    setIsSubmitting(true);
+
     // 新增挑战
     const params: ChallengeCreateParams = {
       name: formData.name.trim(),
@@ -63,17 +82,20 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       principal: parseFloat(formData.principal),
       baseNumber: formData.initialBetAmount,
       playRuleCode: formData.challengeType,
+      currency: formData.currency,
     };
 
     // 校验参数
     const validation = validateChallengeParams(params);
     if (!validation.isValid) {
       Alert.alert('提示', validation.errorMessage || '表单填写有误');
+      setIsSubmitting(false);
       return;
     }
     if (raceId) {
       params.raceId = raceId;
     }
+
     createChallenge(params)
       .then((res) => {
         if (res) {
@@ -84,8 +106,12 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       .catch((err) => {
         console.log('新增挑战失败', err.message);
         Alert.alert('提示', err.message);
+      })
+      .finally(() => {
+        // 请求完成后，重置提交状态
+        setIsSubmitting(false);
       });
-  }, [formData, navigation, raceId]);
+  }, [formData, navigation, raceId, isSubmitting]);
 
   // 处理返回按钮点击
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
@@ -116,28 +142,30 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
         <TouchableOpacity onPress={handleGoBack}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>新增挑战</Text>
+        <CustomText style={styles.headerTitle}>新增挑战</CustomText>
         <View style={styles.placeholder} />
       </View>
       <View style={styles.content}>
         <View style={styles.stepContainer}>
           <View style={styles.stepNumberContainer}>
             <View style={styles.stepNumberActive}>
-              <Text style={styles.stepNumberText}>1</Text>
+              <CustomText style={styles.stepNumberText}>1</CustomText>
             </View>
             <View style={[styles.stepLine, selectedChallengeType ? styles.stepLineActive : {}]} />
             <View style={[styles.stepNumber, selectedChallengeType ? styles.stepNumberActive : {}]}>
-              <Text style={styles.stepNumberText}>2</Text>
+              <CustomText style={styles.stepNumberText}>2</CustomText>
             </View>
           </View>
           <View style={styles.stepLabelContainer}>
-            <Text style={[styles.stepLabel, styles.stepLabelActive]}>选择打法</Text>
-            <Text style={[styles.stepLabel, selectedChallengeType ? styles.stepLabelActive : {}]}>填写挑战信息</Text>
+            <CustomText style={[styles.stepLabel, styles.stepLabelActive]}>选择打法</CustomText>
+            <CustomText style={[styles.stepLabel, selectedChallengeType ? styles.stepLabelActive : {}]}>
+              填写挑战信息
+            </CustomText>
           </View>
         </View>
 
         <View style={styles.challengeTypeContainer}>
-          <Text style={styles.labelText}>选择打法</Text>
+          <CustomText style={styles.labelText}>选择打法</CustomText>
           <DropdownSelect
             options={challengeTypes}
             selectedValue={selectedChallengeType}
@@ -162,8 +190,8 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
         ) : (
           <View style={styles.instructionContainer}>
             <Icon name="arrow-upward" size={48} color={THEME_COLORS.primary} />
-            <Text style={styles.instructionText}>请先选择打法</Text>
-            <Text style={styles.instructionSubText}>选择后将显示相应的挑战表单</Text>
+            <CustomText style={styles.instructionText}>请先选择打法</CustomText>
+            <CustomText style={styles.instructionSubText}>选择后将显示相应的挑战表单</CustomText>
           </View>
         )}
       </View>

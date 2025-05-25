@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { en } from './locales/en';
 import { zh } from './locales/zh';
+import { zhHant } from './locales/zhHant';
 
 // 语言资源
 const resources = {
@@ -11,6 +12,9 @@ const resources = {
   },
   zh: {
     translation: zh,
+  },
+  zhHant: {
+    translation: zhHant,
   },
 };
 

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   FlatList,
   ActivityIndicator,
@@ -18,6 +17,7 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { UserResult } from '../../interface/User';
 import { RecorderSelector } from './components/RecorderSelector';
+import CustomText from '../../components/CustomText';
 import { ChallengeCard } from './components/ChallengeCard';
 import { RootStackScreenProps } from '../router';
 
@@ -139,7 +139,7 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <Text style={styles.footerText}>加载中...</Text>
+        <CustomText style={styles.footerText}>加载中...</CustomText>
       </View>
     );
   }, [loading]);
@@ -162,7 +162,7 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>可修改的挑战</Text>
+        <CustomText style={styles.headerTitle}>可修改的挑战</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -179,7 +179,7 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
         />
         {challengeList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无挑战</Text>
+            <CustomText style={styles.emptyText}>暂无挑战</CustomText>
           </View>
         )}
       </View>

@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { GameRoundDto, GamePointDto } from '../../../interface/Game';
 import { PointItem } from './PointItem';
 import { useTranslation } from '../../../hooks/useTranslation';
+import CustomText from '../../../components/CustomText';
 
 interface RoundItemProps {
   round: GameRoundDto;
@@ -22,30 +23,30 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
   return (
     <View style={styles.roundItem}>
       <View style={styles.roundHeader}>
-        <Text style={styles.roundTitle}>
+        <CustomText style={styles.roundTitle}>
           {t('challengeDetail.round')} {round.orderNumber || index + 1}
-        </Text>
+        </CustomText>
         <View style={styles.itemRow}>
-          <Text style={styles.label}>{t('challengeDetail.roundWaterInfo')}:</Text>
-          <Text style={styles.value}>{round.profitStr || '-'}</Text>
+          <CustomText style={styles.label}>{t('challengeDetail.roundWaterInfo')}:</CustomText>
+          <CustomText style={[styles.value, { fontSize: 14 }]}>{round.profitStr || '-'}</CustomText>
         </View>
         <View style={styles.itemRow}>
-          <Text style={styles.label}>{t('challengeDetail.roundTranscoding')}:</Text>
-          <Text style={styles.value}>{round.turnOverStr || '-'}</Text>
+          <CustomText style={styles.label}>{t('challengeDetail.roundTranscoding')}:</CustomText>
+          <CustomText style={[styles.value, { fontSize: 14 }]}>{round.turnOverStr || '-'}</CustomText>
         </View>
-        <Text style={styles.roundStatus}>
+        <CustomText style={styles.roundStatus}>
           {round.isEnabled === 1 ? t('challengeDetail.inProgress') : t('challengeDetail.ended')}
-        </Text>
+        </CustomText>
       </View>
 
       {faultData.length > 0 && (
         <View style={styles.faultContainer}>
-          <Text style={styles.faultTitle}>{t('challengeDetail.faultBetData')}</Text>
+          <CustomText style={styles.faultTitle}>{t('challengeDetail.faultBetData')}</CustomText>
           <View style={styles.faultItemsContainer}>
             {faultData.map((item, idx) => (
-              <Text style={styles.faultText} key={`fault-${item.id || idx}`}>
+              <CustomText style={styles.faultText} key={`fault-${item.id || idx}`}>
                 {`第${item.eventNum}轮-第${item.orderNumber}把实际押注:  ${item.betNumber}`}
-              </Text>
+              </CustomText>
             ))}
           </View>
         </View>
@@ -54,10 +55,10 @@ export const RoundItem = React.memo((props: RoundItemProps) => {
       {round.gamePointDtoList && round.gamePointDtoList.length > 0 && (
         <>
           <View style={styles.pointsContainer}>
-            <Text style={styles.pointsTitle}>{t('challengeDetail.detailInfo')}</Text>
+            <CustomText style={styles.pointsTitle}>{t('challengeDetail.detailInfo')}</CustomText>
             <View style={styles.itemRow}>
-              <Text style={styles.label}>{t('challengeDetail.createTime')}:</Text>
-              <Text style={styles.value}>{round.createTime || '-'}</Text>
+              <CustomText style={styles.label}>{t('challengeDetail.createTime')}:</CustomText>
+              <CustomText style={styles.value}>{round.createTime || '-'}</CustomText>
             </View>
           </View>
           {round.gamePointDtoList.map(renderPoint)}

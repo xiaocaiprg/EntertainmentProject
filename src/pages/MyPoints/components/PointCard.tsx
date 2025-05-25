@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { TransferLogDto } from '../../../interface/Points';
+import CustomText from '../../../components/CustomText';
 
 // 定义积分类型枚举
 export enum PointType {
@@ -46,17 +47,17 @@ export const PointCard = React.memo((props: PointCardProps) => {
   const renderSourceOrDestination = () => {
     if (item.type === PointType.TRANSFER_IN) {
       return (
-        <Text style={styles.recordOrderNo}>
+        <CustomText style={styles.recordOrderNo}>
           来源: {item.fromName}
           {item.fromCode ? ` (${item.fromCode})` : ''}
-        </Text>
+        </CustomText>
       );
     } else if (item.type === PointType.TRANSFER_OUT) {
       return (
-        <Text style={styles.recordOrderNo}>
+        <CustomText style={styles.recordOrderNo}>
           去向: {item.toName}
           {item.toCode ? ` (${item.toCode})` : ''}
-        </Text>
+        </CustomText>
       );
     }
     return null;
@@ -65,17 +66,17 @@ export const PointCard = React.memo((props: PointCardProps) => {
   return (
     <View style={styles.recordItem}>
       <View style={styles.recordMain}>
-        <Text style={styles.recordDesc}>
+        <CustomText style={styles.recordDesc}>
           {pointTypeText}
           {item.matchName ? ` - ${item.matchName}` : ''}
-        </Text>
-        <Text style={styles.recordDate}>{item.transferTime}</Text>
+        </CustomText>
+        <CustomText style={styles.recordDate}>{item.transferTime}</CustomText>
         {renderSourceOrDestination()}
       </View>
-      <Text style={[styles.recordAmount, isEarnType ? styles.earnAmount : styles.spendAmount]}>
+      <CustomText style={[styles.recordAmount, isEarnType ? styles.earnAmount : styles.spendAmount]}>
         {pointDisplay.sign}
         {pointDisplay.absAmount}
-      </Text>
+      </CustomText>
     </View>
   );
 });

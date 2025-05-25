@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, View, TouchableOpacity, Animated, StatusBar, Text } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Animated, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isAndroid } from '../../../utils/platform';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { RankingTypeEnum } from '../../../interface/Ranking';
+import CustomText from '../../../components/CustomText';
 
 interface HeaderProps {
   scrollY: Animated.Value;
@@ -36,9 +37,9 @@ export const Nav = React.memo((props: HeaderProps) => {
             style={[styles.typeOption, rankingType === option.value && styles.activeTypeOption]}
             onPress={() => onRankingTypeChange(option.value)}
           >
-            <Text style={[styles.typeOptionText, rankingType === option.value && styles.activeTypeOptionText]}>
+            <CustomText style={[styles.typeOptionText, rankingType === option.value && styles.activeTypeOptionText]}>
               {option.label}
-            </Text>
+            </CustomText>
           </TouchableOpacity>
         ))}
       </View>
@@ -54,7 +55,7 @@ export const Nav = React.memo((props: HeaderProps) => {
         {renderTypeSelector()}
         <TouchableOpacity onPress={onShowInfo} style={styles.infoContainer}>
           <Icon name="list" size={24} color={'#fff'} />
-          <Text style={styles.infoText}>{t('pitcher_ranking.info')}</Text>
+          <CustomText style={styles.infoText}>{t('pitcher_ranking.info')}</CustomText>
         </TouchableOpacity>
       </View>
     );

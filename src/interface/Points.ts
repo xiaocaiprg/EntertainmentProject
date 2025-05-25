@@ -28,24 +28,16 @@ export interface TransferLogDto {
   type?: number;
 }
 
-export interface GameMatch {
-  addressInfoId?: number;
-  baseNumber?: number;
-  commissionRate?: number;
-  createTime?: string;
-  docPersonCode?: string;
-  gameDate?: string;
-  id?: number;
-  investPersonCode?: string;
-  isEnabled?: number;
-  name?: string;
-  operationCompanyCode?: string;
-  orderNumber?: number;
-  playPersonCode?: string;
-  playRuleCode?: string;
-  principal?: number;
-  profit?: number;
-  turnOver?: number;
+export interface FrozeningDto {
+  amount: number;
+  gameDate: string;
+  id: number;
+  name: string;
+  currency: string;
+  playPersonCode: string;
+  playPersonName: string;
+  addressName: string;
+  addressInfoId: number;
 }
 
 export interface PageDtoProfitDto {
@@ -59,6 +51,7 @@ export interface PageDtoProfitDto {
 export interface ProfitDto {
   code?: string;
   matchId: number;
+  currency: string;
   matchName?: string;
   name?: string;
   profit: number;

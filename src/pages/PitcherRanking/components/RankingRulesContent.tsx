@@ -1,21 +1,22 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
+import CustomText from '../../../components/CustomText';
 
 export const RankingRulesContent = React.memo(() => {
   return (
     <View>
       <View style={styles.ruleItem}>
-        <Text style={styles.ruleNumber}>1.</Text>
-        <Text style={styles.ruleText}>命中率 = 胜局数 / 总局数</Text>
+        <CustomText style={styles.ruleNumber}>1.</CustomText>
+        <CustomText style={styles.ruleText}>命中率 = 胜局数 / 总局数</CustomText>
       </View>
       <View style={styles.ruleItem}>
-        <Text style={styles.ruleNumber}>2.</Text>
-        <Text style={styles.ruleText}>杀数 = 上下水 / 转码</Text>
+        <CustomText style={styles.ruleNumber}>2.</CustomText>
+        <CustomText style={styles.ruleText}>杀数 = 上下水 / 转码</CustomText>
       </View>
       <View style={styles.ruleItem}>
-        <Text style={styles.ruleNumber}>3.</Text>
-        <Text style={styles.ruleText}>榜单每日凌晨更新前N天数据</Text>
+        <CustomText style={styles.ruleNumber}>3.</CustomText>
+        <CustomText style={styles.ruleText}>榜单每日凌晨更新前N天数据</CustomText>
       </View>
     </View>
   );

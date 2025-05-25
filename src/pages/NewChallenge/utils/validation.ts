@@ -8,6 +8,9 @@ import { ChallengeCreateParams } from '../../../interface/Game';
 export const validateChallengeParams = (
   params: Partial<ChallengeCreateParams>,
 ): { isValid: boolean; errorMessage?: string } => {
+  if (!params.baseNumber || params.baseNumber < 0) {
+    return { isValid: false, errorMessage: '请选择投注基数' };
+  }
   if (!params.playPersonCode) {
     return { isValid: false, errorMessage: '请选择投手' };
   }
@@ -20,6 +23,9 @@ export const validateChallengeParams = (
   }
   if (params.principal === undefined || params.principal <= 0 || params.principal % 10000 !== 0) {
     return { isValid: false, errorMessage: '请输入有效的本金金额(需要10000的倍数)' };
+  }
+  if (!params.currency) {
+    return { isValid: false, errorMessage: '请选择币种' };
   }
   return { isValid: true };
 };

@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchPageDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
 import { getChallengeList } from '../../api/services/gameService';
 import { ChallengeStatus } from '../../interface/Common';
 import { useTranslation } from '../../hooks/useTranslation';
+import CustomText from '../../components/CustomText';
 interface ChallengeListProps {
   onItemPress: (matchId: number | undefined) => void;
   onBack: () => void;
@@ -56,36 +57,70 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => onItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemContent}>
-            <View style={styles.itemLeft}>
+            <View style={styles.itemTop}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>创建时间:</Text>
-                <Text style={styles.value}>{item.createTime || '-'}</Text>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.challenge')}:</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.name || '-'}
+                  </CustomText>
+                </View>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.time')}:</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.gameDate || '-'}
+                  </CustomText>
+                </View>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战名称:</Text>
-                <Text style={styles.value}>{item.name || '-'}</Text>
+                {item.raceName ? (
+                  <View style={styles.itemSubRow}>
+                    <CustomText style={styles.label}>{t('fundraisingChallenge.race')}:</CustomText>
+                    <CustomText style={styles.value} numberOfLines={1}>
+                      {item.raceName || '-'}
+                    </CustomText>
+                  </View>
+                ) : null}
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.location')}:</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.addressName || '-'}
+                  </CustomText>
+                </View>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战时间:</Text>
-                <Text style={styles.value}>{item.gameDate || '-'}</Text>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.principal')}:</CustomText>
+                  <CustomText style={styles.value}>{item.principal || '-'}</CustomText>
+                </View>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.pitcher')}:</CustomText>
+                  <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
+                </View>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>地点:</Text>
-                <Text style={styles.value}>{item.addressName || '-'}</Text>
-              </View>
-              <View style={styles.itemRow}>
-                <Text style={styles.label}>投手:</Text>
-                <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.playRule')}:</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.playRuleName || '-'}
+                  </CustomText>
+                </View>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.currency')}:</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.currency || '-'}
+                  </CustomText>
+                </View>
               </View>
             </View>
             <TouchableOpacity style={styles.investButton} onPress={() => onItemPress(item.id)} activeOpacity={0.7}>
-              <Text style={styles.investButtonText}>查看</Text>
+              <CustomText style={styles.investButtonText}>{t('fundraisingChallenge.invest')}</CustomText>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
       );
     },
-    [onItemPress],
+    [onItemPress, t],
   );
 
   // 渲染列表底部加载状态
@@ -96,7 +131,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color={THEME_COLORS.primary} />
-        <Text style={styles.footerText}>{t('common.loading')}</Text>
+        <CustomText style={styles.footerText}>{t('common.loading')}</CustomText>
       </View>
     );
   }, [loading, t]);
@@ -107,14 +142,14 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('fundraisingChallenge.fundraisingChallenges')}</Text>
+        <CustomText style={styles.headerTitle}>{t('fundraisingChallenge.fundraisingChallenges')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
       <View style={styles.contentContainer}>
         {challengeList.length === 0 && !loading ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>{t('fundraisingChallenge.noFundraisingChallenges')}</Text>
+            <CustomText style={styles.emptyText}>{t('fundraisingChallenge.noFundraisingChallenges')}</CustomText>
           </View>
         ) : (
           <FlatList
@@ -137,7 +172,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -145,7 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 40,
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -173,24 +208,28 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   itemContent: {
-    padding: 15,
-    flexDirection: 'row',
+    padding: 10,
+    flexDirection: 'column',
     alignItems: 'flex-end',
-    justifyContent: 'space-between',
   },
-  itemLeft: {
-    flex: 1,
+  itemTop: {
+    width: '100%',
   },
   itemRow: {
     flexDirection: 'row',
     marginBottom: 6,
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  itemSubRow: {
+    flex: 1,
+    flexDirection: 'row',
   },
   label: {
     fontSize: 14,
     color: '#999',
     marginRight: 8,
-    width: 80,
+    width: 40,
   },
   value: {
     fontSize: 14,

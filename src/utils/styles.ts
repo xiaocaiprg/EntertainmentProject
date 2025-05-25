@@ -15,6 +15,7 @@ export const THEME_COLORS = {
   success: '#2ecc71',
   danger: '#e74c3c',
   warning: '#f39c12',
+  disabled: '#cccccc',
   text: {
     primary: '#333333',
     secondary: '#666666',

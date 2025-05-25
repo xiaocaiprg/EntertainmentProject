@@ -1,6 +1,8 @@
 import React, { useMemo, useCallback, useState } from 'react';
-import { View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import CustomText from '../../../components/CustomText';
+import CustomTextInput from '../../../components/CustomTextInput';
 import DropdownSelect from '../../../components/DropdownSelect';
 import NumberInput from '../../../components/NumberInput';
 import { DatePicker } from '../../../components/DatePicker';
@@ -8,8 +10,9 @@ import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
-import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS } from '../interface/IModuleProps';
+import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS, CURRENCY_OPTIONS } from '../interface/IModuleProps';
 import { ChallengeType } from '../../../interface/Common';
+
 interface NewChallengeFormProps {
   challengeType: ChallengeType;
   operators: UserResult[];
@@ -38,7 +41,8 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
       !!formData.operatorCode &&
       formData.locationId > 0 &&
       !!formData.date &&
-      validateNumberInput(formData.principal) > 0
+      validateNumberInput(formData.principal) > 0 &&
+      !!formData.currency
     );
   }, [formData]);
 
@@ -57,7 +61,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
   return (
     <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled">
       <>
-        <Text style={styles.labelText}>投注基数</Text>
+        <CustomText style={styles.labelText}>投注基数</CustomText>
         <DropdownSelect
           options={BET_AMOUNT_OPTIONS[challengeType]}
           selectedValue={formData.initialBetAmount}
@@ -72,7 +76,22 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         />
       </>
       <>
-        <Text style={styles.labelText}>选择投手</Text>
+        <CustomText style={styles.labelText}>币种</CustomText>
+        <DropdownSelect
+          options={CURRENCY_OPTIONS}
+          selectedValue={formData.currency}
+          placeholder="请选择币种"
+          onSelect={(value: any) => updateField('currency', value)}
+          valueKey="value"
+          labelKey="label"
+          isOpen={activeDropdown === DropdownType.CURRENCY}
+          onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.CURRENCY, isOpen)}
+          zIndex={1800}
+          zIndexInverse={2200}
+        />
+      </>
+      <>
+        <CustomText style={styles.labelText}>选择投手</CustomText>
         <DropdownSelect
           options={operators}
           selectedValue={formData.operatorCode}
@@ -87,7 +106,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         />
       </>
       <>
-        <Text style={styles.labelText}>选择地点</Text>
+        <CustomText style={styles.labelText}>选择地点</CustomText>
         <DropdownSelect
           options={locations}
           selectedValue={formData.locationId}
@@ -111,8 +130,8 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         }}
       />
       <View style={{ marginBottom: 10 }}>
-        <Text style={styles.labelText}>挑战名称</Text>
-        <TextInput
+        <CustomText style={styles.labelText}>挑战名称</CustomText>
+        <CustomTextInput
           style={styles.textInput}
           value={formData.name}
           onChangeText={(text) => updateField('name', text)}
@@ -147,7 +166,7 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         onPress={onConfirm}
         disabled={!isFormValid}
       >
-        <Text style={styles.confirmButtonText}>确认</Text>
+        <CustomText style={styles.confirmButtonText}>确认</CustomText>
       </TouchableOpacity>
     </ScrollView>
   );

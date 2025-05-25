@@ -1,14 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
+import CustomText from '../../components/CustomText';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList } from '../../api/services/gameService';
@@ -66,39 +58,39 @@ export const GameHistory = React.memo(() => {
       return (
         <TouchableOpacity style={styles.itemContainer} onPress={() => handleItemPress(item.id)} activeOpacity={0.7}>
           <View style={styles.itemHeader}>
-            <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name || '-'}
-            </Text>
+            </CustomText>
             <View style={[styles.statusTag, { backgroundColor: status.color + '20' }]}>
-              <Text style={[styles.statusText, { color: status.color }]}>{status.text}</Text>
+              <CustomText style={[styles.statusText, { color: status.color }]}>{status.text}</CustomText>
             </View>
           </View>
 
           <View style={styles.itemContent}>
             <View style={styles.itemLeft}>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>创建时间:</Text>
-                <Text style={styles.value}>{item.createTime || '-'}</Text>
+                <CustomText style={styles.label}>创建时间:</CustomText>
+                <CustomText style={styles.value}>{item.createTime || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战上下水:</Text>
-                <Text style={styles.value}>{item.profitStr || '-'}</Text>
+                <CustomText style={styles.label}>挑战上下水:</CustomText>
+                <CustomText style={styles.value}>{item.profitStr || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战转码:</Text>
-                <Text style={styles.value}>{item.turnOverStr || '-'}</Text>
+                <CustomText style={styles.label}>挑战转码:</CustomText>
+                <CustomText style={styles.value}>{item.turnOverStr || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>投手:</Text>
-                <Text style={styles.value}>{item.playPersonName || '-'}</Text>
+                <CustomText style={styles.label}>投手:</CustomText>
+                <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>记录人:</Text>
-                <Text style={styles.value}>{item.docPersonName || '-'}</Text>
+                <CustomText style={styles.label}>记录人:</CustomText>
+                <CustomText style={styles.value}>{item.docPersonName || '-'}</CustomText>
               </View>
               <View style={styles.itemRow}>
-                <Text style={styles.label}>挑战开始时间:</Text>
-                <Text style={styles.value}>{item.gameDate || '-'}</Text>
+                <CustomText style={styles.label}>挑战开始时间:</CustomText>
+                <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
               </View>
             </View>
 
@@ -119,7 +111,7 @@ export const GameHistory = React.memo(() => {
     return (
       <View style={styles.footerContainer}>
         <ActivityIndicator size="small" color="#0000ff" />
-        <Text style={styles.footerText}>加载中...</Text>
+        <CustomText style={styles.footerText}>加载中...</CustomText>
       </View>
     );
   }, [loading]);
@@ -135,7 +127,7 @@ export const GameHistory = React.memo(() => {
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>历史记录</Text>
+        <CustomText style={styles.headerTitle}>历史记录</CustomText>
         <View style={styles.headerRight} />
       </View>
       <View style={styles.container}>
@@ -151,7 +143,7 @@ export const GameHistory = React.memo(() => {
         />
         {historyList.length === 0 && !loading && (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无历史记录</Text>
+            <CustomText style={styles.emptyText}>暂无历史记录</CustomText>
           </View>
         )}
       </View>

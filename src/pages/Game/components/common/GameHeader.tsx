@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { STATUS_BAR_HEIGHT } from '../../../../utils/platform';
+import CustomText from '../../../../components/CustomText';
 
 interface GameHeaderProps {
   title: string;
@@ -21,7 +22,7 @@ export const GameHeader: React.FC<GameHeaderProps> = React.memo((props) => {
       <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
         <Icon name="arrow-back" size={24} color="#111" />
       </TouchableOpacity>
-      <Text style={styles.headerTitle}>{title}</Text>
+      <CustomText style={styles.headerTitle}>{title}</CustomText>
     </View>
   );
 });

@@ -71,7 +71,7 @@ export const useAAGameLogic = (baseNumber: number) => {
     // 创建并添加历史记录
     if (currentChoice) {
       const newRecord = createHistoryRecord(
-        inningResult.gameInningDto.id,
+        inningResult.gameInningDto?.id || new Date().getTime(),
         aaRoundStats.round,
         gameNumber,
         currentChoice,

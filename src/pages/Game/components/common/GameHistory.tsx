@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { HistoryRecord } from '../../types/CBtypes';
 import { groupRecordsByRound, getChoiceDisplayText } from '../../utils/historyHelper';
+import CustomText from '../../../../components/CustomText';
 
 interface GameHistoryProps {
   historyRecords: HistoryRecord[];
@@ -21,25 +22,25 @@ export const GameHistory: React.FC<GameHistoryProps> = React.memo(({ historyReco
 
   return (
     <View style={styles.historyContainer}>
-      <Text style={styles.title}>历史记录</Text>
+      <CustomText style={styles.title}>历史记录</CustomText>
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
         {rounds.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>暂无历史记录</Text>
+            <CustomText style={styles.emptyText}>暂无历史记录</CustomText>
           </View>
         ) : (
           rounds.map((round) => (
             <View key={`round-${round}`} style={styles.roundContainer}>
               <View style={styles.roundHeader}>
-                <Text style={styles.roundTitle}>第 {round} 轮</Text>
+                <CustomText style={styles.roundTitle}>第 {round} 轮</CustomText>
               </View>
               {groupedRecords[round].map((record) => (
                 <View key={`record-${record.id}`} style={styles.recordItem}>
-                  <Text style={styles.betAmountText}>押注：{record.betAmount}</Text>
-                  <Text style={[styles.choiceText, record.isWin ? styles.winText : styles.loseText]}>
+                  <CustomText style={styles.betAmountText}>押注：{record.betAmount}</CustomText>
+                  <CustomText style={[styles.choiceText, record.isWin ? styles.winText : styles.loseText]}>
                     {getChoiceDisplayText(record.choice)}
-                  </Text>
-                  <Text style={styles.timeText}>{record.time}</Text>
+                  </CustomText>
+                  <CustomText style={styles.timeText}>{record.time}</CustomText>
                 </View>
               ))}
             </View>
