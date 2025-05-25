@@ -28,7 +28,7 @@ class UpdateManager {
       console.log('下载目录:', downloadDir);
 
       this.updateAPK = new UpdateAPK({
-        apkVersionUrl: APP_VERSION_URL,
+        apkVersionUrl: `${APP_VERSION_URL}?t=${Date.now()}`,
         fileProviderAuthority: 'com.entertainmentproject.provider',
         downloadDestDirectory: downloadDir,
         needUpdateApp: (confirmUpdate: (isUpdate: boolean) => void) => {
