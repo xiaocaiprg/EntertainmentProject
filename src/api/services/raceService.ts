@@ -17,6 +17,7 @@ export const PATH = {
   RACE_POOL_LIST: 'haiyang/racePool/page',
   RACE_POOL_LIST_ALL: 'haiyang/racePool/list',
   CREATE_RACE_POOL: 'haiyang/racePool/create',
+  UPDATE_RACE_POOL_STATUS: 'haiyang/racePool/updateStatus',
 };
 
 export const createRace = (params: CreateRaceParams): Promise<string> => {
@@ -88,4 +89,14 @@ export const getRacePoolListAll = (isEnabled: number): Promise<RacePoolPageDto[]
     .catch(() => {
       return null;
     });
+};
+
+export const updateRacePoolStatus = (params: { id: number; isEnabled: number }): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.UPDATE_RACE_POOL_STATUS, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };

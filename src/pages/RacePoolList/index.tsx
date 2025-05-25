@@ -105,10 +105,16 @@ export const RacePoolListScreen: React.FC<RootStackScreenProps<'RacePoolList'>> 
     ({ item, index }: { item: RacePoolPageDto; index: number }) => {
       const colorIndex = index % POOL_COLORS.length;
       return (
-        <PoolCard pool={item} color={POOL_COLORS[colorIndex]} isAdmin={isAdmin} onDistribute={handleDistributePoints} />
+        <PoolCard
+          pool={item}
+          color={POOL_COLORS[colorIndex]}
+          isAdmin={isAdmin}
+          onDistribute={handleDistributePoints}
+          onStatusChange={() => fetchPoolList(true)}
+        />
       );
     },
-    [handleDistributePoints, isAdmin],
+    [handleDistributePoints, isAdmin, fetchPoolList],
   );
 
   // 渲染列表底部
