@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameInningDto, GamePointDto } from '../../../interface/Game';
 import { THEME_COLORS } from '../../../utils/styles';
@@ -7,6 +7,8 @@ import { useTranslation } from '../../../hooks/useTranslation';
 import { updateInning } from '../../../api/services/inningService';
 import { ConfirmModal } from '../../../components/ConfirmModal';
 import { validateBetAmount } from '../utils/validation';
+import CustomText from '../../../components/CustomText';
+import CustomTextInput from '../../../components/CustomTextInput';
 
 interface InningListProps {
   pointGroups: GamePointDto[];
@@ -83,19 +85,19 @@ export const InningList: React.FC<InningListProps> = React.memo((props) => {
     (inning: GameInningDto, idx: number) => {
       return (
         <View key={`inning-${inning.id || idx}`} style={styles.inningItem}>
-          <Text
+          <CustomText
             style={[
               styles.inningResult,
               inning.result === 1 ? styles.winText : inning.result === 2 ? styles.loseText : {},
             ]}
           >
             {inning.result === 1 ? '+' : inning.result === 2 ? '-' : ''}
-          </Text>
-          <Text style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</Text>
-          <Text style={styles.inningBet}>{inning.betNumber}</Text>
+          </CustomText>
+          <CustomText style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</CustomText>
+          <CustomText style={styles.inningBet}>{inning.betNumber}</CustomText>
           <TouchableOpacity style={styles.modifyButton} onPress={() => showModifyConfirm(inning)}>
             <Icon name="edit" size={14} color="#fff" style={styles.buttonIcon} />
-            <Text style={styles.buttonText}>{t('roundDetail.modifyBet')}</Text>
+            <CustomText style={styles.buttonText}>{t('roundDetail.modifyBet')}</CustomText>
           </TouchableOpacity>
         </View>
       );
@@ -110,15 +112,15 @@ export const InningList: React.FC<InningListProps> = React.memo((props) => {
         <View key={`group_${item.eventNum}`} style={styles.groupContainer}>
           <TouchableOpacity style={styles.groupHeader} onPress={() => toggleGroup(item.eventNum)}>
             <View style={styles.groupTitleRow}>
-              <Text style={styles.groupTitle}>
+              <CustomText style={styles.groupTitle}>
                 {t('roundDetail.eventNumber')}: {item.eventNum}
-              </Text>
-              <Text style={styles.groupBetNumber}>
+              </CustomText>
+              <CustomText style={styles.groupBetNumber}>
                 {t('roundDetail.betAmount')}: {item.betNumber}
-              </Text>
-              <Text style={styles.groupBetNumber}>
+              </CustomText>
+              <CustomText style={styles.groupBetNumber}>
                 {t('roundDetail.status')}: {pointStatus === 1 ? '进行中' : '已结束'}
-              </Text>
+              </CustomText>
             </View>
             <Icon name={isExpanded ? 'expand-less' : 'expand-more'} size={24} color={THEME_COLORS.text.primary} />
           </TouchableOpacity>
@@ -136,7 +138,7 @@ export const InningList: React.FC<InningListProps> = React.memo((props) => {
   if (!hasPointsData) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>{t('common.noData')}</Text>
+        <CustomText style={styles.emptyText}>{t('common.noData')}</CustomText>
       </View>
     );
   }
@@ -152,7 +154,7 @@ export const InningList: React.FC<InningListProps> = React.memo((props) => {
         onConfirm={handleConfirmModify}
         isProcessing={processing}
         customContent={
-          <TextInput
+          <CustomTextInput
             style={styles.betInput}
             value={newBetAmount}
             onChangeText={setNewBetAmount}

@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { UserResult } from '../../../../interface/User';
 import { useTranslation } from '../../../../hooks/useTranslation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import CustomText from '../../../../components/CustomText';
 
 interface MemberBenefitsProps {
   user: UserResult;
@@ -27,16 +28,16 @@ export const MemberBenefits = React.memo((props: MemberBenefitsProps) => {
     >
       <View style={styles.membershipCardWrapper}>
         <View style={styles.leftSection}>
-          <Text style={styles.membershipLabel}>普通会员</Text>
+          <CustomText style={styles.membershipLabel}>普通会员</CustomText>
         </View>
         <View style={styles.rightSection}>
           <TouchableOpacity style={styles.profitContainer} onPress={handleProfitPress}>
             <View style={styles.profitContent}>
               <View style={styles.profitLabelContainer}>
                 <Icon name="money" size={16} color="#6c5ce7" />
-                <Text style={styles.profitLabel}>{t('my.profit')}</Text>
+                <CustomText style={styles.profitLabel}>{t('my.profit')}</CustomText>
               </View>
-              <Text style={styles.profitValue}>{user.profitStr}</Text>
+              <CustomText style={styles.profitValue}>{user.profitStr}</CustomText>
             </View>
             <Icon name="chevron-right" size={12} color="#111" />
           </TouchableOpacity>

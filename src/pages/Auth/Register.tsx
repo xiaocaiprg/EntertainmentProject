@@ -1,8 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import {
   View,
-  Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
@@ -13,7 +11,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-
+import CustomText from '../../components/CustomText';
+import CustomTextInput from '../../components/CustomTextInput';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 
@@ -80,14 +79,14 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
             </TouchableOpacity>
 
             <View style={styles.header}>
-              <Text style={styles.title}>注册</Text>
-              <Text style={styles.subtitle}>创建一个新账号</Text>
+              <CustomText style={styles.title}>注册</CustomText>
+              <CustomText style={styles.subtitle}>创建一个新账号</CustomText>
             </View>
 
             <View style={styles.form}>
               <View style={styles.inputContainer}>
                 <Icon name="person" size={20} color="#6c5ce7" style={styles.inputIcon} />
-                <TextInput
+                <CustomTextInput
                   style={styles.input}
                   placeholder="用户名"
                   placeholderTextColor="#95a5a6"
@@ -99,7 +98,7 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
 
               <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#6c5ce7" style={styles.inputIcon} />
-                <TextInput
+                <CustomTextInput
                   style={styles.input}
                   placeholder="密码"
                   placeholderTextColor="#95a5a6"
@@ -111,7 +110,7 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
 
               <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#6c5ce7" style={styles.inputIcon} />
-                <TextInput
+                <CustomTextInput
                   style={styles.input}
                   placeholder="确认密码"
                   placeholderTextColor="#95a5a6"
@@ -122,13 +121,13 @@ export const Register: React.FC<RegisterProps> = React.memo(({ navigation, onTog
               </View>
 
               <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
-                {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>注册</Text>}
+                {loading ? <ActivityIndicator color="#fff" /> : <CustomText style={styles.buttonText}>注册</CustomText>}
               </TouchableOpacity>
 
               <View style={styles.footer}>
-                <Text style={styles.footerText}>已有账号？</Text>
+                <CustomText style={styles.footerText}>已有账号？</CustomText>
                 <TouchableOpacity onPress={onToggleMode}>
-                  <Text style={styles.footerLink}>立即登录</Text>
+                  <CustomText style={styles.footerLink}>立即登录</CustomText>
                 </TouchableOpacity>
               </View>
             </View>

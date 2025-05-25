@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { THEME_COLORS } from '../../../utils/styles';
 import { UserResult } from '../../../interface/User';
-
+import CustomText from '../../../components/CustomText';
 interface RecorderSelectorProps {
   visible: boolean;
   recorderList: UserResult[];
@@ -34,7 +34,9 @@ export const RecorderSelector = React.memo((props: RecorderSelectorProps) => {
           style={[styles.recorderItem, isSelected && styles.selectedRecorderItem]}
           onPress={() => handleSelectRecorder(item)}
         >
-          <Text style={[styles.recorderName, isSelected && styles.selectedRecorderName]}>{item.name || '未命名'}</Text>
+          <CustomText style={[styles.recorderName, isSelected && styles.selectedRecorderName]}>
+            {item.name || '未命名'}
+          </CustomText>
           {isSelected && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
         </TouchableOpacity>
       );
@@ -48,7 +50,7 @@ export const RecorderSelector = React.memo((props: RecorderSelectorProps) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>选择记录人</Text>
+            <CustomText style={styles.modalTitle}>选择记录人</CustomText>
             <TouchableOpacity onPress={onClose}>
               <Icon name="close" size={24} color={THEME_COLORS.text.primary} />
             </TouchableOpacity>
@@ -63,7 +65,7 @@ export const RecorderSelector = React.memo((props: RecorderSelectorProps) => {
 
           <View style={styles.modalFooter}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose} disabled={submitting}>
-              <Text style={styles.cancelButtonText}>取消</Text>
+              <CustomText style={styles.cancelButtonText}>取消</CustomText>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.confirmButton, (!selectedRecorder || submitting) && styles.disabledButton]}
@@ -73,7 +75,7 @@ export const RecorderSelector = React.memo((props: RecorderSelectorProps) => {
               {submitting ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text style={styles.confirmButtonText}>确认</Text>
+                <CustomText style={styles.confirmButtonText}>确认</CustomText>
               )}
             </TouchableOpacity>
           </View>

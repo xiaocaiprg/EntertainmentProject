@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
 import { useTranslation } from '../../../hooks/useTranslation';
+import CustomText from '../../../components/CustomText';
 import { PlayerKillrateRankDto } from '../../../interface/Ranking';
 
 interface KillRateCardProps {
@@ -33,24 +34,24 @@ export const KillRateCard = React.memo((props: KillRateCardProps) => {
   return (
     <View style={styles.rankItem}>
       <View style={[styles.rankBadge, rankClass]}>
-        <Text style={styles.rankText}>{rank}</Text>
+        <CustomText style={styles.rankText}>{rank}</CustomText>
       </View>
       <View style={styles.playerInfo}>
-        <Text style={styles.playerName}>{item.playerName || ''}</Text>
-        <Text style={styles.companyName}>{item.companyName || ''}</Text>
+        <CustomText style={styles.playerName}>{item.playerName || ''}</CustomText>
+        <CustomText style={styles.companyName}>{item.companyName || ''}</CustomText>
       </View>
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{item.killRateStr || '-'}</Text>
-          <Text style={styles.statLabel}>{t('pitcher_ranking.killRate')}</Text>
+          <CustomText style={styles.statValue}>{item.killRateStr || '-'}</CustomText>
+          <CustomText style={styles.statLabel}>{t('pitcher_ranking.killRate')}</CustomText>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{item.totalProfitStr || '-'}</Text>
-          <Text style={styles.statLabel}>{t('pitcher_ranking.totalProfit')}</Text>
+          <CustomText style={styles.statValue}>{item.totalProfitStr || '-'}</CustomText>
+          <CustomText style={styles.statLabel}>{t('pitcher_ranking.totalProfit')}</CustomText>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{item.totalTurnOverStr || '-'}</Text>
-          <Text style={styles.statLabel}>{t('pitcher_ranking.totalTurnOver')}</Text>
+          <CustomText style={styles.statValue}>{item.totalTurnOverStr || '-'}</CustomText>
+          <CustomText style={styles.statLabel}>{t('pitcher_ranking.totalTurnOver')}</CustomText>
         </View>
       </View>
     </View>

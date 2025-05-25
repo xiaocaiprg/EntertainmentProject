@@ -1,18 +1,25 @@
-import React, { useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Image, Text } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Image, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from '../../hooks/useTranslation';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { MemberBenefits } from './components/MemberBenefits';
+import CustomText from '../../components/CustomText';
 import { PointsCard } from './components/PointsCard';
 import { ActionArea } from './components/ActionArea';
 import useFocusRefresh from '../../hooks/useFocusRefresh';
+import { ConfirmModal } from '../../components/ConfirmModal';
+import { turnoverProcess } from '../../api/services/pointService';
+import { useRole } from '../../hooks/useRole';
 
 export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
   const { t } = useTranslation();
   const { user, isLoggedIn, logout, checkUserStatus } = useAuth();
+  const [showSettlementModal, setShowSettlementModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { isOperationAdmin } = useRole();
 
   const handleLoginPress = useCallback(() => {
     navigation.navigate('Auth');
@@ -38,6 +45,26 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     navigation.navigate('MyPoints');
   }, [navigation]);
 
+  const handleOneClickSettlement = useCallback(() => {
+    setShowSettlementModal(true);
+  }, []);
+
+  const handleSettlementConfirm = useCallback(async () => {
+    setIsProcessing(true);
+    try {
+      await turnoverProcess();
+      setShowSettlementModal(false);
+      Alert.alert(t('my.settlementSuccess'));
+    } catch (error) {
+      Alert.alert(t('my.settlementFailed'));
+    }
+    setIsProcessing(false);
+  }, [t]);
+
+  const handleSettlementCancel = useCallback(() => {
+    setShowSettlementModal(false);
+  }, []);
+
   // 列表项组件
   const MenuItem = useCallback(
     ({ icon, title, onPress }: { icon: string; title: string; onPress: () => void }) => (
@@ -45,7 +72,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         <View style={styles.menuIconContainer}>
           <Icon name={icon} size={24} color="#6c5ce7" />
         </View>
-        <Text style={styles.menuItemText}>{title}</Text>
+        <CustomText style={styles.menuItemText}>{title}</CustomText>
         <Icon name="chevron-right" size={24} color="#bdc3c7" />
       </TouchableOpacity>
     ),
@@ -57,9 +84,9 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     () => (
       <View style={styles.notLoggedInContainer}>
         <FontAwesome name="user-circle" size={100} color="#bdc3c7" />
-        <Text style={styles.loginText}>{t('auth.loginToViewProfile')}</Text>
+        <CustomText style={styles.loginText}>{t('auth.loginToViewProfile')}</CustomText>
         <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-          <Text style={styles.loginButtonText}>{t('auth.login')}</Text>
+          <CustomText style={styles.loginButtonText}>{t('auth.login')}</CustomText>
         </TouchableOpacity>
       </View>
     ),
@@ -80,17 +107,17 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
             />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.name || 'User'}</Text>
-            <Text style={styles.userHandle}>{user?.code || 'code'}</Text>
+            <CustomText style={styles.userName}>{user?.name || 'User'}</CustomText>
+            <CustomText style={styles.userHandle}>{user?.code || 'code'}</CustomText>
           </View>
           <View style={styles.settingsContainer}>
             <TouchableOpacity style={styles.settingsButton} onPress={handleSettingsPress}>
               <Icon name="settings" size={24} color="#fff" />
-              <Text style={styles.settingsText}>{t('settings.settings')}</Text>
+              <CustomText style={styles.settingsText}>{t('settings.settings')}</CustomText>
             </TouchableOpacity>
             <TouchableOpacity style={styles.settingsButton} onPress={handleLogoutPress}>
               <Icon name="exit-to-app" size={24} color="#fff" />
-              <Text style={styles.settingsText}>{t('my.loginout')}</Text>
+              <CustomText style={styles.settingsText}>{t('my.loginout')}</CustomText>
             </TouchableOpacity>
           </View>
         </View>
@@ -99,6 +126,14 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
           {user && <MemberBenefits user={user} navigation={navigation} />}
           {user && <PointsCard user={user} onPointsPress={handleMyPoints} />}
           <ActionArea navigation={navigation} />
+          {isOperationAdmin && (
+            <View style={styles.settlementContainer}>
+              <TouchableOpacity style={styles.settlementButton} onPress={handleOneClickSettlement}>
+                <Icon name="account-balance" size={24} color="#fff" />
+                <CustomText style={styles.settlementButtonText}>{t('my.oneClickSettlement')}</CustomText>
+              </TouchableOpacity>
+            </View>
+          )}
           <View style={styles.menuContainer}>
             {/* <MenuItem icon="history" title={t('my.historyRecord')} onPress={handleHistoryPress} /> */}
             <MenuItem icon="playlist-play" title={t('my.myGames')} onPress={handleMyGames} />
@@ -106,7 +141,17 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         </View>
       </>
     ),
-    [user, handleMyGames, handleLogoutPress, MenuItem, t, navigation, handleSettingsPress, handleMyPoints],
+    [
+      user,
+      handleMyGames,
+      handleLogoutPress,
+      MenuItem,
+      t,
+      navigation,
+      handleSettingsPress,
+      handleMyPoints,
+      handleOneClickSettlement,
+    ],
   );
 
   useFocusRefresh(() => {
@@ -118,6 +163,15 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {isLoggedIn ? renderLoggedIn() : renderNotLoggedIn()}
       </ScrollView>
+
+      <ConfirmModal
+        visible={showSettlementModal}
+        title={t('my.settlementConfirmTitle')}
+        message={t('my.settlementConfirmMessage')}
+        onConfirm={handleSettlementConfirm}
+        onCancel={handleSettlementCancel}
+        isProcessing={isProcessing}
+      />
     </SafeAreaView>
   );
 });
@@ -206,6 +260,25 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     backgroundColor: '#f5f3fe',
+  },
+  settlementContainer: {
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  settlementButton: {
+    backgroundColor: '#e74c3c',
+    borderRadius: 15,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settlementButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
   menuContainer: {
     backgroundColor: '#fff',

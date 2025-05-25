@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -10,6 +9,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
+import CustomText from '../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getMatchDetail } from '../../api/services/gameService';
 import { removeLastInning } from '../../api/services/roundService';
@@ -20,12 +20,16 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { RootStackScreenProps } from '../router';
 import { RoundItem } from './components/RoundItem';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
+import { RoundStatus } from '../../interface/Common';
+import { useRole } from '../../hooks/useRole';
+
 // 使用导航堆栈中定义的类型
 type RoundDetailScreenProps = RootStackScreenProps<'RoundDetail'>;
 
 export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({ navigation, route }) => {
   const { t } = useTranslation();
   const { matchId } = route.params;
+  const { isOperationAdmin } = useRole();
   const [loading, setLoading] = useState<boolean>(true);
   const [matchDetail, setMatchDetail] = useState<GameMatchDto | null>(null);
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
@@ -85,11 +89,24 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
     setProcessing(false);
   }, [selectedRoundId, fetchMatchDetail, t]);
 
+  const showRestartBtn = useMemo(() => {
+    const isAllRoundEnd = matchDetail?.roundList?.every((round) => round.isEnabled === RoundStatus.ENDED);
+    return isAllRoundEnd && isOperationAdmin;
+  }, [matchDetail, isOperationAdmin]);
+
   const renderRoundItem = useCallback(
     ({ item, index }: { item: GameRoundDto; index: number }) => {
-      return <RoundItem item={item} index={index} onRestartConfirm={showRestartConfirm} onRefresh={fetchMatchDetail} />;
+      return (
+        <RoundItem
+          showRestartBtn={showRestartBtn}
+          item={item}
+          index={index}
+          onRestartConfirm={showRestartConfirm}
+          onRefresh={fetchMatchDetail}
+        />
+      );
     },
-    [showRestartConfirm, fetchMatchDetail],
+    [showRestartConfirm, fetchMatchDetail, showRestartBtn],
   );
 
   // 渲染内容区域
@@ -98,7 +115,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>{t('common.loading')}</Text>
+          <CustomText style={styles.loadingText}>{t('common.loading')}</CustomText>
         </View>
       );
     }
@@ -106,7 +123,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
     if (!matchDetail?.roundList?.length) {
       return (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>{t('roundDetail.noRounds')}</Text>
+          <CustomText style={styles.emptyText}>{t('roundDetail.noRounds')}</CustomText>
         </View>
       );
     }
@@ -128,7 +145,7 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('roundDetail.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('roundDetail.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -156,7 +173,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 50,
+    height: 40,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
     borderBottomWidth: 1,

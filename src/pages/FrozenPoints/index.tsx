@@ -1,20 +1,12 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, FlatList, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from '../../hooks/useTranslation';
 import { RootStackScreenProps } from '../router';
 import { getFrozenList } from '../../api/services/pointService';
-import { GameMatch } from '../../interface/Points';
+import { FrozeningDto } from '../../interface/Points';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
+import CustomText from '../../components/CustomText';
 
 type FrozenPointsScreenProps = RootStackScreenProps<'FrozenPoints'>;
 
@@ -22,21 +14,14 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
   const { navigation } = props;
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
-  const [frozenList, setFrozenList] = useState<GameMatch[]>([]);
-  const [hasMore, setHasMore] = useState(false);
-  const pageNumRef = useRef(1);
-  const pageSizeRef = useRef(10);
+  const [frozenList, setFrozenList] = useState<FrozeningDto[]>([]);
 
   // 加载在途积分数据
   const loadFrozenPoints = useCallback(async () => {
     setLoading(true);
-    const result = await getFrozenList({
-      pageNum: pageNumRef.current,
-      pageSize: pageSizeRef.current,
-    });
+    const result = await getFrozenList();
     if (result) {
       setFrozenList((prev) => [...prev, ...result]);
-      setHasMore(result.length === pageSizeRef.current);
     }
     setLoading(false);
   }, []);
@@ -53,26 +38,29 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
 
   // 渲染每个挑战项
   const renderItem = useCallback(
-    ({ item }: { item: GameMatch }) => {
+    ({ item }: { item: FrozeningDto }) => {
       return (
         <View style={styles.itemContainer}>
           <View style={styles.itemHeader}>
-            <Text style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
+            <CustomText style={styles.itemName} numberOfLines={1} ellipsizeMode="tail">
               {item.name}
-            </Text>
+            </CustomText>
           </View>
           <View style={styles.itemDetail}>
-            <Text style={styles.itemText}>
-              {t('frozenPoints.playRuleCode')}: {item.playRuleCode}
-            </Text>
+            <CustomText style={styles.itemText}>
+              {t('frozenPoints.amount')}: {item.amount} {item.currency && `(${item.currency})`}
+            </CustomText>
+            <CustomText style={styles.itemText}>
+              {t('frozenPoints.playPersonName')}: {item.playPersonName || '-'}
+            </CustomText>
           </View>
           <View style={styles.itemDetail}>
-            <Text style={styles.itemText}>
+            <CustomText style={styles.itemText}>
               {t('frozenPoints.gameDate')}: {item.gameDate}
-            </Text>
-            <Text style={styles.itemText}>
-              {t('frozenPoints.principal')}: {item.principal || 0}
-            </Text>
+            </CustomText>
+            <CustomText style={styles.itemText}>
+              {t('frozenPoints.addressName')}: {item.addressName || '-'}
+            </CustomText>
           </View>
         </View>
       );
@@ -88,7 +76,7 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
     return (
       <View style={styles.footer}>
         <ActivityIndicator size="small" color="#999" />
-        <Text style={styles.footerText}>{t('common.loading')}</Text>
+        <CustomText style={styles.footerText}>{t('common.loading')}</CustomText>
       </View>
     );
   }, [loading, t]);
@@ -100,18 +88,10 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
     }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>{t('frozenPoints.noData')}</Text>
+        <CustomText style={styles.emptyText}>{t('frozenPoints.noData')}</CustomText>
       </View>
     );
   }, [loading, t]);
-
-  // 处理滚动到底部事件
-  const handleEndReached = useCallback(() => {
-    if (!loading && hasMore) {
-      pageNumRef.current += 1;
-      loadFrozenPoints();
-    }
-  }, [loading, hasMore, loadFrozenPoints]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,15 +100,14 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
         <TouchableOpacity onPress={handleBackPress}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('frozenPoints.title')}</Text>
+        <CustomText style={styles.headerTitle}>{t('frozenPoints.title')}</CustomText>
         <View style={{ width: 24 }} />
       </View>
 
       <FlatList
         data={frozenList}
         renderItem={renderItem}
-        keyExtractor={(item: GameMatch, index: number) => `${index}-${item.id}`}
-        onEndReached={handleEndReached}
+        keyExtractor={(item: FrozeningDto, index: number) => `${index}-${item.id}`}
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderEmpty}
@@ -182,11 +161,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-  },
-  itemProfit: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#6c5ce7',
   },
   itemDetail: {
     flexDirection: 'row',

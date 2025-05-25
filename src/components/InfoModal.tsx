@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, ReactNode } from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Modal, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import CustomText from './CustomText';
 import { useTranslation } from '../hooks/useTranslation';
 
 interface InfoModalProps {
@@ -25,7 +26,7 @@ export const InfoModal = React.memo((props: InfoModalProps) => {
     }
     return (
       <ScrollView style={styles.contentScroll}>
-        <Text style={styles.contentText}>{content}</Text>
+        <CustomText style={styles.contentText}>{content}</CustomText>
       </ScrollView>
     );
   }, [content, customContent]);
@@ -36,14 +37,14 @@ export const InfoModal = React.memo((props: InfoModalProps) => {
         <View style={styles.modalContent}>
           <View style={styles.header}>
             <View style={{ width: 20 }} />
-            <Text style={styles.title}>{title}</Text>
+            <CustomText style={styles.title}>{title}</CustomText>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Icon name="close" size={24} color="#333" />
             </TouchableOpacity>
           </View>
           {renderContent}
           <TouchableOpacity style={styles.confirmButton} onPress={handleClose}>
-            <Text style={styles.confirmText}>{t('common.confirm')}</Text>
+            <CustomText style={styles.confirmText}>{t('common.confirm')}</CustomText>
           </TouchableOpacity>
         </View>
       </View>

@@ -7,7 +7,20 @@ export enum DropdownType {
   PLAYPERSON = 'operator',
   LOCATION = 'location',
   BET_AMOUNT = 'betAmount',
+  CURRENCY = 'currency',
 }
+
+// 定义币种枚举
+export enum CurrencyType {
+  HKD = 'HKD',
+  USD = 'USD',
+}
+
+// 币种选项
+export const CURRENCY_OPTIONS = [
+  { label: 'HKD', value: CurrencyType.HKD },
+  { label: 'USD', value: CurrencyType.USD },
+];
 
 export const BET_AMOUNT_OPTIONS = {
   [ChallengeType.NO_PROFIT_LIMIT]: [
@@ -32,4 +45,5 @@ export interface ChallengeFormData {
   principal: string; // 本金
   // contriAmount: string; // 出资额
   initialBetAmount: number; // 投注基数
+  currency: CurrencyType; // 币种
 }

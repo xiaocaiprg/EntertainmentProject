@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { THEME_COLORS } from '../../../utils/styles';
 import { useTranslation } from '../../../hooks/useTranslation';
+import CustomText from '../../../components/CustomText';
 import {
   RankingTabType,
   PlayerHitrateRankDto,
@@ -46,14 +47,14 @@ export const RankingListView = React.memo((props: RankingListViewProps) => {
       return (
         <View style={styles.emptyContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.emptyText}>{t('common.loading')}</Text>
+          <CustomText style={styles.emptyText}>{t('common.loading')}</CustomText>
         </View>
       );
     }
     return (
       <View style={styles.emptyContainer}>
         <Icon name="error-outline" size={50} color="#ccc" />
-        <Text style={styles.emptyText}>{t('pitcher_ranking.noData')}</Text>
+        <CustomText style={styles.emptyText}>{t('pitcher_ranking.noData')}</CustomText>
       </View>
     );
   }, [loading, t, currentData.length]);

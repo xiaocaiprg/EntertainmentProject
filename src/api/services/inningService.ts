@@ -1,5 +1,5 @@
 import { post } from '../request';
-import { InningCreateParams, GameRoundDto } from '../../interface/Game';
+import { InningCreateParams, GameRoundDto, GameRoundSimpleDto } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
 
 const PATH = {
@@ -8,8 +8,8 @@ const PATH = {
   INNING_UPDATE: 'haiyang/inning/update',
 };
 
-export const inningCreate = (params: InningCreateParams): Promise<GameRoundDto | null> => {
-  return post<ApiResponse<GameRoundDto>>(PATH.INNING_CREATE, params)
+export const inningCreate = (params: InningCreateParams): Promise<GameRoundSimpleDto | null> => {
+  return post<ApiResponse<GameRoundSimpleDto>>(PATH.INNING_CREATE, params)
     .then((res) => {
       if (res.code === 200) {
         return res.data;

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
@@ -12,18 +11,24 @@ import {
 import { RootStackScreenProps } from '../router';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getRaceDetail } from '../../api/services/raceService';
-import { RaceDetailDto } from '../../interface/Race';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getRaceStatusText } from '../../public/Race';
 import { useRole } from '../../hooks/useRole';
+import { useTranslation } from '../../hooks/useTranslation';
 import { PoolInfoCard } from './components/PoolInfoCard';
+import { ChallengeList } from './components/ChallengeList';
+import { RacePeakRecordCard } from './components/RacePeakRecordCard';
+import CustomText from '../../components/CustomText';
+import { GameMatchSimpleDto } from '../../interface/Ranking';
+import { RaceDetailDto } from '../../interface/Race';
 
 export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = React.memo(({ navigation, route }) => {
   const { raceId } = route.params;
   const [raceDetail, setRaceDetail] = useState<RaceDetailDto | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { isInvestmentManager } = useRole();
+  const { t } = useTranslation();
 
   // 获取比赛详情数据
   const fetchRaceDetail = useCallback(async () => {
@@ -52,12 +57,20 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
     }
   }, [navigation, raceId, isInvestmentManager]);
 
+  // 跳转到挑战详情
+  const handleChallengePress = useCallback(
+    (item: GameMatchSimpleDto) => {
+      navigation.navigate('ChallengeDetail', { matchId: item.id });
+    },
+    [navigation],
+  );
+
   // 渲染比赛状态标签
   const renderStatusTag = useCallback((status: number | undefined) => {
     const statusInfo = getRaceStatusText(status || 0);
     return (
       <View style={[styles.statusTag, { backgroundColor: statusInfo.color + '20' }]}>
-        <Text style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</Text>
+        <CustomText style={[styles.statusText, { color: statusInfo.color }]}>{statusInfo.text}</CustomText>
       </View>
     );
   }, []);
@@ -71,12 +84,12 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
           <TouchableOpacity onPress={handleBack}>
             <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>比赛详情</Text>
+          <CustomText style={styles.headerTitle}>{t('raceDetail.title')}</CustomText>
           <View style={styles.headerRight} />
         </View>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-          <Text style={styles.loadingText}>加载中...</Text>
+          <CustomText style={styles.loadingText}>{t('raceDetail.loading')}</CustomText>
         </View>
       </SafeAreaView>
     );
@@ -89,7 +102,7 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
         <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>比赛详情</Text>
+        <CustomText style={styles.headerTitle}>{t('raceDetail.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
 
@@ -98,38 +111,34 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
           <>
             <View style={styles.detailCard}>
               <View style={styles.cardHeader}>
-                <Text style={styles.raceName} numberOfLines={1} ellipsizeMode="tail">
+                <CustomText style={styles.raceName} numberOfLines={1} ellipsizeMode="tail">
                   {raceDetail.name || '-'}
-                </Text>
+                </CustomText>
                 {renderStatusTag(raceDetail.isEnabled)}
               </View>
 
               <View style={styles.infoSection}>
                 <View style={styles.infoRow}>
-                  <Text style={styles.label}>开始时间:</Text>
-                  <Text style={styles.value}>{raceDetail.beginDate || '-'}</Text>
+                  <CustomText style={styles.label}>{t('raceDetail.startTime')}:</CustomText>
+                  <CustomText style={styles.value}>{raceDetail.beginDate || '-'}</CustomText>
                 </View>
                 <View style={styles.infoRow}>
-                  <Text style={styles.label}>结束时间:</Text>
-                  <Text style={styles.value}>{raceDetail.endDate || '-'}</Text>
+                  <CustomText style={styles.label}>{t('raceDetail.endTime')}:</CustomText>
+                  <CustomText style={styles.value}>{raceDetail.endDate || '-'}</CustomText>
                 </View>
                 <View style={styles.infoRow}>
-                  <Text style={styles.label}>比赛规则:</Text>
-                  <Text style={styles.value}>{raceDetail.playRuleName || '-'}</Text>
+                  <CustomText style={styles.label}>{t('raceDetail.raceRule')}:</CustomText>
+                  <CustomText style={styles.value}>{raceDetail.playRuleName || '-'}</CustomText>
                 </View>
                 <View style={styles.infoRow}>
-                  <Text style={styles.label}>转码限制:</Text>
-                  <Text style={styles.value}>{raceDetail.turnOverLimit || '-'}</Text>
+                  <CustomText style={styles.label}>{t('raceDetail.turnOverLimit')}:</CustomText>
+                  <CustomText style={styles.value}>{raceDetail.turnOverLimit || '-'}</CustomText>
+                </View>
+                <View style={styles.infoRow}>
+                  <CustomText style={styles.label}>{t('raceDetail.description')}:</CustomText>
+                  <CustomText style={styles.value}>{raceDetail.description || '-'}</CustomText>
                 </View>
               </View>
-
-              {raceDetail.description && (
-                <View style={styles.descriptionSection}>
-                  <Text style={styles.descriptionTitle}>比赛描述</Text>
-                  <Text style={styles.descriptionContent}>{raceDetail.description}</Text>
-                </View>
-              )}
-
               {raceDetail.racePoolDetailDto && <PoolInfoCard poolDetail={raceDetail.racePoolDetailDto} />}
             </View>
 
@@ -139,13 +148,34 @@ export const RaceDetailScreen: React.FC<RootStackScreenProps<'RaceDetail'>> = Re
                 onPress={handleStartChallenge}
                 activeOpacity={0.7}
               >
-                <Text style={styles.actionButtonText}>发起挑战</Text>
+                <CustomText style={styles.actionButtonText}>{t('raceDetail.startChallenge')}</CustomText>
               </TouchableOpacity>
+            )}
+
+            {raceDetail.peakRecordDto && (
+              <View style={styles.peakRecordContainer}>
+                {raceDetail.peakRecordDto.maxProfitMatch && (
+                  <RacePeakRecordCard matchData={raceDetail.peakRecordDto.maxProfitMatch} recordType="profit" />
+                )}
+                {raceDetail.peakRecordDto.maxProfitMatch && raceDetail.peakRecordDto.maxInningCountMatch && (
+                  <View style={styles.peakCardSpacer} />
+                )}
+                {raceDetail.peakRecordDto.maxInningCountMatch && (
+                  <RacePeakRecordCard matchData={raceDetail.peakRecordDto.maxInningCountMatch} recordType="count" />
+                )}
+              </View>
+            )}
+
+            {raceDetail?.gameMatchSimpleDtoList?.length && (
+              <View style={styles.challengeSection}>
+                <CustomText style={styles.sectionTitle}>{t('raceDetail.profitRanking')}</CustomText>
+                <ChallengeList challenges={raceDetail.gameMatchSimpleDtoList} onPressItem={handleChallengePress} />
+              </View>
             )}
           </>
         ) : (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>未找到比赛信息</Text>
+            <CustomText style={styles.emptyText}>{t('raceDetail.noRaceInfo')}</CustomText>
           </View>
         )}
       </ScrollView>
@@ -233,92 +263,12 @@ const styles = StyleSheet.create({
     color: THEME_COLORS.text.primary,
     flex: 1,
   },
-  descriptionSection: {
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: THEME_COLORS.border.light,
-  },
-  descriptionTitle: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: THEME_COLORS.text.primary,
-    marginBottom: 8,
-  },
-  descriptionContent: {
-    fontSize: 14,
-    color: THEME_COLORS.text.secondary,
-    lineHeight: 20,
-  },
-  poolSection: {
-    display: 'none',
-  },
-  poolTitle: {
-    display: 'none',
-  },
-  poolCard: {
-    display: 'none',
-  },
-  poolHeader: {
-    display: 'none',
-  },
-  poolName: {
-    display: 'none',
-  },
-  poolCode: {
-    display: 'none',
-  },
-  poolAmountContainer: {
-    display: 'none',
-  },
-  poolAmountItem: {
-    display: 'none',
-  },
-  poolAmountValue: {
-    display: 'none',
-  },
-  poolAmountLabel: {
-    display: 'none',
-  },
-  poolAmountDivider: {
-    display: 'none',
-  },
-  frozenPoints: {
-    display: 'none',
-  },
-  availablePoints: {
-    display: 'none',
-  },
-  progressContainer: {
-    display: 'none',
-  },
-  progressBg: {
-    display: 'none',
-  },
-  progressBar: {
-    display: 'none',
-  },
-  progressText: {
-    display: 'none',
-  },
-  poolInfoRow: {
-    display: 'none',
-  },
-  poolInfoItem: {
-    display: 'none',
-  },
-  poolInfoLabel: {
-    display: 'none',
-  },
-  poolInfoValue: {
-    display: 'none',
-  },
   actionButton: {
     backgroundColor: THEME_COLORS.primary,
     borderRadius: 8,
     padding: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
   },
   disabledButton: {
     backgroundColor: '#ccc',
@@ -346,5 +296,22 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: THEME_COLORS.text.light,
+  },
+  peakRecordContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  peakCardSpacer: {
+    width: 10,
+  },
+  challengeSection: {
+    marginTop: 10,
+  },
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: THEME_COLORS.text.primary,
+    marginBottom: 5,
+    paddingHorizontal: 5,
   },
 });

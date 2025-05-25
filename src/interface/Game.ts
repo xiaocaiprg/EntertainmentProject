@@ -23,14 +23,16 @@ export interface GameMatchPageDto {
   docPersonCode?: string;
   docPersonName?: string;
   gameDate?: string;
-  id?: number;
+  id: number;
   baseNumber: number;
   createTime?: string;
   isEnabled: number;
   name?: string;
+  currency?: string;
   playPersonCode?: string;
   playPersonName?: string;
   playRuleCode?: string;
+  playRuleName?: string;
   principal?: number;
   profit?: number;
   profitStr?: string;
@@ -38,7 +40,6 @@ export interface GameMatchPageDto {
   raceName?: string;
   turnOver?: number;
   turnOverStr?: string;
-  roundList?: GameRoundDto[];
 }
 export interface ChallengeList {
   current: number;
@@ -52,13 +53,13 @@ export interface ProfitDto {
   code?: string;
   matchId: number;
   matchName?: string;
+  currency?: string;
   name?: string;
   profit: number;
   profitStr: string;
 }
 
 export interface PersonProfitDto {
-  id?: number;
   investPersonCode?: string;
   investPersonName?: string;
   matchId: number;
@@ -66,12 +67,12 @@ export interface PersonProfitDto {
   profitStr: string;
 }
 export interface GameMatchProfitDto {
-  docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfit?: number;
+  docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfitStr?: string;
   investCompanyProfit?: number;
-  investCompanyProfitStr?: string;
   investCompanyProfitDtoList?: ProfitDto[];
+  investCompanyProfitStr?: string;
   investPersonProfitDtoList?: PersonProfitDto[];
   operationCompanyCode?: string;
   operationCompanyName?: string;
@@ -81,6 +82,20 @@ export interface GameMatchProfitDto {
   playCompanyName?: string;
   playCompanyProfit?: number;
   playCompanyProfitStr?: string;
+  racePoolProfit?: ProfitDto;
+}
+export interface GameMatchStatisticDto {
+  bankerLoseCount?: number;
+  bankerWinCount?: number;
+  dealerLoseCount?: number;
+  dealerWinCount?: number;
+  hitRate?: number;
+  hitRateStr?: string;
+  profit?: number;
+  totalCount?: number;
+  totalLoseCount?: number;
+  totalWinCount?: number;
+  turnOver?: number;
 }
 
 export interface GameMatchDto {
@@ -105,6 +120,7 @@ export interface GameMatchDto {
   orderNumber?: number;
   playPersonCode?: string;
   playPersonName?: string;
+  currency?: string;
   baseNumber: number;
   playRuleCode?: string;
   principal?: number;
@@ -113,16 +129,21 @@ export interface GameMatchDto {
   roundList?: GameRoundDto[];
   turnOver?: number;
   turnOverStr?: string;
+  gameMatchStatisticDto?: GameMatchStatisticDto;
 }
 
 export interface GameRoundDto {
   addressInfoId?: number;
   addressName?: string;
+  baseNumber: number;
   createTime?: string;
   docPersonCode?: string;
   docPersonName?: string;
   faultGameInningDtoList?: GameInningDto[];
+  gameInningDto: GameInningDto;
   gamePointDtoList?: GamePointDto[];
+  playRuleName?: string;
+  playRuleCode?: string;
   id: number;
   investPersonCode?: string;
   investPersonName?: string;
@@ -141,9 +162,6 @@ export interface GameRoundDto {
   totalTurnOverStr: string;
   turnOver: number;
   turnOverStr: string;
-  gameInningDto: GameInningDto;
-  baseNumber: number;
-  playRuleCode?: string;
 }
 export interface GamePointDto {
   betNumber: number;
@@ -167,6 +185,17 @@ export interface GameInningDto {
   result?: number; // 结果：1赢2输
   roundId?: number;
 }
+export interface GameRoundSimpleDto {
+  gameInningDto: GameInningDto;
+  profit: number;
+  profitStr: string;
+  totalProfit: number;
+  totalProfitStr: string;
+  totalTurnOver: number;
+  totalTurnOverStr: string;
+  turnOver: number;
+  turnOverStr: string;
+}
 
 export interface ChallengeCreateParams {
   addressInfoId: number;
@@ -178,6 +207,7 @@ export interface ChallengeCreateParams {
   principal: number;
   tableNumber?: string;
   baseNumber: number;
+  currency?: string;
   playRuleCode?: string;
   raceId?: number;
 }

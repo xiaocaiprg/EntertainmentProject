@@ -82,8 +82,8 @@ android {
         applicationId "com.entertainmentproject"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 7
+        versionName "1.0.9"
     }
     signingConfigs {
         debug {
@@ -128,7 +128,15 @@ dependencies {
 
 // 添加Vector Icons的字体资源配置
 project.ext.vectoricons = [
-    iconFontNames: [ 'MaterialIcons.ttf', 'FontAwesome.ttf', 'Ionicons.ttf', 'AntDesign.ttf' ]
+    iconFontNames: [ 
+        'MaterialIcons.ttf', 
+        'FontAwesome.ttf', 
+        'Ionicons.ttf', 
+        'AntDesign.ttf',
+        'FontAwesome5_Brands.ttf',
+        'FontAwesome5_Regular.ttf',
+        'FontAwesome5_Solid.ttf'
+    ]
 ]
 
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import CustomText from '../../../../components/CustomText';
 import { useTranslation } from '../../../../hooks/useTranslation';
 import { UserResult } from '../../../../interface/User';
 interface PointsCardProps {
@@ -15,8 +16,8 @@ export const PointsCard = React.memo((props: PointsCardProps) => {
   const PointsItem = useCallback(
     ({ value, label, onPress }: { value?: number | string; label: string; onPress?: () => void }) => (
       <TouchableOpacity style={styles.pointsItem} onPress={onPress}>
-        <Text style={styles.pointsValue}>{value?.toLocaleString() || '-'}</Text>
-        <Text style={styles.pointsLabel}>{label}</Text>
+        <CustomText style={styles.pointsValue}>{value?.toLocaleString() || '-'}</CustomText>
+        <CustomText style={styles.pointsLabel}>{label}</CustomText>
       </TouchableOpacity>
     ),
     [],

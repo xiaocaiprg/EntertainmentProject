@@ -110,18 +110,14 @@ export const updateMatchDocPerson = (params: UpdateMatchDocPersonParams): Promis
     }
   });
 };
-export const updateMatchStatus = (params: UpdateStatusParams): Promise<GameMatchDto | null> => {
-  return post<ApiResponse<GameMatchDto>>(PATH.MATCH_UPDATE_STATUS, params)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
+export const updateMatchStatus = (params: UpdateStatusParams): Promise<GameMatchDto> => {
+  return post<ApiResponse<GameMatchDto>>(PATH.MATCH_UPDATE_STATUS, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };
 
 export const getMatchTurnOver = (params: GameTurnOverDtoParams): Promise<GameTurnOverDto | null> => {

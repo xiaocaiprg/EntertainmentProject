@@ -18,7 +18,6 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
       roundId,
       recorder,
       baseNumber,
-      playRuleCode,
       navigation,
     };
     switch (playRuleCode) {
