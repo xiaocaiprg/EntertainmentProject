@@ -4,6 +4,7 @@ export interface TransferPointParams {
   amount: number;
   fromCode?: string;
   fromType?: number;
+  description?: string;
 }
 export interface PageDtoTransferLogDto {
   current: number;
@@ -26,6 +27,7 @@ export interface TransferLogDto {
   toName?: string;
   toType?: number;
   type?: number;
+  description?: string;
 }
 
 export interface FrozeningDto {

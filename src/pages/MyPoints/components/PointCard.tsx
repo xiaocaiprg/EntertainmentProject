@@ -72,6 +72,7 @@ export const PointCard = React.memo((props: PointCardProps) => {
         </CustomText>
         <CustomText style={styles.recordDate}>{item.transferTime}</CustomText>
         {renderSourceOrDestination()}
+        {item.description && <CustomText style={styles.recordDate}>备注: {item.description}</CustomText>}
       </View>
       <CustomText style={[styles.recordAmount, isEarnType ? styles.earnAmount : styles.spendAmount]}>
         {pointDisplay.sign}

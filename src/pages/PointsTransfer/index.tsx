@@ -43,6 +43,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
   const [transferType, setTransferType] = useState<TransferType>(TransferType.PERSONAL);
   const [account, setAccount] = useState('');
   const [points, setPoints] = useState('');
+  const [description, setDescription] = useState('');
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -56,7 +57,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
   useEffect(() => {
     const fetchPoolList = async () => {
       setIsLoadingPools(true);
-      const res = await getRacePoolListAll(1);
+      const res = await getRacePoolListAll();
       if (res?.length) {
         setPoolList(res);
       } else {
@@ -81,6 +82,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         setTransferType(newType);
         setAccount('');
         setPoints('');
+        setDescription('');
         setSelectedPoolCode('');
       }
     },
@@ -178,6 +180,10 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       toType: transferType === TransferType.PERSONAL ? 1 : transferType === TransferType.COMPANY ? 2 : 3,
       amount: Number(points),
     };
+    // 如果有备注，添加到参数中
+    if (description.trim()) {
+      transferParams.description = description.trim();
+    }
     // 如果是从奖金池转账，添加fromCode和fromType参数
     if (isPoolTransfer && code) {
       transferParams.fromCode = code;
@@ -194,7 +200,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       setIsProcessing(false);
       setConfirmModalVisible(false);
     }
-  }, [account, points, transferType, isPoolTransfer, code, selectedPoolCode]);
+  }, [account, points, description, transferType, isPoolTransfer, code, selectedPoolCode]);
 
   const handleSuccessConfirm = useCallback(() => {
     setSuccessModalVisible(false);
@@ -349,6 +355,20 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
             />
             {invalidPointsReason ? <CustomText style={styles.errorText}>{invalidPointsReason}</CustomText> : null}
           </View>
+
+          <View style={styles.inputGroup}>
+            <CustomText style={styles.label}>{t('pointsTransfer.description')}</CustomText>
+            <TextInput
+              style={[styles.input, styles.descriptionInput]}
+              value={description}
+              onChangeText={setDescription}
+              placeholderTextColor={'#999'}
+              placeholder={t('pointsTransfer.descriptionPlaceholder')}
+              multiline
+              numberOfLines={3}
+              textAlignVertical="top"
+            />
+          </View>
         </View>
 
         <TouchableOpacity
@@ -480,6 +500,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: '#eee',
+  },
+  descriptionInput: {
+    height: 80,
   },
   errorText: {
     color: 'red',

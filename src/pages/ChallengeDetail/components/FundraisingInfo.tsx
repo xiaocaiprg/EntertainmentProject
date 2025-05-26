@@ -54,23 +54,21 @@ export const FundraisingInfo: React.FC<FundraisingInfoProps> = React.memo((props
       {hasContributions && (
         <View>
           <CustomText style={styles.contributionTitle}>{t('challengeDetail.contributionDetails')}</CustomText>
-          <View style={styles.listContainer}>
-            <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
-              {matchDetail.contributionDtoList?.map((item, index) => (
-                <View key={`${item.id}-${index}`} style={styles.contributionItem}>
-                  <CustomText style={styles.contributionName}>
-                    {t('challengeDetail.investor')}: {item.investPersonName}
-                  </CustomText>
-                  <CustomText style={styles.contributionAmount}>
-                    {t('challengeDetail.amount')}: {item.amount}
-                  </CustomText>
-                  <CustomText style={styles.contributionAmount}>
-                    {t('challengeDetail.contriRate')}: {item.contriRateStr}
-                  </CustomText>
-                </View>
-              ))}
-            </ScrollView>
-          </View>
+          <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={true}>
+            {matchDetail.contributionDtoList?.map((item, index) => (
+              <View key={`${item.id}-${index}`} style={styles.contributionItem}>
+                <CustomText style={styles.contributionName}>
+                  {t('challengeDetail.investor')}: {item.investPersonName}
+                </CustomText>
+                <CustomText style={styles.contributionAmount}>
+                  {t('challengeDetail.amount')}: {item.amount}
+                </CustomText>
+                <CustomText style={styles.contributionAmount}>
+                  {t('challengeDetail.contriRate')}: {item.contriRateStr}
+                </CustomText>
+              </View>
+            ))}
+          </ScrollView>
         </View>
       )}
     </View>
@@ -147,9 +145,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: '#666',
-  },
-  listContainer: {
-    height: 150,
   },
   contributionItem: {
     flexDirection: 'row',
