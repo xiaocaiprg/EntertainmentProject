@@ -40,6 +40,7 @@ export interface GameMatchPageDto {
   raceName?: string;
   turnOver?: number;
   turnOverStr?: string;
+  isInside?: number;
 }
 export interface ChallengeList {
   current: number;

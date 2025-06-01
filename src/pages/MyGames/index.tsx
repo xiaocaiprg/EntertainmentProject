@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getChallengeList, getMatchDetail, updateMatchStatus } from '../../api/services/gameService';
 import { ContributionDto } from '../../interface/Contribution';
 import { ChallengeListParams, GameMatchPageDto, GameMatchProfitDto } from '../../interface/Game';
-import { ChallengeStatus } from '../../interface/Common';
+import { ChallengeStatus, IsInside } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getStatusText } from '../../public/Game';
@@ -231,6 +231,14 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
                 <CustomText style={styles.value}>{item.turnOverStr || '-'}</CustomText>
               </View>
             </View>
+            {item.isInside === IsInside.OUTSIDE && (
+              <View style={styles.itemLine}>
+                <View style={styles.itemRow}>
+                  <CustomText style={styles.label}>{t('myGames.isInside')}:</CustomText>
+                  <CustomText style={styles.value}>{t('myGames.outside')}</CustomText>
+                </View>
+              </View>
+            )}
           </View>
           <View style={styles.buttonContainer}>
             {canEndChallenge && (

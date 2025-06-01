@@ -7,39 +7,40 @@ import CustomText from '../../../components/CustomText';
 import {
   RankingTabType,
   PlayerHitrateRankDto,
-  PlayerKillrateRankDto,
+  // PlayerKillrateRankDto,
   RankingTypeEnum,
   PlayerCompanyHitrateRankDto,
-  PlayerCompanyKillrateRankDto,
+  // PlayerCompanyKillrateRankDto,
 } from '../../../interface/Ranking';
 import { HitRateCard } from './HitRateCard';
-import { KillRateCard } from './KillRateCard';
+// import { KillRateCard } from './KillRateCard';
 import { CompanyHitRateCard } from './CompanyHitRateCard';
-import { CompanyKillRateCard } from './CompanyKillRateCard';
+// import { CompanyKillRateCard } from './CompanyKillRateCard';
 
 interface RankingListViewProps {
   loading: boolean;
   currentTab: RankingTabType;
   rankingType: RankingTypeEnum;
   hitRateData: PlayerHitrateRankDto[];
-  killRateData: PlayerKillrateRankDto[];
+  killRateData: any[]; // 保留但不使用，避免破坏接口
   companyHitRateData: PlayerCompanyHitrateRankDto[];
-  companyKillRateData: PlayerCompanyKillrateRankDto[];
+  companyKillRateData: any[]; // 保留但不使用，避免破坏接口
 }
 
 export const RankingListView = React.memo((props: RankingListViewProps) => {
-  const { loading, currentTab, rankingType, hitRateData, killRateData, companyHitRateData, companyKillRateData } =
-    props;
+  const { loading, rankingType, hitRateData, companyHitRateData } = props;
   const { t } = useTranslation();
 
   // 获取当前数据
   const currentData = useMemo(() => {
     if (rankingType === RankingTypeEnum.PERSONAL) {
-      return currentTab === RankingTabType.HIT_RATE ? hitRateData : killRateData;
+      // 个人排行榜只显示命中率数据，不区分个人/组合Tab
+      return hitRateData;
     } else {
-      return currentTab === RankingTabType.HIT_RATE ? companyHitRateData : companyKillRateData;
+      // 公司排行榜显示命中率数据
+      return companyHitRateData;
     }
-  }, [currentTab, hitRateData, killRateData, rankingType, companyHitRateData, companyKillRateData]);
+  }, [hitRateData, rankingType, companyHitRateData]);
 
   // 渲染空数据状态
   const renderEmpty = useMemo(() => {
@@ -75,44 +76,26 @@ export const RankingListView = React.memo((props: RankingListViewProps) => {
   const renderItems = useMemo(() => {
     return currentData.map((item, index) => {
       if (rankingType === RankingTypeEnum.PERSONAL) {
-        if (currentTab === RankingTabType.HIT_RATE) {
-          return (
-            <HitRateCard
-              key={`hitrate-${(item as PlayerHitrateRankDto).playerCode}-${index}`}
-              item={item}
-              index={index}
-            />
-          );
-        } else {
-          return (
-            <KillRateCard
-              key={`killrate-${(item as PlayerKillrateRankDto).playerCode}-${index}`}
-              item={item}
-              index={index}
-            />
-          );
-        }
+        // 个人排行榜只显示命中率卡片
+        return (
+          <HitRateCard
+            key={`hitrate-${(item as PlayerHitrateRankDto).playerCode}-${index}`}
+            item={item}
+            index={index}
+          />
+        );
       } else {
-        if (currentTab === RankingTabType.HIT_RATE) {
-          return (
-            <CompanyHitRateCard
-              key={`company-hitrate-${(item as PlayerCompanyHitrateRankDto).companyCode}-${index}`}
-              item={item}
-              index={index}
-            />
-          );
-        } else {
-          return (
-            <CompanyKillRateCard
-              key={`company-killrate-${(item as PlayerCompanyKillrateRankDto).companyCode}-${index}`}
-              item={item}
-              index={index}
-            />
-          );
-        }
+        // 公司排行榜显示命中率卡片
+        return (
+          <CompanyHitRateCard
+            key={`company-hitrate-${(item as PlayerCompanyHitrateRankDto).companyCode}-${index}`}
+            item={item}
+            index={index}
+          />
+        );
       }
     });
-  }, [currentData, rankingType, currentTab]);
+  }, [currentData, rankingType]);
 
   if (!currentData.length) {
     return renderEmpty;

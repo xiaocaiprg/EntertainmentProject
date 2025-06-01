@@ -1,6 +1,8 @@
 export enum RankingTabType {
   HIT_RATE = 'hit_rate',
   KILL_COUNT = 'kill_count',
+  PERSONAL = 'personal',
+  COMBINATION = 'combination',
 }
 
 export enum RankingTypeEnum {
@@ -19,6 +21,7 @@ export interface RankSearchParam {
   pageNum: number;
   pageSize: number;
   rankPeriod: number;
+  playType: number;
 }
 
 export interface PageDto<T> {

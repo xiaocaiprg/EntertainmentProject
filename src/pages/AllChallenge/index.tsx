@@ -6,7 +6,7 @@ import CustomText from '../../components/CustomText';
 import { useTranslation } from '../../hooks/useTranslation';
 import { getChallengeList } from '../../api/services/gameService';
 import { ChallengeListParams, GameMatchPageDto } from '../../interface/Game';
-import { ChallengeStatus } from '../../interface/Common';
+import { ChallengeStatus, IsInside } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getStatusText } from '../../public/Game';
@@ -155,6 +155,16 @@ export const AllChallengeScreen = React.memo(() => {
                   </CustomText>
                 </>
               </View>
+              {item.isInside === IsInside.OUTSIDE && (
+                <View style={styles.itemRow}>
+                  <>
+                    <CustomText style={styles.label}>{t('allChallenge.isInside')}:</CustomText>
+                    <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
+                      {t('allChallenge.outside')}
+                    </CustomText>
+                  </>
+                </View>
+              )}
             </View>
 
             <View style={styles.arrowContainer}>

@@ -22,6 +22,10 @@ export enum UserType {
   INVESTOR = 3, // 投资人
   OPERATIONPERSON = 4, // 运营人
 }
+export enum IsInside {
+  INSIDE = 1, // 内部
+  OUTSIDE = 2, // 外部
+}
 export interface QueryParams {
   pageNum: number;
   pageSize: number;

@@ -18,19 +18,19 @@ import RankingRulesContent from './components/RankingRulesContent';
 import {
   RankingTabType,
   PlayerHitrateRankDto,
-  PlayerKillrateRankDto,
+  // PlayerKillrateRankDto,
   RankSearchParam,
   RankingTypeEnum,
   RankCompanySearchParam,
   PlayerCompanyHitrateRankDto,
-  PlayerCompanyKillrateRankDto,
+  // PlayerCompanyKillrateRankDto,
 } from '../../interface/Ranking';
 import { RootStackScreenProps } from '../router';
 import {
   getPitcherRankingHitRate,
   getPitcherRankingHitRateCompany,
-  getPitcherRankingKillRate,
-  getPitcherRankingKillRateCompany,
+  // getPitcherRankingKillRate,
+  // getPitcherRankingKillRateCompany,
 } from '../../api/services/rankService';
 import CustomText from '../../components/CustomText';
 
@@ -41,15 +41,15 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   const { navigation } = props;
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [currentTab, setCurrentTab] = useState<RankingTabType>(RankingTabType.HIT_RATE);
+  const [currentTab, setCurrentTab] = useState<RankingTabType>(RankingTabType.PERSONAL);
   const [rankingType, setRankingType] = useState<RankingTypeEnum>(RankingTypeEnum.PERSONAL);
   const [selectedTimeRange, setSelectedTimeRange] = useState(7);
   const [selectedLocation, setSelectedLocation] = useState<number>(-1);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [hitRateRankData, setHitRateRankData] = useState<PlayerHitrateRankDto[]>([]);
-  const [killRateRankData, setKillRateRankData] = useState<PlayerKillrateRankDto[]>([]);
+  // const [killRateRankData, setKillRateRankData] = useState<PlayerKillrateRankDto[]>([]);
   const [companyHitRateRankData, setCompanyHitRateRankData] = useState<PlayerCompanyHitrateRankDto[]>([]);
-  const [companyKillRateRankData, setCompanyKillRateRankData] = useState<PlayerCompanyKillrateRankDto[]>([]);
+  // const [companyKillRateRankData, setCompanyKillRateRankData] = useState<PlayerCompanyKillrateRankDto[]>([]);
   const [hasMore, setHasMore] = useState(false);
 
   const pageNumRef = useRef(1);
@@ -77,6 +77,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
       rankPeriod: selectedTimeRange,
       pageNum: pageNumRef.current,
       pageSize: pageSizeRef.current,
+      playType: currentTab === RankingTabType.PERSONAL ? 1 : 2, // 1.个人 2.组合
     };
     if (selectedLocation > 0) {
       params.addressId = selectedLocation;
@@ -90,29 +91,31 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
       }
     }
     setLoading(false);
-  }, [selectedTimeRange, selectedLocation]);
+  }, [selectedTimeRange, selectedLocation, currentTab]);
 
-  const fetchKillRateRankingData = useCallback(async () => {
-    setLoading(true);
-    const currentRequestId = ++requestIdRef.current;
-    const params: RankSearchParam = {
-      rankPeriod: selectedTimeRange,
-      pageNum: pageNumRef.current,
-      pageSize: pageSizeRef.current,
-    };
-    if (selectedLocation > 0) {
-      params.addressId = selectedLocation;
-    }
-    const result = await getPitcherRankingKillRate(params);
-    if (currentRequestId === requestIdRef.current) {
-      if (result && result.records) {
-        const isHasMore = result.current < result.pages;
-        setHasMore(isHasMore);
-        setKillRateRankData((prev) => [...prev, ...(result.records || [])]);
-      }
-    }
-    setLoading(false);
-  }, [selectedTimeRange, selectedLocation]);
+  // 注释掉杀数相关的API调用
+  // const fetchKillRateRankingData = useCallback(async () => {
+  //   setLoading(true);
+  //   const currentRequestId = ++requestIdRef.current;
+  //   const params: RankSearchParam = {
+  //     rankPeriod: selectedTimeRange,
+  //     pageNum: pageNumRef.current,
+  //     pageSize: pageSizeRef.current,
+  //     playType: currentTab === RankingTabType.PERSONAL ? 1 : 2, // 1.个人 2.组合
+  //   };
+  //   if (selectedLocation > 0) {
+  //     params.addressId = selectedLocation;
+  //   }
+  //   const result = await getPitcherRankingKillRate(params);
+  //   if (currentRequestId === requestIdRef.current) {
+  //     if (result && result.records) {
+  //       const isHasMore = result.current < result.pages;
+  //       setHasMore(isHasMore);
+  //       setKillRateRankData((prev) => [...prev, ...(result.records || [])]);
+  //     }
+  //   }
+  //   setLoading(false);
+  // }, [selectedTimeRange, selectedLocation, currentTab]);
 
   const fetchCompanyHitRateRankingData = useCallback(async () => {
     setLoading(true);
@@ -132,50 +135,58 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     }
     setLoading(false);
   }, [selectedTimeRange, selectedLocation]);
-  const fetchCompanyKillRateRankingData = useCallback(async () => {
-    setLoading(true);
-    const currentRequestId = ++requestIdRef.current;
-    const params: RankCompanySearchParam = {
-      rankPeriod: selectedTimeRange,
-      orderParam: 'desc',
-    };
-    if (selectedLocation > 0) {
-      params.addressId = selectedLocation;
-    }
-    const result = await getPitcherRankingKillRateCompany(params);
-    if (currentRequestId === requestIdRef.current) {
-      if (result?.length) {
-        setCompanyKillRateRankData(result);
-      }
-    }
-    setLoading(false);
-  }, [selectedTimeRange, selectedLocation]);
+
+  // 注释掉公司杀数相关的API调用
+  // const fetchCompanyKillRateRankingData = useCallback(async () => {
+  //   setLoading(true);
+  //   const currentRequestId = ++requestIdRef.current;
+  //   const params: RankCompanySearchParam = {
+  //     rankPeriod: selectedTimeRange,
+  //     orderParam: 'desc',
+  //   };
+  //   if (selectedLocation > 0) {
+  //     params.addressId = selectedLocation;
+  //   }
+  //   const result = await getPitcherRankingKillRateCompany(params);
+  //   if (currentRequestId === requestIdRef.current) {
+  //     if (result?.length) {
+  //       setCompanyKillRateRankData(result);
+  //     }
+  //   }
+  //   setLoading(false);
+  // }, [selectedTimeRange, selectedLocation]);
 
   const handleTabChange = useCallback(
     (tab: RankingTabType) => {
-      if (tab !== currentTab && rankingType === RankingTypeEnum.PERSONAL) {
+      // if (tab !== currentTab && rankingType === RankingTypeEnum.PERSONAL) {
+      //   setHitRateRankData([]);
+      //   setKillRateRankData([]);
+      // }
+      // if (tab !== currentTab && rankingType === RankingTypeEnum.COMPANY) {
+      //   setCompanyHitRateRankData([]);
+      //   setCompanyKillRateRankData([]);
+      // }
+      if (tab !== currentTab) {
         setHitRateRankData([]);
-        setKillRateRankData([]);
-      }
-      if (tab !== currentTab && rankingType === RankingTypeEnum.COMPANY) {
-        setCompanyHitRateRankData([]);
-        setCompanyKillRateRankData([]);
       }
       setCurrentTab(tab);
     },
-    [currentTab, rankingType],
+    [currentTab],
   );
 
   // 切换公司/个人排行榜
   const handleRankingTypeChange = useCallback(
     (type: RankingTypeEnum) => {
-      if (rankingType === RankingTypeEnum.COMPANY && type !== rankingType) {
+      if (type !== rankingType) {
         setHitRateRankData([]);
-        setKillRateRankData([]);
-      }
-      if (rankingType === RankingTypeEnum.PERSONAL && type !== rankingType) {
+        // setKillRateRankData([]);
         setCompanyHitRateRankData([]);
-        setCompanyKillRateRankData([]);
+        // setCompanyKillRateRankData([]);
+
+        // 如果切换到个人，默认选择个人Tab，如果切换到公司，不需要Tab
+        if (type === RankingTypeEnum.PERSONAL) {
+          setCurrentTab(RankingTabType.PERSONAL);
+        }
       }
       setRankingType(type);
     },
@@ -185,37 +196,27 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   const handleLoadMore = useCallback(() => {
     if (rankingType === RankingTypeEnum.PERSONAL && hasMore && !loading) {
       pageNumRef.current++;
-      if (currentTab === RankingTabType.HIT_RATE) {
-        fetchHitRateRankingData();
-      } else {
-        fetchKillRateRankingData();
-      }
+      fetchHitRateRankingData();
     }
-  }, [rankingType, fetchHitRateRankingData, hasMore, currentTab, fetchKillRateRankingData, loading]);
+  }, [rankingType, fetchHitRateRankingData, hasMore, loading]);
+
   const resetData = useCallback(() => {
     pageNumRef.current = 1;
     requestIdRef.current = 0;
     setHasMore(false);
     setHitRateRankData([]);
-    setKillRateRankData([]);
+    // setKillRateRankData([]);
     setCompanyHitRateRankData([]);
-    setCompanyKillRateRankData([]);
+    // setCompanyKillRateRankData([]);
   }, []);
+
   useEffect(() => {
     // 重置请求状态，确保新的筛选条件开始前清空旧的请求ID
     resetData();
     if (rankingType === RankingTypeEnum.PERSONAL) {
-      if (currentTab === RankingTabType.HIT_RATE) {
-        fetchHitRateRankingData();
-      } else {
-        fetchKillRateRankingData();
-      }
+      fetchHitRateRankingData();
     } else {
-      if (currentTab === RankingTabType.HIT_RATE) {
-        fetchCompanyHitRateRankingData();
-      } else {
-        fetchCompanyKillRateRankingData();
-      }
+      fetchCompanyHitRateRankingData();
     }
   }, [
     currentTab,
@@ -223,9 +224,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     selectedLocation,
     rankingType,
     fetchCompanyHitRateRankingData,
-    fetchCompanyKillRateRankingData,
     fetchHitRateRankingData,
-    fetchKillRateRankingData,
     resetData,
   ]);
 
@@ -258,7 +257,42 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
             onLocationChange={(locationId) => setSelectedLocation(locationId)}
           />
 
-          <View style={styles.tabContainer}>
+          {/* 只有选择个人时才显示个人/组合Tab */}
+          {rankingType === RankingTypeEnum.PERSONAL && (
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.tabButton,
+                  currentTab === RankingTabType.PERSONAL && styles.activeTabButton,
+                  { marginRight: 10 },
+                ]}
+                onPress={() => handleTabChange(RankingTabType.PERSONAL)}
+              >
+                <CustomText
+                  style={[styles.tabButtonText, currentTab === RankingTabType.PERSONAL && styles.activeTabButtonText]}
+                >
+                  {t('pitcher_ranking.personalTab')}
+                </CustomText>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.tabButton, currentTab === RankingTabType.COMBINATION && styles.activeTabButton]}
+                onPress={() => handleTabChange(RankingTabType.COMBINATION)}
+              >
+                <CustomText
+                  style={[
+                    styles.tabButtonText,
+                    currentTab === RankingTabType.COMBINATION && styles.activeTabButtonText,
+                  ]}
+                >
+                  {t('pitcher_ranking.combinationTab')}
+                </CustomText>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* 注释掉原来的命中率/杀数Tab */}
+          {/* <View style={styles.tabContainer}>
             <TouchableOpacity
               style={[
                 styles.tabButton,
@@ -284,16 +318,16 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
                 {t('pitcher_ranking.killCountTab')}
               </CustomText>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           <RankingListView
             loading={loading}
             currentTab={currentTab}
             rankingType={rankingType}
             hitRateData={hitRateRankData}
-            killRateData={killRateRankData}
+            killRateData={[]} // 传空数组，因为杀数逻辑被注释
             companyHitRateData={companyHitRateRankData}
-            companyKillRateData={companyKillRateRankData}
+            companyKillRateData={[]} // 传空数组，因为杀数逻辑被注释
           />
         </View>
         <View style={styles.bottomSpace} />
