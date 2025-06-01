@@ -57,6 +57,27 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
     },
     [t],
   );
+  const renderPlayCompanyProfit = useCallback(
+    (profitData: GameMatchProfitDto) => {
+      if (!profitData.playCompanyProfitDtoList || profitData.playCompanyProfitDtoList.length === 0) {
+        return null;
+      }
+      return (
+        <>
+          <View style={styles.divider} />
+          <CustomText style={styles.sectionTitle}>{t('myGames.playCompanyProfitDetails')}</CustomText>
+          {profitData.playCompanyProfitDtoList.map((company, index) => (
+            <View key={index} style={styles.profitItem}>
+              <CustomText style={styles.profitLabel}>{company.name}</CustomText>
+              <CustomText style={styles.profitValue}>{company.profitStr}</CustomText>
+            </View>
+          ))}
+        </>
+      );
+    },
+    [t],
+  );
+
   const renderDocCompanyProfit = useCallback(
     (profitData: GameMatchProfitDto) => {
       if (!profitData.docCompanyProfitDtoList || profitData.docCompanyProfitDtoList.length === 0) {
@@ -113,18 +134,21 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           }`}</CustomText>
           <CustomText style={styles.profitValue}>{profit.operationCompanyProfitStr}</CustomText>
         </View>
-        <View style={styles.profitItem}>
-          <CustomText style={styles.profitLabel}>{`${t('myGames.playerCompany')}:${
-            profit.playCompanyName
-          }`}</CustomText>
-          <CustomText style={styles.profitValue}>{profit.playCompanyProfitStr}</CustomText>
-        </View>
         {renderInvestCompanyProfit(profit)}
         {renderInvestPersonMyGames(profit)}
+        {renderPlayCompanyProfit(profit)}
         {renderDocCompanyProfit(profit)}
       </View>
     );
-  }, [loading, profit, renderInvestPersonMyGames, renderDocCompanyProfit, renderInvestCompanyProfit, t]);
+  }, [
+    loading,
+    profit,
+    renderInvestPersonMyGames,
+    renderDocCompanyProfit,
+    renderInvestCompanyProfit,
+    renderPlayCompanyProfit,
+    t,
+  ]);
 
   return (
     <SlideModal

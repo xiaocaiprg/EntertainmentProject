@@ -350,6 +350,7 @@ export const zhHant = {
     investCompanyProfitDetails: '投資公司利潤詳情',
     investPersonProfitDetails: '投資人利潤詳情',
     companyProfitDetails: '記錄公司分配詳情',
+    playCompanyProfitDetails: '投手公司利潤詳情',
   },
 
   // 獎金池列表

@@ -349,6 +349,7 @@ export const en = {
     investCompanyProfitDetails: 'Investment Company Profit Details',
     investPersonProfitDetails: 'Investor Profit Details',
     companyProfitDetails: 'Record Company Profit Details',
+    playCompanyProfitDetails: 'Player Company Profit Details',
   },
 
   // Prize Pool List

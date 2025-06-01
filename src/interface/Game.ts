@@ -78,10 +78,7 @@ export interface GameMatchProfitDto {
   operationCompanyName?: string;
   operationCompanyProfit?: number;
   operationCompanyProfitStr?: string;
-  playCompanyCode?: string;
-  playCompanyName?: string;
-  playCompanyProfit?: number;
-  playCompanyProfitStr?: string;
+  playCompanyProfitDtoList?: ProfitDto[];
   racePoolProfit?: ProfitDto;
 }
 export interface GameMatchStatisticDto {

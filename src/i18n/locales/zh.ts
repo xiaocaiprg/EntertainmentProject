@@ -350,6 +350,7 @@ export const zh = {
     investCompanyProfitDetails: '投资公司利润详情',
     investPersonProfitDetails: '投资人利润详情',
     companyProfitDetails: '记录公司分配详情',
+    playCompanyProfitDetails: '投手公司利润详情',
   },
 
   // 奖金池列表
