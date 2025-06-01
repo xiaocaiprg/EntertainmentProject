@@ -1,7 +1,7 @@
 import { ModuleConfig, UserRole, RoleModuleMapping, ModuleType } from '../interface/Role';
 
 // 定义所有可用模块
-export const availableModules: ModuleConfig[] = [
+export const moduleConfigs: ModuleConfig[] = [
   {
     id: '1',
     title: 'modules.challengeNew',
@@ -190,19 +190,36 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.RACE_POOL_LIST,
     ],
   },
+  {
+    role: 'OUTSIDE',
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
+  },
 ];
 
 // 获取用户可访问的模块列表
-export const getUserAccessibleModules = (userRole?: UserRole): ModuleConfig[] => {
-  if (!userRole) {
+export const getUserAccessibleModules = (userRoles: UserRole[] = []): ModuleConfig[] => {
+  if (!userRoles || userRoles.length === 0) {
     return [];
   }
 
-  const roleMapping = roleModuleMappings.find((mapping) => mapping.role === userRole);
-  if (!roleMapping) {
-    return [];
-  }
+  // 获取用户所有角色对应的模块
+  const accessibleModuleTypes = new Set<ModuleType>();
 
-  // 根据模块类型过滤可访问的模块
-  return availableModules.filter((module) => roleMapping.moduleTypes.includes(module.type));
+  userRoles.forEach((role) => {
+    const roleMapping = roleModuleMappings.find((mapping) => mapping.role === role);
+    if (roleMapping) {
+      roleMapping.moduleTypes.forEach((moduleType) => {
+        accessibleModuleTypes.add(moduleType);
+      });
+    }
+  });
+
+  // 返回对应的模块配置
+  return moduleConfigs.filter((config) => accessibleModuleTypes.has(config.type));
 };

@@ -169,42 +169,7 @@ export const AssignmentDetail = React.memo((props: AssignmentDetailProps) => {
       return;
     }
 
-    setLocalPitchers((prev) => {
-      const updatedPitchers = [...prev];
-      const currentPitcherIndex = updatedPitchers.findIndex((p) => p.uniqueId === uniqueId);
-      if (currentPitcherIndex === -1) {
-        return prev;
-      }
-
-      const currentPitcher = updatedPitchers[currentPitcherIndex];
-
-      // 更新当前投手比例
-      updatedPitchers[currentPitcherIndex] = { ...currentPitcher, rate: newRate };
-
-      // 如果有其他投手，调整其他投手的比例
-      const otherPitchers = updatedPitchers.filter((p) => p.uniqueId !== uniqueId);
-      if (otherPitchers.length > 0) {
-        const totalOtherRate = otherPitchers.reduce((sum, p) => sum + p.rate, 0);
-        const remainingRate = 100 - newRate;
-
-        if (remainingRate >= 0) {
-          // 按比例分配剩余比例给其他投手
-          otherPitchers.forEach((pitcher) => {
-            const actualIndex = updatedPitchers.findIndex((p) => p.uniqueId === pitcher.uniqueId);
-            if (actualIndex !== -1) {
-              if (totalOtherRate > 0) {
-                const newOtherRate = Math.round((pitcher.rate / totalOtherRate) * remainingRate);
-                updatedPitchers[actualIndex] = { ...pitcher, rate: newOtherRate };
-              } else {
-                updatedPitchers[actualIndex] = { ...pitcher, rate: Math.round(remainingRate / otherPitchers.length) };
-              }
-            }
-          });
-        }
-      }
-
-      return updatedPitchers;
-    });
+    setLocalPitchers((prev) => prev.map((p) => (p.uniqueId === uniqueId ? { ...p, rate: newRate } : p)));
     setHasChanges(true);
   }, []);
 

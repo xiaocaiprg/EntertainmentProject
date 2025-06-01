@@ -345,6 +345,7 @@ export const zhHant = {
     noProfitInfo: '暫無利潤分配信息',
     docCompany: '記錄公司(總)',
     investCompany: '投資公司(總)',
+    playCompany: '投手公司(總)',
     operationCompany: '運營公司',
     playerCompany: '投手公司',
     investCompanyProfitDetails: '投資公司利潤詳情',

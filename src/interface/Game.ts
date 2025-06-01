@@ -70,6 +70,8 @@ export interface GameMatchProfitDto {
   docCompanyProfit?: number;
   docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfitStr?: string;
+  playCompanyProfitStr: string;
+  playCompanyProfit: number;
   investCompanyProfit?: number;
   investCompanyProfitDtoList?: ProfitDto[];
   investCompanyProfitStr?: string;

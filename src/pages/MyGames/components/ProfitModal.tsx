@@ -129,6 +129,10 @@ export const ProfitModal = React.memo((props: ProfitModalProps) => {
           <CustomText style={styles.profitValue}>{profit.docCompanyProfitStr}</CustomText>
         </View>
         <View style={styles.profitItem}>
+          <CustomText style={styles.profitLabel}>{`${t('myGames.playCompany')}`}</CustomText>
+          <CustomText style={styles.profitValue}>{profit.playCompanyProfitStr}</CustomText>
+        </View>
+        <View style={styles.profitItem}>
           <CustomText style={styles.profitLabel}>{`${t('myGames.operationCompany')}:${
             profit.operationCompanyName
           }`}</CustomText>

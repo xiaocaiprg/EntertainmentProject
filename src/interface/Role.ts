@@ -10,7 +10,8 @@ export type UserRole =
   | 'OPERATION_ADMIN'
   | 'ADMIN'
   | 'USER'
-  | 'VISITOR';
+  | 'VISITOR'
+  | 'OUTSIDE';
 
 // 模块类型定义
 export enum ModuleType {

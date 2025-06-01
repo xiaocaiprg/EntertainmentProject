@@ -344,6 +344,7 @@ export const en = {
     noProfitInfo: 'No profit distribution information',
     docCompany: 'Record Company(All)',
     investCompany: 'Investment Company(All)',
+    playCompany: 'Player Company(All)',
     operationCompany: 'Operation Company',
     playerCompany: 'Player Company',
     investCompanyProfitDetails: 'Investment Company Profit Details',

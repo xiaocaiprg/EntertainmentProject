@@ -25,10 +25,10 @@ export const HomeScreen = React.memo(() => {
   const bannerScrollViewRef = useRef<ScrollView>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const { isLoggedIn, initCheckLogin } = useAuth();
-  const { userRole } = useRole();
+  const { userRoles } = useRole();
 
-  // 获取当前用户可访问的模块
-  const accessibleModules = useMemo(() => getUserAccessibleModules(userRole), [userRole]);
+  // 获取用户可访问的模块
+  const accessibleModules = useMemo(() => getUserAccessibleModules(userRoles), [userRoles]);
 
   // 轮播图数据
   const banners = useMemo(

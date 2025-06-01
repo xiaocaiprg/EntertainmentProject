@@ -345,6 +345,7 @@ export const zh = {
     noProfitInfo: '暂无利润分配信息',
     docCompany: '记录公司(总)',
     investCompany: '投资公司(总)',
+    playCompany: '投手公司(总)',
     operationCompany: '运营公司',
     playerCompany: '投手公司',
     investCompanyProfitDetails: '投资公司利润详情',
