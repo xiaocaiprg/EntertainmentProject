@@ -19,6 +19,7 @@ export enum ModuleType {
   ALL_CHALLENGE = 'all_challenge',
   CHANGE_RECORDER_CHALLENGE = 'change_recorder_challenge',
   FUNDRAISING_CHALLENGE = 'fundraising_challenge',
+  ASSIGN_PITCHER_CHALLENGE = 'assign_pitcher_challenge',
   TURNOVER_QUERY = 'turnover_query',
   PITCHER_RANKING = 'player_ranking',
   CREATE_RACE = 'create_race',

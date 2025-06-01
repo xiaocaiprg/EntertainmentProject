@@ -78,6 +78,10 @@ export const HomeScreen = React.memo(() => {
         icon: 'hand-holding-usd',
         gradient: ['#fc4a1a', '#f7b733'],
       },
+      [ModuleType.ASSIGN_PITCHER_CHALLENGE]: {
+        icon: 'user-plus',
+        gradient: ['#ff9800', '#ffb74d'],
+      },
       [ModuleType.TURNOVER_QUERY]: {
         icon: 'search-dollar',
         gradient: ['#12c2e9', '#c471ed'],
@@ -189,6 +193,9 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.FUNDRAISING_CHALLENGE:
           navigation.navigate('FundraisingChallenge');
           break;
+        case ModuleType.ASSIGN_PITCHER_CHALLENGE:
+          navigation.navigate('AssignPitcherChallenge');
+          break;
         case ModuleType.TURNOVER_QUERY:
           navigation.navigate('TurnoverQuery');
           break;
@@ -224,6 +231,7 @@ export const HomeScreen = React.memo(() => {
             ModuleType.ALL_CHALLENGE,
             ModuleType.CHANGE_RECORDER_CHALLENGE,
             ModuleType.FUNDRAISING_CHALLENGE,
+            ModuleType.ASSIGN_PITCHER_CHALLENGE,
             ModuleType.CREATE_RACE,
             ModuleType.ALL_RACE,
             ModuleType.RACE_POOL_LIST,
@@ -252,6 +260,7 @@ export const HomeScreen = React.memo(() => {
         [ModuleType.ALL_CHALLENGE]: 'list-alt',
         [ModuleType.CHANGE_RECORDER_CHALLENGE]: 'exchange-alt',
         [ModuleType.FUNDRAISING_CHALLENGE]: 'hand-holding-usd',
+        [ModuleType.ASSIGN_PITCHER_CHALLENGE]: 'user-plus',
         [ModuleType.TURNOVER_QUERY]: 'search-dollar',
         [ModuleType.PITCHER_RANKING]: 'trophy',
         [ModuleType.CREATE_RACE]: 'plus-square',

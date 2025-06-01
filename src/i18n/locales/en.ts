@@ -14,6 +14,9 @@ export const en = {
     loading: 'Loading...',
     success: 'Success',
     submit: 'Submit',
+    add: 'Add',
+    save: 'Save',
+    saving: 'Saving...',
   },
 
   // Navigation and Tabs
@@ -142,6 +145,7 @@ export const en = {
     noDetail: 'No challenge details available',
     roundInfo: 'RoundInformation',
     challengeName: 'Name',
+    playRule: 'Play Rule',
     location: 'Location',
     time: 'Time',
     currency: 'Currency',
@@ -445,5 +449,30 @@ export const en = {
     pool: 'PrizePool',
     challengeTurnover: 'Turnover',
     noChallengeInfo: 'No challenge information',
+  },
+
+  // Assign Pitcher
+  assignPitcher: {
+    title: 'Assign Pitcher',
+    selectPitcher: 'Select Pitcher',
+    currentPitcher: 'Current Pitcher',
+    assignSuccess: 'Assignment Successful',
+    noChallenges: 'No challenges available for assignment',
+    pleaseSelectPitcher: 'Please select a pitcher',
+    assignPitcherFor: 'Assign pitcher for challenge',
+    playerCodeRequired: 'All pitchers must be selected',
+    totalRateMustBe100: 'Total rate must be 100%',
+    confirmSave: 'Confirm Save',
+    mainPitcherCannotDelete: 'Main pitcher cannot be deleted',
+    confirmDelete: 'Confirm Delete',
+    confirmDeletePitcher: 'Are you sure you want to delete this pitcher?',
+    pitcherAlreadyExists: 'Cannot select the same pitcher',
+    mainPitcher: 'Main Pitcher',
+    vicePitcher: 'Vice Pitcher',
+    name: 'Name',
+    rate: 'Rate',
+    noChangesToSave: 'No changes to save',
+    atLeastOnePitcher: 'At least one pitcher is required',
+    confirmSaveMessage: 'Confirm saving the following pitcher configuration:',
   },
 };
