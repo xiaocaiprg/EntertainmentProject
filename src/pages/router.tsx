@@ -30,6 +30,8 @@ import { AllRaceScreen } from './AllRace/index';
 import { RaceDetailScreen } from './RaceDetail/index';
 import { RacePoolListScreen } from './RacePoolList/index';
 import { PeakRecordScreen } from './PeakRecord/index';
+import { CompanyManagementScreen } from './CompanyManagement/index';
+import { CompanyDetailScreen } from './CompanyDetail/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -69,6 +71,8 @@ export type RootStackParamList = {
   RaceDetail: { raceId: number };
   RacePoolList: undefined;
   PeakRecord: undefined;
+  CompanyManagement: undefined;
+  CompanyDetail: { code: string };
 };
 
 // 通用导航类型
@@ -163,6 +167,8 @@ function AppNavigator() {
                 <Stack.Screen name="RaceDetail" component={RaceDetailScreen} />
                 <Stack.Screen name="RacePoolList" component={RacePoolListScreen} />
                 <Stack.Screen name="PeakRecord" component={PeakRecordScreen} />
+                <Stack.Screen name="CompanyManagement" component={CompanyManagementScreen} />
+                <Stack.Screen name="CompanyDetail" component={CompanyDetailScreen} />
               </Stack.Navigator>
             </RoleProvider>
           </AuthProvider>

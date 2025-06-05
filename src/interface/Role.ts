@@ -11,7 +11,8 @@ export type UserRole =
   | 'ADMIN'
   | 'USER'
   | 'VISITOR'
-  | 'OUTSIDE';
+  | 'OUTSIDE'
+  | 'GROUP';
 
 // 模块类型定义
 export enum ModuleType {
@@ -26,6 +27,7 @@ export enum ModuleType {
   CREATE_RACE = 'create_race',
   ALL_RACE = 'all_race',
   RACE_POOL_LIST = 'race_pool_list',
+  COMPANY_MANAGEMENT = 'company_management',
 }
 
 // 模块配置类型定义

@@ -79,6 +79,13 @@ export const moduleConfigs: ModuleConfig[] = [
     icon: 'attach-money',
     backgroundColor: '#00cec9',
   },
+  {
+    id: '12',
+    title: 'modules.companyManagement',
+    type: ModuleType.COMPANY_MANAGEMENT,
+    icon: 'business',
+    backgroundColor: '#636e72',
+  },
 ];
 
 // 定义角色到模块的映射
@@ -198,6 +205,16 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.PITCHER_RANKING,
       ModuleType.ALL_RACE,
       ModuleType.RACE_POOL_LIST,
+    ],
+  },
+  {
+    role: 'GROUP',
+    moduleTypes: [
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.COMPANY_MANAGEMENT,
     ],
   },
 ];

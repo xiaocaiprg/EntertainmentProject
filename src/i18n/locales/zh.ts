@@ -55,6 +55,7 @@ export const zh = {
     createRace: '创建比赛',
     allRace: '比赛',
     racePoolList: '奖金池',
+    companyManagement: '公司',
   },
 
   // 创建比赛
@@ -482,5 +483,22 @@ export const zh = {
     noChangesToSave: '没有需要保存的变更',
     atLeastOnePitcher: '至少需要一个投手',
     confirmSaveMessage: '确认保存以下投手配置：',
+  },
+
+  // 公司管理相关
+  company: {
+    title: '公司管理',
+    companyDetail: '公司详情',
+    all: '全部',
+    recordCompany: '记录公司',
+    playCompany: '投手公司',
+    investCompany: '投资公司',
+    operationCompany: '运营公司',
+    matchCompany: '赛事公司',
+    unknownType: '未知类型',
+    availablePoints: '可用积分',
+    frozenPoints: '冻结积分',
+    code: '代码',
+    name: '名称',
   },
 };

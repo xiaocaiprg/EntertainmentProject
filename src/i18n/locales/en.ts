@@ -53,6 +53,7 @@ export const en = {
     pitcher_ranking: 'PitcherRanking',
     createRace: 'CreateRace',
     allRace: 'AllRaces',
+    companyManagement: 'CompanyManagement',
     racePoolList: 'PrizePoolList',
   },
 
@@ -482,5 +483,22 @@ export const en = {
     noChangesToSave: 'No changes to save',
     atLeastOnePitcher: 'At least one pitcher is required',
     confirmSaveMessage: 'Confirm saving the following pitcher configuration:',
+  },
+
+  // Company Management
+  company: {
+    title: 'Company Management',
+    companyDetail: 'Company Detail',
+    all: 'All',
+    recordCompany: 'Record Company',
+    playCompany: 'Player Company',
+    investCompany: 'Investment Company',
+    operationCompany: 'Operation Company',
+    matchCompany: 'Match Company',
+    unknownType: 'Unknown Type',
+    availablePoints: 'Available Points',
+    frozenPoints: 'Frozen Points',
+    code: 'Code',
+    name: 'Name',
   },
 };

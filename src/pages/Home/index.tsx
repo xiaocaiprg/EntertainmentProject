@@ -14,6 +14,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { PeakRecordPromo } from './components/PeakRecordPromo';
 import { HotActivities } from './components/HotActivities';
 import CustomText from '../../components/CustomText';
+import { ImageInfoDto, ImageType } from '../../interface/Universal';
+import { getImage } from '../../api/services/commonService';
 
 const BANNER_HEIGHT = 150;
 const HEADER_HEIGHT = 35;
@@ -26,34 +28,10 @@ export const HomeScreen = React.memo(() => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const { isLoggedIn, initCheckLogin } = useAuth();
   const { userRoles } = useRole();
+  const [imageInfo, setImageInfo] = useState<ImageInfoDto[]>([]);
 
   // 获取用户可访问的模块
   const accessibleModules = useMemo(() => getUserAccessibleModules(userRoles), [userRoles]);
-
-  // 轮播图数据
-  const banners = useMemo(
-    () => [
-      {
-        id: 1,
-        image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/chess.jpg',
-        title: '精彩对局',
-        subtitle: '参与最新挑战赛事',
-      },
-      {
-        id: 2,
-        image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/puzzle.jpg',
-        title: '策略制胜',
-        subtitle: '查看最新玩法规则',
-      },
-      {
-        id: 3,
-        image: 'https://junlongpro.s3.ap-southeast-1.amazonaws.com/macao.jpg',
-        title: '澳门风采',
-        subtitle: '感受独特氛围',
-      },
-    ],
-    [],
-  );
 
   // 功能图标数据
   const moduleIcons = useMemo(() => {
@@ -102,14 +80,18 @@ export const HomeScreen = React.memo(() => {
         icon: 'coins',
         gradient: ['#396afc', '#2948ff'],
       },
+      [ModuleType.COMPANY_MANAGEMENT]: {
+        icon: 'building',
+        gradient: ['#636e72', '#95a5a6'],
+      },
     };
   }, []);
 
   // 自动轮播效果
   useEffect(() => {
     const interval = setInterval(() => {
-      if (banners.length > 1) {
-        const nextBanner = (currentBanner + 1) % banners.length;
+      if (imageInfo.length > 1) {
+        const nextBanner = (currentBanner + 1) % imageInfo.length;
         setCurrentBanner(nextBanner);
         bannerScrollViewRef.current?.scrollTo({
           x: nextBanner * SCREEN_WIDTH,
@@ -119,7 +101,7 @@ export const HomeScreen = React.memo(() => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [banners.length, currentBanner]);
+  }, [imageInfo.length, currentBanner]);
 
   // 处理手动滚动结束事件
   const handleScrollEnd = useCallback((event: any) => {
@@ -128,8 +110,11 @@ export const HomeScreen = React.memo(() => {
     setCurrentBanner(newIndex);
   }, []);
 
-  const bannerContent = useCallback(
-    () => (
+  const bannerContent = useCallback(() => {
+    if (!imageInfo) {
+      return null;
+    }
+    return (
       <View style={styles.bannerContainer}>
         <ScrollView
           ref={bannerScrollViewRef}
@@ -139,22 +124,22 @@ export const HomeScreen = React.memo(() => {
           onMomentumScrollEnd={handleScrollEnd}
           decelerationRate="fast"
         >
-          {banners.map((banner, index) => (
+          {imageInfo.map((banner, index) => (
             <View key={index} style={styles.bannerCardContainer}>
               <View style={styles.bannerCard}>
-                <Image source={{ uri: banner.image }} style={styles.bannerImage} resizeMode="cover" />
-                <View style={styles.bannerTextOverlay}>
+                <Image source={{ uri: banner.imageUrl }} style={styles.bannerImage} resizeMode="cover" />
+                {/* <View style={styles.bannerTextOverlay}>
                   <CustomText style={styles.bannerTitle}>{banner.title}</CustomText>
                   <CustomText style={styles.bannerSubtitle}>{banner.subtitle}</CustomText>
-                </View>
+                </View> */}
               </View>
             </View>
           ))}
         </ScrollView>
-        {banners.length > 1 && (
+        {imageInfo.length > 1 && (
           <View style={styles.paginationWrap}>
             <View style={styles.paginationContainer}>
-              {banners.map((_, index) => (
+              {imageInfo.map((_, index) => (
                 <View
                   key={index}
                   style={[
@@ -170,9 +155,8 @@ export const HomeScreen = React.memo(() => {
           </View>
         )}
       </View>
-    ),
-    [banners, currentBanner, handleScrollEnd],
-  );
+    );
+  }, [currentBanner, handleScrollEnd, imageInfo]);
 
   // 检查登录态和权限并跳转
   const handleModulePress = useCallback(
@@ -211,6 +195,9 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.RACE_POOL_LIST:
           navigation.navigate('RacePoolList');
           break;
+        case ModuleType.COMPANY_MANAGEMENT:
+          navigation.navigate('CompanyManagement');
+          break;
         default:
           break;
       }
@@ -241,7 +228,7 @@ export const HomeScreen = React.memo(() => {
       {
         title: t('home.managementGroup'),
         modules: accessibleModules.filter((m) =>
-          [ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING].includes(m.type),
+          [ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING, ModuleType.COMPANY_MANAGEMENT].includes(m.type),
         ),
       },
       // {
@@ -266,6 +253,7 @@ export const HomeScreen = React.memo(() => {
         [ModuleType.CREATE_RACE]: 'plus-square',
         [ModuleType.ALL_RACE]: 'flag-checkered',
         [ModuleType.RACE_POOL_LIST]: 'coins',
+        [ModuleType.COMPANY_MANAGEMENT]: 'building',
       };
 
       return iconMap[moduleType] || 'star';
@@ -341,7 +329,10 @@ export const HomeScreen = React.memo(() => {
     // 用户已登录，不显示任何内容
     return null;
   }, [initCheckLogin, isLoggedIn, navigation, t]);
-
+  const getImageInfo = useCallback(async () => {
+    const res = await getImage(ImageType.HOME_PAGE);
+    setImageInfo(res);
+  }, []);
   useEffect(() => {
     // 只有在身份验证加载完成且用户未登录时才跳转
     if (!initCheckLogin && !isLoggedIn) {
@@ -349,6 +340,8 @@ export const HomeScreen = React.memo(() => {
         returnScreen: 'Home',
       });
     }
+    console.log('getImage');
+    getImageInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

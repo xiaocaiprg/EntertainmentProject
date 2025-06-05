@@ -55,6 +55,7 @@ export const zhHant = {
     createRace: '創建比賽',
     allRace: '比賽',
     racePoolList: '獎金池',
+    companyManagement: '公司',
   },
 
   // 創建比賽
@@ -109,7 +110,7 @@ export const zhHant = {
   settings: {
     settings: '設定',
     language: '語言設定',
-    accountSecurity: '賬戶安全',
+    accountSecurity: '帳戶安全',
     checkUpdate: '檢查更新',
     checkUpdateNoUpdate: '當前已是最新版本',
   },
@@ -482,5 +483,22 @@ export const zhHant = {
     noChangesToSave: '沒有需要保存的變更',
     atLeastOnePitcher: '至少需要一個投手',
     confirmSaveMessage: '確認保存以下投手配置：',
+  },
+
+  // 公司管理相關
+  company: {
+    title: '公司管理',
+    companyDetail: '公司詳情',
+    all: '全部',
+    recordCompany: '記錄公司',
+    playCompany: '投手公司',
+    investCompany: '投資公司',
+    operationCompany: '運營公司',
+    matchCompany: '賽事公司',
+    unknownType: '未知類型',
+    availablePoints: '可用積分',
+    frozenPoints: '凍結積分',
+    code: '代碼',
+    name: '名稱',
   },
 };

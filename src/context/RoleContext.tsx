@@ -17,6 +17,7 @@ export interface RoleContextType {
   isVisitor: boolean;
   isAdmin: boolean;
   isOutside: boolean;
+  isGroup: boolean;
   hasRole: (role: UserRole) => boolean;
 }
 
@@ -35,6 +36,7 @@ export const RoleContext = createContext<RoleContextType>({
   isVisitor: false,
   isAdmin: false,
   isOutside: false,
+  isGroup: false,
   hasRole: () => false,
 });
 
@@ -58,6 +60,7 @@ export const mapUserRoles = (roleString?: string): UserRole[] => {
     ROLE_USER: 'USER',
     ROLE_VISITOR: 'VISITOR',
     ROLE_OUTSIDE: 'OUTSIDE',
+    ROLE_GROUP: 'GROUP',
   };
 
   // 分割多个角色并映射
@@ -80,7 +83,7 @@ interface RoleProviderProps {
 }
 
 // 角色提供者组件
-// ROLE_PLAYPERSON：投手公司员工  ROLE_INVESTPERSON:投资人 ROLE_OPERATIONPERSON:娱乐场公司员工ROLE_DOC_ADMIN：记录公司管理员 ROLE_PLAY_ADMIN:投手公司管理员 ROLE_INVEST_ADMIN：投资公司管理员 ROLE_OPERATION_ADMIN:娱乐场公司管理员  ROLE_ADMIN:系统管理员 ROLE_USER:普通用户
+// ROLE_PLAYPERSON：投手公司员工  ROLE_INVESTPERSON:投资人 ROLE_OPERATIONPERSON:娱乐场公司员工ROLE_DOC_ADMIN：记录公司管理员 ROLE_PLAY_ADMIN:投手公司管理员 ROLE_INVEST_ADMIN：投资公司管理员 ROLE_OPERATION_ADMIN:娱乐场公司管理员  ROLE_ADMIN:系统管理员 ROLE_USER:普通用户 ROLE_GROUP:组合公司员工
 export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const { user } = useAuth();
 
@@ -98,6 +101,7 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const isVisitor = useMemo(() => userRoles.includes('VISITOR'), [userRoles]);
   const isAdmin = useMemo(() => userRoles.includes('ADMIN'), [userRoles]);
   const isOutside = useMemo(() => userRoles.includes('OUTSIDE'), [userRoles]);
+  const isGroup = useMemo(() => userRoles.includes('GROUP'), [userRoles]);
 
   // 角色上下文值
   const value = {
@@ -114,6 +118,7 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
     isVisitor,
     isAdmin,
     isOutside,
+    isGroup,
     hasRole: (role: UserRole) => userRoles.includes(role),
   };
 

@@ -26,6 +26,13 @@ export enum IsInside {
   INSIDE = 1, // 内部
   OUTSIDE = 2, // 外部
 }
+export enum CompanyType {
+  RECORD = 1, // 记录公司
+  PLAY = 2, // 投手公司
+  INVEST = 3, // 投资公司
+  OPERATION = 4, // 运营公司
+  MATCH = 5, // 赛事公司
+}
 export interface QueryParams {
   pageNum: number;
   pageSize: number;
