@@ -47,8 +47,8 @@ export interface PlayerHitrateRankDto {
   playerName?: string;
   rankPeriod?: number;
   setDate: string;
-  totalInningCount?: number;
-  winInningCount?: number;
+  totalCount?: number;
+  winCount?: number;
 }
 
 export interface PlayerKillrateRankDto {

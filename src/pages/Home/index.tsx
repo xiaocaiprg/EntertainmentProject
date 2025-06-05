@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { useFocusRefresh } from '../../hooks/useFocusRefresh';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { STATUS_BAR_HEIGHT, SCREEN_WIDTH } from '../../utils/platform';
@@ -340,10 +341,9 @@ export const HomeScreen = React.memo(() => {
         returnScreen: 'Home',
       });
     }
-    console.log('getImage');
-    getImageInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useFocusRefresh(() => getImageInfo());
 
   return (
     <View style={styles.container}>
