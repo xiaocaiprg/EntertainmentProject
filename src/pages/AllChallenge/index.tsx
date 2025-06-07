@@ -149,9 +149,9 @@ export const AllChallengeScreen = React.memo(() => {
                   </CustomText>
                 </>
                 <>
-                  <CustomText style={styles.label}>{t('allChallenge.currency')}:</CustomText>
+                  <CustomText style={styles.label}>{t('allChallenge.investPersonName')}:</CustomText>
                   <CustomText numberOfLines={1} style={[styles.value, { width: 100 }]}>
-                    {item.currency || '-'}
+                    {item.investPersonName || '-'}
                   </CustomText>
                 </>
               </View>

@@ -11,11 +11,13 @@ import {
   RankingTypeEnum,
   PlayerCompanyHitrateRankDto,
   // PlayerCompanyKillrateRankDto,
+  AddressKillrateRankDto,
 } from '../../../interface/Ranking';
 import { HitRateCard } from './HitRateCard';
 // import { KillRateCard } from './KillRateCard';
 import { CompanyHitRateCard } from './CompanyHitRateCard';
 // import { CompanyKillRateCard } from './CompanyKillRateCard';
+import { AddressKillRateCard } from './AddressKillRateCard';
 
 interface RankingListViewProps {
   loading: boolean;
@@ -25,22 +27,26 @@ interface RankingListViewProps {
   killRateData: any[]; // 保留但不使用，避免破坏接口
   companyHitRateData: PlayerCompanyHitrateRankDto[];
   companyKillRateData: any[]; // 保留但不使用，避免破坏接口
+  addressKillRateData: AddressKillrateRankDto[];
 }
 
 export const RankingListView = React.memo((props: RankingListViewProps) => {
-  const { loading, rankingType, hitRateData, companyHitRateData } = props;
+  const { loading, rankingType, hitRateData, companyHitRateData, addressKillRateData } = props;
   const { t } = useTranslation();
 
   // 获取当前数据
   const currentData = useMemo(() => {
-    if (rankingType === RankingTypeEnum.PERSONAL) {
+    if (rankingType === RankingTypeEnum.ENTERTAINMENT) {
+      // 娱乐场排行榜显示杀数数据
+      return addressKillRateData;
+    } else if (rankingType === RankingTypeEnum.PERSONAL) {
       // 个人排行榜只显示命中率数据，不区分个人/组合Tab
       return hitRateData;
     } else {
       // 公司排行榜显示命中率数据
       return companyHitRateData;
     }
-  }, [hitRateData, rankingType, companyHitRateData]);
+  }, [hitRateData, rankingType, companyHitRateData, addressKillRateData]);
 
   // 渲染空数据状态
   const renderEmpty = useMemo(() => {
@@ -75,7 +81,16 @@ export const RankingListView = React.memo((props: RankingListViewProps) => {
   // 渲染列表内容
   const renderItems = useMemo(() => {
     return currentData.map((item, index) => {
-      if (rankingType === RankingTypeEnum.PERSONAL) {
+      if (rankingType === RankingTypeEnum.ENTERTAINMENT) {
+        // 娱乐场排行榜显示杀数卡片
+        return (
+          <AddressKillRateCard
+            key={`address-killrate-${(item as AddressKillrateRankDto).addressInfoId}-${index}`}
+            item={item}
+            index={index}
+          />
+        );
+      } else if (rankingType === RankingTypeEnum.PERSONAL) {
         // 个人排行榜只显示命中率卡片
         return (
           <HitRateCard

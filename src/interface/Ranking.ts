@@ -8,6 +8,7 @@ export enum RankingTabType {
 export enum RankingTypeEnum {
   COMPANY = 'company',
   PERSONAL = 'personal',
+  ENTERTAINMENT = 'entertainment',
 }
 
 export interface RankCompanySearchParam {
@@ -91,8 +92,8 @@ export interface PlayerCompanyHitrateRankDto {
   hitRateStr?: string;
   rankPeriod?: number;
   setDate: string;
-  totalInningCount?: number;
-  winInningCount?: number;
+  totalCount?: number;
+  winCount?: number;
 }
 export interface PeakRecordDto {
   maxInningCountMatch: GameMatchSimpleDto;
@@ -121,4 +122,26 @@ export interface GameMatchSimpleDto {
   raceName: string;
   turnOver: number;
   turnOverStr: string;
+}
+
+export interface AddressKillrateRankDto {
+  addressInfoId?: number;
+  addressInfoName?: string;
+  dealerLoseCount?: number;
+  dealerWinCount?: number;
+  killRate?: number;
+  killRateStr?: string;
+  loseCount?: number;
+  playerLoseCount?: number;
+  playerWinCount?: number;
+  rankPeriod?: number;
+  setDate: string;
+  totalCount?: number;
+  hitRateStr?: string;
+  hitRate?: number;
+  totalProfit?: number;
+  totalProfitStr?: string;
+  totalTurnOver?: number;
+  totalTurnOverStr?: string;
+  winCount?: number;
 }

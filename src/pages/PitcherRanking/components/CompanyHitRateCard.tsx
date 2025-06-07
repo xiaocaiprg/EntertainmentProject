@@ -44,11 +44,11 @@ export const CompanyHitRateCard = React.memo((props: CompanyHitRateCardProps) =>
           <CustomText style={styles.statLabel}>{t('pitcher_ranking.hitRate')}</CustomText>
         </View>
         <View style={styles.statItem}>
-          <CustomText style={styles.statValue}>{item.totalInningCount || 0}</CustomText>
+          <CustomText style={styles.statValue}>{item.totalCount || 0}</CustomText>
           <CustomText style={styles.statLabel}>{t('pitcher_ranking.totalGames')}</CustomText>
         </View>
         <View style={styles.statItem}>
-          <CustomText style={styles.statValue}>{item.winInningCount || 0}</CustomText>
+          <CustomText style={styles.statValue}>{item.winCount || 0}</CustomText>
           <CustomText style={styles.statLabel}>{t('pitcher_ranking.winCount')}</CustomText>
         </View>
       </View>
@@ -61,8 +61,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 10,
-    padding: 10,
-    marginHorizontal: 10,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: '#EFEFEF',
   },

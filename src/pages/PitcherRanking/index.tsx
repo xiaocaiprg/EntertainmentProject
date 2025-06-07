@@ -24,6 +24,7 @@ import {
   RankCompanySearchParam,
   PlayerCompanyHitrateRankDto,
   // PlayerCompanyKillrateRankDto,
+  AddressKillrateRankDto,
 } from '../../interface/Ranking';
 import { RootStackScreenProps } from '../router';
 import {
@@ -31,6 +32,7 @@ import {
   getPitcherRankingHitRateCompany,
   // getPitcherRankingKillRate,
   // getPitcherRankingKillRateCompany,
+  getAddressKillRate,
 } from '../../api/services/rankService';
 import CustomText from '../../components/CustomText';
 
@@ -50,6 +52,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   // const [killRateRankData, setKillRateRankData] = useState<PlayerKillrateRankDto[]>([]);
   const [companyHitRateRankData, setCompanyHitRateRankData] = useState<PlayerCompanyHitrateRankDto[]>([]);
   // const [companyKillRateRankData, setCompanyKillRateRankData] = useState<PlayerCompanyKillrateRankDto[]>([]);
+  const [addressKillRateData, setAddressKillRateData] = useState<AddressKillrateRankDto[]>([]);
   const [hasMore, setHasMore] = useState(false);
 
   const pageNumRef = useRef(1);
@@ -156,6 +159,25 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   //   setLoading(false);
   // }, [selectedTimeRange, selectedLocation]);
 
+  const fetchAddressKillRateData = useCallback(async () => {
+    setLoading(true);
+    const currentRequestId = ++requestIdRef.current;
+    const params: RankCompanySearchParam = {
+      rankPeriod: selectedTimeRange,
+      orderParam: 'desc',
+    };
+    if (selectedLocation > 0) {
+      params.addressId = selectedLocation;
+    }
+    const result = await getAddressKillRate(params);
+    if (currentRequestId === requestIdRef.current) {
+      if (result?.length) {
+        setAddressKillRateData(result);
+      }
+    }
+    setLoading(false);
+  }, [selectedTimeRange, selectedLocation]);
+
   const handleTabChange = useCallback(
     (tab: RankingTabType) => {
       // if (tab !== currentTab && rankingType === RankingTypeEnum.PERSONAL) {
@@ -168,6 +190,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
       // }
       if (tab !== currentTab) {
         setHitRateRankData([]);
+        setAddressKillRateData([]);
       }
       setCurrentTab(tab);
     },
@@ -182,8 +205,9 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
         // setKillRateRankData([]);
         setCompanyHitRateRankData([]);
         // setCompanyKillRateRankData([]);
+        setAddressKillRateData([]);
 
-        // 如果切换到个人，默认选择个人Tab，如果切换到公司，不需要Tab
+        // 如果切换到个人，默认选择个人Tab，如果切换到公司或娱乐场，不需要Tab
         if (type === RankingTypeEnum.PERSONAL) {
           setCurrentTab(RankingTabType.PERSONAL);
         }
@@ -208,12 +232,15 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     // setKillRateRankData([]);
     setCompanyHitRateRankData([]);
     // setCompanyKillRateRankData([]);
+    setAddressKillRateData([]);
   }, []);
 
   useEffect(() => {
     // 重置请求状态，确保新的筛选条件开始前清空旧的请求ID
     resetData();
-    if (rankingType === RankingTypeEnum.PERSONAL) {
+    if (rankingType === RankingTypeEnum.ENTERTAINMENT) {
+      fetchAddressKillRateData();
+    } else if (rankingType === RankingTypeEnum.PERSONAL) {
       fetchHitRateRankingData();
     } else {
       fetchCompanyHitRateRankingData();
@@ -225,6 +252,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     rankingType,
     fetchCompanyHitRateRankingData,
     fetchHitRateRankingData,
+    fetchAddressKillRateData,
     resetData,
   ]);
 
@@ -328,6 +356,7 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
             killRateData={[]} // 传空数组，因为杀数逻辑被注释
             companyHitRateData={companyHitRateRankData}
             companyKillRateData={[]} // 传空数组，因为杀数逻辑被注释
+            addressKillRateData={addressKillRateData}
           />
         </View>
         <View style={styles.bottomSpace} />

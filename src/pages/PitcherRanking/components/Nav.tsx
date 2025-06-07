@@ -24,6 +24,7 @@ export const Nav = React.memo((props: HeaderProps) => {
     () => [
       { value: RankingTypeEnum.PERSONAL, label: t('pitcher_ranking.personal') },
       { value: RankingTypeEnum.COMPANY, label: t('pitcher_ranking.company') },
+      { value: RankingTypeEnum.ENTERTAINMENT, label: t('pitcher_ranking.entertainment') },
     ],
     [t],
   );

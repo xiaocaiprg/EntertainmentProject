@@ -41,6 +41,8 @@ export interface GameMatchPageDto {
   turnOver?: number;
   turnOverStr?: string;
   isInside?: number;
+  investPersonCode?: string;
+  investPersonName?: string;
 }
 export interface ChallengeList {
   current: number;
