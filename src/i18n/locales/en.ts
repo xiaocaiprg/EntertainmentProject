@@ -501,4 +501,35 @@ export const en = {
     code: 'Code',
     name: 'Name',
   },
+
+  // Turnover Query
+  turnoverQuery: {
+    title: 'View Transcoding',
+    userType: {
+      investor: 'Investor',
+      recorder: 'Recorder',
+      playperson: 'Player',
+      operation: 'Operation',
+    },
+    filter: {
+      selectCompany: 'Please select company',
+      selectPerson: 'Select person (optional)',
+      startTime: 'Start Time:',
+      endTime: 'End Time:',
+      query: 'Query',
+      selectCompanyModal: 'Select Company',
+      selectPersonModal: 'Select Person (Optional)',
+      doNotSelect: 'Do not select',
+    },
+    result: {
+      totalTurnover: 'Total Turnover',
+      totalProfit: 'Total Profit',
+      loading: 'Loading data...',
+      noData: 'No data available',
+      address: 'Address:',
+      currency: 'Currency:',
+      turnover: 'Turnover:',
+      profit: 'Profit:',
+    },
+  },
 };

@@ -501,4 +501,35 @@ export const zhHant = {
     code: '代碼',
     name: '名稱',
   },
+
+  // 轉碼查詢相關
+  turnoverQuery: {
+    title: '查看轉碼',
+    userType: {
+      investor: '投資',
+      recorder: '記錄',
+      playperson: '投手',
+      operation: '運營',
+    },
+    filter: {
+      selectCompany: '請選擇公司',
+      selectPerson: '選擇個人(非必填)',
+      startTime: '開始時間:',
+      endTime: '結束時間:',
+      query: '查詢',
+      selectCompanyModal: '選擇公司',
+      selectPersonModal: '選擇個人(可選)',
+      doNotSelect: '不選擇',
+    },
+    result: {
+      totalTurnover: '總轉碼',
+      totalProfit: '總上下水',
+      loading: '正在載入數據...',
+      noData: '暫無數據',
+      address: '地址:',
+      currency: '幣種:',
+      turnover: '轉碼:',
+      profit: '上下水:',
+    },
+  },
 };

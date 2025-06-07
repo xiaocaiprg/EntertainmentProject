@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: THEME_COLORS.text.secondary,
     marginRight: 4,
-    width: 60,
+    width: 50,
   },
   value: {
     fontSize: 12,

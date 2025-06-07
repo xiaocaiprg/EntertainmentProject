@@ -501,4 +501,35 @@ export const zh = {
     code: '代码',
     name: '名称',
   },
+
+  // 转码查询相关
+  turnoverQuery: {
+    title: '查看转码',
+    userType: {
+      investor: '投资',
+      recorder: '记录',
+      playperson: '投手',
+      operation: '运营',
+    },
+    filter: {
+      selectCompany: '请选择公司',
+      selectPerson: '选择个人(非必填)',
+      startTime: '开始时间:',
+      endTime: '结束时间:',
+      query: '查询',
+      selectCompanyModal: '选择公司',
+      selectPersonModal: '选择个人(可选)',
+      doNotSelect: '不选择',
+    },
+    result: {
+      totalTurnover: '总转码',
+      totalProfit: '总上下水',
+      loading: '正在加载数据...',
+      noData: '暂无数据',
+      address: '地址:',
+      currency: '币种:',
+      turnover: '转码:',
+      profit: '上下水:',
+    },
+  },
 };

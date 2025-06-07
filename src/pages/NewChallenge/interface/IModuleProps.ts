@@ -24,6 +24,7 @@ export const CURRENCY_OPTIONS = [
 
 export const BET_AMOUNT_OPTIONS = {
   [ChallengeType.NO_PROFIT_LIMIT]: [
+    { label: BASE_BET_AMOUNT.THIRRH_THOUSAND.toString(), value: BASE_BET_AMOUNT.THIRRH_THOUSAND },
     { label: BASE_BET_AMOUNT.THREE_THOUSAND.toString(), value: BASE_BET_AMOUNT.THREE_THOUSAND },
     {
       label: BASE_BET_AMOUNT.ONE_THOUSAND_TWO_HUNDRED.toString(),

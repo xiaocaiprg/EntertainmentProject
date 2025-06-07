@@ -274,6 +274,7 @@ export interface GameTurnOverItemDto {
   addressName?: string;
   gameDate?: string;
   id?: number;
+  currency: string;
   name?: string;
   profit?: number;
   profitStr?: string;

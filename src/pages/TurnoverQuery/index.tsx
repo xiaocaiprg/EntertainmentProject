@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -14,17 +14,11 @@ import { UserType } from '../../interface/Common';
 import { GameTurnOverDto } from '../../interface/Game';
 import { Company } from '../../interface/Company';
 import CustomText from '../../components/CustomText';
-
-// 用户类型选项
-const userTypeOptions = [
-  { label: '投资', value: UserType.INVESTOR },
-  { label: '记录', value: UserType.RECORDER },
-  { label: '投手', value: UserType.PLAYPERSON },
-  { label: '运营', value: UserType.OPERATIONPERSON },
-];
+import { useTranslation } from '../../hooks/useTranslation';
 
 export const TurnoverQueryScreen = React.memo(() => {
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<GameTurnOverDto | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -32,6 +26,17 @@ export const TurnoverQueryScreen = React.memo(() => {
 
   const pageNumRef = useRef(1);
   const pageSizeRef = useRef(100);
+
+  // 用户类型选项
+  const userTypeOptions = useMemo(
+    () => [
+      { label: t('turnoverQuery.userType.investor'), value: UserType.INVESTOR },
+      { label: t('turnoverQuery.userType.recorder'), value: UserType.RECORDER },
+      { label: t('turnoverQuery.userType.playperson'), value: UserType.PLAYPERSON },
+      { label: t('turnoverQuery.userType.operation'), value: UserType.OPERATIONPERSON },
+    ],
+    [t],
+  );
 
   const fetchCompanies = useCallback(async () => {
     const result = await getCompany({
@@ -66,7 +71,7 @@ export const TurnoverQueryScreen = React.memo(() => {
         ))}
       </View>
     ),
-    [currentUserType, handleUserTypeChange],
+    [currentUserType, handleUserTypeChange, userTypeOptions],
   );
 
   // 处理搜索提交
@@ -96,7 +101,7 @@ export const TurnoverQueryScreen = React.memo(() => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <CustomText style={styles.headerTitle}>查看转码</CustomText>
+        <CustomText style={styles.headerTitle}>{t('turnoverQuery.title')}</CustomText>
         <View style={styles.headerRight} />
       </View>
       {renderCategoryTabs()}
