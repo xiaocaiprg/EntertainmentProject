@@ -1,5 +1,14 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Alert, TextInput } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+  Alert,
+  TextInput,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
@@ -7,17 +16,18 @@ import { getMatchDetail } from '../../api/services/gameService';
 import { createContribution, getContributionDetail, deleteContribution } from '../../api/services/contributionService';
 import { ContributionDto } from '../../interface/Contribution';
 import { useTranslation } from '../../hooks/useTranslation';
-import { ChallengeDetailCard } from './components/ChallengeDetailCard';
-import { ContributionList } from './components/ContributionList';
+import { ChallengeDetailCard } from '../FundraisingChallenge/components/ChallengeDetailCard';
+import { ContributionList } from '../FundraisingChallenge/components/ContributionList';
 import ConfirmModal from '../../components/ConfirmModal';
 import CustomText from '../../components/CustomText';
-interface InvestmentDetailProps {
-  matchId: number;
-  onBack: () => void;
-}
+import { RootStackScreenProps } from '../router';
+import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 
-export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((props) => {
-  const { matchId, onBack } = props;
+type InvestmentDetailScreenProps = RootStackScreenProps<'InvestmentDetail'>;
+
+export const InvestmentDetailScreen: React.FC<InvestmentDetailScreenProps> = React.memo((props) => {
+  const { navigation, route } = props;
+  const { matchId } = route.params;
   const { t } = useTranslation();
   const [matchDetail, setMatchDetail] = useState<GameMatchDto | null>(null);
   const [myContribution, setMyContribution] = useState<ContributionDto | null>(null);
@@ -120,6 +130,11 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
     setShowDeleteModal(false);
   }, [myContribution?.id, fetchChallengeDetail, fetchMyContributionDetail, t]);
 
+  // 返回按钮处理
+  const handleBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   // 判断是否可以投资
   const isAvailableForInvest = useMemo(
     () => matchDetail?.availableAmount && matchDetail.availableAmount > 0,
@@ -200,46 +215,59 @@ export const InvestmentDetail: React.FC<InvestmentDetailProps> = React.memo((pro
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-        <CustomText style={styles.loadingText}>{t('fundraisingChallenge.loading')}</CustomText>
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={THEME_COLORS.primary} />
+            <CustomText style={styles.loadingText}>{t('fundraisingChallenge.loading')}</CustomText>
+          </View>
+        </SafeAreaView>
       </View>
     );
   }
 
   return (
-    <View style={styles.detailInner}>
-      <View style={styles.detailHeader}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
-        </TouchableOpacity>
-        <CustomText style={styles.detailTitle}>挑战出资</CustomText>
-        <View style={styles.headerRight} />
-      </View>
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.detailHeader}>
+          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+            <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
+          </TouchableOpacity>
+          <CustomText style={styles.detailTitle}>挑战出资</CustomText>
+          <View style={styles.headerRight} />
+        </View>
 
-      <View style={styles.detailContent}>
-        <ChallengeDetailCard matchDetail={matchDetail} />
-        {hasContribution ? renderMyContribution() : renderInvestForm()}
-        <ContributionList contributions={matchDetail?.contributionDtoList} matchDetail={matchDetail} />
-      </View>
+        <View style={styles.detailContent}>
+          <ChallengeDetailCard matchDetail={matchDetail} />
+          {hasContribution ? renderMyContribution() : renderInvestForm()}
+          <ContributionList contributions={matchDetail?.contributionDtoList} matchDetail={matchDetail} />
+        </View>
 
-      {/* 删除确认模态框 */}
-      <ConfirmModal
-        visible={showDeleteModal}
-        title="删除出资"
-        message="您确定要删除此出资吗？"
-        cancelText="取消"
-        confirmText="确认删除"
-        onCancel={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
-        isProcessing={submitting}
-      />
+        {/* 删除确认模态框 */}
+        <ConfirmModal
+          visible={showDeleteModal}
+          title="删除出资"
+          message="您确定要删除此出资吗？"
+          cancelText="取消"
+          confirmText="确认删除"
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          isProcessing={submitting}
+        />
+      </SafeAreaView>
     </View>
   );
 });
 
 const styles = StyleSheet.create({
-  detailInner: {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: isIOS() ? 0 : STATUS_BAR_HEIGHT,
+  },
+  safeArea: {
     flex: 1,
     backgroundColor: '#fff',
   },

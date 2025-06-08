@@ -17,6 +17,9 @@ declare global {
       AllChallenge: undefined;
       ChangeRecorderChallenge: undefined;
       FundraisingChallenge: undefined;
+      InvestmentDetail: {
+        matchId: number;
+      };
       MyGames: undefined;
       TurnoverQuery: undefined;
       ChallengeDetail: {

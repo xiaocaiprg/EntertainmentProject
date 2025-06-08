@@ -15,6 +15,7 @@ import { ChangeRecorderChallenge } from './ChangeRecorderChallenge/index';
 import { AssignPitcherChallengeScreen } from './AssignPitcherChallenge/index';
 import { AllChallengeScreen } from './AllChallenge/index';
 import { FundraisingChallengeScreen } from './FundraisingChallenge/index';
+import { InvestmentDetailScreen } from './InvestmentDetail/index';
 import { MyGamesScreen } from './MyGames/index';
 import { RoundDetailScreen } from './RoundDetail/index';
 import { TurnoverQueryScreen } from './TurnoverQuery/index';
@@ -56,6 +57,7 @@ export type RootStackParamList = {
   ChangeRecorderChallenge: undefined;
   AssignPitcherChallenge: undefined;
   FundraisingChallenge: undefined;
+  InvestmentDetail: { matchId: number };
   MyGames: undefined;
   RoundDetail: { matchId: number };
   TurnoverQuery: undefined;
@@ -152,6 +154,7 @@ function AppNavigator() {
                 <Stack.Screen name="ChangeRecorderChallenge" component={ChangeRecorderChallenge} />
                 <Stack.Screen name="AssignPitcherChallenge" component={AssignPitcherChallengeScreen} />
                 <Stack.Screen name="FundraisingChallenge" component={FundraisingChallengeScreen} />
+                <Stack.Screen name="InvestmentDetail" component={InvestmentDetailScreen} />
                 <Stack.Screen name="MyGames" component={MyGamesScreen} />
                 <Stack.Screen name="RoundDetail" component={RoundDetailScreen} />
                 <Stack.Screen name="TurnoverQuery" component={TurnoverQueryScreen} />

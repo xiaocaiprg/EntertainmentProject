@@ -196,7 +196,6 @@ export const en = {
     modifySuccess: 'Modified successfully',
     modifyFailed: 'Modification failed',
     betAmountMin: 'Bet amount must be greater than 0',
-    betAmountMax: 'Bet amount must be less than 3000000',
     betAmountMultiple: 'Bet amount must be a multiple of 100',
     round: 'Round',
     roundWaterInfo: 'WaterInfo',
@@ -495,7 +494,7 @@ export const en = {
   // Company Management
   company: {
     title: 'Company Management',
-    companyDetail: 'Company Detail',
+    companyDetail: 'Detail',
     all: 'All',
     recordCompany: 'Record Company',
     playCompany: 'Player Company',
@@ -505,6 +504,7 @@ export const en = {
     unknownType: 'Unknown Type',
     availablePoints: 'Available Points',
     frozenPoints: 'Frozen Points',
+    profit: 'Profit',
     code: 'Code',
     name: 'Name',
   },

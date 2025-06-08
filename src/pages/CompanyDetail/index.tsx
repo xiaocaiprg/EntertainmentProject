@@ -63,6 +63,10 @@ export const CompanyDetailScreen: React.FC<CompanyDetailScreenProps> = React.mem
             <CustomText style={styles.detailLabel}>{t('company.frozenPoints')}:</CustomText>
             <CustomText style={styles.detailValue}>{item.frozenPoints.toLocaleString()}</CustomText>
           </View>
+          <View style={styles.detailRow}>
+            <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
+            <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
+          </View>
         </View>
       </View>
     ),

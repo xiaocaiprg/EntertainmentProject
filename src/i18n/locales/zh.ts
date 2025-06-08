@@ -197,7 +197,6 @@ export const zh = {
     modifySuccess: '修改成功',
     modifyFailed: '修改失败',
     betAmountMin: '押注金额必须大于0',
-    betAmountMax: '押注金额必须小于3000000',
     betAmountMultiple: '押注金额必须是100的倍数',
     round: '场次',
     roundWaterInfo: '本场上下水',
@@ -495,7 +494,7 @@ export const zh = {
   // 公司管理相关
   company: {
     title: '公司管理',
-    companyDetail: '公司详情',
+    companyDetail: '详情',
     all: '全部',
     recordCompany: '记录公司',
     playCompany: '投手公司',
@@ -505,7 +504,8 @@ export const zh = {
     unknownType: '未知类型',
     availablePoints: '可用积分',
     frozenPoints: '冻结积分',
-    code: '代码',
+    profit: '盈利',
+    code: '编码',
     name: '名称',
   },
 

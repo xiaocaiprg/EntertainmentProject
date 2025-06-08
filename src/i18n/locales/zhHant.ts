@@ -197,7 +197,6 @@ export const zhHant = {
     modifySuccess: '修改成功',
     modifyFailed: '修改失敗',
     betAmountMin: '押注金額必須大於0',
-    betAmountMax: '押注金額必須小於3000000',
     betAmountMultiple: '押注金額必須是100的倍數',
     round: '場次',
     roundWaterInfo: '本場上下水',
@@ -495,7 +494,7 @@ export const zhHant = {
   // 公司管理相關
   company: {
     title: '公司管理',
-    companyDetail: '公司詳情',
+    companyDetail: '詳情',
     all: '全部',
     recordCompany: '記錄公司',
     playCompany: '投手公司',
@@ -505,7 +504,8 @@ export const zhHant = {
     unknownType: '未知類型',
     availablePoints: '可用積分',
     frozenPoints: '凍結積分',
-    code: '代碼',
+    profit: '營利',
+    code: '編碼',
     name: '名稱',
   },
 

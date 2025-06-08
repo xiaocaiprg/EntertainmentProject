@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { useRole } from '../../hooks/useRole';
 import { ChallengeList } from './ChallengeList';
-import { InvestmentDetail } from './InvestmentDetail';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
+import { RootStackScreenProps } from '../router';
 
-export const FundraisingChallengeScreen = React.memo(() => {
-  const navigation = useNavigation();
+type FundraisingChallengeScreenProps = RootStackScreenProps<'FundraisingChallenge'>;
+
+export const FundraisingChallengeScreen: React.FC<FundraisingChallengeScreenProps> = React.memo((props) => {
+  const { navigation } = props;
   const { isInvestor } = useRole();
-  const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
 
   // 检查权限
   useEffect(() => {
@@ -20,16 +20,14 @@ export const FundraisingChallengeScreen = React.memo(() => {
   }, [isInvestor, navigation]);
 
   // 点击挑战项或出资按钮，跳转到出资详情页
-  const handleItemPress = useCallback((matchId: number | undefined) => {
-    if (matchId) {
-      setSelectedMatchId(matchId);
-    }
-  }, []);
-
-  // 返回列表页
-  const handleBackToList = useCallback(() => {
-    setSelectedMatchId(null);
-  }, []);
+  const handleItemPress = useCallback(
+    (matchId: number | undefined) => {
+      if (matchId) {
+        navigation.navigate('InvestmentDetail', { matchId });
+      }
+    },
+    [navigation],
+  );
 
   // 返回按钮处理
   const handleBack = useCallback(() => {
@@ -40,11 +38,7 @@ export const FundraisingChallengeScreen = React.memo(() => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <SafeAreaView style={styles.safeArea}>
-        {selectedMatchId ? (
-          <InvestmentDetail matchId={selectedMatchId} onBack={handleBackToList} />
-        ) : (
-          <ChallengeList onItemPress={handleItemPress} onBack={handleBack} />
-        )}
+        <ChallengeList onItemPress={handleItemPress} onBack={handleBack} />
       </SafeAreaView>
     </View>
   );

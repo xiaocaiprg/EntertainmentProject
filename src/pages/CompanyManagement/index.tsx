@@ -162,16 +162,19 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
   );
 
   // 渲染section header
-  const renderSectionHeader = useCallback(
-    ({ section }: { section: CompanySection }) => (
-      <View style={[styles.sectionHeader, { backgroundColor: section.backgroundColor }]}>
+  const renderSectionHeader = useCallback(({ section }: { section: CompanySection }) => {
+    // 计算实际的公司数量，排除占位项
+    const actualCount = section.data.filter((item) => !(item as any).isPlaceholder).length;
+
+    return (
+      <View style={styles.sectionHeader}>
+        <View style={[styles.sectionHeaderLine, { backgroundColor: section.backgroundColor }]} />
         <CustomText style={styles.sectionHeaderText}>
-          {section.title} ({section.data.length})
+          {section.title} ({actualCount})
         </CustomText>
       </View>
-    ),
-    [],
-  );
+    );
+  }, []);
 
   // 渲染公司项
   const renderCompanyItem = useCallback(
@@ -210,6 +213,10 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
             <View style={styles.detailRow}>
               <CustomText style={styles.detailLabel}>{t('company.availablePoints')}:</CustomText>
               <CustomText style={styles.detailValue}>{item.availablePoints.toLocaleString()}</CustomText>
+            </View>
+            <View style={styles.detailRow}>
+              <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
+              <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
             </View>
           </View>
         </TouchableOpacity>
@@ -289,7 +296,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   listContainer: {
-    paddingBottom: 10,
+    paddingTop: 10,
   },
   companyItem: {
     backgroundColor: '#fff',
@@ -356,15 +363,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#999',
   },
+  sectionHeaderLine: {
+    width: 6,
+    height: 20,
+    borderRadius: 20,
+    marginRight: 8,
+  },
   sectionHeader: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
     marginBottom: 8,
+    backgroundColor: '#fff',
   },
   sectionHeaderText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: '700',
+    color: '#111',
   },
   placeholderItem: {
     backgroundColor: '#f8f9fa',
