@@ -1,5 +1,5 @@
 import { BASE_BET_AMOUNT } from '../../../constants/betAmounts';
-import { ChallengeType } from '../../../interface/Common';
+import { ChallengeType, FundraisingType } from '../../../interface/Common';
 
 // 定义下拉框枚举类型
 export enum DropdownType {
@@ -8,6 +8,7 @@ export enum DropdownType {
   LOCATION = 'location',
   BET_AMOUNT = 'betAmount',
   CURRENCY = 'currency',
+  COMPANY = 'company',
 }
 
 // 定义币种枚举
@@ -24,14 +25,14 @@ export const CURRENCY_OPTIONS = [
 
 export const BET_AMOUNT_OPTIONS = {
   [ChallengeType.NO_PROFIT_LIMIT]: [
-    { label: BASE_BET_AMOUNT.THIRRH_THOUSAND.toString(), value: BASE_BET_AMOUNT.THIRRH_THOUSAND },
-    { label: BASE_BET_AMOUNT.THREE_THOUSAND.toString(), value: BASE_BET_AMOUNT.THREE_THOUSAND },
+    { label: BASE_BET_AMOUNT.THREE_HUNDRED.toString(), value: BASE_BET_AMOUNT.THREE_HUNDRED },
+    { label: BASE_BET_AMOUNT.SIX_HUNDRED.toString(), value: BASE_BET_AMOUNT.SIX_HUNDRED },
     {
       label: BASE_BET_AMOUNT.ONE_THOUSAND_TWO_HUNDRED.toString(),
       value: BASE_BET_AMOUNT.ONE_THOUSAND_TWO_HUNDRED,
     },
-    { label: BASE_BET_AMOUNT.SIX_HUNDRED.toString(), value: BASE_BET_AMOUNT.SIX_HUNDRED },
-    { label: BASE_BET_AMOUNT.THREE_HUNDRED.toString(), value: BASE_BET_AMOUNT.THREE_HUNDRED },
+    { label: BASE_BET_AMOUNT.THREE_THOUSAND.toString(), value: BASE_BET_AMOUNT.THREE_THOUSAND },
+    { label: BASE_BET_AMOUNT.THIRRTY_THOUSAND.toString(), value: BASE_BET_AMOUNT.THIRRTY_THOUSAND },
   ],
   [ChallengeType.EVEN_BET]: [{ label: BASE_BET_AMOUNT.TWO_THOUSAND, value: BASE_BET_AMOUNT.TWO_THOUSAND }],
 };
@@ -47,4 +48,6 @@ export interface ChallengeFormData {
   // contriAmount: string; // 出资额
   initialBetAmount: number; // 投注基数
   currency: CurrencyType; // 币种
+  fundraisingType: FundraisingType; // 募资方式
+  selectedCompanyList: string[]; // 选中的公司列表
 }

@@ -59,3 +59,8 @@ export interface ProfitDto {
   profit: number;
   profitStr: string;
 }
+
+export interface TransferOutLogDto {
+  toCode: string;
+  toName: string;
+}

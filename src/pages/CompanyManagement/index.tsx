@@ -74,7 +74,7 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
   // 获取公司列表
   const fetchCompanies = useCallback(async () => {
     setLoading(true);
-    const result = await getCompanyList();
+    const result = await getCompanyList({});
     setCompanies(result);
     setLoading(false);
   }, []);

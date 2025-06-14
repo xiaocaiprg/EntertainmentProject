@@ -1,6 +1,6 @@
 import { post } from '../request';
 import { UserRecordParams } from '../../interface/Game';
-import { PageDtoCompany, CompanyDto } from '../../interface/Company';
+import { PageDtoCompany, CompanyDto, CompanyListParams } from '../../interface/Company';
 import { ApiResponse } from '../../interface/IModuleProps';
 
 export const PATH = {
@@ -22,8 +22,8 @@ export const getCompany = (params: UserRecordParams): Promise<PageDtoCompany | n
     });
 };
 
-export const getCompanyList = (): Promise<CompanyDto[] | []> => {
-  return post<ApiResponse<CompanyDto[]>>(PATH.GET_COMPANY_LIST, {})
+export const getCompanyList = (params: CompanyListParams): Promise<CompanyDto[] | []> => {
+  return post<ApiResponse<CompanyDto[]>>(PATH.GET_COMPANY_LIST, params)
     .then((res) => {
       if (res.code === 200) {
         return res.data;

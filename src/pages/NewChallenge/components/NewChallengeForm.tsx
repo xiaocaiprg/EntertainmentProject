@@ -73,6 +73,14 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
           onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.BET_AMOUNT, isOpen)}
           zIndex={1900}
           zIndexInverse={2100}
+          style={{
+            selectContainer: {
+              marginBottom: 0,
+            },
+            dropdown: {
+              minHeight: 40,
+            },
+          }}
         />
       </>
       <>
@@ -88,6 +96,14 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
           onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.CURRENCY, isOpen)}
           zIndex={1800}
           zIndexInverse={2200}
+          style={{
+            selectContainer: {
+              marginBottom: 0,
+            },
+            dropdown: {
+              minHeight: 40,
+            },
+          }}
         />
       </>
       <>
@@ -103,6 +119,14 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
           onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.PLAYPERSON, isOpen)}
           zIndex={3000}
           zIndexInverse={1000}
+          style={{
+            selectContainer: {
+              marginBottom: 0,
+            },
+            dropdown: {
+              minHeight: 40,
+            },
+          }}
         />
       </>
       <>
@@ -118,6 +142,14 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
           onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.LOCATION, isOpen)}
           zIndex={2000}
           zIndexInverse={2000}
+          style={{
+            selectContainer: {
+              marginBottom: 0,
+            },
+            dropdown: {
+              minHeight: 40,
+            },
+          }}
         />
       </>
       <DatePicker
@@ -126,10 +158,12 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
         onDateChange={(date) => updateField('date', date)}
         format="YYYY-MM-DD"
         style={{
-          container: { marginBottom: 10 },
+          labelText: {
+            marginTop: 4,
+          },
         }}
       />
-      <View style={{ marginBottom: 10 }}>
+      <View style={{ marginBottom: 2 }}>
         <CustomText style={styles.labelText}>挑战名称</CustomText>
         <CustomTextInput
           style={styles.textInput}
@@ -180,10 +214,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 8,
+    marginBottom: 2,
+    marginTop: 4,
   },
   textInput: {
-    height: 44,
+    height: 40,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,

@@ -58,17 +58,16 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
 });
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 10,
-  },
+  container: {},
   labelText: {
     fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 8,
+    marginTop: 4,
+    marginBottom: 2,
   },
   input: {
-    height: 44,
+    height: 40,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,

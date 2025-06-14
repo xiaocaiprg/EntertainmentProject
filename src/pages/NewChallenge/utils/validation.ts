@@ -1,4 +1,5 @@
 import { ChallengeCreateParams } from '../../../interface/Game';
+import { FundraisingType } from '../../../interface/Common';
 
 /**
  * 校验挑战创建参数
@@ -26,6 +27,16 @@ export const validateChallengeParams = (
   }
   if (!params.currency) {
     return { isValid: false, errorMessage: '请选择币种' };
+  }
+  if (!params.contributionType) {
+    return { isValid: false, errorMessage: '请选择募资方式' };
+  }
+  // 定向募资时必须选择投资公司
+  if (
+    params.contributionType === FundraisingType.TARGETED &&
+    (!params.investCompanyCodeList || params.investCompanyCodeList.length === 0)
+  ) {
+    return { isValid: false, errorMessage: '定向募资时必须选择至少一个投资公司' };
   }
   return { isValid: true };
 };

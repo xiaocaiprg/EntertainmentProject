@@ -33,6 +33,13 @@ export enum CompanyType {
   OPERATION = 4, // 运营公司
   MATCH = 5, // 赛事公司
 }
+
+// 募资方式枚举
+export enum FundraisingType {
+  PUBLIC = 1, // 公开募资
+  TARGETED = 2, // 定向募资
+}
+
 export interface QueryParams {
   pageNum: number;
   pageSize: number;

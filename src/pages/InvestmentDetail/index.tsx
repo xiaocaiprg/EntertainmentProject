@@ -16,8 +16,8 @@ import { getMatchDetail } from '../../api/services/gameService';
 import { createContribution, getContributionDetail, deleteContribution } from '../../api/services/contributionService';
 import { ContributionDto } from '../../interface/Contribution';
 import { useTranslation } from '../../hooks/useTranslation';
-import { ChallengeDetailCard } from '../FundraisingChallenge/components/ChallengeDetailCard';
-import { ContributionList } from '../FundraisingChallenge/components/ContributionList';
+import { ChallengeDetailCard } from './components/ChallengeDetailCard';
+import { ContributionList } from './components/ContributionList';
 import ConfirmModal from '../../components/ConfirmModal';
 import CustomText from '../../components/CustomText';
 import { RootStackScreenProps } from '../router';
@@ -175,7 +175,8 @@ export const InvestmentDetailScreen: React.FC<InvestmentDetailScreenProps> = Rea
     return (
       <View style={styles.investFormCard}>
         <CustomText style={styles.cardTitle}>
-          {t('fundraisingChallenge.investAmount')} {matchDetail?.currency && `(${matchDetail?.currency})`}
+          {t('fundraisingChallenge.investAmount')}
+          <CustomText style={{ color: '#F9230C' }}>{matchDetail?.currency && `(${matchDetail?.currency})`}</CustomText>
         </CustomText>
         <TextInput
           style={styles.amountInput}

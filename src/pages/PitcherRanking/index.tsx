@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  ImageBackground,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
 import { THEME_COLORS } from '../../utils/styles';
 import { useTranslation } from '../../hooks/useTranslation';
 import { InfoModal } from '../../components/InfoModal';
@@ -53,24 +45,11 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
   const [companyHitRateRankData, setCompanyHitRateRankData] = useState<PlayerCompanyHitrateRankDto[]>([]);
   // const [companyKillRateRankData, setCompanyKillRateRankData] = useState<PlayerCompanyKillrateRankDto[]>([]);
   const [addressKillRateData, setAddressKillRateData] = useState<AddressKillrateRankDto[]>([]);
-  const [hasMore, setHasMore] = useState(false);
 
-  const pageNumRef = useRef(1);
-  const pageSizeRef = useRef(20);
   const scrollY = useRef(new Animated.Value(0)).current;
   const requestIdRef = useRef(0);
-
   const handleScroll = Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
     useNativeDriver: false,
-    listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-      const paddingToBottom = 20;
-      const isCloseToBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
-
-      if (isCloseToBottom && !loading && hasMore) {
-        handleLoadMore();
-      }
-    },
   });
 
   const fetchHitRateRankingData = useCallback(async () => {
@@ -78,8 +57,6 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     const currentRequestId = ++requestIdRef.current;
     const params: RankSearchParam = {
       rankPeriod: selectedTimeRange,
-      pageNum: pageNumRef.current,
-      pageSize: pageSizeRef.current,
       playType: currentTab === RankingTabType.PERSONAL ? 1 : 2, // 1.个人 2.组合
     };
     if (selectedLocation > 0) {
@@ -87,10 +64,8 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     }
     const result = await getPitcherRankingHitRate(params);
     if (currentRequestId === requestIdRef.current) {
-      if (result && result.records) {
-        const isHasMore = result.current < result.pages;
-        setHasMore(isHasMore);
-        setHitRateRankData((prev) => [...prev, ...(result.records || [])]);
+      if (result) {
+        setHitRateRankData((prev) => [...prev, ...(result || [])]);
       }
     }
     setLoading(false);
@@ -217,17 +192,8 @@ export const PitcherRankingScreen: React.FC<PitcherRankingScreenProps> = React.m
     [rankingType],
   );
 
-  const handleLoadMore = useCallback(() => {
-    if (rankingType === RankingTypeEnum.PERSONAL && hasMore && !loading) {
-      pageNumRef.current++;
-      fetchHitRateRankingData();
-    }
-  }, [rankingType, fetchHitRateRankingData, hasMore, loading]);
-
   const resetData = useCallback(() => {
-    pageNumRef.current = 1;
     requestIdRef.current = 0;
-    setHasMore(false);
     setHitRateRankData([]);
     // setKillRateRankData([]);
     setCompanyHitRateRankData([]);

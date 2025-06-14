@@ -5,14 +5,18 @@ import CustomText from '../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NewChallengeForm } from './components/NewChallengeForm';
 import { getOperatorList, createChallenge, getAddressList } from '../../api/services/gameService';
+import { getCompanyList } from '../../api/services/companyService';
 import { UserResult } from '../../interface/User';
+import { CompanyDto } from '../../interface/Company';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { AddressInfo, ChallengeCreateParams } from '../../interface/Game';
 import { formatDate } from '../../utils/date';
 import { validateChallengeParams } from './utils/validation';
 import { ChallengeFormData, CurrencyType } from './interface/IModuleProps';
-import { ChallengeType } from '../../interface/Common';
+import { ChallengeType, CompanyType, FundraisingType } from '../../interface/Common';
 import DropdownSelect from '../../components/DropdownSelect';
+import RadioGroup from '../../components/RadioGroup';
+import MultiSelectDropdown from '../../components/MultiSelectDropdown';
 import { RootStackScreenProps } from '../router';
 
 export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> = React.memo((props) => {
@@ -21,6 +25,7 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
 
   const [operatorList, setOperatorList] = useState<UserResult[]>([]);
   const [locationList, setLocationList] = useState<AddressInfo[]>([]);
+  const [companyList, setCompanyList] = useState<CompanyDto[]>([]);
   const [selectedChallengeType, setSelectedChallengeType] = useState<ChallengeType | ''>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const lastSubmitTimeRef = useRef<number>(0);
@@ -36,6 +41,8 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     principal: '',
     initialBetAmount: -1, // 默认投注基数
     currency: CurrencyType.HKD, // 默认币种为HKD
+    fundraisingType: FundraisingType.PUBLIC, // 默认公开募资
+    selectedCompanyList: [], // 默认空数组
   });
 
   // 处理表单数据变更
@@ -53,6 +60,23 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     setFormData((prevData) => ({
       ...prevData,
       challengeType: type,
+    }));
+  }, []);
+
+  // 处理募资方式变更
+  const handleFundraisingTypeChange = useCallback((type: FundraisingType) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      fundraisingType: type,
+      selectedCompanyList: type === FundraisingType.PUBLIC ? [] : prevData.selectedCompanyList,
+    }));
+  }, []);
+
+  // 处理公司选择变更
+  const handleCompanySelectionChange = useCallback((selectedCompanies: string[]) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      selectedCompanyList: selectedCompanies,
     }));
   }, []);
 
@@ -83,6 +107,9 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       baseNumber: formData.initialBetAmount,
       playRuleCode: formData.challengeType,
       currency: formData.currency,
+      contributionType: formData.fundraisingType,
+      investCompanyCodeList:
+        formData.fundraisingType === FundraisingType.TARGETED ? formData.selectedCompanyList : undefined,
     };
 
     // 校验参数
@@ -92,6 +119,14 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       setIsSubmitting(false);
       return;
     }
+
+    // 校验定向募资时必须选择公司
+    if (formData.fundraisingType === FundraisingType.TARGETED && formData.selectedCompanyList.length === 0) {
+      Alert.alert('提示', '定向募资时必须选择至少一个投资公司');
+      setIsSubmitting(false);
+      return;
+    }
+
     if (raceId) {
       params.raceId = raceId;
     }
@@ -123,6 +158,9 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     getAddressList({ pageNum: 1, pageSize: 999 }).then((res) => {
       setLocationList(res?.records || []);
     });
+    getCompanyList({ type: CompanyType.INVEST }).then((res) => {
+      setCompanyList(res || []);
+    });
   }, []);
 
   // 挑战类型选项
@@ -131,6 +169,15 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       { label: '无止盈过关', value: ChallengeType.NO_PROFIT_LIMIT },
       { label: '平注', value: ChallengeType.EVEN_BET },
       // 可以在这里添加更多的挑战类型
+    ],
+    [],
+  );
+
+  // 募资方式选项
+  const fundraisingOptions = useMemo(
+    () => [
+      { label: '公开募资', value: FundraisingType.PUBLIC },
+      { label: '定向募资', value: FundraisingType.TARGETED },
     ],
     [],
   );
@@ -175,18 +222,61 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
             labelKey="label"
             zIndex={4000}
             zIndexInverse={1000}
+            style={{
+              selectContainer: {
+                marginBottom: 0,
+              },
+              dropdown: {
+                minHeight: 40,
+              },
+            }}
           />
         </View>
 
         {selectedChallengeType ? (
-          <NewChallengeForm
-            challengeType={selectedChallengeType}
-            operators={operatorList}
-            locations={locationList}
-            formData={formData}
-            onChange={handleFormChange}
-            onConfirm={handleConfirm}
-          />
+          <>
+            <View style={styles.fundraisingContainer}>
+              <CustomText style={styles.labelText}>募资方式</CustomText>
+              <RadioGroup
+                options={fundraisingOptions}
+                selectedValue={formData.fundraisingType}
+                onSelect={handleFundraisingTypeChange}
+              />
+            </View>
+
+            {formData.fundraisingType === FundraisingType.TARGETED && (
+              <View style={styles.companySelectContainer}>
+                <CustomText style={styles.labelText}>选择投资公司</CustomText>
+                <MultiSelectDropdown
+                  options={companyList}
+                  selectedValues={formData.selectedCompanyList}
+                  onSelectionChange={handleCompanySelectionChange}
+                  placeholder="请选择投资公司"
+                  valueKey="code"
+                  labelKey="name"
+                  zIndex={1700}
+                  zIndexInverse={2300}
+                  style={{
+                    selectContainer: {
+                      marginBottom: 0,
+                    },
+                    dropdown: {
+                      minHeight: 40,
+                    },
+                  }}
+                />
+              </View>
+            )}
+
+            <NewChallengeForm
+              challengeType={selectedChallengeType}
+              operators={operatorList}
+              locations={locationList}
+              formData={formData}
+              onChange={handleFormChange}
+              onConfirm={handleConfirm}
+            />
+          </>
         ) : (
           <View style={styles.instructionContainer}>
             <Icon name="arrow-upward" size={48} color={THEME_COLORS.primary} />
@@ -286,11 +376,18 @@ const styles = StyleSheet.create({
   challengeTypeContainer: {
     marginBottom: 5,
   },
+  fundraisingContainer: {
+    marginBottom: 5,
+  },
+  companySelectContainer: {
+    marginBottom: 5,
+  },
   labelText: {
     fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 8,
+    marginBottom: 2,
+    marginTop: 4,
   },
   instructionContainer: {
     flex: 1,

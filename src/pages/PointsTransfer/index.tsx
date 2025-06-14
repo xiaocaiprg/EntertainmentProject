@@ -15,6 +15,7 @@ import { RootStackScreenProps } from '../router';
 import { ConfirmModal } from '../../components/ConfirmModal';
 import { useAuth } from '../../hooks/useAuth';
 import { transferPoint } from '../../api/services/pointService';
+import { AccountInputWithHistory } from './components/AccountInputWithHistory';
 import { TransferPointParams } from '../../interface/Points';
 import { isIOS } from '../../utils/platform';
 import { STATUS_BAR_HEIGHT } from '../../utils/platform';
@@ -25,11 +26,12 @@ import CustomText from '../../components/CustomText';
 import { getUserDetail } from '../../api/services/authService';
 import { LoginResultDto } from '../../interface/User';
 
-enum TransferType {
+export enum TransferType {
   PERSONAL = 'personal',
   COMPANY = 'company',
   POOL = 'pool',
 }
+
 type PointsTransferScreenProps = RootStackScreenProps<'PointsTransfer'>;
 
 export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.memo((props) => {
@@ -253,16 +255,16 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     return (
       <View style={styles.inputGroup}>
         <CustomText style={styles.label}>{t('pointsTransfer.account')}</CustomText>
-        <TextInput
-          style={styles.input}
+        <AccountInputWithHistory
           value={account}
           onChangeText={setAccount}
-          placeholderTextColor={'#999'}
+          transferType={transferType === TransferType.PERSONAL ? TransferType.PERSONAL : TransferType.COMPANY}
           placeholder={
             transferType === TransferType.PERSONAL
               ? t('pointsTransfer.personalAccountPlaceholder')
               : t('pointsTransfer.companyAccountPlaceholder')
           }
+          t={t}
         />
       </View>
     );

@@ -41,6 +41,7 @@ export interface GameMatchPageDto {
   turnOver?: number;
   turnOverStr?: string;
   isInside?: number;
+  contributionType?: number;
   investPersonCode?: string;
   investPersonName?: string;
 }
@@ -212,6 +213,8 @@ export interface ChallengeCreateParams {
   currency?: string;
   playRuleCode?: string;
   raceId?: number;
+  contributionType?: number;
+  investCompanyCodeList?: string[];
 }
 
 export interface RoundCreateParams {
@@ -254,6 +257,10 @@ export interface AddressInfo {
 export interface UpdateMatchDocPersonParams {
   id: number; // 挑战id
   docPersonCode: string;
+}
+export interface UpdateMatchContributeTypeParams {
+  id: number;
+  contributionType: number;
 }
 
 export interface GameTurnOverDtoParams {

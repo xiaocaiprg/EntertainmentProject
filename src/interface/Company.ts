@@ -6,6 +6,11 @@ export interface PageDtoCompany {
   total?: number;
 }
 
+export interface CompanyListParams {
+  type?: number;
+  code?: string;
+}
+
 export interface Company {
   code: string;
   createTime?: string;

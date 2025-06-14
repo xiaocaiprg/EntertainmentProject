@@ -19,8 +19,8 @@ export interface RankCompanySearchParam {
 export interface RankSearchParam {
   addressId?: number;
   orderParam?: string;
-  pageNum: number;
-  pageSize: number;
+  pageNum?: number;
+  pageSize?: number;
   rankPeriod: number;
   playType: number;
 }
@@ -33,7 +33,7 @@ export interface PageDto<T> {
   total: number;
 }
 
-export type PageDtoPlayerHitrateRankDto = PageDto<PlayerHitrateRankDto>;
+export type PageDtoPlayerHitrateRankDto = PlayerHitrateRankDto[];
 export type PageDtoPlayerKillrateRankDto = PageDto<PlayerKillrateRankDto>;
 export type PageDtoPlayerCompanyKillrateRankDto = PlayerCompanyKillrateRankDto[];
 export type PageDtoPlayerCompanyHitrateRankDto = PlayerCompanyHitrateRankDto[];

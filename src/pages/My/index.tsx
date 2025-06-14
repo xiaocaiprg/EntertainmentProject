@@ -149,6 +149,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
       t,
       navigation,
       handleSettingsPress,
+      isOperationAdmin,
       handleMyPoints,
       handleOneClickSettlement,
     ],

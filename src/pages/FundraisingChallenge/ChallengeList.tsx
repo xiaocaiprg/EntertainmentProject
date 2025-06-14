@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GameMatchPageDto } from '../../interface/Game';
 import { THEME_COLORS } from '../../utils/styles';
 import { getChallengeList } from '../../api/services/gameService';
-import { ChallengeStatus } from '../../interface/Common';
+import { ChallengeStatus, FundraisingType } from '../../interface/Common';
 import { useTranslation } from '../../hooks/useTranslation';
 import CustomText from '../../components/CustomText';
 interface ChallengeListProps {
@@ -109,6 +109,16 @@ export const ChallengeList: React.FC<ChallengeListProps> = React.memo((props) =>
                   <CustomText style={styles.label}>{t('fundraisingChallenge.currency')}:</CustomText>
                   <CustomText style={styles.value} numberOfLines={1}>
                     {item.currency || '-'}
+                  </CustomText>
+                </View>
+              </View>
+              <View style={styles.itemRow}>
+                <View style={styles.itemSubRow}>
+                  <CustomText style={styles.label}>{t('fundraisingChallenge.contributionType')}:</CustomText>
+                  <CustomText style={styles.value} numberOfLines={1}>
+                    {item.contributionType === FundraisingType.PUBLIC
+                      ? t('fundraisingChallenge.public')
+                      : t('fundraisingChallenge.targeted')}
                   </CustomText>
                 </View>
               </View>

@@ -10,10 +10,15 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getChallengeList, getMatchDetail, updateMatchStatus } from '../../api/services/gameService';
+import {
+  getChallengeList,
+  getMatchDetail,
+  updateMatchStatus,
+  updateMatchContributeType,
+} from '../../api/services/gameService';
 import { ContributionDto } from '../../interface/Contribution';
 import { ChallengeListParams, GameMatchPageDto, GameMatchProfitDto } from '../../interface/Game';
-import { ChallengeStatus, IsInside } from '../../interface/Common';
+import { ChallengeStatus, FundraisingType, IsInside } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
 import { getStatusText } from '../../public/Game';
@@ -42,6 +47,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
   const [profitModalVisible, setProfitModalVisible] = useState<boolean>(false);
   const [contributionModalVisible, setContributionModalVisible] = useState<boolean>(false);
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
+  const [convertToPublicModalVisible, setConvertToPublicModalVisible] = useState<boolean>(false);
   const [processing, setProcessing] = useState<boolean>(false);
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
   const [selectedContribution, setSelectedContribution] = useState<ContributionDto[]>([]);
@@ -149,6 +155,20 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     setSelectedMatchId(null);
   }, []);
 
+  // 显示转公开确认弹窗
+  const showConvertToPublicConfirm = useCallback((matchId: number) => {
+    if (matchId) {
+      setSelectedMatchId(matchId);
+      setConvertToPublicModalVisible(true);
+    }
+  }, []);
+
+  // 隐藏转公开确认弹窗
+  const hideConvertToPublicConfirm = useCallback(() => {
+    setConvertToPublicModalVisible(false);
+    setSelectedMatchId(null);
+  }, []);
+
   // 确认结束挑战
   const confirmEndChallenge = useCallback(async () => {
     if (!selectedMatchId) {
@@ -173,6 +193,30 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     setSelectedMatchId(null);
   }, [selectedMatchId, fetchCompletedChallenges, t]);
 
+  // 确认转为公开募资
+  const confirmConvertToPublic = useCallback(async () => {
+    if (!selectedMatchId) {
+      return;
+    }
+
+    setProcessing(true);
+    try {
+      const result = await updateMatchContributeType({
+        id: selectedMatchId,
+        contributionType: FundraisingType.PUBLIC, // 转为公开募资
+      });
+      if (result) {
+        fetchCompletedChallenges(true);
+        Alert.alert(t('common.success'), t('myGames.convertSuccess'));
+      }
+    } catch (error: any) {
+      Alert.alert(t('common.error'), error.message);
+    }
+    setProcessing(false);
+    setConvertToPublicModalVisible(false);
+    setSelectedMatchId(null);
+  }, [selectedMatchId, fetchCompletedChallenges, t]);
+
   const renderItem = useCallback(
     (item: GameMatchPageDto) => {
       const status = getStatusText(item.isEnabled);
@@ -184,6 +228,12 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
         (item.isEnabled === ChallengeStatus.IN_PROGRESS ||
           item.isEnabled === ChallengeStatus.FUNDRAISING ||
           item.isEnabled === ChallengeStatus.FUNDRAISING_COMPLETED);
+
+      // 判断是否显示转公开按钮：投资公司管理员 && 募资中 && 定向募资
+      const canConvertToPublic =
+        isInvestmentManager &&
+        item.isEnabled === ChallengeStatus.FUNDRAISING &&
+        item.contributionType === FundraisingType.TARGETED;
 
       return (
         <View style={styles.itemContainer}>
@@ -231,16 +281,33 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
                 <CustomText style={styles.value}>{item.turnOverStr || '-'}</CustomText>
               </View>
             </View>
-            {item.isInside === IsInside.OUTSIDE && (
-              <View style={styles.itemLine}>
+
+            <View style={styles.itemLine}>
+              <View style={styles.itemRow}>
+                <CustomText style={styles.label}>{t('myGames.fundraisingType')}:</CustomText>
+                <CustomText style={styles.value}>
+                  {item.contributionType === FundraisingType.PUBLIC ? t('myGames.public') : t('myGames.targeted')}
+                </CustomText>
+              </View>
+              {item.isInside === IsInside.OUTSIDE && (
                 <View style={styles.itemRow}>
                   <CustomText style={styles.label}>{t('myGames.isInside')}:</CustomText>
                   <CustomText style={styles.value}>{t('myGames.outside')}</CustomText>
                 </View>
-              </View>
-            )}
+              )}
+            </View>
           </View>
           <View style={styles.buttonContainer}>
+            {canConvertToPublic && (
+              <TouchableOpacity
+                style={[styles.actionButton, styles.convertToPublicButton]}
+                onPress={() => showConvertToPublicConfirm(item.id)}
+                disabled={processing}
+              >
+                <Icon name="public" size={12} color="#fff" style={styles.buttonIcon} />
+                <CustomText style={styles.buttonText}>{t('myGames.convertToPublic')}</CustomText>
+              </TouchableOpacity>
+            )}
             {canEndChallenge && (
               <TouchableOpacity
                 style={[styles.actionButton, styles.endChallengeButton]}
@@ -278,6 +345,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
       handleViewContribution,
       handleViewRoundDetail,
       showEndChallengeConfirm,
+      showConvertToPublicConfirm,
       processing,
       t,
       isOperationAdmin,
@@ -355,6 +423,17 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
         confirmText={t('challengeDetail.confirmEndAction')}
         onCancel={hideEndChallengeConfirm}
         onConfirm={confirmEndChallenge}
+        isProcessing={processing}
+      />
+
+      <ConfirmModal
+        visible={convertToPublicModalVisible}
+        title={t('myGames.convertToPublicTitle')}
+        message={t('myGames.convertToPublicMessage')}
+        cancelText={t('common.cancel')}
+        confirmText={t('myGames.confirmConvert')}
+        onCancel={hideConvertToPublicConfirm}
+        onConfirm={confirmConvertToPublic}
         isProcessing={processing}
       />
     </SafeAreaView>
@@ -510,6 +589,9 @@ const styles = StyleSheet.create({
   },
   endChallengeButton: {
     backgroundColor: THEME_COLORS.danger,
+  },
+  convertToPublicButton: {
+    backgroundColor: '#fa8c16',
   },
 });
 

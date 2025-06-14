@@ -11,6 +11,7 @@ import {
   UpdateMatchDocPersonParams,
   GameTurnOverDtoParams,
   GameTurnOverDto,
+  UpdateMatchContributeTypeParams,
 } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
 import { QueryParams } from '../../interface/Common';
@@ -23,6 +24,7 @@ const PATH = {
   MATCH_UPDATE_DOC_PERSON: 'haiyang/match/updataDocPerson',
   MATCH_UPDATE_STATUS: 'haiyang/match/updateStatus',
   MATCH_TURNOVER: 'haiyang/match/turnover',
+  MATCH_UPDATE_CONTRIBUTE_TYPE: 'haiyang/match/updataContributeType',
 };
 
 export const getOperatorList = (params: UserRecordParams): Promise<RecorderList | null> => {
@@ -132,4 +134,13 @@ export const getMatchTurnOver = (params: GameTurnOverDtoParams): Promise<GameTur
     .catch(() => {
       return null;
     });
+};
+export const updateMatchContributeType = (params: UpdateMatchContributeTypeParams): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.MATCH_UPDATE_CONTRIBUTE_TYPE, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };

@@ -188,7 +188,6 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   datePickerButton: {
-    height: 40,
     borderRadius: 8,
     backgroundColor: '#fff',
     flexDirection: 'row',
