@@ -4,10 +4,12 @@ import { THEME_COLORS } from '../../utils/styles';
 import CustomText from '../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NewChallengeForm } from './components/NewChallengeForm';
-import { getOperatorList, createChallenge, getAddressList } from '../../api/services/gameService';
+import { createChallenge, getAddressList } from '../../api/services/gameService';
+import { getBusinessList } from '../../api/services/businessService';
 import { getCompanyList } from '../../api/services/companyService';
-import { UserResult } from '../../interface/User';
+import { BusinessDto } from '../../interface/Business';
 import { CompanyDto } from '../../interface/Company';
+import { UserType } from '../../interface/Common';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { AddressInfo, ChallengeCreateParams } from '../../interface/Game';
 import { formatDate } from '../../utils/date';
@@ -23,7 +25,7 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
   const { navigation, route } = props;
   const { raceId } = route.params || {};
 
-  const [operatorList, setOperatorList] = useState<UserResult[]>([]);
+  const [operatorList, setOperatorList] = useState<BusinessDto[]>([]);
   const [locationList, setLocationList] = useState<AddressInfo[]>([]);
   const [companyList, setCompanyList] = useState<CompanyDto[]>([]);
   const [selectedChallengeType, setSelectedChallengeType] = useState<ChallengeType | ''>('');
@@ -152,8 +154,8 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
 
   useEffect(() => {
-    getOperatorList({ pageNum: 1, pageSize: 999, type: 2 }).then((res) => {
-      setOperatorList(res?.records || []);
+    getBusinessList({ type: UserType.PLAYPERSON }).then((res) => {
+      setOperatorList(res || []);
     });
     getAddressList({ pageNum: 1, pageSize: 999 }).then((res) => {
       setLocationList(res?.records || []);

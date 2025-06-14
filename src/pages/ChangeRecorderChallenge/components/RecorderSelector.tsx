@@ -2,15 +2,15 @@ import React, { useCallback, useMemo } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { THEME_COLORS } from '../../../utils/styles';
-import { UserResult } from '../../../interface/User';
+import { BusinessDto } from '../../../interface/Business';
 import CustomText from '../../../components/CustomText';
 interface RecorderSelectorProps {
   visible: boolean;
-  recorderList: UserResult[];
-  selectedRecorder: UserResult | null;
+  recorderList: BusinessDto[];
+  selectedRecorder: BusinessDto | null;
   submitting: boolean;
   onClose: () => void;
-  onSelect: (recorder: UserResult) => void;
+  onSelect: (recorder: BusinessDto) => void;
   onSubmit: () => void;
 }
 
@@ -19,7 +19,7 @@ export const RecorderSelector = React.memo((props: RecorderSelectorProps) => {
 
   // 选择记录人
   const handleSelectRecorder = useCallback(
-    (recorder: UserResult) => {
+    (recorder: BusinessDto) => {
       onSelect(recorder);
     },
     [onSelect],
@@ -27,7 +27,7 @@ export const RecorderSelector = React.memo((props: RecorderSelectorProps) => {
 
   // 渲染记录人列表项
   const renderRecorderItem = useCallback(
-    ({ item }: { item: UserResult }) => {
+    ({ item }: { item: BusinessDto }) => {
       const isSelected = selectedRecorder?.id === item.id;
       return (
         <TouchableOpacity

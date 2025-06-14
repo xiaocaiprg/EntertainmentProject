@@ -7,7 +7,7 @@ import DropdownSelect from '../../../components/DropdownSelect';
 import NumberInput from '../../../components/NumberInput';
 import { DatePicker } from '../../../components/DatePicker';
 import { THEME_COLORS } from '../../../utils/styles';
-import { UserResult } from '../../../interface/User';
+import { BusinessDto } from '../../../interface/Business';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
 import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS, CURRENCY_OPTIONS } from '../interface/IModuleProps';
@@ -15,7 +15,7 @@ import { ChallengeType } from '../../../interface/Common';
 
 interface NewChallengeFormProps {
   challengeType: ChallengeType;
-  operators: UserResult[];
+  operators: BusinessDto[];
   locations: AddressInfo[];
   formData: ChallengeFormData;
   onChange: (data: Partial<ChallengeFormData>) => void;

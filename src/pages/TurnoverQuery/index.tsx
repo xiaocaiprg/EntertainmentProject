@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getCompany } from '../../api/services/companyService';
+import { getCompanyList } from '../../api/services/companyService';
 import { getMatchTurnOver } from '../../api/services/gameService';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
@@ -24,9 +24,6 @@ export const TurnoverQueryScreen = React.memo(() => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [currentUserType, setCurrentUserType] = useState<number>(UserType.INVESTOR);
 
-  const pageNumRef = useRef(1);
-  const pageSizeRef = useRef(100);
-
   // 用户类型选项
   const userTypeOptions = useMemo(
     () => [
@@ -39,13 +36,11 @@ export const TurnoverQueryScreen = React.memo(() => {
   );
 
   const fetchCompanies = useCallback(async () => {
-    const result = await getCompany({
+    const result = await getCompanyList({
       type: currentUserType,
-      pageNum: pageNumRef.current,
-      pageSize: pageSizeRef.current,
     });
-    if (result && result.records) {
-      setCompanies(result.records);
+    if (result) {
+      setCompanies(result);
     }
   }, [currentUserType]);
 

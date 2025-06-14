@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert, ScrollView, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getPlayer, assignPlayer } from '../../api/services/playerService';
-import { getOperatorList } from '../../api/services/gameService';
+import { getBusinessList } from '../../api/services/businessService';
 import { MatchPlayerDetailDto, AssignPlayerParams, GameMatchPlayerDto } from '../../interface/Player';
 import { UserType } from '../../interface/Common';
 import { THEME_COLORS } from '../../utils/styles';
-import { UserResult } from '../../interface/User';
+import { BusinessDto } from '../../interface/Business';
 import DropdownSelect from '../../components/DropdownSelect';
 import ConfirmModal from '../../components/ConfirmModal';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -28,11 +28,10 @@ export const AssignmentDetail = React.memo((props: AssignmentDetailProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [matchPlayer, setMatchPlayer] = useState<GameMatchPlayerDto | null>(null);
   const [localPitchers, setLocalPitchers] = useState<LocalPitcher[]>([]);
-  const [pitcherList, setPitcherList] = useState<UserResult[]>([]);
+  const [pitcherList, setPitcherList] = useState<BusinessDto[]>([]);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const pageSizeForPitcher = useRef<number>(1000);
 
   const [confirmModal, setConfirmModal] = useState<{
     visible: boolean;
@@ -72,13 +71,11 @@ export const AssignmentDetail = React.memo((props: AssignmentDetailProps) => {
   // 获取投手列表
   const fetchPitcherList = useCallback(async () => {
     const params = {
-      pageNum: 1,
-      pageSize: pageSizeForPitcher.current,
       type: UserType.PLAYPERSON,
     };
-    const res = await getOperatorList(params);
-    if (res && res.records) {
-      setPitcherList(res.records);
+    const res = await getBusinessList(params);
+    if (res) {
+      setPitcherList(res);
     }
   }, []);
 

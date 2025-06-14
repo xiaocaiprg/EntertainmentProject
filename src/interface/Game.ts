@@ -1,22 +1,10 @@
-import { UserResult } from './User';
 import { ContributionDto } from './Contribution';
 import { QueryParams } from './Common';
 
-export interface UserRecordParams extends QueryParams {
-  type?: number;
-  companyCode?: string;
-}
 export interface ChallengeListParams extends QueryParams {
   isEnabledList?: number[];
 }
 
-export interface RecorderList {
-  records: UserResult[];
-  pages: number;
-  total: number;
-  size: number;
-  current: number;
-}
 export interface GameMatchPageDto {
   addressInfoId?: number;
   addressName?: string;

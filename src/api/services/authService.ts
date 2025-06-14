@@ -1,6 +1,7 @@
 import { get, post } from '../request';
-import { UserResult, UserParams, UserDetailParams, LoginResultDto } from '../../interface/User';
+import { UserParams, UserDetailParams, LoginResultDto } from '../../interface/User';
 import { ApiResponse } from '../../interface/IModuleProps';
+import { BusinessDto } from '../../interface/Business';
 import { APP_VERSION_URL } from '../../utils/UpdateManager';
 
 export const PATH = {
@@ -10,8 +11,8 @@ export const PATH = {
   GET_USER_DETAIL: 'haiyang/business/detail',
 };
 
-export const userlogin = (params: UserParams): Promise<UserResult> => {
-  return post<ApiResponse<UserResult>>(PATH.LOGIN, params).then((res) => {
+export const userlogin = (params: UserParams): Promise<BusinessDto> => {
+  return post<ApiResponse<BusinessDto>>(PATH.LOGIN, params).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {
@@ -20,8 +21,8 @@ export const userlogin = (params: UserParams): Promise<UserResult> => {
   });
 };
 
-export const getUserStatus = (): Promise<UserResult> => {
-  return get<ApiResponse<UserResult>>(PATH.LOGIN_STATUS).then((res) => {
+export const getUserStatus = (): Promise<BusinessDto> => {
+  return get<ApiResponse<BusinessDto>>(PATH.LOGIN_STATUS).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {

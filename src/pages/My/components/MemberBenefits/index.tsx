@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { UserResult } from '../../../../interface/User';
+import { BusinessDto } from '../../../../interface/Business';
 import { useTranslation } from '../../../../hooks/useTranslation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomText from '../../../../components/CustomText';
 
 interface MemberBenefitsProps {
-  user: UserResult;
+  user: BusinessDto;
   navigation: any;
 }
 

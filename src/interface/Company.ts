@@ -1,14 +1,7 @@
-export interface PageDtoCompany {
-  current?: number;
-  pages?: number;
-  records?: Company[];
-  size?: number;
-  total?: number;
-}
-
 export interface CompanyListParams {
   type?: number;
   code?: string;
+  isSelf?: number;
 }
 
 export interface Company {

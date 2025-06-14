@@ -1,14 +1,14 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
-import { UserResult } from '../../../interface/User';
+import { BusinessDto } from '../../../interface/Business';
 import { FilterProps, QueryCondition } from '../interface/ITurnoverQuery';
 import { DatePicker } from '../../../components/DatePicker';
 import CustomText from '../../../components/CustomText';
 import { formatDate } from '../../../utils/date';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SlideModal } from '../../../components/SlideModal';
-import { getOperatorList } from '../../../api/services/gameService';
+import { getBusinessList } from '../../../api/services/businessService';
 import { useTranslation } from '../../../hooks/useTranslation';
 
 export const FilterComponent = React.memo((props: FilterProps) => {
@@ -24,18 +24,14 @@ export const FilterComponent = React.memo((props: FilterProps) => {
   const [selectedPersonCode, setSelectedPersonCode] = useState<string>('');
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [personModalOpen, setPersonModalOpen] = useState(false);
-  const [users, setUsers] = useState<UserResult[]>([]);
-  const pageNumRef = useRef(1);
-  const pageSizeRef = useRef(100);
+  const [users, setUsers] = useState<BusinessDto[]>([]);
 
   const fetchUsers = useCallback(async (companyCode: string) => {
-    const result = await getOperatorList({
-      companyCode: companyCode,
-      pageNum: pageNumRef.current,
-      pageSize: pageSizeRef.current,
+    const result = await getBusinessList({
+      code: companyCode,
     });
-    if (result && result.records) {
-      setUsers(result.records);
+    if (result) {
+      setUsers(result);
     }
   }, []);
 

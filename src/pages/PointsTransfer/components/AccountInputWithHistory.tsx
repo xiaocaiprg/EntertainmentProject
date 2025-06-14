@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   historyName: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#666',
     marginTop: 2,
   },

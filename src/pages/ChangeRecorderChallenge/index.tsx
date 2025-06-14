@@ -10,12 +10,13 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getChallengeList, getRecorderList, updateMatchDocPerson } from '../../api/services/gameService';
-import { GameMatchPageDto, UserRecordParams } from '../../interface/Game';
+import { getChallengeList, updateMatchDocPerson } from '../../api/services/gameService';
+import { getBusinessList } from '../../api/services/businessService';
+import { GameMatchPageDto } from '../../interface/Game';
 import { ChallengeStatus, UserType } from '../../interface/Common';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { THEME_COLORS } from '../../utils/styles';
-import { UserResult } from '../../interface/User';
+import { BusinessDto, BusinessListParams } from '../../interface/Business';
 import { RecorderSelector } from './components/RecorderSelector';
 import CustomText from '../../components/CustomText';
 import { ChallengeCard } from './components/ChallengeCard';
@@ -29,14 +30,12 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
   const [challengeList, setChallengeList] = useState<GameMatchPageDto[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [recorderList, setRecorderList] = useState<UserResult[]>([]);
-  const [selectedRecorder, setSelectedRecorder] = useState<UserResult | null>(null);
+  const [recorderList, setRecorderList] = useState<BusinessDto[]>([]);
+  const [selectedRecorder, setSelectedRecorder] = useState<BusinessDto | null>(null);
   const [currentChallengeId, setCurrentChallengeId] = useState<number | undefined>(undefined);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const pageNum = useRef<number>(1);
   const pageSize = useRef<number>(10);
-  const pageSizeForRecorder = useRef<number>(1000);
-
   // 获取挑战列表
   const fetchChallengeList = useCallback(async () => {
     setLoading(true);
@@ -55,14 +54,12 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
 
   // 获取记录人列表
   const fetchRecorderList = useCallback(async () => {
-    const params: UserRecordParams = {
-      pageNum: 1,
-      pageSize: pageSizeForRecorder.current,
+    const params: BusinessListParams = {
       type: UserType.RECORDER,
     };
-    const res = await getRecorderList(params);
-    if (res && res.records) {
-      setRecorderList(res.records);
+    const res = await getBusinessList(params);
+    if (res) {
+      setRecorderList(res);
     }
   }, []);
 
@@ -97,7 +94,7 @@ export const ChangeRecorderChallenge: React.FC<ChangeRecorderChallengeScreenProp
   }, []);
 
   // 选择记录人
-  const handleSelectRecorder = useCallback((recorder: UserResult) => {
+  const handleSelectRecorder = useCallback((recorder: BusinessDto) => {
     setSelectedRecorder(recorder);
   }, []);
 

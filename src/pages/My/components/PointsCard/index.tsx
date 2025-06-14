@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import CustomText from '../../../../components/CustomText';
 import { useTranslation } from '../../../../hooks/useTranslation';
-import { UserResult } from '../../../../interface/User';
+import { BusinessDto } from '../../../../interface/Business';
 interface PointsCardProps {
-  user: UserResult;
+  user: BusinessDto;
   onPointsPress: () => void;
 }
 
