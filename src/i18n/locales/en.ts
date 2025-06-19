@@ -53,6 +53,7 @@ export const en = {
     pitcher_ranking: 'PitcherRanking',
     createRace: 'CreateRace',
     allRace: 'AllRaces',
+    groupManagement: 'GroupManagement',
     companyManagement: 'CompanyManagement',
     racePoolList: 'PrizePoolList',
   },
@@ -508,6 +509,17 @@ export const en = {
     confirmSaveMessage: 'Confirm saving the following pitcher configuration:',
   },
 
+  // Group Management
+  group: {
+    title: 'Group Management',
+    code: 'Code',
+    name: 'Name',
+    availablePoints: 'Available Points',
+    frozenPoints: 'Frozen Points',
+    totalPoints: 'Total Points',
+    noData: 'No group data available',
+  },
+
   // Company Management
   company: {
     title: 'Company Management',
@@ -524,6 +536,19 @@ export const en = {
     profit: 'Profit',
     code: 'Code',
     name: 'Name',
+  },
+
+  // Finance Related
+  finance: {
+    currentInterestStatus: 'CurrentInterest Status',
+    interestEnabled: 'Enabled',
+    interestDisabled: 'Disabled',
+    enable: 'Enable',
+    disable: 'Disable',
+    confirmTitle: 'Confirm Operation',
+    confirmMessage: 'Are you sure you want to',
+    switchSuccess: 'Operation successful',
+    switchFailed: 'Operation failed, please try again',
   },
 
   // Turnover Query

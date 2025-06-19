@@ -1,21 +1,42 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getBusinessList } from '../../api/services/businessService';
+import { switchFinance } from '../../api/services/financeService';
 import { BusinessDto } from '../../interface/Business';
+import { InterestStatus, RoleType } from '../../interface/Finance';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useRole } from '../../hooks/useRole';
 import CustomText from '../../components/CustomText';
+import ConfirmModal from '../../components/ConfirmModal';
 import { RootStackScreenProps } from '../router';
 
 type CompanyDetailScreenProps = RootStackScreenProps<'CompanyDetail'>;
 
 export const CompanyDetailScreen: React.FC<CompanyDetailScreenProps> = React.memo(({ navigation, route }) => {
   const { t } = useTranslation();
+  const { isAdmin } = useRole();
   const { code } = route.params;
   const [loading, setLoading] = useState<boolean>(true);
   const [businessList, setBusinessList] = useState<BusinessDto[]>([]);
+  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
+  const [confirmModalData, setConfirmModalData] = useState<{
+    business: BusinessDto | null;
+    newStatus: InterestStatus;
+    statusText: string;
+  }>({ business: null, newStatus: InterestStatus.DISABLED, statusText: '' });
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   // 获取公司人员列表
   const fetchBusinessList = useCallback(async () => {
@@ -29,6 +50,62 @@ export const CompanyDetailScreen: React.FC<CompanyDetailScreenProps> = React.mem
   const handleBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  // 获取活期状态文本
+  const getInterestStatusText = useCallback(
+    (currentInterestType: number) => {
+      return currentInterestType === InterestStatus.ENABLED
+        ? t('finance.interestEnabled')
+        : t('finance.interestDisabled');
+    },
+    [t],
+  );
+
+  // 处理活期状态切换
+  const handleInterestSwitch = useCallback(
+    (business: BusinessDto) => {
+      const newStatus =
+        business.currentInterestType === InterestStatus.ENABLED ? InterestStatus.DISABLED : InterestStatus.ENABLED;
+      const statusText = newStatus === InterestStatus.ENABLED ? t('finance.enable') : t('finance.disable');
+
+      setConfirmModalData({
+        business,
+        newStatus,
+        statusText,
+      });
+      setConfirmModalVisible(true);
+    },
+    [t],
+  );
+
+  // 确认切换活期状态
+  const handleConfirmSwitch = useCallback(async () => {
+    if (!confirmModalData.business) {
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      await switchFinance({
+        code: confirmModalData.business.code,
+        isEnabled: confirmModalData.newStatus,
+        roleType: RoleType.PERSON,
+      });
+      // 刷新商家列表
+      fetchBusinessList();
+      setConfirmModalVisible(false);
+    } catch (error) {
+      Alert.alert(t('common.error'), (error as Error).message, [{ text: t('common.ok') }]);
+    }
+    setIsProcessing(false);
+  }, [confirmModalData, fetchBusinessList, t]);
+
+  // 取消切换
+  const handleCancelSwitch = useCallback(() => {
+    if (!isProcessing) {
+      setConfirmModalVisible(false);
+    }
+  }, [isProcessing]);
 
   // 渲染导航栏
   const renderHeader = useCallback(
@@ -67,10 +144,34 @@ export const CompanyDetailScreen: React.FC<CompanyDetailScreenProps> = React.mem
             <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
             <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
           </View>
+          {isAdmin && (
+            <View style={styles.detailRow}>
+              <CustomText style={styles.detailLabel}>{t('finance.currentInterestStatus')}:</CustomText>
+              <View style={styles.interestStatusContainer}>
+                <CustomText style={[styles.detailValue, styles.interestStatusText]}>
+                  {getInterestStatusText(item.currentInterestType)}
+                </CustomText>
+                <TouchableOpacity
+                  style={[
+                    styles.interestButton,
+                    item.currentInterestType === InterestStatus.ENABLED
+                      ? styles.interestButtonDisable
+                      : styles.interestButtonEnable,
+                  ]}
+                  onPress={() => handleInterestSwitch(item)}
+                  activeOpacity={0.7}
+                >
+                  <CustomText style={styles.interestButtonText}>
+                    {item.currentInterestType === InterestStatus.ENABLED ? t('finance.disable') : t('finance.enable')}
+                  </CustomText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </View>
       </View>
     ),
-    [t],
+    [t, isAdmin, getInterestStatusText, handleInterestSwitch],
   );
 
   useEffect(() => {
@@ -102,6 +203,17 @@ export const CompanyDetailScreen: React.FC<CompanyDetailScreenProps> = React.mem
           }
         />
       )}
+
+      <ConfirmModal
+        visible={confirmModalVisible}
+        title={t('finance.confirmTitle')}
+        message={`${t('finance.confirmMessage')} ${confirmModalData.statusText} ${
+          confirmModalData.business?.name || ''
+        } ${t('finance.currentInterestStatus')}？`}
+        onCancel={handleCancelSwitch}
+        onConfirm={handleConfirmSwitch}
+        isProcessing={isProcessing}
+      />
     </SafeAreaView>
   );
 });
@@ -200,5 +312,32 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: '#999',
+  },
+  interestStatusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  interestStatusText: {
+    marginRight: 10,
+  },
+  interestButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  interestButtonEnable: {
+    backgroundColor: '#4CAF50',
+  },
+  interestButtonDisable: {
+    backgroundColor: '#f44336',
+  },
+  interestButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });

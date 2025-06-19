@@ -27,4 +27,5 @@ export interface CompanyDto {
   role: string;
   totalPoints: number;
   type: number;
+  currentInterestType: number; // 是否结算活期利息 0:关闭 1：开启
 }

@@ -81,6 +81,13 @@ export const moduleConfigs: ModuleConfig[] = [
   },
   {
     id: '12',
+    title: 'modules.groupManagement',
+    type: ModuleType.GROUP_MANAGEMENT,
+    icon: 'account-tree',
+    backgroundColor: '#2d3436',
+  },
+  {
+    id: '13',
     title: 'modules.companyManagement',
     type: ModuleType.COMPANY_MANAGEMENT,
     icon: 'business',
@@ -185,6 +192,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.CREATE_RACE,
       ModuleType.ALL_RACE,
       ModuleType.RACE_POOL_LIST,
+      ModuleType.GROUP_MANAGEMENT,
     ],
   },
   {

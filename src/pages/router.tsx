@@ -31,6 +31,7 @@ import { AllRaceScreen } from './AllRace/index';
 import { RaceDetailScreen } from './RaceDetail/index';
 import { RacePoolListScreen } from './RacePoolList/index';
 import { PeakRecordScreen } from './PeakRecord/index';
+import { GroupManagementScreen } from './GroupManagement/index';
 import { CompanyManagementScreen } from './CompanyManagement/index';
 import { CompanyDetailScreen } from './CompanyDetail/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -73,7 +74,8 @@ export type RootStackParamList = {
   RaceDetail: { raceId: number };
   RacePoolList: undefined;
   PeakRecord: undefined;
-  CompanyManagement: undefined;
+  GroupManagement: undefined;
+  CompanyManagement: { groupCode?: string };
   CompanyDetail: { code: string };
 };
 
@@ -170,6 +172,7 @@ function AppNavigator() {
                 <Stack.Screen name="RaceDetail" component={RaceDetailScreen} />
                 <Stack.Screen name="RacePoolList" component={RacePoolListScreen} />
                 <Stack.Screen name="PeakRecord" component={PeakRecordScreen} />
+                <Stack.Screen name="GroupManagement" component={GroupManagementScreen} />
                 <Stack.Screen name="CompanyManagement" component={CompanyManagementScreen} />
                 <Stack.Screen name="CompanyDetail" component={CompanyDetailScreen} />
               </Stack.Navigator>

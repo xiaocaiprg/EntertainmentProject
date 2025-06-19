@@ -13,4 +13,5 @@ export interface BusinessDto {
   profitStr: string;
   role: string;
   totalPoints: number;
+  currentInterestType: number;
 }

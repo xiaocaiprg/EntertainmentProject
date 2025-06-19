@@ -55,6 +55,7 @@ export const zhHant = {
     createRace: '創建比賽',
     allRace: '比賽',
     racePoolList: '獎金池',
+    groupManagement: '集團',
     companyManagement: '公司',
   },
 
@@ -507,6 +508,17 @@ export const zhHant = {
     confirmSaveMessage: '確認保存以下投手配置：',
   },
 
+  // 集團管理相關
+  group: {
+    title: '集團管理',
+    code: '編碼',
+    name: '名稱',
+    availablePoints: '可用積分',
+    frozenPoints: '凍結積分',
+    totalPoints: '總積分',
+    noData: '暫無集團數據',
+  },
+
   // 公司管理相關
   company: {
     title: '公司管理',
@@ -523,6 +535,19 @@ export const zhHant = {
     profit: '營利',
     code: '編碼',
     name: '名稱',
+  },
+
+  // 活期相關
+  finance: {
+    currentInterestStatus: '活期狀態',
+    interestEnabled: '已開啟',
+    interestDisabled: '已關閉',
+    enable: '開啟',
+    disable: '關閉',
+    confirmTitle: '確認操作',
+    confirmMessage: '確定要',
+    switchSuccess: '操作成功',
+    switchFailed: '操作失敗，請重試',
   },
 
   // 轉碼查詢相關

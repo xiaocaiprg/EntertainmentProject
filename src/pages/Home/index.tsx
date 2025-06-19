@@ -81,6 +81,10 @@ export const HomeScreen = React.memo(() => {
         icon: 'coins',
         gradient: ['#396afc', '#2948ff'],
       },
+      [ModuleType.GROUP_MANAGEMENT]: {
+        icon: 'sitemap',
+        gradient: ['#2d3436', '#636e72'],
+      },
       [ModuleType.COMPANY_MANAGEMENT]: {
         icon: 'building',
         gradient: ['#636e72', '#95a5a6'],
@@ -196,6 +200,9 @@ export const HomeScreen = React.memo(() => {
         case ModuleType.RACE_POOL_LIST:
           navigation.navigate('RacePoolList');
           break;
+        case ModuleType.GROUP_MANAGEMENT:
+          navigation.navigate('GroupManagement');
+          break;
         case ModuleType.COMPANY_MANAGEMENT:
           navigation.navigate('CompanyManagement');
           break;
@@ -229,7 +236,12 @@ export const HomeScreen = React.memo(() => {
       {
         title: t('home.managementGroup'),
         modules: accessibleModules.filter((m) =>
-          [ModuleType.TURNOVER_QUERY, ModuleType.PITCHER_RANKING, ModuleType.COMPANY_MANAGEMENT].includes(m.type),
+          [
+            ModuleType.TURNOVER_QUERY,
+            ModuleType.PITCHER_RANKING,
+            ModuleType.COMPANY_MANAGEMENT,
+            ModuleType.GROUP_MANAGEMENT,
+          ].includes(m.type),
         ),
       },
       // {
@@ -254,6 +266,7 @@ export const HomeScreen = React.memo(() => {
         [ModuleType.CREATE_RACE]: 'plus-square',
         [ModuleType.ALL_RACE]: 'flag-checkered',
         [ModuleType.RACE_POOL_LIST]: 'coins',
+        [ModuleType.GROUP_MANAGEMENT]: 'sitemap',
         [ModuleType.COMPANY_MANAGEMENT]: 'building',
       };
 

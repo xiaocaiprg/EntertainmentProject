@@ -27,6 +27,7 @@ export enum ModuleType {
   CREATE_RACE = 'create_race',
   ALL_RACE = 'all_race',
   RACE_POOL_LIST = 'race_pool_list',
+  GROUP_MANAGEMENT = 'group_management',
   COMPANY_MANAGEMENT = 'company_management',
 }
 

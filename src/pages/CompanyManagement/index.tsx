@@ -7,15 +7,20 @@ import {
   TouchableOpacity,
   SectionList,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getCompanyList } from '../../api/services/companyService';
-import { CompanyDto } from '../../interface/Company';
+import { switchFinance } from '../../api/services/financeService';
+import { CompanyDto, CompanyListParams } from '../../interface/Company';
+import { InterestStatus, RoleType } from '../../interface/Finance';
 import { CompanyType } from '../../interface/Common';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useRole } from '../../hooks/useRole';
 import CustomText from '../../components/CustomText';
+import ConfirmModal from '../../components/ConfirmModal';
 import { RootStackScreenProps } from '../router';
 
 type CompanyManagementScreenProps = RootStackScreenProps<'CompanyManagement'>;
@@ -27,10 +32,19 @@ interface CompanySection {
   backgroundColor: string;
 }
 
-export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = React.memo(({ navigation }) => {
+export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = React.memo(({ navigation, route }) => {
   const { t } = useTranslation();
+  const { isAdmin } = useRole();
+  const { groupCode } = route.params || {};
   const [loading, setLoading] = useState<boolean>(true);
   const [companies, setCompanies] = useState<CompanyDto[]>([]);
+  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
+  const [confirmModalData, setConfirmModalData] = useState<{
+    company: CompanyDto | null;
+    newStatus: InterestStatus;
+    statusText: string;
+  }>({ company: null, newStatus: InterestStatus.DISABLED, statusText: '' });
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   // 获取公司类型名称
   const getCompanyTypeName = useCallback(
@@ -74,10 +88,14 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
   // 获取公司列表
   const fetchCompanies = useCallback(async () => {
     setLoading(true);
-    const result = await getCompanyList({ isSelf: 1 });
+    const params: CompanyListParams = { isSelf: 1 };
+    if (groupCode) {
+      params.code = groupCode;
+    }
+    const result = await getCompanyList(params);
     setCompanies(result);
     setLoading(false);
-  }, []);
+  }, [groupCode]);
 
   // 按类型分组的公司数据
   const sectionData = useMemo(() => {
@@ -147,6 +165,62 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
     navigation.goBack();
   }, [navigation]);
 
+  // 获取活期状态文本
+  const getInterestStatusText = useCallback(
+    (currentInterestType: number) => {
+      return currentInterestType === InterestStatus.ENABLED
+        ? t('finance.interestEnabled')
+        : t('finance.interestDisabled');
+    },
+    [t],
+  );
+
+  // 处理活期状态切换
+  const handleInterestSwitch = useCallback(
+    (company: CompanyDto) => {
+      const newStatus =
+        company.currentInterestType === InterestStatus.ENABLED ? InterestStatus.DISABLED : InterestStatus.ENABLED;
+      const statusText = newStatus === InterestStatus.ENABLED ? t('finance.enable') : t('finance.disable');
+
+      setConfirmModalData({
+        company,
+        newStatus,
+        statusText,
+      });
+      setConfirmModalVisible(true);
+    },
+    [t],
+  );
+
+  // 确认切换活期状态
+  const handleConfirmSwitch = useCallback(async () => {
+    if (!confirmModalData.company) {
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      await switchFinance({
+        code: confirmModalData.company.code,
+        isEnabled: confirmModalData.newStatus,
+        roleType: RoleType.COMPANY,
+      });
+      // 刷新公司列表
+      fetchCompanies();
+      setConfirmModalVisible(false);
+    } catch (error) {
+      Alert.alert(t('common.error'), (error as Error).message, [{ text: t('common.ok') }]);
+    }
+    setIsProcessing(false);
+  }, [confirmModalData, fetchCompanies, t]);
+
+  // 取消切换
+  const handleCancelSwitch = useCallback(() => {
+    if (!isProcessing) {
+      setConfirmModalVisible(false);
+    }
+  }, [isProcessing]);
+
   // 渲染导航栏
   const renderHeader = useCallback(
     () => (
@@ -154,11 +228,13 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
         <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-back" size={24} color={THEME_COLORS.text.primary} />
         </TouchableOpacity>
-        <CustomText style={styles.headerTitle}>{t('company.title')}</CustomText>
+        <CustomText style={styles.headerTitle}>
+          {groupCode ? `${t('company.title')} - ${groupCode}` : t('company.title')}
+        </CustomText>
         <View style={styles.headerRight} />
       </View>
     ),
-    [handleBack, t],
+    [handleBack, t, groupCode],
   );
 
   // 渲染section header
@@ -218,11 +294,35 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
               <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
               <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
             </View>
+            {isAdmin && (
+              <View style={styles.detailRow}>
+                <CustomText style={styles.detailLabel}>{t('finance.currentInterestStatus')}:</CustomText>
+                <View style={styles.interestStatusContainer}>
+                  <CustomText style={[styles.detailValue, styles.interestStatusText]}>
+                    {getInterestStatusText(item.currentInterestType)}
+                  </CustomText>
+                  <TouchableOpacity
+                    style={[
+                      styles.interestButton,
+                      item.currentInterestType === InterestStatus.ENABLED
+                        ? styles.interestButtonDisable
+                        : styles.interestButtonEnable,
+                    ]}
+                    onPress={() => handleInterestSwitch(item)}
+                    activeOpacity={0.7}
+                  >
+                    <CustomText style={styles.interestButtonText}>
+                      {item.currentInterestType === InterestStatus.ENABLED ? t('finance.disable') : t('finance.enable')}
+                    </CustomText>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </View>
         </TouchableOpacity>
       );
     },
-    [navigation, t],
+    [navigation, t, isAdmin, getInterestStatusText, handleInterestSwitch],
   );
 
   useEffect(() => {
@@ -256,6 +356,17 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
           }
         />
       )}
+
+      <ConfirmModal
+        visible={confirmModalVisible}
+        title={t('finance.confirmTitle')}
+        message={`${t('finance.confirmMessage')} ${confirmModalData.statusText} ${
+          confirmModalData.company?.name || ''
+        } ${t('finance.currentInterestStatus')}？`}
+        onCancel={handleCancelSwitch}
+        onConfirm={handleConfirmSwitch}
+        isProcessing={isProcessing}
+      />
     </SafeAreaView>
   );
 });
@@ -404,5 +515,32 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     marginLeft: 6,
+  },
+  interestStatusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  interestStatusText: {
+    marginRight: 10,
+  },
+  interestButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  interestButtonEnable: {
+    backgroundColor: '#4CAF50',
+  },
+  interestButtonDisable: {
+    backgroundColor: '#f44336',
+  },
+  interestButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });

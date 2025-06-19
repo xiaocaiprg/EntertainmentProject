@@ -55,6 +55,7 @@ export const zh = {
     createRace: '创建比赛',
     allRace: '比赛',
     racePoolList: '奖金池',
+    groupManagement: '集团',
     companyManagement: '公司',
   },
 
@@ -507,6 +508,17 @@ export const zh = {
     confirmSaveMessage: '确认保存以下投手配置：',
   },
 
+  // 集团管理相关
+  group: {
+    title: '集团管理',
+    code: '编码',
+    name: '名称',
+    availablePoints: '可用积分',
+    frozenPoints: '冻结积分',
+    totalPoints: '总积分',
+    noData: '暂无集团数据',
+  },
+
   // 公司管理相关
   company: {
     title: '公司管理',
@@ -523,6 +535,19 @@ export const zh = {
     profit: '盈利',
     code: '编码',
     name: '名称',
+  },
+
+  // 活期相关
+  finance: {
+    currentInterestStatus: '活期状态',
+    interestEnabled: '已开启',
+    interestDisabled: '已关闭',
+    enable: '开启',
+    disable: '关闭',
+    confirmTitle: '确认操作',
+    confirmMessage: '确定要',
+    switchSuccess: '操作成功',
+    switchFailed: '操作失败，请重试',
   },
 
   // 转码查询相关
