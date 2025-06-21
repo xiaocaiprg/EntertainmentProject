@@ -21,6 +21,7 @@ import { RoundDetailScreen } from './RoundDetail/index';
 import { TurnoverQueryScreen } from './TurnoverQuery/index';
 import { SettingsScreen } from './Settings/index';
 import { AccountSecurity } from './Settings/AccountSecurity';
+import { PaymentManager } from './Settings/PaymentManager';
 import { PitcherRankingScreen } from './PitcherRanking/index';
 import { MyPointsScreen } from './MyPoints/index';
 import { PointsTransferScreen } from './PointsTransfer/index';
@@ -64,6 +65,7 @@ export type RootStackParamList = {
   TurnoverQuery: undefined;
   Settings: undefined;
   AccountSecurity: undefined;
+  PaymentManager: undefined;
   PitcherRanking: undefined;
   MyPoints: undefined;
   PointsTransfer: { code?: string; availablePoints?: number; name?: string };
@@ -162,6 +164,7 @@ function AppNavigator() {
                 <Stack.Screen name="TurnoverQuery" component={TurnoverQueryScreen} />
                 <Stack.Screen name="Settings" component={SettingsScreen} />
                 <Stack.Screen name="AccountSecurity" component={AccountSecurity} />
+                <Stack.Screen name="PaymentManager" component={PaymentManager} />
                 <Stack.Screen name="PitcherRanking" component={PitcherRankingScreen} />
                 <Stack.Screen name="MyPoints" component={MyPointsScreen} />
                 <Stack.Screen name="PointsTransfer" component={PointsTransferScreen} />

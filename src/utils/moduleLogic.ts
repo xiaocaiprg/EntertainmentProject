@@ -196,6 +196,16 @@ export const roleModuleMappings: RoleModuleMapping[] = [
     ],
   },
   {
+    role: 'RACE_ADMIN',
+    moduleTypes: [
+      ModuleType.CREATE_RACE,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+    ],
+  },
+  {
     role: 'VISITOR',
     moduleTypes: [
       ModuleType.ALL_CHALLENGE,

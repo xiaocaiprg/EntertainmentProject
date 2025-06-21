@@ -8,6 +8,7 @@ export type UserRole =
   | 'RECORDER_ADMIN'
   | 'PLAY_ADMIN'
   | 'OPERATION_ADMIN'
+  | 'RACE_ADMIN'
   | 'ADMIN'
   | 'USER'
   | 'VISITOR'

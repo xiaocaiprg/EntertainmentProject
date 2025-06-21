@@ -12,6 +12,7 @@ export interface RoleContextType {
   isRecorderAdmin: boolean;
   isPlayAdmin: boolean;
   isOperationAdmin: boolean;
+  isRaceAdmin: boolean;
   isOperator: boolean;
   isPitcher: boolean;
   isVisitor: boolean;
@@ -31,6 +32,7 @@ export const RoleContext = createContext<RoleContextType>({
   isRecorderAdmin: false,
   isPlayAdmin: false,
   isOperationAdmin: false,
+  isRaceAdmin: false,
   isOperator: false,
   isPitcher: false,
   isVisitor: false,
@@ -56,6 +58,7 @@ export const mapUserRoles = (roleString?: string): UserRole[] => {
     ROLE_PLAYPERSON: 'PLAYPERSON',
     ROLE_OPERATION_ADMIN: 'OPERATION_ADMIN',
     ROLE_OPERATIONPERSON: 'OPERATIONPERSON',
+    ROLE_RACE_ADMIN: 'RACE_ADMIN',
     ROLE_ADMIN: 'ADMIN',
     ROLE_USER: 'USER',
     ROLE_VISITOR: 'VISITOR',
@@ -83,7 +86,7 @@ interface RoleProviderProps {
 }
 
 // 角色提供者组件
-// ROLE_PLAYPERSON：投手公司员工  ROLE_INVESTPERSON:投资人 ROLE_OPERATIONPERSON:娱乐场公司员工ROLE_DOC_ADMIN：记录公司管理员 ROLE_PLAY_ADMIN:投手公司管理员 ROLE_INVEST_ADMIN：投资公司管理员 ROLE_OPERATION_ADMIN:娱乐场公司管理员  ROLE_ADMIN:系统管理员 ROLE_USER:普通用户 ROLE_GROUP:组合公司员工
+// ROLE_PLAYPERSON：投手公司员工  ROLE_INVESTPERSON:投资人 ROLE_OPERATIONPERSON:娱乐场公司员工ROLE_DOC_ADMIN：记录公司管理员 ROLE_PLAY_ADMIN:投手公司管理员 ROLE_INVEST_ADMIN：投资公司管理员 ROLE_OPERATION_ADMIN:娱乐场公司管理员 ROLE_RACE_ADMIN:赛事公司管理员 ROLE_ADMIN:系统管理员 ROLE_USER:普通用户 ROLE_GROUP:组合公司员工
 export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const { user } = useAuth();
 
@@ -98,6 +101,7 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   const isRecorderAdmin = useMemo(() => userRoles.includes('RECORDER_ADMIN'), [userRoles]);
   const isPlayAdmin = useMemo(() => userRoles.includes('PLAY_ADMIN'), [userRoles]);
   const isOperationAdmin = useMemo(() => userRoles.includes('OPERATION_ADMIN'), [userRoles]);
+  const isRaceAdmin = useMemo(() => userRoles.includes('RACE_ADMIN'), [userRoles]);
   const isVisitor = useMemo(() => userRoles.includes('VISITOR'), [userRoles]);
   const isAdmin = useMemo(() => userRoles.includes('ADMIN'), [userRoles]);
   const isOutside = useMemo(() => userRoles.includes('OUTSIDE'), [userRoles]);
@@ -113,6 +117,7 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
     isRecorderAdmin,
     isPlayAdmin,
     isOperationAdmin,
+    isRaceAdmin,
     isOperator,
     isPitcher,
     isVisitor,

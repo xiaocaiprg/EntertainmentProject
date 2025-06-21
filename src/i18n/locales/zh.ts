@@ -119,6 +119,7 @@ export const zh = {
     settings: '设置',
     language: '语言设置',
     accountSecurity: '账户安全',
+    paymentManager: '支付设置',
     checkUpdate: '检查更新',
     checkUpdateNoUpdate: '当前已是最新版本',
   },
@@ -135,6 +136,25 @@ export const zh = {
     submit: '提交',
     success: '密码修改成功',
     failed: '密码修改失败，请重试',
+  },
+
+  // 支付管家
+  paymentManager: {
+    title: '支付管家',
+    oldPassword: '原支付密码',
+    newPassword: '新支付密码',
+    confirmPassword: '确认支付密码',
+    enterOldPassword: '请输入原支付密码',
+    enterNewPassword: '请输入新支付密码',
+    confirmNewPassword: '请再次输入新支付密码',
+    oldPasswordEmpty: '原支付密码不能为空',
+    newPasswordEmpty: '新支付密码不能为空',
+    oldPasswordInvalid: '原支付密码必须为6位数字',
+    passwordInvalid: '支付密码必须为6位数字',
+    passwordNotMatch: '两次输入的支付密码不一致',
+    submit: '提交',
+    success: '支付密码修改成功',
+    failed: '支付密码修改失败，请重试',
   },
 
   // 挑战详情

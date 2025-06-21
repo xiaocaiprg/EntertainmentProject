@@ -118,6 +118,7 @@ export const en = {
     settings: 'Settings',
     language: 'Language',
     accountSecurity: 'Account Security',
+    paymentManager: 'Payment Manager',
     checkUpdate: 'Check Update',
     checkUpdateNoUpdate: 'No update available',
   },
@@ -134,6 +135,25 @@ export const en = {
     submit: 'Submit',
     success: 'Password changed successfully',
     failed: 'Failed to change password, please try again',
+  },
+
+  // paymentManager
+  paymentManager: {
+    title: 'Payment Manager',
+    oldPassword: 'Current Payment Password',
+    newPassword: 'New Payment Password',
+    confirmPassword: 'Confirm Payment Password',
+    enterOldPassword: 'Enter current payment password',
+    enterNewPassword: 'Enter new payment password',
+    confirmNewPassword: 'Confirm new payment password',
+    oldPasswordEmpty: 'Current payment password cannot be empty',
+    newPasswordEmpty: 'New payment password cannot be empty',
+    oldPasswordInvalid: 'Current payment password must be 6 digits',
+    passwordInvalid: 'Payment password must be 6 digits',
+    passwordNotMatch: 'Payment passwords do not match',
+    submit: 'Submit',
+    success: 'Payment password changed successfully',
+    failed: 'Failed to change payment password, please try again',
   },
 
   // Challenge Detail

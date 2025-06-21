@@ -119,6 +119,7 @@ export const zhHant = {
     settings: '設定',
     language: '語言設定',
     accountSecurity: '帳戶安全',
+    paymentManager: '支付設定',
     checkUpdate: '檢查更新',
     checkUpdateNoUpdate: '當前已是最新版本',
   },
@@ -135,6 +136,25 @@ export const zhHant = {
     submit: '提交',
     success: '密碼修改成功',
     failed: '密碼修改失敗，請重試',
+  },
+
+  // 支付管家
+  paymentManager: {
+    title: '支付管家',
+    oldPassword: '原支付密碼',
+    newPassword: '新支付密碼',
+    confirmPassword: '確認支付密碼',
+    enterOldPassword: '請輸入原支付密碼',
+    enterNewPassword: '請輸入新支付密碼',
+    confirmNewPassword: '請再次輸入新支付密碼',
+    oldPasswordEmpty: '原支付密碼不能為空',
+    newPasswordEmpty: '新支付密碼不能為空',
+    oldPasswordInvalid: '原支付密碼必須為6位數字',
+    passwordInvalid: '支付密碼必須為6位數字',
+    passwordNotMatch: '兩次輸入的支付密碼不一致',
+    submit: '提交',
+    success: '支付密碼修改成功',
+    failed: '支付密碼修改失敗，請重試',
   },
 
   // 挑戰詳情

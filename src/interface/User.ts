@@ -7,6 +7,11 @@ export interface UserDetailParams {
   type: number;
 }
 
+export interface ChangePayPasswordParams {
+  oldPayPassword: string;
+  newPayPassword: string;
+}
+
 export interface LoginResultDto {
   availablePoints: number;
   code: string;

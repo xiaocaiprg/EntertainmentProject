@@ -43,6 +43,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = React.memo((props) 
     navigation.navigate('AccountSecurity');
   }, [navigation]);
 
+  const navigateToPaymentManager = useCallback(() => {
+    navigation.navigate('PaymentManager');
+  }, [navigation]);
+
   const handleCheckUpdate = useCallback(async () => {
     ToastAndroid.show('正在检查更新...', ToastAndroid.SHORT);
 
@@ -94,6 +98,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = React.memo((props) 
 
           <TouchableOpacity style={styles.settingItem} onPress={navigateToAccountSecurity}>
             <CustomText style={styles.settingItemText}>{t('settings.accountSecurity')}</CustomText>
+            <Icon name="chevron-right" size={24} color="#666" />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          <TouchableOpacity style={styles.settingItem} onPress={navigateToPaymentManager}>
+            <CustomText style={styles.settingItemText}>{t('settings.paymentManager')}</CustomText>
             <Icon name="chevron-right" size={24} color="#666" />
           </TouchableOpacity>
 

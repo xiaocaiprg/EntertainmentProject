@@ -1,5 +1,5 @@
 import { get, post } from '../request';
-import { UserParams, UserDetailParams, LoginResultDto } from '../../interface/User';
+import { UserParams, UserDetailParams, LoginResultDto, ChangePayPasswordParams } from '../../interface/User';
 import { ApiResponse } from '../../interface/IModuleProps';
 import { BusinessDto } from '../../interface/Business';
 import { APP_VERSION_URL } from '../../utils/UpdateManager';
@@ -8,6 +8,7 @@ export const PATH = {
   LOGIN: 'haiyang/business/login',
   LOGIN_STATUS: 'haiyang/business/token',
   CHANGE_PASSWORD: 'haiyang/business/password/change',
+  CHANGE_PAY_PASSWORD: 'haiyang/business/payPassword/change',
   GET_USER_DETAIL: 'haiyang/business/detail',
 };
 
@@ -61,4 +62,13 @@ export const getUserDetail = async (params: UserDetailParams): Promise<LoginResu
     .catch(() => {
       return null;
     });
+};
+export const changePayPassword = (params: ChangePayPasswordParams): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.CHANGE_PAY_PASSWORD, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };
