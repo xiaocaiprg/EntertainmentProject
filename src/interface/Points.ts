@@ -1,4 +1,4 @@
-export interface TransferPointParams {
+export interface TransferCreateParam {
   toCode: string;
   toType: number;
   amount: number;
@@ -6,6 +6,11 @@ export interface TransferPointParams {
   fromType?: number;
   description?: string;
 }
+export interface TransferPointParams {
+  transfer: TransferCreateParam;
+  payPassword: string;
+}
+
 export interface PageDtoTransferLogDto {
   current: number;
   pages: number;

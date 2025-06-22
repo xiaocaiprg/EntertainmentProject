@@ -16,7 +16,7 @@ import { ConfirmModal } from '../../components/ConfirmModal';
 import { useAuth } from '../../hooks/useAuth';
 import { transferPoint } from '../../api/services/pointService';
 import { AccountInputWithHistory } from './components/AccountInputWithHistory';
-import { TransferPointParams } from '../../interface/Points';
+import { TransferPointParams, TransferCreateParam } from '../../interface/Points';
 import { isIOS } from '../../utils/platform';
 import { STATUS_BAR_HEIGHT } from '../../utils/platform';
 import DropdownSelect from '../../components/DropdownSelect';
@@ -25,6 +25,7 @@ import { RacePoolPageDto } from '../../interface/Race';
 import CustomText from '../../components/CustomText';
 import { getUserDetail } from '../../api/services/authService';
 import { LoginResultDto } from '../../interface/User';
+import PayPasswordInput from './components/PayPasswordInput';
 
 export enum TransferType {
   PERSONAL = 'personal',
@@ -55,6 +56,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
   const [isLoadingPools, setIsLoadingPools] = useState(false);
   const [recipientDetail, setRecipientDetail] = useState<LoginResultDto | null>(null);
   const [isLoadingRecipient, setIsLoadingRecipient] = useState(false);
+  const [payPassword, setPayPassword] = useState('');
 
   useEffect(() => {
     const fetchPoolList = async () => {
@@ -86,6 +88,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         setPoints('');
         setDescription('');
         setSelectedPoolCode('');
+        setPayPassword('');
       }
     },
     [transferType],
@@ -99,24 +102,28 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     return poolList.find((pool) => pool.code === selectedPoolCode);
   }, [poolList, selectedPoolCode]);
 
-  const confirmMessage = useMemo(() => {
+  const confirmTransferInfo = useMemo(() => {
     if (transferType === TransferType.POOL) {
       const poolName = selectedPool?.name;
-      return t('pointsTransfer.confirmDetailedMessage', {
+      return {
         code: selectedPoolCode,
         name: poolName,
         points,
-      });
+      };
     } else if (recipientDetail) {
-      return t('pointsTransfer.confirmDetailedMessage', {
+      return {
         code: account,
         name: recipientDetail.name,
         points,
-      });
+      };
     } else {
-      return t('pointsTransfer.confirmMessage', { points });
+      return {
+        code: account,
+        name: '',
+        points,
+      };
     }
-  }, [transferType, selectedPool, selectedPoolCode, recipientDetail, account, points, t]);
+  }, [transferType, selectedPool, selectedPoolCode, recipientDetail, account, points]);
 
   const isFormValid = useMemo(() => {
     const condition = points.trim() !== '' && !isNaN(Number(points)) && Number(points) > 0;
@@ -176,25 +183,40 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
   }, [isFormValid, transferType, account]);
 
   const handleConfirmTransfer = useCallback(async () => {
+    // 如果密码不完整，直接返回
+    if (payPassword.length !== 6) {
+      return;
+    }
+
     setIsProcessing(true);
-    const transferParams: TransferPointParams = {
+
+    const transfer: TransferCreateParam = {
       toCode: transferType === TransferType.POOL ? selectedPoolCode : account,
       toType: transferType === TransferType.PERSONAL ? 1 : transferType === TransferType.COMPANY ? 2 : 3,
       amount: Number(points),
     };
+
     // 如果有备注，添加到参数中
     if (description.trim()) {
-      transferParams.description = description.trim();
+      transfer.description = description.trim();
     }
+
     // 如果是从奖金池转账，添加fromCode和fromType参数
     if (isPoolTransfer && code) {
-      transferParams.fromCode = code;
-      transferParams.fromType = 3;
+      transfer.fromCode = code;
+      transfer.fromType = 3;
     }
+
+    const transferParams: TransferPointParams = {
+      transfer,
+      payPassword,
+    };
+
     try {
       const res = await transferPoint(transferParams);
       if (res) {
         setSuccessModalVisible(true);
+        setPayPassword('');
       }
     } catch (err: any) {
       Alert.alert('提示', err.message);
@@ -202,7 +224,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       setIsProcessing(false);
       setConfirmModalVisible(false);
     }
-  }, [account, points, description, transferType, isPoolTransfer, code, selectedPoolCode]);
+  }, [account, points, description, transferType, isPoolTransfer, code, selectedPoolCode, payPassword]);
 
   const handleSuccessConfirm = useCallback(() => {
     setSuccessModalVisible(false);
@@ -388,15 +410,52 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       <ConfirmModal
         visible={confirmModalVisible}
         title={t('pointsTransfer.confirmTitle')}
-        message={confirmMessage}
+        message=""
         cancelText={t('common.cancel')}
         confirmText={t('common.confirm')}
-        onCancel={() => setConfirmModalVisible(false)}
+        onCancel={() => {
+          setConfirmModalVisible(false);
+          setPayPassword('');
+        }}
         onConfirm={handleConfirmTransfer}
         isProcessing={isProcessing}
+        confirmButtonDisabled={payPassword.length !== 6}
+        customContent={
+          <View>
+            {/* 转账信息 */}
+            <View style={styles.transferInfoContainer}>
+              <View style={styles.transferInfoRow}>
+                <CustomText style={styles.transferInfoLabel}>{t('pointsTransfer.receiverCode')}:</CustomText>
+                <CustomText style={styles.transferInfoValue}>{confirmTransferInfo.code}</CustomText>
+              </View>
+              {confirmTransferInfo.name ? (
+                <View style={styles.transferInfoRow}>
+                  <CustomText style={styles.transferInfoLabel}>{t('pointsTransfer.receiverName')}:</CustomText>
+                  <CustomText style={styles.transferInfoValue}>{confirmTransferInfo.name}</CustomText>
+                </View>
+              ) : null}
+              <View style={styles.transferInfoRow}>
+                <CustomText style={styles.transferInfoLabel}>{t('pointsTransfer.transferAmount')}:</CustomText>
+                <CustomText style={styles.transferInfoValue}>
+                  {confirmTransferInfo.points}
+                  {t('pointsTransfer.pointsUnit')}
+                </CustomText>
+              </View>
+            </View>
+
+            {/* 支付密码 */}
+            <View style={styles.payPasswordContainer}>
+              <CustomText style={styles.payPasswordLabel}>{t('pointsTransfer.payPassword')}</CustomText>
+              <PayPasswordInput value={payPassword} onChangeText={setPayPassword} />
+            </View>
+
+            {/* 提示信息 */}
+            <CustomText style={styles.confirmWarning}>{t('pointsTransfer.confirmWarning')}</CustomText>
+          </View>
+        }
         style={{
           modalMessage: {
-            color: '#FF0F3C',
+            display: 'none',
           },
         }}
       />
@@ -556,5 +615,45 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 14,
     color: '#666',
+  },
+  payPasswordLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 2,
+    textAlign: 'center',
+  },
+  transferInfoContainer: {
+    backgroundColor: '#f8f8f8',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+  },
+  transferInfoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  transferInfoLabel: {
+    fontSize: 14,
+    color: '#666',
+    flex: 1,
+  },
+  transferInfoValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+    flex: 1,
+    textAlign: 'right',
+  },
+  payPasswordContainer: {
+    marginBottom: 2,
+  },
+  confirmWarning: {
+    fontSize: 13,
+    color: '#FF0F3C',
+    textAlign: 'center',
+    lineHeight: 18,
   },
 });

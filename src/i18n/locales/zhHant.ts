@@ -344,9 +344,6 @@ export const zhHant = {
     moreThanZero: '積分必須大於0',
     notEnoughPoints: '積分不足',
     confirmTitle: '確認轉賬',
-    confirmMessage: '轉賬{{points}}積分,此操作不可撤銷,請確認是否繼續?',
-    confirmDetailedMessage:
-      '接收方編碼: {{code}}\n接收方名稱: {{name}}\n轉賬數量: {{points}}積分\n\n此操作不可撤銷,請確認是否繼續?',
     success: '轉賬成功',
     successMessage: '已成功轉賬{{points}}積分',
     poolSelect: '選擇獎金池',
@@ -354,6 +351,12 @@ export const zhHant = {
     availablePoolPoints: '獎金池已有積分',
     recentTransferHistory: '最近轉帳記錄',
     noTransferHistory: '暫無轉帳記錄',
+    payPassword: '請輸入支付密碼',
+    receiverCode: '接收方編碼',
+    receiverName: '接收方名稱',
+    transferAmount: '轉賬數量',
+    pointsUnit: '積分',
+    confirmWarning: '此操作不可撤銷，請確認是否繼續？',
   },
 
   // 我的挑戰

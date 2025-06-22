@@ -343,9 +343,6 @@ export const en = {
     moreThanZero: 'Points must be greater than 0',
     notEnoughPoints: 'Insufficient points',
     confirmTitle: 'Confirm Transfer',
-    confirmMessage: 'Transfer {{points}} points, this operation is irreversible, please confirm whether to continue?',
-    confirmDetailedMessage:
-      'Recipient Code: {{code}}\nRecipient Name: {{name}}\nTransfer Amount: {{points}} points\n\nThis operation is irreversible, please confirm whether to continue?',
     success: 'Transfer Successful',
     successMessage: 'Successfully transferred {{points}} points',
     poolSelect: 'Select Prize Pool',
@@ -353,6 +350,12 @@ export const en = {
     availablePoolPoints: 'Available Prize Pool Points',
     recentTransferHistory: 'Recent Transfer History',
     noTransferHistory: 'No transfer history',
+    payPassword: 'Please enter payment password',
+    receiverCode: 'Receiver Code',
+    receiverName: 'Receiver Name',
+    transferAmount: 'Transfer Amount',
+    pointsUnit: 'points',
+    confirmWarning: 'This operation cannot be undone. Are you sure to continue?',
   },
 
   // My Games

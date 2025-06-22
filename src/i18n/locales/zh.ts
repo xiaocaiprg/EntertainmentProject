@@ -344,9 +344,6 @@ export const zh = {
     moreThanZero: '积分必须大于0',
     notEnoughPoints: '积分不足',
     confirmTitle: '确认转账',
-    confirmMessage: '转账{{points}}积分,此操作不可撤销,请确认是否继续?',
-    confirmDetailedMessage:
-      '接收方编码: {{code}}\n接收方名称: {{name}}\n转账数量: {{points}}积分\n\n此操作不可撤销,请确认是否继续?',
     success: '转账成功',
     successMessage: '已成功转账{{points}}积分',
     poolSelect: '选择奖金池',
@@ -354,6 +351,12 @@ export const zh = {
     availablePoolPoints: '奖金池已有积分',
     recentTransferHistory: '最近转账记录',
     noTransferHistory: '暂无转账记录',
+    payPassword: '请输入支付密码',
+    receiverCode: '接收方编码',
+    receiverName: '接收方名称',
+    transferAmount: '转账数量',
+    pointsUnit: '积分',
+    confirmWarning: '此操作不可撤销，请确认是否继续？',
   },
 
   // 我的挑战

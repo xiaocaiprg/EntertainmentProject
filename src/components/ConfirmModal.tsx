@@ -22,6 +22,7 @@ interface ConfirmModalProps {
   onCancel?: () => void;
   onConfirm?: () => void;
   isProcessing?: boolean;
+  confirmButtonDisabled?: boolean;
   customContent?: React.ReactNode;
   style?: Partial<Record<keyof typeof styles, ViewStyle | TextStyle>>;
 }
@@ -37,6 +38,7 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
     onCancel,
     onConfirm,
     isProcessing = false,
+    confirmButtonDisabled = false,
     customContent,
     style,
   } = props;
@@ -83,15 +85,20 @@ export const ConfirmModal = React.memo((props: ConfirmModalProps) => {
                     style={[
                       mergedStyles.modalButton,
                       mergedStyles.confirmButton,
-                      isProcessing && mergedStyles.disabledButton,
+                      (isProcessing || confirmButtonDisabled) && mergedStyles.disabledButton,
                     ]}
                     onPress={onConfirm}
-                    disabled={isProcessing}
+                    disabled={isProcessing || confirmButtonDisabled}
                   >
                     {isProcessing ? (
                       <ActivityIndicator size="small" color="#fff" />
                     ) : (
-                      <CustomText style={[mergedStyles.confirmButtonText, isProcessing && mergedStyles.disabledText]}>
+                      <CustomText
+                        style={[
+                          mergedStyles.confirmButtonText,
+                          (isProcessing || confirmButtonDisabled) && mergedStyles.disabledText,
+                        ]}
+                      >
                         {confirmText}
                       </CustomText>
                     )}
