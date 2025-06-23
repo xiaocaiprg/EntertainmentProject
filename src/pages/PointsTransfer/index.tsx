@@ -177,6 +177,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         });
         if (detail) {
           setRecipientDetail(detail);
+          setPayPassword('');
           setConfirmModalVisible(true);
         }
       } catch (err: any) {
@@ -184,6 +185,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       }
       setIsLoadingRecipient(false);
     } else {
+      setPayPassword('');
       setConfirmModalVisible(true);
     }
   }, [isFormValid, transferType, account]);
