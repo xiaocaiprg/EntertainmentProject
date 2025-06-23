@@ -123,55 +123,65 @@ export const CompanyDetailScreen: React.FC<CompanyDetailScreenProps> = React.mem
 
   // 渲染人员项
   const renderBusinessItem = useCallback(
-    ({ item }: { item: BusinessDto }) => (
-      <View style={styles.businessItem}>
-        <View style={styles.businessHeader}>
-          <CustomText style={styles.businessName}>{item.name}</CustomText>
-          <CustomText style={styles.businessCode}>
-            {t('company.code')}: {item.code}
-          </CustomText>
-        </View>
-        <View style={styles.businessDetails}>
-          <View style={styles.detailRow}>
-            <CustomText style={styles.detailLabel}>{t('company.availablePoints')}:</CustomText>
-            <CustomText style={styles.detailValue}>{item.availablePoints.toLocaleString()}</CustomText>
+    ({ item }: { item: BusinessDto }) => {
+      const handlePointsPress = () => {
+        navigation.navigate('MyPoints', { code: item.code });
+      };
+
+      return (
+        <View style={styles.businessItem}>
+          <View style={styles.businessHeader}>
+            <CustomText style={styles.businessName}>{item.name}</CustomText>
+            <CustomText style={styles.businessCode}>
+              {t('company.code')}: {item.code}
+            </CustomText>
           </View>
-          <View style={styles.detailRow}>
-            <CustomText style={styles.detailLabel}>{t('company.frozenPoints')}:</CustomText>
-            <CustomText style={styles.detailValue}>{item.frozenPoints.toLocaleString()}</CustomText>
-          </View>
-          <View style={styles.detailRow}>
-            <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
-            <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
-          </View>
-          {isAdmin && (
-            <View style={styles.detailRow}>
-              <CustomText style={styles.detailLabel}>{t('finance.currentInterestStatus')}:</CustomText>
-              <View style={styles.interestStatusContainer}>
-                <CustomText style={[styles.detailValue, styles.interestStatusText]}>
-                  {getInterestStatusText(item.currentInterestType)}
-                </CustomText>
-                <TouchableOpacity
-                  style={[
-                    styles.interestButton,
-                    item.currentInterestType === InterestStatus.ENABLED
-                      ? styles.interestButtonDisable
-                      : styles.interestButtonEnable,
-                  ]}
-                  onPress={() => handleInterestSwitch(item)}
-                  activeOpacity={0.7}
-                >
-                  <CustomText style={styles.interestButtonText}>
-                    {item.currentInterestType === InterestStatus.ENABLED ? t('finance.disable') : t('finance.enable')}
-                  </CustomText>
-                </TouchableOpacity>
+          <View style={styles.businessDetails}>
+            <TouchableOpacity onPress={handlePointsPress} activeOpacity={0.7}>
+              <View style={styles.detailRow}>
+                <CustomText style={styles.detailLabel}>{t('company.availablePoints')}:</CustomText>
+                <CustomText style={styles.detailValue}>{item.availablePoints.toLocaleString()}</CustomText>
+                <Icon name="chevron-right" size={16} color="#bbb" style={styles.arrowIcon} />
               </View>
+            </TouchableOpacity>
+            <View style={styles.detailRow}>
+              <CustomText style={styles.detailLabel}>{t('company.frozenPoints')}:</CustomText>
+              <CustomText style={styles.detailValue}>{item.frozenPoints.toLocaleString()}</CustomText>
             </View>
-          )}
+            <View style={styles.detailRow}>
+              <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
+              <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
+            </View>
+
+            {isAdmin && (
+              <View style={styles.detailRow}>
+                <CustomText style={styles.detailLabel}>{t('finance.currentInterestStatus')}:</CustomText>
+                <View style={styles.interestStatusContainer}>
+                  <CustomText style={[styles.detailValue, styles.interestStatusText]}>
+                    {getInterestStatusText(item.currentInterestType)}
+                  </CustomText>
+                  <TouchableOpacity
+                    style={[
+                      styles.interestButton,
+                      item.currentInterestType === InterestStatus.ENABLED
+                        ? styles.interestButtonDisable
+                        : styles.interestButtonEnable,
+                    ]}
+                    onPress={() => handleInterestSwitch(item)}
+                    activeOpacity={0.7}
+                  >
+                    <CustomText style={styles.interestButtonText}>
+                      {item.currentInterestType === InterestStatus.ENABLED ? t('finance.disable') : t('finance.enable')}
+                    </CustomText>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    ),
-    [t, isAdmin, getInterestStatusText, handleInterestSwitch],
+      );
+    },
+    [t, isAdmin, getInterestStatusText, handleInterestSwitch, navigation],
   );
 
   useEffect(() => {

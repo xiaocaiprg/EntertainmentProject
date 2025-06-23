@@ -170,21 +170,27 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     // 如果是转给个人或公司，获取接收方详情
     if (transferType !== TransferType.POOL) {
       setIsLoadingRecipient(true);
-      const detail = await getUserDetail({
-        code: account,
-        type: transferType === TransferType.PERSONAL ? 1 : 2,
-      });
-      if (detail) {
-        setRecipientDetail(detail);
+      try {
+        const detail = await getUserDetail({
+          code: account,
+          type: transferType === TransferType.PERSONAL ? 1 : 2,
+        });
+        if (detail) {
+          setRecipientDetail(detail);
+          setConfirmModalVisible(true);
+        }
+      } catch (err: any) {
+        Alert.alert('提示', err.message);
       }
       setIsLoadingRecipient(false);
+    } else {
+      setConfirmModalVisible(true);
     }
-    setConfirmModalVisible(true);
   }, [isFormValid, transferType, account]);
 
   const handleConfirmTransfer = useCallback(async () => {
-    // 如果密码不完整，直接返回
-    if (payPassword.length !== 6) {
+    // 如果不是奖金池转账且密码不完整，直接返回
+    if (!isPoolTransfer && payPassword.length !== 6) {
       return;
     }
 
@@ -209,7 +215,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
 
     const transferParams: TransferPointParams = {
       transfer,
-      payPassword,
+      payPassword: isPoolTransfer ? null : payPassword,
     };
 
     try {
@@ -318,12 +324,14 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
           <View style={[styles.card, styles.poolCard]}>
             <View style={styles.infoRow}>
               <CustomText style={styles.sectionTitle}>{t('pointsTransfer.poolPoints')}</CustomText>
-              <CustomText style={styles.pointsValue}>{availablePoints?.toLocaleString()}</CustomText>
+              <CustomText style={[styles.pointsValue, { fontSize: 15 }]}>
+                {availablePoints?.toLocaleString()}
+              </CustomText>
             </View>
             {name && (
               <View style={styles.infoRow}>
                 <CustomText style={styles.sectionTitle}>{t('pointsTransfer.poolName')}</CustomText>
-                <CustomText style={styles.pointsValue}>{name}</CustomText>
+                <CustomText style={[styles.pointsValue, { fontSize: 15 }]}>{name}</CustomText>
               </View>
             )}
           </View>
@@ -415,11 +423,13 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         confirmText={t('common.confirm')}
         onCancel={() => {
           setConfirmModalVisible(false);
-          setPayPassword('');
+          if (!isPoolTransfer) {
+            setPayPassword('');
+          }
         }}
         onConfirm={handleConfirmTransfer}
         isProcessing={isProcessing}
-        confirmButtonDisabled={payPassword.length !== 6}
+        confirmButtonDisabled={!isPoolTransfer && payPassword.length !== 6}
         customContent={
           <View>
             {/* 转账信息 */}
@@ -443,11 +453,13 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
               </View>
             </View>
 
-            {/* 支付密码 */}
-            <View style={styles.payPasswordContainer}>
-              <CustomText style={styles.payPasswordLabel}>{t('pointsTransfer.payPassword')}</CustomText>
-              <PayPasswordInput value={payPassword} onChangeText={setPayPassword} />
-            </View>
+            {/* 支付密码 - 仅在非奖金池转账时显示 */}
+            {!isPoolTransfer && (
+              <View style={styles.payPasswordContainer}>
+                <CustomText style={styles.payPasswordLabel}>{t('pointsTransfer.payPassword')}</CustomText>
+                <PayPasswordInput value={payPassword} onChangeText={setPayPassword} />
+              </View>
+            )}
 
             {/* 提示信息 */}
             <CustomText style={styles.confirmWarning}>{t('pointsTransfer.confirmWarning')}</CustomText>
@@ -586,6 +598,7 @@ const styles = StyleSheet.create({
   },
   infoRow: {
     flexDirection: 'column',
+    alignItems: 'center',
   },
   poolInfoRow: {
     flexDirection: 'row',

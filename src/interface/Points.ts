@@ -8,7 +8,7 @@ export interface TransferCreateParam {
 }
 export interface TransferPointParams {
   transfer: TransferCreateParam;
-  payPassword: string;
+  payPassword?: string | null;
 }
 
 export interface PageDtoTransferLogDto {
@@ -68,4 +68,9 @@ export interface ProfitDto {
 export interface TransferOutLogDto {
   toCode: string;
   toName: string;
+}
+export interface PointDetailParams {
+  pageNum: number;
+  pageSize: number;
+  code?: string;
 }

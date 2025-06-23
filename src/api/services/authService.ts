@@ -50,18 +50,14 @@ export const getSetting = async (): Promise<any> => {
     return null;
   }
 };
-export const getUserDetail = async (params: UserDetailParams): Promise<LoginResultDto | null> => {
-  return post<ApiResponse<LoginResultDto>>(PATH.GET_USER_DETAIL, params)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
+export const getUserDetail = async (params: UserDetailParams): Promise<LoginResultDto> => {
+  return post<ApiResponse<LoginResultDto>>(PATH.GET_USER_DETAIL, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };
 export const changePayPassword = (params: ChangePayPasswordParams): Promise<string> => {
   return post<ApiResponse<string>>(PATH.CHANGE_PAY_PASSWORD, params).then((res) => {

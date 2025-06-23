@@ -67,7 +67,7 @@ export type RootStackParamList = {
   AccountSecurity: undefined;
   PaymentManager: undefined;
   PitcherRanking: undefined;
-  MyPoints: undefined;
+  MyPoints: { code?: string };
   PointsTransfer: { code?: string; availablePoints?: number; name?: string };
   FrozenPoints: undefined;
   MyProfit: undefined;

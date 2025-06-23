@@ -6,14 +6,15 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import { RootStackScreenProps } from '../router';
 import { useAuth } from '../../hooks/useAuth';
 import { getPointDetail } from '../../api/services/pointService';
-import { TransferLogDto } from '../../interface/Points';
+import { TransferLogDto, PointDetailParams } from '../../interface/Points';
 import { PointCard } from './components/PointCard';
 
 type MyPointsScreenProps = RootStackScreenProps<'MyPoints'>;
 
 export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
   const { user } = useAuth();
+  const { code } = route?.params || {};
 
   const [pointsList, setPointsList] = useState<TransferLogDto[]>([]);
   const [loading, setLoading] = useState(false);
@@ -28,14 +29,19 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
 
   const getPointDetailList = useCallback(async () => {
     setLoading(true);
-    const res = await getPointDetail({ pageNum: pageNum.current, pageSize: pageSize.current });
+    const params: PointDetailParams = {
+      pageNum: pageNum.current,
+      pageSize: pageSize.current,
+      ...(code ? { code } : {}),
+    };
+    const res = await getPointDetail(params);
     if (res) {
       setPointsList((prev) => [...prev, ...(res.records || [])]);
       const isHasMore = res.current < res.pages;
       setHasMore(isHasMore);
     }
     setLoading(false);
-  }, []);
+  }, [code]);
 
   useEffect(() => {
     getPointDetailList();
@@ -86,17 +92,19 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
         <CustomText style={styles.headerTitle}>积分明细</CustomText>
         <View style={{ width: 24, opacity: 0 }} />
       </View>
+      {code ? null : (
+        <View style={styles.pointsSummary}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+            <CustomText style={styles.availText}>可用:</CustomText>
+            <CustomText style={styles.availablePoints}> {user?.availablePoints.toLocaleString()}</CustomText>
+          </View>
+          <View style={styles.pointsSummaryItem}>
+            <CustomText style={styles.frozenPoints}>在途:</CustomText>
+            <CustomText style={styles.frozenPoints}>{user?.frozenPoints}</CustomText>
+          </View>
+        </View>
+      )}
 
-      <View style={styles.pointsSummary}>
-        <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-          <CustomText style={styles.availText}>可用:</CustomText>
-          <CustomText style={styles.availablePoints}> {user?.availablePoints.toLocaleString()}</CustomText>
-        </View>
-        <View style={styles.pointsSummaryItem}>
-          <CustomText style={styles.frozenPoints}>在途:</CustomText>
-          <CustomText style={styles.frozenPoints}>{user?.frozenPoints}</CustomText>
-        </View>
-      </View>
       <View style={{ flex: 1 }}>
         <FlatList
           data={pointsList}

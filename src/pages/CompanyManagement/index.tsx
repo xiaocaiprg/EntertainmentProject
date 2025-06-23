@@ -270,26 +270,34 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
       const handleCompanyPress = () => {
         navigation.navigate('CompanyDetail', { code: item.code });
       };
+      const handlePointsPress = () => {
+        navigation.navigate('MyPoints', { code: item.code });
+      };
 
       // 正常的公司项渲染
       return (
-        <TouchableOpacity style={styles.companyItem} onPress={handleCompanyPress} activeOpacity={0.7}>
-          <View style={styles.companyHeader}>
-            <View style={styles.companyInfo}>
-              <CustomText style={styles.companyName}>{item.name}</CustomText>
-              <View style={styles.codeRow}>
-                <CustomText style={styles.companyCode}>
-                  {t('company.code')}: {item.code}
-                </CustomText>
-                <Icon name="chevron-right" size={16} color="#bbb" style={styles.arrowIcon} />
+        <View style={styles.companyItem}>
+          <TouchableOpacity onPress={handleCompanyPress} activeOpacity={0.7}>
+            <View style={styles.companyHeader}>
+              <View style={styles.companyInfo}>
+                <CustomText style={styles.companyName}>{item.name}</CustomText>
+                <View style={styles.codeRow}>
+                  <CustomText style={styles.companyCode}>
+                    {t('company.code')}: {item.code}
+                  </CustomText>
+                  <Icon name="chevron-right" size={16} color="#bbb" style={styles.arrowIcon} />
+                </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.companyDetails}>
-            <View style={styles.detailRow}>
-              <CustomText style={styles.detailLabel}>{t('company.availablePoints')}:</CustomText>
-              <CustomText style={styles.detailValue}>{item.availablePoints.toLocaleString()}</CustomText>
-            </View>
+            <TouchableOpacity onPress={handlePointsPress} activeOpacity={0.7}>
+              <View style={styles.detailRow}>
+                <CustomText style={styles.detailLabel}>{t('company.availablePoints')}:</CustomText>
+                <CustomText style={styles.detailValue}>{item.availablePoints.toLocaleString()}</CustomText>
+                <Icon name="chevron-right" size={16} color="#bbb" style={styles.arrowIcon} />
+              </View>
+            </TouchableOpacity>
             <View style={styles.detailRow}>
               <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
               <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
@@ -319,7 +327,7 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
               </View>
             )}
           </View>
-        </TouchableOpacity>
+        </View>
       );
     },
     [navigation, t, isAdmin, getInterestStatusText, handleInterestSwitch],
@@ -451,6 +459,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
+    paddingVertical: 2,
   },
   detailLabel: {
     fontSize: 14,
