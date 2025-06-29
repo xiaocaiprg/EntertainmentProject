@@ -17,6 +17,12 @@ export interface Company {
 export interface CompanyDto {
   availablePoints: number;
   code: string;
+  currentInterestRate: number;
+  currentInterestRateStr: string;
+  currentInterestType: number;
+  fixedInterestRate: number;
+  fixedInterestRateStr: string;
+  fixedInterestType: number;
   frozenPoints: number;
   groupCode: string;
   groupName: string;
@@ -27,5 +33,4 @@ export interface CompanyDto {
   role: string;
   totalPoints: number;
   type: number;
-  currentInterestType: number; // 是否结算活期利息 0:关闭 1：开启
 }

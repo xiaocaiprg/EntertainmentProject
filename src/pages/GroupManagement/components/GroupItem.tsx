@@ -24,14 +24,14 @@ export const GroupItem: React.FC<GroupItemProps> = React.memo((props) => {
     if (item.currentInterestType === InterestStatus.ENABLED) {
       return `${item.currentInterestRateStr}%`;
     }
-    return t('group.disabled');
+    return t('finance.disabled');
   }, [item.currentInterestType, item.currentInterestRateStr, t]);
 
   const fixedInterestDisplay = useMemo(() => {
     if (item.fixedInterestType === InterestStatus.ENABLED) {
       return `${item.fixedInterestRateStr}%`;
     }
-    return t('group.disabled');
+    return t('finance.disabled');
   }, [item.fixedInterestType, item.fixedInterestRateStr, t]);
 
   const handlePress = useCallback(() => {
@@ -102,7 +102,7 @@ export const GroupItem: React.FC<GroupItemProps> = React.memo((props) => {
           <View style={styles.adminActionsContainer}>
             <TouchableOpacity style={styles.settingButton} onPress={handleCurrentSetting} activeOpacity={0.7}>
               <Icon name="settings" size={16} color="#fff" />
-              <CustomText style={styles.settingButtonText}>{t('group.currentSettings')}</CustomText>
+              <CustomText style={styles.settingButtonText}>{t('finance.currentSettings')}</CustomText>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.settingButton, styles.fixedSettingButton]}
@@ -110,7 +110,7 @@ export const GroupItem: React.FC<GroupItemProps> = React.memo((props) => {
               activeOpacity={0.7}
             >
               <Icon name="account-balance" size={16} color="#fff" />
-              <CustomText style={styles.settingButtonText}>{t('group.fixedSettings')}</CustomText>
+              <CustomText style={styles.settingButtonText}>{t('finance.fixedSettings')}</CustomText>
             </TouchableOpacity>
           </View>
         )}

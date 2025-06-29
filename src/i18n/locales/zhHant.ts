@@ -575,20 +575,7 @@ export const zhHant = {
     availablePoints: '可用積分',
     frozenPoints: '凍結積分',
     totalPoints: '總積分',
-    currentInterest: '活期利息',
-    fixedInterest: '定期利息',
     noData: '暫無集團數據',
-    currentSettings: '活期設置',
-    fixedSettings: '定期設置',
-    interestSwitch: '利息開關',
-    interestRate: '年化利率',
-    interestRatePlaceholder: '請輸入年化利率',
-    enabled: '開啟',
-    disabled: '關閉',
-    confirmSetting: '確認設置',
-    settingTitle: '設置',
-    settingSuccess: '設置成功',
-    confirmMessage: '確定要修改嗎？',
   },
 
   // 公司管理相關
@@ -609,17 +596,22 @@ export const zhHant = {
     name: '名稱',
   },
 
-  // 活期相關
+  // 金融設置相關
   finance: {
-    currentInterestStatus: '活期狀態',
-    interestEnabled: '已開啟',
-    interestDisabled: '已關閉',
-    enable: '開啟',
-    disable: '關閉',
-    confirmTitle: '確認操作',
-    confirmMessage: '確定要',
-    switchSuccess: '操作成功',
-    switchFailed: '操作失敗，請重試',
+    currentInterest: '活期利息',
+    fixedInterest: '定期利息',
+    currentSettings: '活期設置',
+    fixedSettings: '定期設置',
+    setting: '設置',
+    settingTitle: '利息設置',
+    settingSuccess: '設置成功',
+    confirmMessage: '確定要修改嗎？',
+    interestSwitch: '利息開關',
+    interestRate: '年化利率',
+    interestRatePlaceholder: '請輸入年化利率',
+    confirmSetting: '確認設置',
+    disabled: '關閉',
+    enabled: '開啟',
   },
 
   // 轉碼查詢相關

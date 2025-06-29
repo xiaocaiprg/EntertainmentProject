@@ -3,13 +3,13 @@ import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList, 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getGroupList } from '../../api/services/groupService';
 import { GroupCompanyDto } from '../../interface/Group';
-import { InterestStatus, InterestSwitchType } from '../../interface/Finance';
+import { InterestStatus, InterestSwitchType, AccountType } from '../../interface/Finance';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { useTranslation } from '../../hooks/useTranslation';
 import CustomText from '../../components/CustomText';
 import GroupItem from './components/GroupItem';
-import FinanceSettingModal from './components/FinanceSettingModal';
+import FinanceSettingModal from '../../bizComponents/FinanceSettingModal';
 import { RootStackScreenProps } from '../router';
 
 type GroupManagementScreenProps = RootStackScreenProps<'GroupManagement'>;
@@ -144,6 +144,7 @@ export const GroupManagementScreen: React.FC<GroupManagementScreenProps> = React
       <FinanceSettingModal
         visible={settingModalVisible}
         settingData={currentSettingData}
+        userType={AccountType.GROUP}
         onClose={handleCloseSetting}
         onSuccess={handleSettingSuccess}
         onSettingChange={updateSettingData}

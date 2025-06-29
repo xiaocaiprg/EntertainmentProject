@@ -7,20 +7,18 @@ import {
   TouchableOpacity,
   SectionList,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getCompanyList } from '../../api/services/companyService';
-import { switchFinance } from '../../api/services/financeService';
 import { CompanyDto, CompanyListParams } from '../../interface/Company';
-import { InterestStatus, AccountType, InterestSwitchType } from '../../interface/Finance';
+import { InterestSwitchType, AccountType, InterestStatus } from '../../interface/Finance';
 import { CompanyType } from '../../interface/Common';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useRole } from '../../hooks/useRole';
 import CustomText from '../../components/CustomText';
-import ConfirmModal from '../../components/ConfirmModal';
+import FinanceSettingModal from '../../bizComponents/FinanceSettingModal';
 import { RootStackScreenProps } from '../router';
 
 type CompanyManagementScreenProps = RootStackScreenProps<'CompanyManagement'>;
@@ -32,19 +30,28 @@ interface CompanySection {
   backgroundColor: string;
 }
 
+interface FinanceSettingData {
+  groupCode: string;
+  settingType: InterestSwitchType;
+  isEnabled: number;
+  interestRate: string;
+}
+
 export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = React.memo(({ navigation, route }) => {
   const { t } = useTranslation();
-  const { isAdmin } = useRole();
+  const { isGroup } = useRole();
   const { groupCode } = route.params || {};
   const [loading, setLoading] = useState<boolean>(true);
   const [companies, setCompanies] = useState<CompanyDto[]>([]);
-  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
-  const [confirmModalData, setConfirmModalData] = useState<{
-    company: CompanyDto | null;
-    newStatus: InterestStatus;
-    statusText: string;
-  }>({ company: null, newStatus: InterestStatus.DISABLED, statusText: '' });
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  // 设置弹窗相关状态
+  const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
+  const [currentSettingData, setCurrentSettingData] = useState<FinanceSettingData>({
+    groupCode: '',
+    settingType: InterestSwitchType.CURRENT,
+    isEnabled: 0,
+    interestRate: '',
+  });
 
   // 获取公司类型名称
   const getCompanyTypeName = useCallback(
@@ -165,62 +172,37 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
     navigation.goBack();
   }, [navigation]);
 
-  // 获取活期状态文本
-  const getInterestStatusText = useCallback(
-    (currentInterestType: number) => {
-      return currentInterestType === InterestStatus.ENABLED
-        ? t('finance.interestEnabled')
-        : t('finance.interestDisabled');
-    },
-    [t],
-  );
+  // 打开设置弹窗
+  const handleOpenSetting = useCallback((company: CompanyDto, settingType: InterestSwitchType) => {
+    setCurrentSettingData({
+      groupCode: company.code,
+      settingType,
+      isEnabled: 0,
+      interestRate: '',
+    });
+    setSettingModalVisible(true);
+  }, []);
 
-  // 处理活期状态切换
-  const handleInterestSwitch = useCallback(
-    (company: CompanyDto) => {
-      const newStatus =
-        company.currentInterestType === InterestStatus.ENABLED ? InterestStatus.DISABLED : InterestStatus.ENABLED;
-      const statusText = newStatus === InterestStatus.ENABLED ? t('finance.enable') : t('finance.disable');
+  // 关闭设置弹窗
+  const handleCloseSetting = useCallback(() => {
+    setSettingModalVisible(false);
+    setCurrentSettingData({
+      groupCode: '',
+      settingType: InterestSwitchType.CURRENT,
+      isEnabled: 0,
+      interestRate: '',
+    });
+  }, []);
 
-      setConfirmModalData({
-        company,
-        newStatus,
-        statusText,
-      });
-      setConfirmModalVisible(true);
-    },
-    [t],
-  );
+  // 更新设置数据
+  const updateSettingData = useCallback((key: keyof FinanceSettingData, value: any) => {
+    setCurrentSettingData((prev) => ({ ...prev, [key]: value }));
+  }, []);
 
-  // 确认切换活期状态
-  const handleConfirmSwitch = useCallback(async () => {
-    if (!confirmModalData.company) {
-      return;
-    }
-
-    setIsProcessing(true);
-    try {
-      await switchFinance({
-        code: confirmModalData.company.code,
-        isEnabled: confirmModalData.newStatus,
-        userType: AccountType.COMPANY,
-        interestSwitchType: InterestSwitchType.CURRENT,
-      });
-      // 刷新公司列表
-      fetchCompanies();
-      setConfirmModalVisible(false);
-    } catch (error) {
-      Alert.alert(t('common.error'), (error as Error).message, [{ text: t('common.ok') }]);
-    }
-    setIsProcessing(false);
-  }, [confirmModalData, fetchCompanies, t]);
-
-  // 取消切换
-  const handleCancelSwitch = useCallback(() => {
-    if (!isProcessing) {
-      setConfirmModalVisible(false);
-    }
-  }, [isProcessing]);
+  // 设置成功回调
+  const handleSettingSuccess = useCallback(() => {
+    fetchCompanies();
+  }, [fetchCompanies]);
 
   // 渲染导航栏
   const renderHeader = useCallback(
@@ -275,6 +257,13 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
         navigation.navigate('MyPoints', { code: item.code });
       };
 
+      // 计算利息显示文本
+      const currentInterestDisplay =
+        item.currentInterestType === InterestStatus.ENABLED ? `${item.currentInterestRateStr}%` : t('finance.disabled');
+
+      const fixedInterestDisplay =
+        item.fixedInterestType === InterestStatus.ENABLED ? `${item.fixedInterestRateStr}%` : t('finance.disabled');
+
       // 正常的公司项渲染
       return (
         <View style={styles.companyItem}>
@@ -303,35 +292,59 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
               <CustomText style={styles.detailLabel}>{t('company.profit')}:</CustomText>
               <CustomText style={styles.detailValue}>{item.profitStr}</CustomText>
             </View>
-            {isAdmin && (
-              <View style={styles.detailRow}>
-                <CustomText style={styles.detailLabel}>{t('finance.currentInterestStatus')}:</CustomText>
-                <View style={styles.interestStatusContainer}>
-                  <CustomText style={[styles.detailValue, styles.interestStatusText]}>
-                    {getInterestStatusText(item.currentInterestType)}
-                  </CustomText>
-                  <TouchableOpacity
-                    style={[
-                      styles.interestButton,
-                      item.currentInterestType === InterestStatus.ENABLED
-                        ? styles.interestButtonDisable
-                        : styles.interestButtonEnable,
-                    ]}
-                    onPress={() => handleInterestSwitch(item)}
-                    activeOpacity={0.7}
-                  >
-                    <CustomText style={styles.interestButtonText}>
-                      {item.currentInterestType === InterestStatus.ENABLED ? t('finance.disable') : t('finance.enable')}
-                    </CustomText>
-                  </TouchableOpacity>
-                </View>
+
+            {/* 利息信息 */}
+            <View style={styles.detailRow}>
+              <CustomText style={styles.detailLabel}>{t('finance.currentInterest')}:</CustomText>
+              <CustomText
+                style={[
+                  styles.detailValue,
+                  item.currentInterestType === InterestStatus.ENABLED
+                    ? styles.enabledInterest
+                    : styles.disabledInterest,
+                ]}
+              >
+                {currentInterestDisplay}
+              </CustomText>
+            </View>
+            <View style={styles.detailRow}>
+              <CustomText style={styles.detailLabel}>{t('finance.fixedInterest')}:</CustomText>
+              <CustomText
+                style={[
+                  styles.detailValue,
+                  item.fixedInterestType === InterestStatus.ENABLED ? styles.enabledInterest : styles.disabledInterest,
+                ]}
+              >
+                {fixedInterestDisplay}
+              </CustomText>
+            </View>
+
+            {/* 管理员功能按钮 */}
+            {isGroup && (
+              <View style={styles.adminActionsContainer}>
+                <TouchableOpacity
+                  style={styles.settingButton}
+                  onPress={() => handleOpenSetting(item, InterestSwitchType.CURRENT)}
+                  activeOpacity={0.7}
+                >
+                  <Icon name="settings" size={16} color="#fff" />
+                  <CustomText style={styles.settingButtonText}>{t('finance.currentSettings')}</CustomText>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.settingButton, styles.fixedSettingButton]}
+                  onPress={() => handleOpenSetting(item, InterestSwitchType.FIXED)}
+                  activeOpacity={0.7}
+                >
+                  <Icon name="account-balance" size={16} color="#fff" />
+                  <CustomText style={styles.settingButtonText}>{t('finance.fixedSettings')}</CustomText>
+                </TouchableOpacity>
               </View>
             )}
           </View>
         </View>
       );
     },
-    [navigation, t, isAdmin, getInterestStatusText, handleInterestSwitch],
+    [navigation, t, isGroup, handleOpenSetting],
   );
 
   useEffect(() => {
@@ -366,15 +379,14 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
         />
       )}
 
-      <ConfirmModal
-        visible={confirmModalVisible}
-        title={t('finance.confirmTitle')}
-        message={`${t('finance.confirmMessage')} ${confirmModalData.statusText} ${
-          confirmModalData.company?.name || ''
-        } ${t('finance.currentInterestStatus')}？`}
-        onCancel={handleCancelSwitch}
-        onConfirm={handleConfirmSwitch}
-        isProcessing={isProcessing}
+      {/* 设置弹窗 */}
+      <FinanceSettingModal
+        visible={settingModalVisible}
+        settingData={currentSettingData}
+        userType={AccountType.COMPANY}
+        onClose={handleCloseSetting}
+        onSuccess={handleSettingSuccess}
+        onSettingChange={updateSettingData}
       />
     </SafeAreaView>
   );
@@ -526,31 +538,36 @@ const styles = StyleSheet.create({
   arrowIcon: {
     marginLeft: 6,
   },
-  interestStatusContainer: {
+  settingButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  interestStatusText: {
-    marginRight: 10,
-  },
-  interestButton: {
+    backgroundColor: THEME_COLORS.primary,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 15,
-    minWidth: 60,
-    alignItems: 'center',
+    borderRadius: 6,
+    flex: 1,
+    justifyContent: 'center',
   },
-  interestButtonEnable: {
-    backgroundColor: '#4CAF50',
-  },
-  interestButtonDisable: {
-    backgroundColor: '#f44336',
-  },
-  interestButtonText: {
+  settingButtonText: {
     color: '#fff',
     fontSize: 12,
+    fontWeight: '500',
+    marginLeft: 4,
+  },
+  adminActionsContainer: {
+    flexDirection: 'row',
+    marginTop: 12,
+    marginBottom: 5,
+    gap: 10,
+  },
+  enabledInterest: {
+    color: '#00b894',
     fontWeight: '600',
+  },
+  disabledInterest: {
+    color: '#5F6369',
+  },
+  fixedSettingButton: {
+    backgroundColor: '#00b894',
   },
 });

@@ -1,38 +1,39 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { switchFinance } from '../../../api/services/financeService';
-import { InterestStatus, AccountType, InterestSwitchType } from '../../../interface/Finance';
-import { useTranslation } from '../../../hooks/useTranslation';
-import CustomText from '../../../components/CustomText';
-import SlideModal from '../../../components/SlideModal';
-import RadioGroup from '../../../components/RadioGroup';
-import NumberInput from '../../../components/NumberInput';
-import { THEME_COLORS } from '../../../utils/styles';
+import { switchFinance } from '../api/services/financeService';
+import { InterestStatus, AccountType, InterestSwitchType } from '../interface/Finance';
+import { useTranslation } from '../hooks/useTranslation';
+import CustomText from '../components/CustomText';
+import SlideModal from '../components/SlideModal';
+import RadioGroup from '../components/RadioGroup';
+import NumberInput from '../components/NumberInput';
+import { THEME_COLORS } from '../utils/styles';
 
 interface FinanceSettingData {
   groupCode: string;
   settingType: InterestSwitchType;
-  isEnabled: InterestStatus;
+  isEnabled: number;
   interestRate: string;
 }
 
 interface FinanceSettingModalProps {
   visible: boolean;
   settingData: FinanceSettingData;
+  userType: AccountType;
   onClose: () => void;
   onSuccess: () => void;
   onSettingChange: (key: keyof FinanceSettingData, value: any) => void;
 }
 
 export const FinanceSettingModal: React.FC<FinanceSettingModalProps> = React.memo((props) => {
-  const { visible, settingData, onClose, onSuccess, onSettingChange } = props;
+  const { visible, settingData, userType, onClose, onSuccess, onSettingChange } = props;
   const { t } = useTranslation();
 
   // 开关选项
   const switchOptions = useMemo(
     () => [
-      { label: t('group.disabled'), value: InterestStatus.DISABLED },
-      { label: t('group.enabled'), value: InterestStatus.ENABLED },
+      { label: t('finance.disabled'), value: InterestStatus.DISABLED },
+      { label: t('finance.enabled'), value: InterestStatus.ENABLED },
     ],
     [t],
   );
@@ -65,7 +66,7 @@ export const FinanceSettingModal: React.FC<FinanceSettingModalProps> = React.mem
 
       const params = {
         code: settingData.groupCode,
-        userType: AccountType.GROUP,
+        userType: userType,
         interestSwitchType: settingData.settingType,
         isEnabled: settingData.isEnabled,
         ...(shouldIncludeInterestRate && {
@@ -74,19 +75,19 @@ export const FinanceSettingModal: React.FC<FinanceSettingModalProps> = React.mem
       };
       await switchFinance(params);
       onClose();
-      Alert.alert(t('common.success'), t('group.settingSuccess'));
+      Alert.alert(t('common.success'), t('finance.settingSuccess'));
       onSuccess();
     } catch (error: any) {
       Alert.alert(t('common.error'), error.message);
     }
-  }, [settingData, onClose, onSuccess, t]);
+  }, [settingData, userType, onClose, onSuccess, t]);
 
   // 提交设置
   const handleSubmitSetting = useCallback(() => {
     if (!isFormValid) {
       return;
     }
-    Alert.alert(t('group.settingTitle'), t('group.confirmMessage'), [
+    Alert.alert(t('finance.settingTitle'), t('finance.confirmMessage'), [
       {
         text: t('common.cancel'),
         style: 'cancel',
@@ -99,14 +100,14 @@ export const FinanceSettingModal: React.FC<FinanceSettingModalProps> = React.mem
   }, [isFormValid, t, handleConfirmSubmit]);
 
   const modalTitle =
-    settingData.settingType === InterestSwitchType.CURRENT ? t('group.currentSettings') : t('group.fixedSettings');
+    settingData.settingType === InterestSwitchType.CURRENT ? t('finance.currentSettings') : t('finance.fixedSettings');
 
   return (
     <>
       <SlideModal visible={visible} onClose={onClose} title={modalTitle}>
         <View style={styles.modalContent}>
           <View style={styles.settingSection}>
-            <CustomText style={styles.sectionTitle}>{t('group.interestSwitch')}</CustomText>
+            <CustomText style={styles.sectionTitle}>{t('finance.interestSwitch')}</CustomText>
             <RadioGroup
               options={switchOptions}
               selectedValue={settingData.isEnabled}
@@ -116,12 +117,12 @@ export const FinanceSettingModal: React.FC<FinanceSettingModalProps> = React.mem
           </View>
           {settingData.isEnabled === InterestStatus.ENABLED && (
             <View style={styles.settingSection}>
-              <CustomText style={styles.sectionTitle}>{t('group.interestRate')}</CustomText>
+              <CustomText style={styles.sectionTitle}>{t('finance.interestRate')}</CustomText>
               <View style={styles.inputWrapper}>
                 <NumberInput
                   value={settingData.interestRate}
                   onChangeText={handleInterestRateChange}
-                  placeholder={t('group.interestRatePlaceholder')}
+                  placeholder={t('finance.interestRatePlaceholder')}
                   keyboardType="decimal-pad"
                   hint="支持小数点后一位"
                 />
@@ -135,7 +136,7 @@ export const FinanceSettingModal: React.FC<FinanceSettingModalProps> = React.mem
             disabled={!isFormValid}
             activeOpacity={0.7}
           >
-            <CustomText style={styles.confirmButtonText}>{t('group.confirmSetting')}</CustomText>
+            <CustomText style={styles.confirmButtonText}>{t('finance.confirmSetting')}</CustomText>
           </TouchableOpacity>
         </View>
       </SlideModal>

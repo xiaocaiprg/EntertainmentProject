@@ -575,20 +575,7 @@ export const zh = {
     availablePoints: '可用积分',
     frozenPoints: '冻结积分',
     totalPoints: '总积分',
-    currentInterest: '活期利息',
-    fixedInterest: '定期利息',
     noData: '暂无集团数据',
-    currentSettings: '活期设置',
-    fixedSettings: '定期设置',
-    interestSwitch: '利息开关',
-    interestRate: '年化利率',
-    interestRatePlaceholder: '请输入年化利率',
-    enabled: '开启',
-    disabled: '关闭',
-    confirmSetting: '确认设置',
-    settingTitle: '设置',
-    settingSuccess: '设置成功',
-    confirmMessage: '确定要修改吗？',
   },
 
   // 公司管理相关
@@ -609,17 +596,22 @@ export const zh = {
     name: '名称',
   },
 
-  // 活期相关
+  // 金融设置相关
   finance: {
-    currentInterestStatus: '活期状态',
-    interestEnabled: '已开启',
-    interestDisabled: '已关闭',
-    enable: '开启',
-    disable: '关闭',
-    confirmTitle: '确认操作',
-    confirmMessage: '确定要',
-    switchSuccess: '操作成功',
-    switchFailed: '操作失败，请重试',
+    currentInterest: '活期利息',
+    fixedInterest: '定期利息',
+    currentSettings: '活期设置',
+    fixedSettings: '定期设置',
+    setting: '设置',
+    settingTitle: '利息设置',
+    settingSuccess: '设置成功',
+    confirmMessage: '确定要修改吗？',
+    interestSwitch: '利息开关',
+    interestRate: '年化利率',
+    interestRatePlaceholder: '请输入年化利率',
+    confirmSetting: '确认设置',
+    disabled: '关闭',
+    enabled: '开启',
   },
 
   // 转码查询相关
