@@ -75,7 +75,7 @@ export const GroupItem: React.FC<GroupItemProps> = React.memo((props) => {
 
         {/* 利息信息 */}
         <View style={styles.detailRow}>
-          <CustomText style={styles.detailLabel}>{t('group.currentInterest')}:</CustomText>
+          <CustomText style={styles.detailLabel}>{t('finance.currentInterest')}:</CustomText>
           <CustomText
             style={[
               styles.detailValue,
@@ -86,7 +86,7 @@ export const GroupItem: React.FC<GroupItemProps> = React.memo((props) => {
           </CustomText>
         </View>
         <View style={styles.detailRow}>
-          <CustomText style={styles.detailLabel}>{t('group.fixedInterest')}:</CustomText>
+          <CustomText style={styles.detailLabel}>{t('finance.fixedInterest')}:</CustomText>
           <CustomText
             style={[
               styles.detailValue,

@@ -4,7 +4,7 @@ import { useTranslation } from '../../../hooks/useTranslation';
 import CustomText from '../../../components/CustomText';
 import CustomTextInput from '../../../components/CustomTextInput';
 import { SlideModal } from '../../../components/SlideModal';
-import PayPasswordInput from '../../PointsTransfer/components/PayPasswordInput';
+import PayPasswordInput from '../../../bizComponents/PayPasswordInput';
 import { createFixedAccount } from '../../../api/services/accountService';
 import { CreateFixAccountParams } from '../../../interface/Account';
 

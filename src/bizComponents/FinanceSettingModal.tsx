@@ -125,6 +125,11 @@ export const FinanceSettingModal: React.FC<FinanceSettingModalProps> = React.mem
                   placeholder={t('finance.interestRatePlaceholder')}
                   keyboardType="decimal-pad"
                   hint="支持小数点后一位"
+                  style={{
+                    input: {
+                      fontSize: 12,
+                    },
+                  }}
                 />
                 <CustomText style={styles.percentSymbol}>%</CustomText>
               </View>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { View, TextInput, StyleSheet, ViewStyle } from 'react-native';
-import CustomText from '../../../components/CustomText';
+import CustomText from '../components/CustomText';
 
 interface PayPasswordInputProps {
   value: string;

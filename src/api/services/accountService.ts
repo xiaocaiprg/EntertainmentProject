@@ -1,5 +1,5 @@
 import { post } from '../request';
-import { FixAccountDto, CreateFixAccountParams } from '../../interface/Account';
+import { FixAccountDto, CreateFixAccountParams, TerminateFixAccountParams } from '../../interface/Account';
 import { ApiResponse } from '../../interface/IModuleProps';
 
 export const PATH = {
@@ -31,8 +31,8 @@ export const createFixedAccount = (params: CreateFixAccountParams): Promise<stri
   });
 };
 
-export const terminateFixedAccount = (code: string): Promise<string> => {
-  return post<ApiResponse<string>>(`${PATH.TERMINATE_FIXED_ACCOUNT}`, { code: code }).then((res) => {
+export const terminateFixedAccount = (params: TerminateFixAccountParams): Promise<string> => {
+  return post<ApiResponse<string>>(`${PATH.TERMINATE_FIXED_ACCOUNT}`, params).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {

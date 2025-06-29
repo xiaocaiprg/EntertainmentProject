@@ -25,7 +25,7 @@ import { RacePoolPageDto } from '../../interface/Race';
 import CustomText from '../../components/CustomText';
 import { getUserDetail } from '../../api/services/authService';
 import { LoginResultDto } from '../../interface/User';
-import PayPasswordInput from './components/PayPasswordInput';
+import PayPasswordInput from '../../bizComponents/PayPasswordInput';
 
 export enum TransferType {
   PERSONAL = 'personal',

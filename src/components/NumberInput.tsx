@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { View, StyleSheet, TextInput, ViewStyle, TextStyle } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
 import CustomText from './CustomText';
+import { mergeStyles } from '../utils/styles';
 
 interface NumberInputProps {
   title?: string;
@@ -11,6 +12,7 @@ interface NumberInputProps {
   keyboardType?: 'numeric' | 'decimal-pad';
   errorMessage?: string;
   hint?: string;
+  style?: Partial<Record<keyof typeof styles, ViewStyle | TextStyle>>;
 }
 
 export const NumberInput: React.FC<NumberInputProps> = React.memo((props: NumberInputProps) => {
@@ -23,7 +25,11 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
     keyboardType = 'decimal-pad',
     errorMessage,
     hint,
+    style,
   } = props;
+
+  // 使用mergeStyles合并样式
+  const mergedStyles = useMemo(() => mergeStyles(styles, style), [style]);
 
   const handleChangeText = useCallback(
     (text: string) => {
@@ -40,18 +46,18 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
   );
 
   return (
-    <View style={styles.container}>
-      {title && <CustomText style={styles.labelText}>{title}</CustomText>}
+    <View style={mergedStyles.container}>
+      {title && <CustomText style={mergedStyles.labelText}>{title}</CustomText>}
       <TextInput
-        style={[styles.input, errorMessage && styles.inputError]}
+        style={[mergedStyles.input, errorMessage && mergedStyles.inputError]}
         value={value}
         onChangeText={handleChangeText}
         placeholder={placeholder}
         placeholderTextColor="#999"
         keyboardType={keyboardType}
       />
-      {hint ? <CustomText style={styles.hintText}>{hint}</CustomText> : null}
-      {errorMessage ? <CustomText style={styles.errorText}>{errorMessage}</CustomText> : null}
+      {hint ? <CustomText style={mergedStyles.hintText}>{hint}</CustomText> : null}
+      {errorMessage ? <CustomText style={mergedStyles.errorText}>{errorMessage}</CustomText> : null}
     </View>
   );
 });

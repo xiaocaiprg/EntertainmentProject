@@ -7,9 +7,10 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import CustomText from '../../components/CustomText';
 import ConfirmModal from '../../components/ConfirmModal';
 import { getFixedAccountList, terminateFixedAccount } from '../../api/services/accountService';
-import { FixAccountDto } from '../../interface/Account';
+import { FixAccountDto, TerminateFixAccountParams } from '../../interface/Account';
 import { RootStackScreenProps } from '../router';
 import { CreateDepositModal } from './components/CreateDepositModal';
+import PayPasswordInput from '../../bizComponents/PayPasswordInput';
 
 const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposits'>) => {
   const { navigation } = props;
@@ -25,6 +26,7 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
   const [showTerminateModal, setShowTerminateModal] = useState(false);
   const [selectedDeposit, setSelectedDeposit] = useState<FixAccountDto | null>(null);
   const [isTerminating, setIsTerminating] = useState(false);
+  const [payPassword, setPayPassword] = useState('');
 
   const loadDeposits = useCallback(async () => {
     setLoading(true);
@@ -43,27 +45,32 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
   }, []);
 
   const handleConfirmTerminate = useCallback(async () => {
-    if (!selectedDeposit) {
+    if (!selectedDeposit || !payPassword) {
       return;
     }
-
+    const params: TerminateFixAccountParams = {
+      code: selectedDeposit.code,
+      payPassword: payPassword,
+    };
     setIsTerminating(true);
     try {
-      await terminateFixedAccount(selectedDeposit.code);
+      await terminateFixedAccount(params);
       Alert.alert(t('common.success'), t('fixedDeposits.terminateSuccess'));
       loadDeposits(); // 刷新列表
       setShowTerminateModal(false);
       setSelectedDeposit(null);
+      setPayPassword(''); // 重置支付密码
     } catch (error: any) {
       Alert.alert(t('common.error'), error?.message || t('fixedDeposits.terminateFailed'));
     }
     setIsTerminating(false);
-  }, [selectedDeposit, t, loadDeposits]);
+  }, [selectedDeposit, payPassword, t, loadDeposits]);
 
   const handleCancelTerminate = useCallback(() => {
     setShowTerminateModal(false);
     setSelectedDeposit(null);
     setIsTerminating(false);
+    setPayPassword(''); // 重置支付密码
   }, []);
 
   const formatDate = useCallback((dateString: string) => {
@@ -88,6 +95,11 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
     }),
     [t],
   );
+
+  // 支付密码输入验证
+  const isTerminateFormValid = useMemo(() => {
+    return payPassword.length === 6;
+  }, [payPassword]);
 
   const renderDepositItem = useCallback(
     ({ item }: { item: FixAccountDto }) => (
@@ -203,6 +215,13 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
         onCancel={handleCancelTerminate}
         onConfirm={handleConfirmTerminate}
         isProcessing={isTerminating}
+        confirmButtonDisabled={!isTerminateFormValid}
+        customContent={
+          <View style={styles.payPasswordContainer}>
+            <CustomText style={styles.payPasswordLabel}>{t('pointsTransfer.payPassword')}:</CustomText>
+            <PayPasswordInput value={payPassword} onChangeText={setPayPassword} maxLength={6} />
+          </View>
+        }
       />
     </SafeAreaView>
   );
@@ -349,6 +368,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  payPasswordContainer: {
+    marginTop: 15,
+  },
+  payPasswordLabel: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 10,
+    fontWeight: '500',
   },
 });
 
