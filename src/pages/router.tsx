@@ -35,6 +35,7 @@ import { PeakRecordScreen } from './PeakRecord/index';
 import { GroupManagementScreen } from './GroupManagement/index';
 import { CompanyManagementScreen } from './CompanyManagement/index';
 import { CompanyDetailScreen } from './CompanyDetail/index';
+import { FixedDepositsScreen } from './FixedDeposits/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -79,6 +80,7 @@ export type RootStackParamList = {
   GroupManagement: undefined;
   CompanyManagement: { groupCode?: string };
   CompanyDetail: { code: string };
+  FixedDeposits: undefined;
 };
 
 // 通用导航类型
@@ -178,6 +180,7 @@ function AppNavigator() {
                 <Stack.Screen name="GroupManagement" component={GroupManagementScreen} />
                 <Stack.Screen name="CompanyManagement" component={CompanyManagementScreen} />
                 <Stack.Screen name="CompanyDetail" component={CompanyDetailScreen} />
+                <Stack.Screen name="FixedDeposits" component={FixedDepositsScreen} />
               </Stack.Navigator>
             </RoleProvider>
           </AuthProvider>

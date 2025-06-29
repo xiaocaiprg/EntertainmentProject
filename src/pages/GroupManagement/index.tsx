@@ -3,18 +3,37 @@ import { View, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, FlatList, 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getGroupList } from '../../api/services/groupService';
 import { GroupCompanyDto } from '../../interface/Group';
+import { InterestStatus, InterestSwitchType } from '../../interface/Finance';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { useTranslation } from '../../hooks/useTranslation';
 import CustomText from '../../components/CustomText';
+import GroupItem from './components/GroupItem';
+import FinanceSettingModal from './components/FinanceSettingModal';
 import { RootStackScreenProps } from '../router';
 
 type GroupManagementScreenProps = RootStackScreenProps<'GroupManagement'>;
+
+interface FinanceSettingData {
+  groupCode: string;
+  settingType: InterestSwitchType;
+  isEnabled: InterestStatus;
+  interestRate: string;
+}
 
 export const GroupManagementScreen: React.FC<GroupManagementScreenProps> = React.memo(({ navigation }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [groups, setGroups] = useState<GroupCompanyDto[]>([]);
+
+  // 设置弹窗相关状态
+  const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
+  const [currentSettingData, setCurrentSettingData] = useState<FinanceSettingData>({
+    groupCode: '',
+    settingType: InterestSwitchType.CURRENT,
+    isEnabled: InterestStatus.DISABLED,
+    interestRate: '',
+  });
 
   // 获取集团列表
   const fetchGroups = useCallback(async () => {
@@ -37,6 +56,38 @@ export const GroupManagementScreen: React.FC<GroupManagementScreenProps> = React
     [navigation],
   );
 
+  // 打开设置弹窗
+  const handleOpenSetting = useCallback((group: GroupCompanyDto, settingType: InterestSwitchType) => {
+    setCurrentSettingData({
+      groupCode: group.code,
+      settingType,
+      isEnabled: InterestStatus.DISABLED,
+      interestRate: '',
+    });
+    setSettingModalVisible(true);
+  }, []);
+
+  // 关闭设置弹窗
+  const handleCloseSetting = useCallback(() => {
+    setSettingModalVisible(false);
+    setCurrentSettingData({
+      groupCode: '',
+      settingType: InterestSwitchType.CURRENT,
+      isEnabled: InterestStatus.DISABLED,
+      interestRate: '',
+    });
+  }, []);
+
+  // 更新设置数据
+  const updateSettingData = useCallback((key: keyof FinanceSettingData, value: any) => {
+    setCurrentSettingData((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  // 设置成功回调
+  const handleSettingSuccess = useCallback(() => {
+    fetchGroups();
+  }, [fetchGroups]);
+
   // 渲染导航栏
   const renderHeader = useCallback(
     () => (
@@ -54,35 +105,9 @@ export const GroupManagementScreen: React.FC<GroupManagementScreenProps> = React
   // 渲染集团项
   const renderGroupItem = useCallback(
     ({ item }: { item: GroupCompanyDto }) => (
-      <TouchableOpacity style={styles.groupItem} onPress={() => handleGroupPress(item)} activeOpacity={0.7}>
-        <View style={styles.groupHeader}>
-          <View style={styles.groupInfo}>
-            <CustomText style={styles.groupName}>{item.name}</CustomText>
-            <View style={styles.codeRow}>
-              <CustomText style={styles.groupCode}>
-                {t('group.code')}: {item.code}
-              </CustomText>
-              <Icon name="chevron-right" size={16} color="#bbb" style={styles.arrowIcon} />
-            </View>
-          </View>
-        </View>
-        <View style={styles.groupDetails}>
-          <View style={styles.detailRow}>
-            <CustomText style={styles.detailLabel}>{t('group.availablePoints')}:</CustomText>
-            <CustomText style={styles.detailValue}>{item.availablePoints.toLocaleString()}</CustomText>
-          </View>
-          <View style={styles.detailRow}>
-            <CustomText style={styles.detailLabel}>{t('group.frozenPoints')}:</CustomText>
-            <CustomText style={styles.detailValue}>{item.frozenPoints.toLocaleString()}</CustomText>
-          </View>
-          <View style={styles.detailRow}>
-            <CustomText style={styles.detailLabel}>{t('group.totalPoints')}:</CustomText>
-            <CustomText style={styles.detailValue}>{item.totalPoints.toLocaleString()}</CustomText>
-          </View>
-        </View>
-      </TouchableOpacity>
+      <GroupItem item={item} onPress={handleGroupPress} onOpenSetting={handleOpenSetting} />
     ),
-    [handleGroupPress, t],
+    [handleGroupPress, handleOpenSetting],
   );
 
   useEffect(() => {
@@ -114,6 +139,15 @@ export const GroupManagementScreen: React.FC<GroupManagementScreenProps> = React
           }
         />
       )}
+
+      {/* 设置弹窗 */}
+      <FinanceSettingModal
+        visible={settingModalVisible}
+        settingData={currentSettingData}
+        onClose={handleCloseSetting}
+        onSuccess={handleSettingSuccess}
+        onSettingChange={updateSettingData}
+      />
     </SafeAreaView>
   );
 });
@@ -155,62 +189,6 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingTop: 10,
   },
-  groupItem: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    marginBottom: 10,
-    marginHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#f1f3f4',
-  },
-  groupHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  groupInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  groupName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  groupCode: {
-    fontSize: 14,
-    color: '#666',
-  },
-  groupDetails: {
-    borderTopWidth: 1,
-    borderTopColor: '#f1f3f4',
-    paddingTop: 12,
-    flex: 1,
-  },
-  detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  detailLabel: {
-    fontSize: 14,
-    color: '#666',
-    flex: 1,
-  },
-  detailValue: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '500',
-    textAlign: 'right',
-    flex: 1,
-  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -220,12 +198,5 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: '#999',
-  },
-  codeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  arrowIcon: {
-    marginLeft: 6,
   },
 });

@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getCompanyList } from '../../api/services/companyService';
 import { switchFinance } from '../../api/services/financeService';
 import { CompanyDto, CompanyListParams } from '../../interface/Company';
-import { InterestStatus, RoleType } from '../../interface/Finance';
+import { InterestStatus, AccountType, InterestSwitchType } from '../../interface/Finance';
 import { CompanyType } from '../../interface/Common';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
@@ -203,7 +203,8 @@ export const CompanyManagementScreen: React.FC<CompanyManagementScreenProps> = R
       await switchFinance({
         code: confirmModalData.company.code,
         isEnabled: confirmModalData.newStatus,
-        roleType: RoleType.COMPANY,
+        userType: AccountType.COMPANY,
+        interestSwitchType: InterestSwitchType.CURRENT,
       });
       // 刷新公司列表
       fetchCompanies();

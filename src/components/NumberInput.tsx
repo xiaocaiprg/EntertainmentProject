@@ -4,7 +4,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import CustomText from './CustomText';
 
 interface NumberInputProps {
-  title: string;
+  title?: string;
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
@@ -41,8 +41,7 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.labelText}>{title}</CustomText>
-
+      {title && <CustomText style={styles.labelText}>{title}</CustomText>}
       <TextInput
         style={[styles.input, errorMessage && styles.inputError]}
         value={value}

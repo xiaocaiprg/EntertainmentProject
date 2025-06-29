@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getBusinessList } from '../../api/services/businessService';
 import { switchFinance } from '../../api/services/financeService';
 import { BusinessDto } from '../../interface/Business';
-import { InterestStatus, RoleType } from '../../interface/Finance';
+import { InterestStatus, AccountType } from '../../interface/Finance';
 import { THEME_COLORS } from '../../utils/styles';
 import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -89,7 +89,8 @@ export const CompanyDetailScreen: React.FC<CompanyDetailScreenProps> = React.mem
       await switchFinance({
         code: confirmModalData.business.code,
         isEnabled: confirmModalData.newStatus,
-        roleType: RoleType.PERSON,
+        userType: AccountType.PERSON,
+        interestSwitchType: InterestSwitchType.CURRENT,
       });
       // 刷新商家列表
       fetchBusinessList();

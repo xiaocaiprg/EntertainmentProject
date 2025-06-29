@@ -3,11 +3,11 @@ import { SwitchFinanceParams } from '../../interface/Finance';
 import { ApiResponse } from '../../interface/IModuleProps';
 
 const PATH = {
-  SWITCH_CURRENT: 'haiyang/finance/current/switch',
+  SWITCH_INTEREST: 'haiyang/finance/interest/switch',
 };
 
 export const switchFinance = (params: SwitchFinanceParams): Promise<string> => {
-  return post<ApiResponse<string>>(PATH.SWITCH_CURRENT, params).then((res) => {
+  return post<ApiResponse<string>>(PATH.SWITCH_INTEREST, params).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {

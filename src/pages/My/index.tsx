@@ -33,6 +33,10 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     navigation.navigate('MyGames');
   }, [navigation]);
 
+  const handleFixedDeposits = useCallback(() => {
+    navigation.navigate('FixedDeposits');
+  }, [navigation]);
+
   const handleSettingsPress = useCallback(() => {
     navigation.navigate('Settings');
   }, [navigation]);
@@ -137,6 +141,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
           <View style={styles.menuContainer}>
             {/* <MenuItem icon="history" title={t('my.historyRecord')} onPress={handleHistoryPress} /> */}
             <MenuItem icon="playlist-play" title={t('my.myGames')} onPress={handleMyGames} />
+            <MenuItem icon="account-balance-wallet" title={t('my.fixedDeposits')} onPress={handleFixedDeposits} />
           </View>
         </View>
       </>
@@ -144,6 +149,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     [
       user,
       handleMyGames,
+      handleFixedDeposits,
       handleLogoutPress,
       MenuItem,
       t,

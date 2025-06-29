@@ -173,7 +173,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       try {
         const detail = await getUserDetail({
           code: account,
-          type: transferType === TransferType.PERSONAL ? 1 : 2,
+          userType: transferType === TransferType.PERSONAL ? 1 : 2,
         });
         if (detail) {
           setRecipientDetail(detail);

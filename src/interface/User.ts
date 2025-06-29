@@ -4,7 +4,7 @@ export interface UserParams {
 }
 export interface UserDetailParams {
   code: string;
-  type: number;
+  userType: number;
 }
 
 export interface ChangePayPasswordParams {
