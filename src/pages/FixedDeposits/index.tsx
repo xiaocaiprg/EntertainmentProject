@@ -107,11 +107,11 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
         <View style={styles.depositHeader}>
           <View style={styles.headerLeft}>
             <CustomText style={styles.accountName}>{item.name || '-'}</CustomText>
-            <View style={[styles.statusBadge, item.isEnabled === 1 ? styles.statusEnabled : styles.statusDisabled]}>
+            {/* <View style={[styles.statusBadge, item.isEnabled === 1 ? styles.statusEnabled : styles.statusDisabled]}>
               <CustomText style={styles.statusText}>
                 {item.isEnabled === 1 ? statusText.enabled : statusText.disabled}
               </CustomText>
-            </View>
+            </View> */}
           </View>
 
           {/* 只有启用状态的定存才显示终止按钮 */}
