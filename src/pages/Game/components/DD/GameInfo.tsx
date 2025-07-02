@@ -1,36 +1,30 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import CustomText from '../../../../components/CustomText';
-import { CBRoundStats } from '../../types/CBtypes';
+import { DDRoundStats } from '../../types/DDtypes';
 interface GameInfoProps {
   gameName: string;
   operator: string;
   recorder: string;
-  cbRoundStats: CBRoundStats;
+  ddRoundStats: DDRoundStats;
 }
 
 export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
-  const { gameName, operator, cbRoundStats, recorder } = props;
+  const { gameName, operator, ddRoundStats, recorder } = props;
   const {
     round,
     wins,
     losses,
     gamesPlayed,
     maxGames,
-    isFirstRound,
-    betAmount,
     roundProfitStr,
     roundTurnOverStr,
     challengeProfitStr,
     challengeTurnOverStr,
-  } = cbRoundStats;
+  } = ddRoundStats;
   // 获取轮次描述
   const getRoundDescription = () => {
-    if (isFirstRound) {
-      return '第一轮';
-    } else {
-      return `第${round}轮`;
-    }
+    return `第${round}轮`;
   };
 
   // 判断上下水是正数还是负数来决定颜色
@@ -83,10 +77,6 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
           <View style={styles.infoItem}>
             <CustomText style={styles.label}>当前轮次:</CustomText>
             <CustomText style={styles.value}>{getRoundDescription()}</CustomText>
-          </View>
-          <View style={styles.infoItem}>
-            <CustomText style={styles.label}>押注金额:</CustomText>
-            <CustomText style={styles.value}>{betAmount}</CustomText>
           </View>
         </View>
         <View style={styles.infoRow}>

@@ -17,6 +17,7 @@ interface CreateRaceFormProps {
 const RULE_CODE_OPTIONS = [
   { label: '无止盈过关', value: ChallengeType.NO_PROFIT_LIMIT },
   { label: '平注', value: ChallengeType.EVEN_BET },
+  { label: '自由搏击', value: ChallengeType.FREE_FIGHT },
 ];
 
 export const CreateRaceForm = React.memo((props: CreateRaceFormProps) => {

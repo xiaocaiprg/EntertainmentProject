@@ -41,7 +41,7 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     name: '',
     date: new Date(),
     principal: '',
-    initialBetAmount: -1, // 默认投注基数
+    initialBetAmount: 0, // 默认投注基数
     currency: CurrencyType.HKD, // 默认币种为HKD
     fundraisingType: FundraisingType.PUBLIC, // 默认公开募资
     selectedCompanyList: [], // 默认空数组
@@ -62,6 +62,8 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     setFormData((prevData) => ({
       ...prevData,
       challengeType: type,
+      // 根据挑战类型重置投注基数
+      initialBetAmount: type === ChallengeType.FREE_FIGHT ? [] : 0,
     }));
   }, []);
 
@@ -106,7 +108,9 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
       addressInfoId: formData.locationId,
       gameDate: formData.date ? formatDate(formData.date, 'YYYY-MM-DD') : '',
       principal: parseFloat(formData.principal),
-      baseNumber: formData.initialBetAmount,
+      baseNumberList: Array.isArray(formData.initialBetAmount)
+        ? formData.initialBetAmount
+        : [formData.initialBetAmount],
       playRuleCode: formData.challengeType,
       currency: formData.currency,
       contributionType: formData.fundraisingType,
@@ -170,6 +174,7 @@ export const NewChallengeScreen: React.FC<RootStackScreenProps<'NewChallenge'>> 
     () => [
       { label: '无止盈过关', value: ChallengeType.NO_PROFIT_LIMIT },
       { label: '平注', value: ChallengeType.EVEN_BET },
+      { label: '自由搏击', value: ChallengeType.FREE_FIGHT },
       // 可以在这里添加更多的挑战类型
     ],
     [],

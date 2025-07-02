@@ -126,7 +126,8 @@ export interface GameMatchDto {
 export interface GameRoundDto {
   addressInfoId?: number;
   addressName?: string;
-  baseNumber: number;
+  baseNumber: string;
+  baseNumberList: number[];
   createTime?: string;
   docPersonCode?: string;
   docPersonName?: string;
@@ -197,7 +198,7 @@ export interface ChallengeCreateParams {
   playPersonCode: string;
   principal: number;
   tableNumber?: string;
-  baseNumber: number;
+  baseNumberList: number[];
   currency?: string;
   playRuleCode?: string;
   raceId?: number;

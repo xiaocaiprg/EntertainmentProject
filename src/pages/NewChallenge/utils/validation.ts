@@ -1,5 +1,41 @@
 import { ChallengeCreateParams } from '../../../interface/Game';
-import { FundraisingType } from '../../../interface/Common';
+import { FundraisingType, ChallengeType } from '../../../interface/Common';
+
+/**
+ * 校验投注基数
+ * @param baseNumberList 投注基数数组
+ * @param challengeType 挑战类型
+ * @returns 校验结果对象，包含是否有效和错误信息
+ */
+export const validateBetAmount = (
+  baseNumberList: number[],
+  challengeType: string,
+): { isValid: boolean; errorMessage?: string } => {
+  for (const amount of baseNumberList) {
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return { isValid: false, errorMessage: '所有投注基数必须为有效的正数' };
+    }
+
+    if (challengeType === ChallengeType.EVEN_BET) {
+      // 平注法仅支持100的倍数
+      if (amount % 100 !== 0) {
+        return { isValid: false, errorMessage: '投注基数必须为100的倍数' };
+      }
+    } else if (challengeType === ChallengeType.NO_PROFIT_LIMIT) {
+      // 无止盈打法仅支持300的倍数
+      if (amount % 300 !== 0) {
+        return { isValid: false, errorMessage: '投注基数必须为300的倍数' };
+      }
+    } else if (challengeType === ChallengeType.FREE_FIGHT) {
+      // 自由搏击打法仅支持100的倍数
+      if (amount % 100 !== 0) {
+        return { isValid: false, errorMessage: '投注基数必须为100的倍数' };
+      }
+    }
+  }
+
+  return { isValid: true };
+};
 
 /**
  * 校验挑战创建参数
@@ -9,9 +45,19 @@ import { FundraisingType } from '../../../interface/Common';
 export const validateChallengeParams = (
   params: Partial<ChallengeCreateParams>,
 ): { isValid: boolean; errorMessage?: string } => {
-  if (!params.baseNumber || params.baseNumber < 0) {
-    return { isValid: false, errorMessage: '请选择投注基数' };
+  // 校验投注基数
+  if (!params.baseNumberList || params.baseNumberList.length === 0) {
+    return { isValid: false, errorMessage: '请输入投注基数' };
   }
+
+  // 使用统一的投注基数校验函数
+  if (params.playRuleCode) {
+    const betAmountValidation = validateBetAmount(params.baseNumberList, params.playRuleCode);
+    if (!betAmountValidation.isValid) {
+      return betAmountValidation;
+    }
+  }
+
   if (!params.playPersonCode) {
     return { isValid: false, errorMessage: '请选择投手' };
   }

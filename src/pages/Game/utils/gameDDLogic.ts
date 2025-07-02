@@ -1,11 +1,11 @@
-import { AARoundStats } from '../types/AAtypes';
+import { DDRoundStats } from '../types/DDtypes';
 import { GameRoundDto } from '../../../interface/Game';
 
 /**
  * 获取初始轮次状态
- * @returns {AARoundStats} AA初始轮次状态
+ * @returns {DDRoundStats} DD初始轮次状态
  */
-export const getAAInitialRoundStats = (initialBetAmount: number): AARoundStats => {
+export const getDDInitialRoundStats = (initialBetAmount: number): DDRoundStats => {
   return {
     round: 1,
     wins: 0,
@@ -25,10 +25,9 @@ export const getAAInitialRoundStats = (initialBetAmount: number): AARoundStats =
  * @param roundData 游戏轮次数据
  * @returns 更新后的游戏统计数据
  */
-export const updateAAGameStats = (roundData: GameRoundDto): AARoundStats => {
+export const updateDDGameStats = (roundData: GameRoundDto): DDRoundStats => {
   // 初始化游戏统计数据
-  const baseNumber = roundData.baseNumberList?.[0];
-  const stats: AARoundStats = getAAInitialRoundStats(baseNumber);
+  const stats: DDRoundStats = getDDInitialRoundStats(0);
 
   if (!roundData?.gamePointDtoList?.length) {
     return stats;
@@ -56,6 +55,7 @@ export const updateAAGameStats = (roundData: GameRoundDto): AARoundStats => {
       });
     }
   });
+
   // 更新游戏统计数据
   stats.round = lastRound;
   stats.wins = wins;
@@ -70,5 +70,6 @@ export const updateAAGameStats = (roundData: GameRoundDto): AARoundStats => {
   stats.roundTurnOverStr = roundData.turnOverStr;
   stats.challengeProfitStr = roundData.totalProfitStr;
   stats.challengeTurnOverStr = roundData.totalTurnOverStr;
+
   return stats;
 };

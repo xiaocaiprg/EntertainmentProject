@@ -6,11 +6,12 @@ import CustomTextInput from '../../../components/CustomTextInput';
 import DropdownSelect from '../../../components/DropdownSelect';
 import NumberInput from '../../../components/NumberInput';
 import { DatePicker } from '../../../components/DatePicker';
+import { TagNumberInput } from './TagNumberInput';
 import { THEME_COLORS } from '../../../utils/styles';
 import { BusinessDto } from '../../../interface/Business';
 import { AddressInfo } from '../../../interface/Game';
 import { validateNumberInput } from '../utils/validation';
-import { ChallengeFormData, DropdownType, BET_AMOUNT_OPTIONS, CURRENCY_OPTIONS } from '../interface/IModuleProps';
+import { ChallengeFormData, DropdownType, CURRENCY_OPTIONS } from '../interface/IModuleProps';
 import { ChallengeType } from '../../../interface/Common';
 
 interface NewChallengeFormProps {
@@ -35,16 +36,60 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
     [onChange],
   );
 
+  // 获取投注基数的提示信息
+  const getBetAmountHint = useCallback(() => {
+    if (challengeType === ChallengeType.EVEN_BET) {
+      return '仅支持100的倍数';
+    } else if (challengeType === ChallengeType.NO_PROFIT_LIMIT) {
+      return '仅支持300的倍数';
+    } else if (challengeType === ChallengeType.FREE_FIGHT) {
+      return '仅支持100的倍数，可以添加多个投注基数';
+    }
+    return '';
+  }, [challengeType]);
+
   // 验证表单是否可提交
   const isFormValid = useMemo(() => {
+    const hasValidBetAmount =
+      challengeType === ChallengeType.FREE_FIGHT
+        ? Array.isArray(formData.initialBetAmount) && formData.initialBetAmount.length > 0
+        : typeof formData.initialBetAmount === 'number' && formData.initialBetAmount > 0;
+
     return (
       !!formData.operatorCode &&
       formData.locationId > 0 &&
       !!formData.date &&
       validateNumberInput(formData.principal) > 0 &&
-      !!formData.currency
+      !!formData.currency &&
+      hasValidBetAmount
     );
-  }, [formData]);
+  }, [formData, challengeType]);
+
+  // 处理投注基数变更
+  const handleBetAmountChange = useCallback(
+    (value: number | number[]) => {
+      updateField('initialBetAmount', value);
+    },
+    [updateField],
+  );
+
+  // 处理单个数字输入（非自由搏击）
+  const handleSingleBetAmountChange = useCallback(
+    (value: string) => {
+      updateField('initialBetAmount', value ? parseFloat(value) || 0 : 0);
+    },
+    [updateField],
+  );
+
+  // 获取单个投注基数显示值
+  const getSingleBetAmountValue = useCallback(() => {
+    return typeof formData.initialBetAmount === 'number' ? formData.initialBetAmount.toString() : '';
+  }, [formData.initialBetAmount]);
+
+  // 获取多个投注基数值
+  const getMultipleBetAmountValues = useCallback(() => {
+    return Array.isArray(formData.initialBetAmount) ? formData.initialBetAmount : [];
+  }, [formData.initialBetAmount]);
 
   // 处理下拉框状态变化
   const handleDropdownStateChange = useCallback(
@@ -60,29 +105,23 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
 
   return (
     <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true} keyboardShouldPersistTaps="handled">
-      <>
-        <CustomText style={styles.labelText}>投注基数</CustomText>
-        <DropdownSelect
-          options={BET_AMOUNT_OPTIONS[challengeType]}
-          selectedValue={formData.initialBetAmount}
-          placeholder="请选择投注基数"
-          onSelect={(value: any) => updateField('initialBetAmount', value)}
-          valueKey="value"
-          labelKey="label"
-          isOpen={activeDropdown === DropdownType.BET_AMOUNT}
-          onStateChange={(isOpen: any) => handleDropdownStateChange(DropdownType.BET_AMOUNT, isOpen)}
-          zIndex={1900}
-          zIndexInverse={2100}
-          style={{
-            selectContainer: {
-              marginBottom: 0,
-            },
-            dropdown: {
-              minHeight: 40,
-            },
-          }}
+      <CustomText style={styles.labelText}>投注基数</CustomText>
+      {challengeType === ChallengeType.FREE_FIGHT ? (
+        <TagNumberInput
+          values={getMultipleBetAmountValues()}
+          onChange={handleBetAmountChange}
+          placeholder="输入数字"
+          hint={getBetAmountHint()}
         />
-      </>
+      ) : (
+        <NumberInput
+          value={getSingleBetAmountValue()}
+          onChangeText={handleSingleBetAmountChange}
+          placeholder="请输入投注基数"
+          hint={getBetAmountHint()}
+          keyboardType="numeric"
+        />
+      )}
       <>
         <CustomText style={styles.labelText}>币种</CustomText>
         <DropdownSelect

@@ -14,6 +14,7 @@ export enum RoundStatus {
 export enum ChallengeType {
   NO_PROFIT_LIMIT = 'CB', // 无止盈过关
   EVEN_BET = 'AA', // 平注
+  FREE_FIGHT = 'DD', // 自由搏击
   // 这里可以添加更多的挑战类型
 }
 export enum UserType {

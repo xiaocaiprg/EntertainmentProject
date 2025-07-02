@@ -81,7 +81,7 @@ export const GameInfo: React.FC<GameInfoProps> = React.memo((props) => {
           </View>
           <View style={styles.infoItem}>
             <CustomText style={styles.label}>押注金额:</CustomText>
-            <CustomText style={styles.value}>{betAmount}元</CustomText>
+            <CustomText style={styles.value}>{betAmount}</CustomText>
           </View>
         </View>
         <View style={styles.infoRow}>
