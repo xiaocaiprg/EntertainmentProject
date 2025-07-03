@@ -79,9 +79,19 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
     );
   }, [matchDetail]);
 
-  const renderRound = useCallback((round: GameRoundDto, index: number) => {
-    return <RoundItem key={`round-${round.id || index}`} round={round} index={index} />;
-  }, []);
+  const renderRound = useCallback(
+    (round: GameRoundDto, index: number) => {
+      return (
+        <RoundItem
+          key={`round-${round.id || index}`}
+          playRuleCode={matchDetail?.playRuleCode || ''}
+          round={round}
+          index={index}
+        />
+      );
+    },
+    [matchDetail?.playRuleCode],
+  );
 
   // 渲染挑战详情
   const renderMatchDetail = useCallback(() => {

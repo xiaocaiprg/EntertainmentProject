@@ -40,19 +40,27 @@ export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProp
         <CustomText style={styles.ruleDescription}>打法:{playRuleName}</CustomText>
       </View>
 
-      <View style={styles.betAmountContainer}>
-        <CustomText style={styles.betAmountLabel}>选择投注金额:</CustomText>
-        <View style={styles.dropdownContainer}>
-          <DropdownSelect
-            options={betAmountOptions}
-            selectedValue={selectedBetAmount}
-            onSelect={onBetAmountChange}
-            valueKey="value"
-            labelKey="label"
-            placeholder="请选择投注金额"
-          />
-        </View>
+      <View style={styles.dropdownContainer}>
+        <CustomText style={styles.ruleDescription}>投注金额:</CustomText>
+        <DropdownSelect
+          options={betAmountOptions}
+          selectedValue={selectedBetAmount}
+          onSelect={onBetAmountChange}
+          valueKey="value"
+          labelKey="label"
+          style={{
+            selectContainer: {
+              width: 200,
+              marginBottom: 0,
+            },
+            dropdown: {
+              minHeight: 35,
+            },
+          }}
+          placeholder="请选择投注金额"
+        />
       </View>
+
       <View style={styles.betOptionsColumn}>
         <View style={[styles.betOption, styles.bankerOption]}>
           <CustomText style={[styles.betLabel, styles.bankerLabel]}>庄</CustomText>
@@ -96,7 +104,7 @@ export const GameRule: React.FC<GameRuleProps> = React.memo((props: GameRuleProp
 const styles = StyleSheet.create({
   ruleContainer: {
     backgroundColor: '#fff',
-    padding: 15,
+    padding: 10,
     marginTop: 10,
     marginHorizontal: 10,
     borderRadius: 10,
@@ -179,17 +187,11 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
   },
-  betAmountContainer: {
-    marginBottom: 15,
-    paddingHorizontal: 5,
-  },
-  betAmountLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
   dropdownContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     zIndex: 1000,
+    marginBottom: 5,
   },
 });

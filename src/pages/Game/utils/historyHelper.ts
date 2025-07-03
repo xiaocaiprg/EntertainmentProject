@@ -102,7 +102,7 @@ export const convertToHistoryRecords = (roundData: GameRoundDto): HistoryRecord[
           round: round, // 使用计算出的轮次
           gameNumber: inningIndex + 1, // 游戏局数，从1开始
           isWin,
-          betAmount: pointDto.betNumber || 0, // 使用投注金额
+          betAmount: inning.betNumber || 0, // 使用投注金额
           choice,
         });
       });

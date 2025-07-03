@@ -6,17 +6,21 @@ import { useTranslation } from '../../../hooks/useTranslation';
 import CustomText from '../../../components/CustomText';
 
 interface RoundItemProps {
+  playRuleCode: string;
   round: GameRoundDto;
   index: number;
 }
 
 export const RoundItem = React.memo((props: RoundItemProps) => {
-  const { round, index } = props;
+  const { round, index, playRuleCode } = props;
   const { t } = useTranslation();
 
-  const renderPoint = useCallback((point: GamePointDto, idx: number) => {
-    return <PointItem key={`point-${idx}`} point={point} index={idx} />;
-  }, []);
+  const renderPoint = useCallback(
+    (point: GamePointDto, idx: number) => {
+      return <PointItem key={`point-${idx}`} point={point} playRuleCode={playRuleCode} index={idx} />;
+    },
+    [playRuleCode],
+  );
 
   const faultData = useMemo(() => round.faultGameInningDtoList || [], [round.faultGameInningDtoList]);
 

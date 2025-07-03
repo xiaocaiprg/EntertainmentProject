@@ -2,34 +2,44 @@ import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { GamePointDto, GameInningDto } from '../../../interface/Game';
 import CustomText from '../../../components/CustomText';
+import { ChallengeType } from '../../../interface/Common';
 interface PointItemProps {
   point: GamePointDto;
+  playRuleCode: string;
   index?: number;
 }
 
 export const PointItem = React.memo((props: PointItemProps) => {
-  const { point } = props;
+  const { point, playRuleCode } = props;
 
-  const renderInning = useCallback((inning: GameInningDto, idx: number) => {
-    return (
-      <View key={`inning-${inning.id || idx}`} style={styles.inningItem}>
-        <CustomText
-          style={[
-            styles.inningResult,
-            inning.result === 1 ? styles.winText : inning.result === 2 ? styles.loseText : {},
-          ]}
-        >
-          {inning.result === 1 ? '+' : inning.result === 2 ? '-' : ''}
-        </CustomText>
-        <CustomText style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</CustomText>
-      </View>
-    );
-  }, []);
+  const renderInning = useCallback(
+    (inning: GameInningDto, idx: number) => {
+      return (
+        <View key={`inning-${inning.id || idx}`} style={styles.inningItem}>
+          <CustomText
+            style={[
+              styles.inningResult,
+              inning.result === 1 ? styles.winText : inning.result === 2 ? styles.loseText : {},
+            ]}
+          >
+            {inning.result === 1 ? '+' : inning.result === 2 ? '-' : ''}
+          </CustomText>
+          {playRuleCode === ChallengeType.FREE_FIGHT && (
+            <CustomText style={styles.inningLabel}>{inning.betNumber}</CustomText>
+          )}
+          <CustomText style={styles.inningLabel}>{`(${inning.isDealer === 1 ? '庄' : '闲'})`}</CustomText>
+        </View>
+      );
+    },
+    [playRuleCode],
+  );
 
   return (
     <View style={styles.pointItem}>
       <CustomText style={styles.pointLable}>第{point.eventNum}轮:</CustomText>
-      <CustomText style={styles.pointLable}>押注:{point.betNumber}</CustomText>
+      {playRuleCode !== ChallengeType.FREE_FIGHT && (
+        <CustomText style={styles.pointLable}>押注:{point.betNumber}</CustomText>
+      )}
       {point.gameInningDtoList && point.gameInningDtoList.length > 0 && (
         <View style={styles.inningContainer}>{point.gameInningDtoList.map(renderInning)}</View>
       )}
