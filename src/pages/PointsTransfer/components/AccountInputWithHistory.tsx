@@ -5,12 +5,13 @@ import CustomText from '../../../components/CustomText';
 import { getTransferOutlogList } from '../../../api/services/pointService';
 import { TransferOutLogDto } from '../../../interface/Points';
 import { TransferType } from '../index';
+import { UserTransferType } from '../../../interface/Common';
 
 interface AccountInputWithHistoryProps {
   value: string;
   onChangeText: (text: string) => void;
   placeholder: string;
-  transferType: TransferType.PERSONAL | TransferType.COMPANY;
+  transferType: Exclude<TransferType, TransferType.POOL>;
   style?: any;
   t: (key: string) => string;
 }
@@ -21,21 +22,28 @@ export const AccountInputWithHistory: React.FC<AccountInputWithHistoryProps> = R
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [personalHistory, setPersonalHistory] = useState<TransferOutLogDto[]>([]);
   const [companyHistory, setCompanyHistory] = useState<TransferOutLogDto[]>([]);
+  const [groupHistory, setGroupHistory] = useState<TransferOutLogDto[]>([]);
   const inputRef = useRef<TextInput>(null);
 
   // 根据转账类型获取对应的历史记录
   const currentHistory = useMemo(() => {
-    const history = transferType === TransferType.PERSONAL ? personalHistory : companyHistory;
+    const history =
+      transferType === TransferType.PERSONAL
+        ? personalHistory
+        : transferType === TransferType.COMPANY
+        ? companyHistory
+        : groupHistory;
     return history.slice(0, 5); // 只显示最近的5条记录
-  }, [transferType, personalHistory, companyHistory]);
+  }, [transferType, personalHistory, companyHistory, groupHistory]);
 
   // 页面加载时获取历史记录
   useEffect(() => {
     const fetchAllHistory = async () => {
-      // 并行获取个人和公司的历史记录
-      const [personalData, companyData] = await Promise.all([
-        getTransferOutlogList('1'), // 个人
-        getTransferOutlogList('2'), // 公司
+      // 并行获取个人、公司和集团的历史记录
+      const [personalData, companyData, groupData] = await Promise.all([
+        getTransferOutlogList(UserTransferType.PERSONAL.toString()), // 个人
+        getTransferOutlogList(UserTransferType.COMPANY.toString()), // 公司
+        getTransferOutlogList(UserTransferType.GROUP.toString()), // 集团
       ]);
 
       if (personalData && personalData.length > 0) {
@@ -44,6 +52,10 @@ export const AccountInputWithHistory: React.FC<AccountInputWithHistoryProps> = R
 
       if (companyData && companyData.length > 0) {
         setCompanyHistory(companyData);
+      }
+
+      if (groupData && groupData.length > 0) {
+        setGroupHistory(groupData);
       }
     };
 

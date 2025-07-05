@@ -26,14 +26,49 @@ import CustomText from '../../components/CustomText';
 import { getUserDetail } from '../../api/services/authService';
 import { LoginResultDto } from '../../interface/User';
 import PayPasswordInput from '../../bizComponents/PayPasswordInput';
+import { UserTransferType } from '../../interface/Common';
 
 export enum TransferType {
   PERSONAL = 'personal',
   COMPANY = 'company',
+  GROUP = 'group',
   POOL = 'pool',
 }
 
 type PointsTransferScreenProps = RootStackScreenProps<'PointsTransfer'>;
+
+// 常量定义
+const PAY_PASSWORD_LENGTH = 6;
+
+// 工具函数：根据转账类型获取对应的用户类型
+const getTransferUserType = (transferType: TransferType): UserTransferType => {
+  switch (transferType) {
+    case TransferType.PERSONAL:
+      return UserTransferType.PERSONAL;
+    case TransferType.COMPANY:
+      return UserTransferType.COMPANY;
+    case TransferType.GROUP:
+      return UserTransferType.GROUP;
+    case TransferType.POOL:
+      return UserTransferType.POOL;
+    default:
+      return UserTransferType.PERSONAL;
+  }
+};
+
+// 工具函数：根据转账类型获取对应的占位符文本
+const getPlaceholderText = (transferType: TransferType, t: (key: string) => string): string => {
+  switch (transferType) {
+    case TransferType.PERSONAL:
+      return t('pointsTransfer.personalAccountPlaceholder');
+    case TransferType.COMPANY:
+      return t('pointsTransfer.companyAccountPlaceholder');
+    case TransferType.GROUP:
+      return t('pointsTransfer.groupAccountPlaceholder');
+    default:
+      return t('pointsTransfer.personalAccountPlaceholder');
+  }
+};
 
 export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.memo((props) => {
   const { navigation, route } = props;
@@ -167,13 +202,13 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
       return;
     }
 
-    // 如果是转给个人或公司，获取接收方详情
+    // 如果是转给个人、公司或集团，获取接收方详情
     if (transferType !== TransferType.POOL) {
       setIsLoadingRecipient(true);
       try {
         const detail = await getUserDetail({
           code: account,
-          userType: transferType === TransferType.PERSONAL ? 1 : 2,
+          userType: getTransferUserType(transferType),
         });
         if (detail) {
           setRecipientDetail(detail);
@@ -192,7 +227,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
 
   const handleConfirmTransfer = useCallback(async () => {
     // 如果不是奖金池转账且密码不完整，直接返回
-    if (!isPoolTransfer && payPassword.length !== 6) {
+    if (!isPoolTransfer && payPassword.length !== PAY_PASSWORD_LENGTH) {
       return;
     }
 
@@ -200,7 +235,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
 
     const transfer: TransferCreateParam = {
       toCode: transferType === TransferType.POOL ? selectedPoolCode : account,
-      toType: transferType === TransferType.PERSONAL ? 1 : transferType === TransferType.COMPANY ? 2 : 3,
+      toType: getTransferUserType(transferType),
       amount: Number(points),
     };
 
@@ -212,7 +247,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     // 如果是从奖金池转账，添加fromCode和fromType参数
     if (isPoolTransfer && code) {
       transfer.fromCode = code;
-      transfer.fromType = 3;
+      transfer.fromType = UserTransferType.POOL;
     }
 
     const transferParams: TransferPointParams = {
@@ -238,6 +273,17 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
     setSuccessModalVisible(false);
     navigation.goBack();
   }, [navigation]);
+
+  // 类型选择器配置
+  const typeOptions = useMemo(
+    () => [
+      { type: TransferType.PERSONAL, label: t('pointsTransfer.personal') },
+      { type: TransferType.COMPANY, label: t('pointsTransfer.company') },
+      { type: TransferType.GROUP, label: t('pointsTransfer.group') },
+      { type: TransferType.POOL, label: t('pointsTransfer.pool') },
+    ],
+    [t],
+  );
 
   const renderSelect = useCallback(() => {
     if (transferType === TransferType.POOL) {
@@ -288,12 +334,8 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         <AccountInputWithHistory
           value={account}
           onChangeText={setAccount}
-          transferType={transferType === TransferType.PERSONAL ? TransferType.PERSONAL : TransferType.COMPANY}
-          placeholder={
-            transferType === TransferType.PERSONAL
-              ? t('pointsTransfer.personalAccountPlaceholder')
-              : t('pointsTransfer.companyAccountPlaceholder')
-          }
+          transferType={transferType}
+          placeholder={getPlaceholderText(transferType, t)}
           t={t}
         />
       </View>
@@ -318,7 +360,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
         <CustomText style={styles.headerTitle}>{t('pointsTransfer.title')}</CustomText>
-        <View style={{ width: 24 }} />
+        <View style={styles.headerSpacer} />
       </View>
 
       <ScrollView style={styles.content}>
@@ -326,14 +368,14 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
           <View style={[styles.card, styles.poolCard]}>
             <View style={styles.infoRow}>
               <CustomText style={styles.sectionTitle}>{t('pointsTransfer.poolPoints')}</CustomText>
-              <CustomText style={[styles.pointsValue, { fontSize: 15 }]}>
+              <CustomText style={[styles.pointsValue, styles.smallPointsValue]}>
                 {availablePoints?.toLocaleString()}
               </CustomText>
             </View>
             {name && (
               <View style={styles.infoRow}>
                 <CustomText style={styles.sectionTitle}>{t('pointsTransfer.poolName')}</CustomText>
-                <CustomText style={[styles.pointsValue, { fontSize: 15 }]}>{name}</CustomText>
+                <CustomText style={[styles.pointsValue, styles.smallPointsValue]}>{name}</CustomText>
               </View>
             )}
           </View>
@@ -350,30 +392,17 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         <View style={styles.card}>
           <CustomText style={styles.sectionTitle}>{t('pointsTransfer.transferTo')}</CustomText>
           <View style={styles.typeSelector}>
-            <TouchableOpacity
-              style={[styles.typeButton, transferType === TransferType.PERSONAL && styles.typeButtonActive]}
-              onPress={() => handleTypeChange(TransferType.PERSONAL)}
-            >
-              <CustomText style={[styles.typeText, transferType === TransferType.PERSONAL && styles.typeTextActive]}>
-                {t('pointsTransfer.personal')}
-              </CustomText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.typeButton, transferType === TransferType.COMPANY && styles.typeButtonActive]}
-              onPress={() => handleTypeChange(TransferType.COMPANY)}
-            >
-              <CustomText style={[styles.typeText, transferType === TransferType.COMPANY && styles.typeTextActive]}>
-                {t('pointsTransfer.company')}
-              </CustomText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.typeButton, transferType === TransferType.POOL && styles.typeButtonActive]}
-              onPress={() => handleTypeChange(TransferType.POOL)}
-            >
-              <CustomText style={[styles.typeText, transferType === TransferType.POOL && styles.typeTextActive]}>
-                {t('pointsTransfer.pool')}
-              </CustomText>
-            </TouchableOpacity>
+            {typeOptions.map((option) => (
+              <TouchableOpacity
+                key={option.type}
+                style={[styles.typeButton, transferType === option.type && styles.typeButtonActive]}
+                onPress={() => handleTypeChange(option.type)}
+              >
+                <CustomText style={[styles.typeText, transferType === option.type && styles.typeTextActive]}>
+                  {option.label}
+                </CustomText>
+              </TouchableOpacity>
+            ))}
           </View>
           {renderSelect()}
 
@@ -431,7 +460,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         }}
         onConfirm={handleConfirmTransfer}
         isProcessing={isProcessing}
-        confirmButtonDisabled={!isPoolTransfer && payPassword.length !== 6}
+        confirmButtonDisabled={!isPoolTransfer && payPassword.length !== PAY_PASSWORD_LENGTH}
         customContent={
           <View>
             {/* 转账信息 */}
@@ -515,6 +544,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#111',
   },
+  headerSpacer: {
+    width: 24,
+  },
   content: {
     flex: 1,
     padding: 10,
@@ -538,6 +570,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#6c5ce7',
+  },
+  smallPointsValue: {
+    fontSize: 15,
   },
   typeSelector: {
     flexDirection: 'row',

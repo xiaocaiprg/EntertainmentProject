@@ -41,6 +41,14 @@ export enum FundraisingType {
   TARGETED = 2, // 定向募资
 }
 
+// 转账用户类型枚举
+export enum UserTransferType {
+  PERSONAL = 1, // 个人
+  COMPANY = 2, // 公司
+  POOL = 3, // 奖金池
+  GROUP = 4, // 集团
+}
+
 export interface QueryParams {
   pageNum: number;
   pageSize: number;
