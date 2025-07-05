@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: '#fff',
     borderRadius: 16,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
+    // paddingHorizontal: 6,
+    // paddingVertical: 4,
     borderWidth: 1,
     borderColor: THEME_COLORS.primary,
   },

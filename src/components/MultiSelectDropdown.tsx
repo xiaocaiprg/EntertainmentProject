@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   dropdownText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
     flexWrap: 'wrap',
   },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f0f0f0',
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   emptyContainer: {
