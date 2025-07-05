@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import CustomTextInput from '../../../components/CustomTextInput';
 import CustomText from '../../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { THEME_COLORS } from '../../../utils/styles';
@@ -75,7 +76,7 @@ export const TagNumberInput: React.FC<TagNumberInputProps> = React.memo((props) 
 
         {showInput ? (
           <View style={styles.inputContainer}>
-            <TextInput
+            <CustomTextInput
               style={styles.input}
               value={inputValue}
               onChangeText={setInputValue}

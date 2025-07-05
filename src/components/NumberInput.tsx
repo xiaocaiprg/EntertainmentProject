@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, StyleSheet, TextInput, ViewStyle, TextStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
 import CustomText from './CustomText';
 import { mergeStyles } from '../utils/styles';
+import CustomTextInput from './CustomTextInput';
 
 interface NumberInputProps {
   title?: string;
@@ -48,7 +49,7 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
   return (
     <View style={mergedStyles.container}>
       {title && <CustomText style={mergedStyles.labelText}>{title}</CustomText>}
-      <TextInput
+      <CustomTextInput
         style={[mergedStyles.input, errorMessage && mergedStyles.inputError]}
         value={value}
         onChangeText={handleChangeText}
