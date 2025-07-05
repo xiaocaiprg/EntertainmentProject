@@ -82,8 +82,8 @@ android {
         applicationId "com.entertainmentproject"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15
-        versionName "1.0.17"
+        versionCode 16
+        versionName "1.0.18"
     }
     signingConfigs {
         debug {
