@@ -190,7 +190,7 @@ export const zhHant = {
     statisticsInfo: '統計信息',
     totalCount: '總數',
     totalWinCount: '總贏',
-    totalLoseCount: '總負',
+    totalLoseCount: '總輸',
     hitRate: '命中率',
     bankerWinCount: '莊贏',
     bankerLoseCount: '莊輸',

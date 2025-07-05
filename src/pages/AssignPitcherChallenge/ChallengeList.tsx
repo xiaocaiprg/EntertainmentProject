@@ -29,7 +29,7 @@ export const ChallengeList = React.memo((props: ChallengeListProps) => {
     const params: ChallengeListParams = {
       pageNum: pageNum.current,
       pageSize: pageSize.current,
-      isEnabledList: [ChallengeStatus.FUNDRAISING, ChallengeStatus.FUNDRAISING_COMPLETED],
+      isEnabledList: [ChallengeStatus.FUNDRAISING, ChallengeStatus.FUNDRAISING_COMPLETED, ChallengeStatus.IN_PROGRESS],
     };
     const res = await getChallengeList(params);
     if (res) {
