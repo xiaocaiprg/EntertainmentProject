@@ -12,7 +12,8 @@ export interface GameMatchPageDto {
   docPersonName?: string;
   gameDate?: string;
   id: number;
-  baseNumber: number;
+  baseNumber: string;
+  baseNumberList: number[];
   createTime?: string;
   isEnabled: number;
   name?: string;
@@ -112,7 +113,7 @@ export interface GameMatchDto {
   playPersonCode?: string;
   playPersonName?: string;
   currency?: string;
-  baseNumber: number;
+  baseNumber: string;
   playRuleCode?: string;
   principal?: number;
   profit?: number;

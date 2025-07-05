@@ -6,7 +6,7 @@ import { updateRoundStatus } from '../../../api/services/roundService';
 import { createHistoryRecord } from '../utils/historyHelper';
 import { getDDInitialRoundStats } from '../utils/gameDDLogic';
 
-export const useDDGameLogic = (baseNumber: number) => {
+export const useDDGameLogic = () => {
   const [gameStatus, setGameStatus] = useState<'waiting' | 'finished'>('waiting'); // 游戏状态
   const [gameNumber, setGameNumber] = useState(1); // 游戏次数
   const [currentChoice, setCurrentChoice] = useState<BetChoice | undefined>(undefined); // 当前选择
@@ -25,7 +25,7 @@ export const useDDGameLogic = (baseNumber: number) => {
     confirmText: '',
     nextRoundInfo: null,
   });
-  const [ddRoundStats, setDDRoundStats] = useState<DDRoundStats>(getDDInitialRoundStats(baseNumber)); // 游戏状态，传入baseNumber
+  const [ddRoundStats, setDDRoundStats] = useState<DDRoundStats>(getDDInitialRoundStats(0)); // 游戏状态，传入baseNumber
   const isSubmittingRef = useRef(false); // 使用ref来标记接口请求状态
   // 处理庄押注结果
   const handleBankerChange = useCallback((value: number) => {
@@ -163,7 +163,7 @@ export const useDDGameLogic = (baseNumber: number) => {
       }
     };
     handleGameLogic();
-  }, [gameStatus, roundId, ddRoundStats, updateRound, baseNumber]);
+  }, [gameStatus, roundId, ddRoundStats, updateRound]);
 
   return {
     gameStatus,

@@ -102,7 +102,7 @@ export interface PeakRecordDto {
 export interface GameMatchSimpleDto {
   addressInfoId: number;
   addressName: string;
-  baseNumber: number;
+  baseNumber: string;
   count: number;
   docPersonCode: string;
   docPersonName: string;

@@ -2,11 +2,11 @@ import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import DropdownSelect from '../../../components/DropdownSelect';
 import { THEME_COLORS } from '../../../utils/styles';
-import { GameMatchDto, GameRoundDto } from '../../../interface/Game';
+import { GameMatchPageDto, GameRoundDto } from '../../../interface/Game';
 import { getRoundList } from '../../../api/services/roundService';
 import CustomText from '../../../components/CustomText';
 interface ExistingChallengeFormProps {
-  challenges: GameMatchDto[];
+  challenges: GameMatchPageDto[];
   selectedChallengeId: number;
   onSelectChallengeId: (id: number) => void;
   onConfirm: () => void;

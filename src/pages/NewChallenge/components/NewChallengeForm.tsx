@@ -83,7 +83,9 @@ export const NewChallengeForm: React.FC<NewChallengeFormProps> = React.memo((pro
 
   // 获取单个投注基数显示值
   const getSingleBetAmountValue = useCallback(() => {
-    return typeof formData.initialBetAmount === 'number' ? formData.initialBetAmount.toString() : '';
+    return typeof formData.initialBetAmount === 'number' && formData.initialBetAmount > 0
+      ? formData.initialBetAmount.toString()
+      : '';
   }, [formData.initialBetAmount]);
 
   // 获取多个投注基数值

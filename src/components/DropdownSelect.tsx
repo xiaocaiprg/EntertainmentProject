@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   dropdownText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   optionsList: {
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f0f0f0',
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   emptyContainer: {

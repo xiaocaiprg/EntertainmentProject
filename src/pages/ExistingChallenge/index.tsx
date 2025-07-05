@@ -48,7 +48,7 @@ export const ExistingChallengeScreen = React.memo(() => {
         operator: challenge.playPersonName,
         recorder: challenge.docPersonName,
         roundId: activeRoundId,
-        baseNumber: challenge.baseNumber,
+        baseNumber: challenge.baseNumberList?.[0],
         playRuleCode: challenge.playRuleCode,
       });
     } else {
@@ -68,7 +68,7 @@ export const ExistingChallengeScreen = React.memo(() => {
               operator: challenge.playPersonName,
               recorder: challenge.docPersonName,
               roundId: res,
-              baseNumber: challenge.baseNumber,
+              baseNumber: challenge.baseNumberList?.[0],
               playRuleCode: challenge.playRuleCode,
             });
           }

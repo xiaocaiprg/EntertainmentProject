@@ -24,7 +24,7 @@ export interface DDGameProps {
 }
 
 export const DDGame: React.FC<DDGameProps> = React.memo((props) => {
-  const { challengeName, operator, roundId, recorder, baseNumber, navigation } = props;
+  const { challengeName, operator, roundId, recorder, navigation } = props;
 
   const {
     currentChoice,
@@ -49,7 +49,7 @@ export const DDGame: React.FC<DDGameProps> = React.memo((props) => {
     handleEndRound,
     selectedBetAmount,
     setSelectedBetAmount,
-  } = useDDGameLogic(baseNumber);
+  } = useDDGameLogic();
 
   // 添加结束本场确认弹窗状态
   const [endRoundModalVisible, setEndRoundModalVisible] = useState(false);
