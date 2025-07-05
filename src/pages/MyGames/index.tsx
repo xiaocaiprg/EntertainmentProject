@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   statusText: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
   },
   itemContent: {
@@ -521,13 +521,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   label: {
-    fontSize: 12,
+    fontSize: 14,
     color: THEME_COLORS.text.secondary,
     marginRight: 4,
     width: 50,
   },
   value: {
-    fontSize: 12,
+    fontSize: 14,
     color: THEME_COLORS.text.primary,
     flex: 1,
   },
@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
   },
   footerContainer: {

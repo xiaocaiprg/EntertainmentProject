@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderColor: '#eaeaea',
   },
   pointLable: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#777',
     marginRight: 4,
   },
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   inningLabel: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#555',
   },
   inningResult: {
