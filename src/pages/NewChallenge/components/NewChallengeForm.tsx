@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 12,
-    fontSize: 16,
+    fontSize: 14,
     backgroundColor: '#f5f5f5',
   },
   spacer: {

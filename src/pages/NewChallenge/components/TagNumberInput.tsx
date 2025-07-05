@@ -52,6 +52,15 @@ export const TagNumberInput: React.FC<TagNumberInputProps> = React.memo((props) 
     handleAddTag();
   }, [handleAddTag]);
 
+  // 处理失去焦点（点击空白区域）
+  const handleBlur = useCallback(() => {
+    if (inputValue.trim()) {
+      handleAddTag();
+    } else {
+      handleCancelInput();
+    }
+  }, [inputValue, handleAddTag, handleCancelInput]);
+
   return (
     <View>
       <View style={styles.tagsContentContainer}>
@@ -74,7 +83,7 @@ export const TagNumberInput: React.FC<TagNumberInputProps> = React.memo((props) 
               keyboardType="numeric"
               autoFocus
               onSubmitEditing={handleSubmitEditing}
-              onBlur={handleCancelInput}
+              onBlur={handleBlur}
             />
           </View>
         ) : (
