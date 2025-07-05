@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, TextStyle, TouchableOpacity, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTranslation } from '../hooks/useTranslation';
 import { mergeStyles } from '../utils/styles';
@@ -76,6 +76,71 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = React.mem
     [onSelectionChange],
   );
 
+  // 自定义渲染列表项，确保文字不缩放
+  const renderListItem = useCallback(
+    ({ item, onPress, isSelected }: any) => (
+      <TouchableOpacity
+        style={[mergedStyles.optionItem, isSelected && { backgroundColor: '#f0f0f0' }]}
+        onPress={() => onPress(item)}
+      >
+        <Text style={mergedStyles.optionText} allowFontScaling={false}>
+          {item.label}
+        </Text>
+      </TouchableOpacity>
+    ),
+    [mergedStyles],
+  );
+
+  // 随机颜色配置
+  const badgeColors = useMemo(() => ['#1890ff20', '#52c41a20', '#faad1420', '#f522d220', '#722ed120', '#eb2f9620'], []);
+  const badgeDotColors = useMemo(() => ['#1890ff', '#52c41a', '#faad14', '#f5222d', '#722ed1', '#eb2f96'], []);
+
+  // 获取字符串的简单哈希值，用于颜色选择
+  const getColorIndex = useCallback(
+    (str: string) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash = hash & hash; // 转换为32位整数
+      }
+      return Math.abs(hash) % badgeColors.length;
+    },
+    [badgeColors.length],
+  );
+
+  // 简单自定义Badge项，支持随机颜色，确保文字不缩放
+  const renderBadgeItem = useCallback(
+    ({ label, value, onPress }: any) => {
+      // 使用 value 或 label 来确定颜色索引
+      const colorKey = String(value || label || '');
+      const colorIndex = getColorIndex(colorKey);
+
+      // 获取对应的颜色
+      const backgroundColor = badgeColors[colorIndex];
+      const dotColor = badgeDotColors[colorIndex];
+
+      return (
+        <TouchableOpacity style={[mergedStyles.badge, { backgroundColor }]} onPress={() => onPress && onPress()}>
+          {/* 可选的圆点装饰 */}
+          <View
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: 3,
+              backgroundColor: dotColor,
+              marginRight: 4,
+            }}
+          />
+          <Text style={mergedStyles.badgeText} allowFontScaling={false}>
+            {label}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [mergedStyles, getColorIndex, badgeColors, badgeDotColors],
+  );
+
   return (
     <View style={[mergedStyles.selectContainer, { zIndex, elevation: zIndex }]}>
       <DropDownPicker
@@ -89,6 +154,8 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = React.mem
             onStateChange(!!isOpened);
           }
         }}
+        renderListItem={renderListItem}
+        renderBadgeItem={renderBadgeItem}
         setValue={setValue}
         onChangeValue={handleValueChange}
         placeholder={placeholder}
@@ -109,15 +176,14 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = React.mem
         translation={{
           NOTHING_TO_SHOW: t('common.noData'),
         }}
+        labelProps={{
+          allowFontScaling: false,
+        }}
         itemKey="value"
         dropDownDirection={'BOTTOM'}
         zIndex={zIndex}
         zIndexInverse={zIndexInverse}
         mode="BADGE"
-        badgeDotColors={['#1890ff', '#52c41a', '#faad14', '#f5222d', '#722ed1', '#eb2f96']}
-        badgeColors={['#1890ff20', '#52c41a20', '#faad1420', '#f522d220', '#722ed120', '#eb2f9620']}
-        badgeTextStyle={mergedStyles.badgeText}
-        badgeStyle={mergedStyles.badge}
       />
     </View>
   );
@@ -175,6 +241,10 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: 4,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    marginRight: 4,
   },
   badgeText: {
     fontSize: 12,
