@@ -13,7 +13,6 @@ declare global {
       };
       NewChallenge: undefined;
       ExistingChallenge: undefined;
-      GameHistory: undefined;
       AllChallenge: undefined;
       ChangeRecorderChallenge: undefined;
       FundraisingChallenge: undefined;

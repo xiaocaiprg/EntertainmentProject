@@ -19,8 +19,25 @@ export interface LoginResultDto {
   frozenPoints: number;
   id: number;
   name: string;
+  currentInterestRate: number;
+  currentInterestRateStr: string;
+  currentInterestType: number;
+  fixedInterestRate: number;
+  fixedInterestRateStr: string;
+  fixedInterestType: number;
   profit: number;
   profitStr: string;
   role: string;
   totalPoints: number;
+  creditAccount: CreditAccountDto;
+}
+
+export interface CreditAccountDto {
+  availablePoints: number;
+  code: string;
+  frozenPoints: number;
+  name: string;
+  repayAmount: number;
+  userCode: string;
+  userType: number;
 }

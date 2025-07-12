@@ -3,38 +3,37 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
 import { HomeScreen } from './Home/index';
-import { MyScreen } from './My/index';
+import { MyScreen } from './MyPages/My/index';
 // import { TournamentScreen } from './Tournament/index';
 import { AuthScreen } from './Auth/AuthScreen';
 import { Game } from './Game/index';
-import { NewChallengeScreen } from './NewChallenge/index';
-import { ExistingChallengeScreen } from './ExistingChallenge/index';
-import { GameHistory } from './GameHistory/index';
-import { ChallengeDetail } from './ChallengeDetail/index';
-import { ChangeRecorderChallenge } from './ChangeRecorderChallenge/index';
-import { AssignPitcherChallengeScreen } from './AssignPitcherChallenge/index';
-import { AllChallengeScreen } from './AllChallenge/index';
-import { FundraisingChallengeScreen } from './FundraisingChallenge/index';
-import { InvestmentDetailScreen } from './InvestmentDetail/index';
-import { MyGamesScreen } from './MyGames/index';
+import { NewChallengeScreen } from './Challenge/NewChallenge/index';
+import { ExistingChallengeScreen } from './Challenge/ExistingChallenge/index';
+import { ChallengeDetail } from './Challenge/ChallengeDetail/index';
+import { ChangeRecorderChallenge } from './Challenge/ChangeRecorderChallenge/index';
+import { AssignPitcherChallengeScreen } from './Challenge/AssignPitcherChallenge/index';
+import { AllChallengeScreen } from './Challenge/AllChallenge/index';
+import { FundraisingChallengeScreen } from './Challenge/FundraisingChallenge/index';
+import { InvestmentDetailScreen } from './Challenge/InvestmentDetail/index';
+import { MyGamesScreen } from './MyPages/MyGames/index';
 import { RoundDetailScreen } from './RoundDetail/index';
 import { TurnoverQueryScreen } from './TurnoverQuery/index';
 import { SettingsScreen } from './Settings/index';
 import { AccountSecurity } from './Settings/AccountSecurity';
 import { PaymentManager } from './Settings/PaymentManager';
-import { PitcherRankingScreen } from './PitcherRanking/index';
-import { MyPointsScreen } from './MyPoints/index';
-import { PointsTransferScreen } from './PointsTransfer/index';
-import { FrozenPointsScreen } from './FrozenPoints/index';
-import { MyProfitScreen } from './MyProfit/index';
-import { CreateRaceScreen } from './CreateRace/index';
-import { AllRaceScreen } from './AllRace/index';
-import { RaceDetailScreen } from './RaceDetail/index';
-import { RacePoolListScreen } from './RacePoolList/index';
-import { PeakRecordScreen } from './PeakRecord/index';
+import { PitcherRankingScreen } from './Rank/PitcherRanking/index';
+import { MyPointsScreen } from './MyPages/MyPoints/index';
+import { PointsTransferScreen } from './Points/PointsTransfer/index';
+import { FrozenPointsScreen } from './Points/FrozenPoints/index';
+import { MyProfitScreen } from './MyPages/MyProfit/index';
+import { CreateRaceScreen } from './Race/CreateRace/index';
+import { AllRaceScreen } from './Race/AllRace/index';
+import { RaceDetailScreen } from './Race/RaceDetail/index';
+import { RacePoolListScreen } from './Race/RacePoolList/index';
+import { PeakRecordScreen } from './Rank/PeakRecord/index';
 import { GroupManagementScreen } from './GroupManagement/index';
-import { CompanyManagementScreen } from './CompanyManagement/index';
-import { CompanyDetailScreen } from './CompanyDetail/index';
+import { CompanyManagementScreen } from './Company/CompanyManagement/index';
+import { CompanyDetailScreen } from './Company/CompanyDetail/index';
 import { FixedDepositsScreen } from './FixedDeposits/index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -54,7 +53,6 @@ export type RootStackParamList = {
   Game: GameRouteParams;
   NewChallenge: { raceId?: number };
   ExistingChallenge: undefined;
-  GameHistory: undefined;
   ChallengeDetail: { matchId: number };
   AllChallenge: undefined;
   ChangeRecorderChallenge: undefined;
@@ -154,7 +152,6 @@ function AppNavigator() {
                 <Stack.Screen name="Game" component={Game} />
                 <Stack.Screen name="NewChallenge" component={NewChallengeScreen} />
                 <Stack.Screen name="ExistingChallenge" component={ExistingChallengeScreen} />
-                <Stack.Screen name="GameHistory" component={GameHistory} />
                 <Stack.Screen name="ChallengeDetail" component={ChallengeDetail} />
                 <Stack.Screen name="AllChallenge" component={AllChallengeScreen} />
                 <Stack.Screen name="ChangeRecorderChallenge" component={ChangeRecorderChallenge} />

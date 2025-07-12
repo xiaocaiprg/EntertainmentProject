@@ -302,6 +302,8 @@ export const zh = {
     loginout: '退出',
     memberCenter: '会员中心',
     points: '积分',
+    creditPoints: '额度积分',
+    repayAmount: '待还积分',
     gameCoins: '比赛币',
     transfer: '转积分',
     frozenPoints: '查在途',

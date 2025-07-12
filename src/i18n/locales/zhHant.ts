@@ -302,6 +302,8 @@ export const zhHant = {
     loginout: '退出',
     memberCenter: '會員中心',
     points: '積分',
+    creditPoints: '額度積分',
+    repayAmount: '待還積分',
     gameCoins: '比賽幣',
     transfer: '轉積分',
     frozenPoints: '查在途',

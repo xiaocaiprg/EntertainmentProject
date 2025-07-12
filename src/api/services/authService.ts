@@ -12,8 +12,8 @@ export const PATH = {
   GET_USER_DETAIL: 'haiyang/business/detail',
 };
 
-export const userlogin = (params: UserParams): Promise<BusinessDto> => {
-  return post<ApiResponse<BusinessDto>>(PATH.LOGIN, params).then((res) => {
+export const userlogin = (params: UserParams): Promise<LoginResultDto> => {
+  return post<ApiResponse<LoginResultDto>>(PATH.LOGIN, params).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {
@@ -22,8 +22,8 @@ export const userlogin = (params: UserParams): Promise<BusinessDto> => {
   });
 };
 
-export const getUserStatus = (): Promise<BusinessDto> => {
-  return get<ApiResponse<BusinessDto>>(PATH.LOGIN_STATUS).then((res) => {
+export const getUserStatus = (): Promise<LoginResultDto> => {
+  return get<ApiResponse<LoginResultDto>>(PATH.LOGIN_STATUS).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {

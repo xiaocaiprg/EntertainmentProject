@@ -301,6 +301,8 @@ export const en = {
     loginout: 'Logout',
     memberCenter: 'Member Center',
     points: 'Points',
+    creditPoints: 'CreditPoints',
+    repayAmount: 'Repay Amount',
     gameCoins: 'GameCoins',
     transfer: 'Transfer',
     frozenPoints: 'Pending Points',
