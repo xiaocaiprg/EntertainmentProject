@@ -5,7 +5,7 @@ import { useTranslation } from '../../../../../hooks/useTranslation';
 import { BusinessDto } from '../../../../../interface/Business';
 interface PointsCardProps {
   user: BusinessDto;
-  onPointsPress: () => void;
+  onPointsPress: (code?: string) => void;
 }
 
 export const PointsCard = React.memo((props: PointsCardProps) => {
@@ -28,8 +28,12 @@ export const PointsCard = React.memo((props: PointsCardProps) => {
   return (
     <View style={styles.pointsCardWrapper}>
       <PointsItem value={user.availablePoints} label={t('my.points')} onPress={onPointsPress} />
-      <PointsItem value={user?.creditAccount.availablePoints} label={t('my.creditPoints')} onPress={onPointsPress} />
-      <PointsItem value={user?.creditAccount.repayAmount} label={t('my.repayAmount')} />
+      <PointsItem
+        value={user?.creditAccount?.availablePoints}
+        label={t('my.creditPoints')}
+        onPress={() => onPointsPress(user?.creditAccount?.code)}
+      />
+      <PointsItem value={user?.creditAccount?.repayAmount} label={t('my.repayAmount')} />
       <PointsItem label={t('my.gameCoins')} onPress={onGameCoinsPress} />
     </View>
   );

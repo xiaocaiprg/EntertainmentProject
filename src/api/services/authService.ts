@@ -1,7 +1,6 @@
 import { get, post } from '../request';
 import { UserParams, UserDetailParams, LoginResultDto, ChangePayPasswordParams } from '../../interface/User';
 import { ApiResponse } from '../../interface/IModuleProps';
-import { BusinessDto } from '../../interface/Business';
 import { APP_VERSION_URL } from '../../utils/UpdateManager';
 
 export const PATH = {

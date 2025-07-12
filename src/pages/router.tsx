@@ -24,6 +24,7 @@ import { PaymentManager } from './Settings/PaymentManager';
 import { PitcherRankingScreen } from './Rank/PitcherRanking/index';
 import { MyPointsScreen } from './MyPages/MyPoints/index';
 import { PointsTransferScreen } from './Points/PointsTransfer/index';
+import { CreditTransferScreen } from './Points/CreditTransfer/index';
 import { FrozenPointsScreen } from './Points/FrozenPoints/index';
 import { MyProfitScreen } from './MyPages/MyProfit/index';
 import { CreateRaceScreen } from './Race/CreateRace/index';
@@ -68,6 +69,7 @@ export type RootStackParamList = {
   PitcherRanking: undefined;
   MyPoints: { code?: string };
   PointsTransfer: { code?: string; availablePoints?: number; name?: string };
+  CreditTransfer: undefined;
   FrozenPoints: undefined;
   MyProfit: undefined;
   CreateRace: undefined;
@@ -167,6 +169,7 @@ function AppNavigator() {
                 <Stack.Screen name="PitcherRanking" component={PitcherRankingScreen} />
                 <Stack.Screen name="MyPoints" component={MyPointsScreen} />
                 <Stack.Screen name="PointsTransfer" component={PointsTransferScreen} />
+                <Stack.Screen name="CreditTransfer" component={CreditTransferScreen} />
                 <Stack.Screen name="FrozenPoints" component={FrozenPointsScreen} />
                 <Stack.Screen name="MyProfit" component={MyProfitScreen} />
                 <Stack.Screen name="CreateRace" component={CreateRaceScreen} />

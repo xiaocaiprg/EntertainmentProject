@@ -10,7 +10,10 @@ export interface TransferPointParams {
   transfer: TransferCreateParam;
   payPassword?: string | null;
 }
-
+export interface TransferCreditPointParams {
+  transfer: TransferCreateParam;
+  payPassword: string | null;
+}
 export interface PageDtoTransferLogDto {
   current: number;
   pages: number;

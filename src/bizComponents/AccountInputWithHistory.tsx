@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import CustomText from '../../../../components/CustomText';
-import { getTransferOutlogList } from '../../../../api/services/pointService';
-import { TransferOutLogDto } from '../../../../interface/Points';
-import { TransferType } from '../index';
-import { UserTransferType } from '../../../../interface/Common';
+import CustomText from '../components/CustomText';
+import { getTransferOutlogList } from '../api/services/pointService';
+import { TransferOutLogDto } from '../interface/Points';
+import { TransferType } from '../pages/Points/PointsTransfer/index';
+import { UserTransferType } from '../interface/Common';
 
 interface AccountInputWithHistoryProps {
   value: string;

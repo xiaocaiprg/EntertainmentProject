@@ -47,6 +47,7 @@ export enum UserTransferType {
   COMPANY = 2, // 公司
   POOL = 3, // 奖金池
   GROUP = 4, // 集团
+  CREDIT_TRANSFER = 8, // 额度转账
 }
 
 export interface QueryParams {

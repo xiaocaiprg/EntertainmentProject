@@ -41,9 +41,12 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
     await logout();
   }, [logout]);
 
-  const handleMyPoints = useCallback(() => {
-    navigation.navigate('MyPoints');
-  }, [navigation]);
+  const handleMyPoints = useCallback(
+    (code?: string) => {
+      navigation.navigate('MyPoints', code ? { code } : {});
+    },
+    [navigation],
+  );
 
   const handleOneClickSettlement = useCallback(() => {
     setShowSettlementModal(true);
@@ -124,7 +127,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
 
         <View style={styles.cardContainer}>
           {user && <MemberBenefits user={user} navigation={navigation} />}
-          {user && <PointsCard user={user} onPointsPress={handleMyPoints} />}
+          {user && <PointsCard user={user} onPointsPress={(code?: string) => handleMyPoints(code)} />}
           <ActionArea navigation={navigation} />
           {isOperationAdmin && (
             <View style={styles.settlementContainer}>

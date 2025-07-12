@@ -15,7 +15,7 @@ import { RootStackScreenProps } from '../../router';
 import { ConfirmModal } from '../../../components/ConfirmModal';
 import { useAuth } from '../../../hooks/useAuth';
 import { transferPoint } from '../../../api/services/pointService';
-import { AccountInputWithHistory } from './components/AccountInputWithHistory';
+import { AccountInputWithHistory } from '../../../bizComponents/AccountInputWithHistory';
 import { TransferPointParams, TransferCreateParam } from '../../../interface/Points';
 import { isIOS } from '../../../utils/platform';
 import { STATUS_BAR_HEIGHT } from '../../../utils/platform';

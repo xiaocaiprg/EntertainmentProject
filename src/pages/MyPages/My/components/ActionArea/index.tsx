@@ -19,11 +19,19 @@ export const ActionArea = React.memo((props: ActionAreaProps) => {
     navigation.navigate('FrozenPoints');
   }, [navigation]);
 
+  const handleCreditTransferPress = useCallback(() => {
+    navigation.navigate('CreditTransfer');
+  }, [navigation]);
+
   return (
     <View style={styles.ActionAreaWrapper}>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleTransferPress}>
         <Icon name="sync-alt" size={24} color="#6c5ce7" />
         <CustomText style={styles.ActionAreaItemLabel}>{t('my.transfer')}</CustomText>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.ActionAreaItem} onPress={handleCreditTransferPress}>
+        <Icon name="account-balance" size={24} color="#6c5ce7" />
+        <CustomText style={styles.ActionAreaItemLabel}>{t('my.creditTransfer')}</CustomText>
       </TouchableOpacity>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleFrozenPointsPress}>
         <Icon name="manage-search" size={24} color="#6c5ce7" />
