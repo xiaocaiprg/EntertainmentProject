@@ -1,11 +1,11 @@
 import { post } from '../request';
-import { FixAccountDto, CreateFixAccountParams, TerminateFixAccountParams } from '../../interface/Account';
+import { FixAccountDto, CreateFixAccountParams, WithdrawFixAccountParams } from '../../interface/Account';
 import { ApiResponse } from '../../interface/IModuleProps';
 
 export const PATH = {
   GET_FIXED_ACCOUNT_LIST: 'haiyang/fixedAccount/list',
   CREATE_FIXED_ACCOUNT: 'haiyang/fixedAccount/create',
-  TERMINATE_FIXED_ACCOUNT: 'haiyang/fixedAccount/terminate',
+  WITHDRAW_FIXED_ACCOUNT: 'haiyang/fixedAccount/withdraw',
 };
 
 export const getFixedAccountList = (): Promise<FixAccountDto[]> => {
@@ -31,8 +31,8 @@ export const createFixedAccount = (params: CreateFixAccountParams): Promise<stri
   });
 };
 
-export const terminateFixedAccount = (params: TerminateFixAccountParams): Promise<string> => {
-  return post<ApiResponse<string>>(`${PATH.TERMINATE_FIXED_ACCOUNT}`, params).then((res) => {
+export const withdrawFixedAccount = (params: WithdrawFixAccountParams): Promise<string> => {
+  return post<ApiResponse<string>>(`${PATH.WITHDRAW_FIXED_ACCOUNT}`, params).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {

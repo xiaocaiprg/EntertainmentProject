@@ -6,11 +6,11 @@ import { useAuth } from '../../hooks/useAuth';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../utils/platform';
 import CustomText from '../../components/CustomText';
 import ConfirmModal from '../../components/ConfirmModal';
-import { getFixedAccountList, terminateFixedAccount } from '../../api/services/accountService';
-import { FixAccountDto, TerminateFixAccountParams } from '../../interface/Account';
+import { getFixedAccountList, withdrawFixedAccount } from '../../api/services/accountService';
+import { FixAccountDto, WithdrawFixAccountParams } from '../../interface/Account';
 import { RootStackScreenProps } from '../router';
 import { CreateDepositModal } from './components/CreateDepositModal';
-import PayPasswordInput from '../../bizComponents/PayPasswordInput';
+import { WithdrawConfirmContent } from './components/WithdrawConfirmContent';
 
 const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposits'>) => {
   const { navigation } = props;
@@ -27,6 +27,7 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
   const [selectedDeposit, setSelectedDeposit] = useState<FixAccountDto | null>(null);
   const [isTerminating, setIsTerminating] = useState(false);
   const [payPassword, setPayPassword] = useState('');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
 
   const loadDeposits = useCallback(async () => {
     setLoading(true);
@@ -41,36 +42,41 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
 
   const handleTerminate = useCallback((item: FixAccountDto) => {
     setSelectedDeposit(item);
+    setWithdrawAmount('');
+    setPayPassword('');
     setShowTerminateModal(true);
   }, []);
 
   const handleConfirmTerminate = useCallback(async () => {
-    if (!selectedDeposit || !payPassword) {
+    if (!selectedDeposit || !payPassword || !withdrawAmount) {
       return;
     }
-    const params: TerminateFixAccountParams = {
+    const params: WithdrawFixAccountParams = {
       code: selectedDeposit.code,
+      amount: Number(withdrawAmount),
       payPassword: payPassword,
     };
     setIsTerminating(true);
     try {
-      await terminateFixedAccount(params);
+      await withdrawFixedAccount(params);
       Alert.alert(t('common.success'), t('fixedDeposits.terminateSuccess'));
       loadDeposits(); // 刷新列表
       setShowTerminateModal(false);
       setSelectedDeposit(null);
       setPayPassword(''); // 重置支付密码
+      setWithdrawAmount(''); // 重置支取金额
     } catch (error: any) {
       Alert.alert(t('common.error'), error?.message || t('fixedDeposits.terminateFailed'));
     }
     setIsTerminating(false);
-  }, [selectedDeposit, payPassword, t, loadDeposits]);
+  }, [selectedDeposit, payPassword, withdrawAmount, t, loadDeposits]);
 
   const handleCancelTerminate = useCallback(() => {
     setShowTerminateModal(false);
     setSelectedDeposit(null);
     setIsTerminating(false);
     setPayPassword(''); // 重置支付密码
+    setWithdrawAmount(''); // 重置支取金额
   }, []);
 
   const formatDate = useCallback((dateString: string) => {
@@ -88,18 +94,48 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
     return amount.toLocaleString();
   }, []);
 
-  const statusText = useMemo(
-    () => ({
-      enabled: t('fixedDeposits.enabled'),
-      disabled: t('fixedDeposits.disabled'),
-    }),
-    [t],
-  );
-
-  // 支付密码输入验证
+  // 支取表单验证
   const isTerminateFormValid = useMemo(() => {
-    return payPassword.length === 6;
-  }, [payPassword]);
+    if (payPassword.length !== 6) {
+      return false;
+    }
+    if (!withdrawAmount.trim()) {
+      return false;
+    }
+
+    const amount = Number(withdrawAmount);
+    if (isNaN(amount)) {
+      return false;
+    }
+    if (amount < 0) {
+      return false;
+    }
+    if (selectedDeposit && amount > selectedDeposit.amount) {
+      return false;
+    }
+
+    return true;
+  }, [payPassword, withdrawAmount, selectedDeposit]);
+
+  // 支取金额错误提示
+  const withdrawAmountError = useMemo(() => {
+    if (!withdrawAmount.trim()) {
+      return '';
+    }
+
+    const amount = Number(withdrawAmount);
+    if (isNaN(amount)) {
+      return '请输入有效数字';
+    }
+    if (amount < 0) {
+      return '支取金额不能少于0';
+    }
+    if (selectedDeposit && amount > selectedDeposit.amount) {
+      return `支取金额不能超过${selectedDeposit.amount}`;
+    }
+
+    return '';
+  }, [withdrawAmount, selectedDeposit]);
 
   const renderDepositItem = useCallback(
     ({ item }: { item: FixAccountDto }) => (
@@ -134,7 +170,7 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
         </View>
       </View>
     ),
-    [t, formatDate, formatAmount, statusText, handleTerminate],
+    [t, formatDate, formatAmount, handleTerminate],
   );
 
   const renderEmptyState = useCallback(
@@ -217,10 +253,14 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
         isProcessing={isTerminating}
         confirmButtonDisabled={!isTerminateFormValid}
         customContent={
-          <View style={styles.payPasswordContainer}>
-            <CustomText style={styles.payPasswordLabel}>{t('pointsTransfer.payPassword')}:</CustomText>
-            <PayPasswordInput value={payPassword} onChangeText={setPayPassword} maxLength={6} />
-          </View>
+          <WithdrawConfirmContent
+            selectedDeposit={selectedDeposit}
+            withdrawAmount={withdrawAmount}
+            onWithdrawAmountChange={setWithdrawAmount}
+            withdrawAmountError={withdrawAmountError}
+            payPassword={payPassword}
+            onPayPasswordChange={setPayPassword}
+          />
         }
       />
     </SafeAreaView>
@@ -368,15 +408,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
-  },
-  payPasswordContainer: {
-    marginTop: 15,
-  },
-  payPasswordLabel: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 10,
-    fontWeight: '500',
   },
 });
 

@@ -12,7 +12,8 @@ export interface CreateFixAccountParams {
   payPassword: string;
   amount: number;
 }
-export interface TerminateFixAccountParams {
+export interface WithdrawFixAccountParams {
   code: string;
+  amount: number;
   payPassword: string;
 }

@@ -27,7 +27,7 @@ export const PointsCard = React.memo((props: PointsCardProps) => {
   }, []);
   return (
     <View style={styles.pointsCardWrapper}>
-      <PointsItem value={user.availablePoints} label={t('my.points')} onPress={onPointsPress} />
+      <PointsItem value={user.availablePoints} label={t('my.points')} onPress={() => onPointsPress()} />
       <PointsItem
         value={user?.creditAccount?.availablePoints}
         label={t('my.creditPoints')}
