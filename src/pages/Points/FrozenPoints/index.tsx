@@ -7,6 +7,7 @@ import { getFrozenList } from '../../../api/services/pointService';
 import { FrozeningDto } from '../../../interface/Points';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../../utils/platform';
 import CustomText from '../../../components/CustomText';
+import { PaymentSourceType } from '../../../interface/Common';
 
 type FrozenPointsScreenProps = RootStackScreenProps<'FrozenPoints'>;
 
@@ -60,6 +61,14 @@ export const FrozenPointsScreen: React.FC<FrozenPointsScreenProps> = React.memo(
             </CustomText>
             <CustomText style={styles.itemText}>
               {t('frozenPoints.addressName')}: {item.addressName || '-'}
+            </CustomText>
+          </View>
+          <View style={styles.itemDetail}>
+            <CustomText style={styles.itemText}>
+              {t('frozenPoints.foundSourceType')}:{' '}
+              {item.foundSourceType === PaymentSourceType.AVAILABLE_POINTS
+                ? t('frozenPoints.availablePoints')
+                : t('frozenPoints.creditPoints')}
             </CustomText>
           </View>
         </View>

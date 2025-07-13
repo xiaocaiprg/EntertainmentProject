@@ -226,8 +226,8 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
   }, [isFormValid, transferType, account]);
 
   const handleConfirmTransfer = useCallback(async () => {
-    // 如果不是奖金池转账且密码不完整，直接返回
-    if (!isPoolTransfer && payPassword.length !== PAY_PASSWORD_LENGTH) {
+    // 如果密码不完整，直接返回
+    if (payPassword.length !== PAY_PASSWORD_LENGTH) {
       return;
     }
 
@@ -252,7 +252,7 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
 
     const transferParams: TransferPointParams = {
       transfer,
-      payPassword: isPoolTransfer ? null : payPassword,
+      payPassword: payPassword,
     };
 
     try {
@@ -454,13 +454,11 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
         confirmText={t('common.confirm')}
         onCancel={() => {
           setConfirmModalVisible(false);
-          if (!isPoolTransfer) {
-            setPayPassword('');
-          }
+          setPayPassword('');
         }}
         onConfirm={handleConfirmTransfer}
         isProcessing={isProcessing}
-        confirmButtonDisabled={!isPoolTransfer && payPassword.length !== PAY_PASSWORD_LENGTH}
+        confirmButtonDisabled={payPassword.length !== PAY_PASSWORD_LENGTH}
         customContent={
           <View>
             {/* 转账信息 */}
@@ -484,13 +482,11 @@ export const PointsTransferScreen: React.FC<PointsTransferScreenProps> = React.m
               </View>
             </View>
 
-            {/* 支付密码 - 仅在非奖金池转账时显示 */}
-            {!isPoolTransfer && (
-              <View style={styles.payPasswordContainer}>
-                <CustomText style={styles.payPasswordLabel}>{t('pointsTransfer.payPassword')}</CustomText>
-                <PayPasswordInput value={payPassword} onChangeText={setPayPassword} />
-              </View>
-            )}
+            {/* 支付密码 */}
+            <View style={styles.payPasswordContainer}>
+              <CustomText style={styles.payPasswordLabel}>{t('pointsTransfer.payPassword')}</CustomText>
+              <PayPasswordInput value={payPassword} onChangeText={setPayPassword} />
+            </View>
 
             {/* 提示信息 */}
             <CustomText style={styles.confirmWarning}>{t('pointsTransfer.confirmWarning')}</CustomText>

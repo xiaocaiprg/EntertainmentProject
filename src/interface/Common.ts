@@ -50,6 +50,12 @@ export enum UserTransferType {
   CREDIT_TRANSFER = 8, // 额度转账
 }
 
+// 支付方式类型枚举
+export enum PaymentSourceType {
+  AVAILABLE_POINTS = 1, // 可用积分
+  CREDIT_POINTS = 2, // 额度积分
+}
+
 export interface QueryParams {
   pageNum: number;
   pageSize: number;

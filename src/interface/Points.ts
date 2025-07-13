@@ -44,6 +44,7 @@ export interface FrozeningDto {
   id: number;
   name: string;
   currency: string;
+  foundSourceType: number;
   playPersonCode: string;
   playPersonName: string;
   addressName: string;

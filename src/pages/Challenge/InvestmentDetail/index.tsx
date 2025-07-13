@@ -24,6 +24,8 @@ import { ChallengeDetailCard } from './components/ChallengeDetailCard';
 import { ContributionList } from './components/ContributionList';
 import ConfirmModal from '../../../components/ConfirmModal';
 import CustomText from '../../../components/CustomText';
+import PaymentMethodSelector from './components/PaymentMethodSelector';
+import { PaymentSourceType } from '../../../interface/Common';
 import { RootStackScreenProps } from '../../router';
 import { STATUS_BAR_HEIGHT, isIOS } from '../../../utils/platform';
 
@@ -37,6 +39,7 @@ export const InvestmentDetailScreen: React.FC<InvestmentDetailScreenProps> = Rea
   const [myContribution, setMyContribution] = useState<ContributionDto | null>(null);
   const [amount, setAmount] = useState<string>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -68,8 +71,8 @@ export const InvestmentDetailScreen: React.FC<InvestmentDetailScreenProps> = Rea
     setAmount(text);
   }, []);
 
-  // 处理出资
-  const handleInvest = useCallback(async () => {
+  // 处理出资 - 先显示支付方式选择模态框
+  const handleInvest = useCallback(() => {
     if (!amount || parseFloat(amount) <= 0) {
       Alert.alert(t('fundraisingChallenge.hint'), t('fundraisingChallenge.invalidAmount'));
       return;
@@ -87,23 +90,36 @@ export const InvestmentDetailScreen: React.FC<InvestmentDetailScreenProps> = Rea
       return;
     }
 
-    setSubmitting(true);
-    try {
-      const result = await createContribution({
-        matchId,
-        amount: amountValue,
-      });
-      if (result) {
-        setMyContribution(result);
-        setAmount('');
-        fetchChallengeDetail();
-        Alert.alert(t('fundraisingChallenge.success'), t('fundraisingChallenge.investSuccess'));
+    // 显示支付方式选择模态框
+    setShowPaymentModal(true);
+  }, [amount, matchDetail, t]);
+
+  // 确认支付方式并执行出资
+  const handleConfirmPayment = useCallback(
+    async (paymentType: PaymentSourceType) => {
+      const amountValue = parseFloat(amount);
+      setShowPaymentModal(false);
+      setSubmitting(true);
+
+      try {
+        const result = await createContribution({
+          matchId,
+          amount: amountValue,
+          foundSourceType: paymentType,
+        });
+        if (result) {
+          setMyContribution(result);
+          setAmount('');
+          fetchChallengeDetail();
+          Alert.alert(t('fundraisingChallenge.success'), t('fundraisingChallenge.investSuccess'));
+        }
+      } catch (error: any) {
+        Alert.alert(t('fundraisingChallenge.error'), error?.message);
       }
-    } catch (error: any) {
-      Alert.alert(t('fundraisingChallenge.error'), error?.message);
-    }
-    setSubmitting(false);
-  }, [amount, matchDetail, matchId, fetchChallengeDetail, t]);
+      setSubmitting(false);
+    },
+    [amount, matchId, fetchChallengeDetail, t],
+  );
 
   // 打开删除确认模态框
   const handleShowDeleteModal = useCallback(() => {
@@ -260,6 +276,14 @@ export const InvestmentDetailScreen: React.FC<InvestmentDetailScreenProps> = Rea
           onCancel={handleCancelDelete}
           onConfirm={handleConfirmDelete}
           isProcessing={submitting}
+        />
+
+        {/* 支付方式选择模态框 */}
+        <PaymentMethodSelector
+          visible={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          onConfirm={handleConfirmPayment}
+          isSubmitting={submitting}
         />
       </SafeAreaView>
     </View>
