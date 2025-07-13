@@ -1,6 +1,6 @@
 {
   "name": "EntertainmentProject",
-  "version": "1.0.9",
+  "version": "1.0.18",
   "private": true,
   "scripts": {
     "android": "react-native run-android",

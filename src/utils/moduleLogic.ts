@@ -1,7 +1,7 @@
 import { ModuleConfig, UserRole, RoleModuleMapping, ModuleType } from '../interface/Role';
 
 // 定义所有可用模块
-export const availableModules: ModuleConfig[] = [
+export const moduleConfigs: ModuleConfig[] = [
   {
     id: '1',
     title: 'modules.challengeNew',
@@ -39,38 +39,59 @@ export const availableModules: ModuleConfig[] = [
   },
   {
     id: '6',
+    title: 'modules.assignPitcher',
+    type: ModuleType.ASSIGN_PITCHER_CHALLENGE,
+    icon: 'assignment-ind',
+    backgroundColor: '#ff9800',
+  },
+  {
+    id: '7',
     title: 'modules.viewTranscoding',
     type: ModuleType.TURNOVER_QUERY,
     icon: 'swap-horiz',
     backgroundColor: '#0984e3',
   },
   {
-    id: '7',
+    id: '8',
     title: 'modules.pitcher_ranking',
     type: ModuleType.PITCHER_RANKING,
     icon: 'leaderboard',
     backgroundColor: '#e84393',
   },
   {
-    id: '8',
+    id: '9',
     title: 'modules.createRace',
     type: ModuleType.CREATE_RACE,
     icon: 'sports-score',
     backgroundColor: '#ff6b81',
   },
   {
-    id: '9',
+    id: '10',
     title: 'modules.allRace',
     type: ModuleType.ALL_RACE,
     icon: 'emoji-events',
     backgroundColor: '#9b59b6',
   },
   {
-    id: '10',
+    id: '11',
     title: 'modules.racePoolList',
     type: ModuleType.RACE_POOL_LIST,
     icon: 'attach-money',
     backgroundColor: '#00cec9',
+  },
+  {
+    id: '12',
+    title: 'modules.groupManagement',
+    type: ModuleType.GROUP_MANAGEMENT,
+    icon: 'account-tree',
+    backgroundColor: '#2d3436',
+  },
+  {
+    id: '13',
+    title: 'modules.companyManagement',
+    type: ModuleType.COMPANY_MANAGEMENT,
+    icon: 'business',
+    backgroundColor: '#636e72',
   },
 ];
 
@@ -123,6 +144,7 @@ export const roleModuleMappings: RoleModuleMapping[] = [
     role: 'PLAY_ADMIN',
     moduleTypes: [
       ModuleType.ALL_CHALLENGE,
+      ModuleType.ASSIGN_PITCHER_CHALLENGE,
       ModuleType.TURNOVER_QUERY,
       ModuleType.PITCHER_RANKING,
       ModuleType.ALL_RACE,
@@ -170,6 +192,17 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.CREATE_RACE,
       ModuleType.ALL_RACE,
       ModuleType.RACE_POOL_LIST,
+      ModuleType.GROUP_MANAGEMENT,
+    ],
+  },
+  {
+    role: 'RACE_ADMIN',
+    moduleTypes: [
+      ModuleType.CREATE_RACE,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
     ],
   },
   {
@@ -182,19 +215,46 @@ export const roleModuleMappings: RoleModuleMapping[] = [
       ModuleType.RACE_POOL_LIST,
     ],
   },
+  {
+    role: 'OUTSIDE',
+    moduleTypes: [
+      ModuleType.ALL_CHALLENGE,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+    ],
+  },
+  {
+    role: 'GROUP',
+    moduleTypes: [
+      ModuleType.ALL_RACE,
+      ModuleType.RACE_POOL_LIST,
+      ModuleType.TURNOVER_QUERY,
+      ModuleType.PITCHER_RANKING,
+      ModuleType.COMPANY_MANAGEMENT,
+    ],
+  },
 ];
 
 // 获取用户可访问的模块列表
-export const getUserAccessibleModules = (userRole?: UserRole): ModuleConfig[] => {
-  if (!userRole) {
+export const getUserAccessibleModules = (userRoles: UserRole[] = []): ModuleConfig[] => {
+  if (!userRoles || userRoles.length === 0) {
     return [];
   }
 
-  const roleMapping = roleModuleMappings.find((mapping) => mapping.role === userRole);
-  if (!roleMapping) {
-    return [];
-  }
+  // 获取用户所有角色对应的模块
+  const accessibleModuleTypes = new Set<ModuleType>();
 
-  // 根据模块类型过滤可访问的模块
-  return availableModules.filter((module) => roleMapping.moduleTypes.includes(module.type));
+  userRoles.forEach((role) => {
+    const roleMapping = roleModuleMappings.find((mapping) => mapping.role === role);
+    if (roleMapping) {
+      roleMapping.moduleTypes.forEach((moduleType) => {
+        accessibleModuleTypes.add(moduleType);
+      });
+    }
+  });
+
+  // 返回对应的模块配置
+  return moduleConfigs.filter((config) => accessibleModuleTypes.has(config.type));
 };

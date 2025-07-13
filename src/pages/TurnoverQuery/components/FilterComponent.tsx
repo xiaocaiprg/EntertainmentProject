@@ -1,17 +1,19 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { THEME_COLORS } from '../../../utils/styles';
-import { UserResult } from '../../../interface/User';
+import { BusinessDto } from '../../../interface/Business';
 import { FilterProps, QueryCondition } from '../interface/ITurnoverQuery';
 import { DatePicker } from '../../../components/DatePicker';
 import CustomText from '../../../components/CustomText';
 import { formatDate } from '../../../utils/date';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SlideModal } from '../../../components/SlideModal';
-import { getOperatorList } from '../../../api/services/gameService';
+import { getBusinessList } from '../../../api/services/businessService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 export const FilterComponent = React.memo((props: FilterProps) => {
   const { onSearch, companyList, currentUserType } = props;
+  const { t } = useTranslation();
   const [startDate, setStartDate] = useState<Date>(() => {
     const date = new Date();
     date.setDate(date.getDate() - 6);
@@ -22,18 +24,14 @@ export const FilterComponent = React.memo((props: FilterProps) => {
   const [selectedPersonCode, setSelectedPersonCode] = useState<string>('');
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [personModalOpen, setPersonModalOpen] = useState(false);
-  const [users, setUsers] = useState<UserResult[]>([]);
-  const pageNumRef = useRef(1);
-  const pageSizeRef = useRef(100);
+  const [users, setUsers] = useState<BusinessDto[]>([]);
 
   const fetchUsers = useCallback(async (companyCode: string) => {
-    const result = await getOperatorList({
-      companyCode: companyCode,
-      pageNum: pageNumRef.current,
-      pageSize: pageSizeRef.current,
+    const result = await getBusinessList({
+      code: companyCode,
     });
-    if (result && result.records) {
-      setUsers(result.records);
+    if (result) {
+      setUsers(result);
     }
   }, []);
 
@@ -69,13 +67,13 @@ export const FilterComponent = React.memo((props: FilterProps) => {
   // 获取当前选中公司名称
   const selectedCompanyName = useMemo(() => {
     const company = companyList.find((c) => c.code === selectedCompanyCode);
-    return company ? company.name : '请选择公司';
-  }, [companyList, selectedCompanyCode]);
+    return company ? company.name : t('turnoverQuery.filter.selectCompany');
+  }, [companyList, selectedCompanyCode, t]);
   // 获取当前选中人员名称
   const selectedPersonName = useMemo(() => {
     const person = users.find((u) => u.code === selectedPersonCode);
-    return person ? person.name : '选择个人(非必填)';
-  }, [users, selectedPersonCode]);
+    return person ? person.name : t('turnoverQuery.filter.selectPerson');
+  }, [users, selectedPersonCode, t]);
   const renderCompanyList = useCallback(
     () => (
       <View style={styles.selectorListContent}>
@@ -100,7 +98,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
           style={[styles.selectorItem, !selectedPersonCode && styles.selectorItemSelected]}
           onPress={() => handlePersonSelect('')}
         >
-          <CustomText style={styles.selectorItemText}>不选择</CustomText>
+          <CustomText style={styles.selectorItemText}>{t('turnoverQuery.filter.doNotSelect')}</CustomText>
           {!selectedPersonCode && <Icon name="check" size={20} color={THEME_COLORS.primary} />}
         </TouchableOpacity>
 
@@ -116,7 +114,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
         ))}
       </View>
     ),
-    [users, selectedPersonCode, handlePersonSelect],
+    [users, selectedPersonCode, handlePersonSelect, t],
   );
   const renderFilterBar = useCallback(
     () => (
@@ -144,13 +142,13 @@ export const FilterComponent = React.memo((props: FilterProps) => {
         </View>
         <View style={styles.filterRow}>
           <View style={[styles.dateContainer, { marginRight: 5 }]}>
-            <CustomText style={styles.dateLabel}>开始时间:</CustomText>
+            <CustomText style={styles.dateLabel}>{t('turnoverQuery.filter.startTime')}</CustomText>
             <View style={styles.datePickerWrapper}>
               <DatePicker title="" selectedDate={startDate} onDateChange={setStartDate} format="YYYY-MM-DD" />
             </View>
           </View>
           <View style={styles.dateContainer}>
-            <CustomText style={styles.dateLabel}>结束时间:</CustomText>
+            <CustomText style={styles.dateLabel}>{t('turnoverQuery.filter.endTime')}</CustomText>
             <View style={styles.datePickerWrapper}>
               <DatePicker title="" selectedDate={endDate} onDateChange={setEndDate} format="YYYY-MM-DD" />
             </View>
@@ -158,7 +156,7 @@ export const FilterComponent = React.memo((props: FilterProps) => {
         </View>
       </View>
     ),
-    [endDate, startDate, selectedCompanyName, selectedPersonName, selectedCompanyCode],
+    [endDate, startDate, selectedCompanyName, selectedPersonName, selectedCompanyCode, t],
   );
 
   useEffect(() => {
@@ -173,12 +171,20 @@ export const FilterComponent = React.memo((props: FilterProps) => {
         onPress={handleSubmit}
         disabled={!selectedCompanyCode}
       >
-        <CustomText style={styles.submitButtonText}>查询</CustomText>
+        <CustomText style={styles.submitButtonText}>{t('turnoverQuery.filter.query')}</CustomText>
       </TouchableOpacity>
-      <SlideModal visible={companyModalOpen} title="选择公司" onClose={() => setCompanyModalOpen(false)}>
+      <SlideModal
+        visible={companyModalOpen}
+        title={t('turnoverQuery.filter.selectCompanyModal')}
+        onClose={() => setCompanyModalOpen(false)}
+      >
         {renderCompanyList()}
       </SlideModal>
-      <SlideModal visible={personModalOpen} title="选择个人(可选)" onClose={() => setPersonModalOpen(false)}>
+      <SlideModal
+        visible={personModalOpen}
+        title={t('turnoverQuery.filter.selectPersonModal')}
+        onClose={() => setPersonModalOpen(false)}
+      >
         {renderPersonList()}
       </SlideModal>
     </View>

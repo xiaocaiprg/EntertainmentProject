@@ -1,16 +1,19 @@
-import React, { useCallback } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useTranslation } from '../hooks/useTranslation';
 import CustomText from './CustomText';
+import { mergeStyles } from '../utils/styles';
+import CustomTextInput from './CustomTextInput';
 
 interface NumberInputProps {
-  title: string;
+  title?: string;
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
   keyboardType?: 'numeric' | 'decimal-pad';
   errorMessage?: string;
   hint?: string;
+  style?: Partial<Record<keyof typeof styles, ViewStyle | TextStyle>>;
 }
 
 export const NumberInput: React.FC<NumberInputProps> = React.memo((props: NumberInputProps) => {
@@ -23,7 +26,11 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
     keyboardType = 'decimal-pad',
     errorMessage,
     hint,
+    style,
   } = props;
+
+  // 使用mergeStyles合并样式
+  const mergedStyles = useMemo(() => mergeStyles(styles, style), [style]);
 
   const handleChangeText = useCallback(
     (text: string) => {
@@ -40,41 +47,39 @@ export const NumberInput: React.FC<NumberInputProps> = React.memo((props: Number
   );
 
   return (
-    <View style={styles.container}>
-      <CustomText style={styles.labelText}>{title}</CustomText>
-
-      <TextInput
-        style={[styles.input, errorMessage && styles.inputError]}
+    <View style={mergedStyles.container}>
+      {title && <CustomText style={mergedStyles.labelText}>{title}</CustomText>}
+      <CustomTextInput
+        style={[mergedStyles.input, errorMessage && mergedStyles.inputError]}
         value={value}
         onChangeText={handleChangeText}
         placeholder={placeholder}
         placeholderTextColor="#999"
         keyboardType={keyboardType}
       />
-      {hint ? <CustomText style={styles.hintText}>{hint}</CustomText> : null}
-      {errorMessage ? <CustomText style={styles.errorText}>{errorMessage}</CustomText> : null}
+      {hint ? <CustomText style={mergedStyles.hintText}>{hint}</CustomText> : null}
+      {errorMessage ? <CustomText style={mergedStyles.errorText}>{errorMessage}</CustomText> : null}
     </View>
   );
 });
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 10,
-  },
+  container: {},
   labelText: {
     fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 8,
+    marginTop: 4,
+    marginBottom: 2,
   },
   input: {
-    height: 44,
+    height: 40,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 12,
     backgroundColor: '#f5f5f5',
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   inputError: {

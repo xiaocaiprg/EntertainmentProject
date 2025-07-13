@@ -4,9 +4,11 @@ import CustomText from '../../../components/CustomText';
 import { THEME_COLORS } from '../../../utils/styles';
 import { ResultListProps } from '../interface/ITurnoverQuery';
 import { GameTurnOverItemDto } from '../../../interface/Game';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 export const ResultList = React.memo((props: ResultListProps) => {
   const { loading, data } = props;
+  const { t } = useTranslation();
   const hasData = useMemo(
     () => data && data.gameTurnOverItemDtoList && data.gameTurnOverItemDtoList.length > 0,
     [data],
@@ -14,11 +16,15 @@ export const ResultList = React.memo((props: ResultListProps) => {
   const renderHeader = useCallback(
     () => (
       <View style={styles.headerContainer}>
-        <CustomText style={styles.totalText}>总转码: {data?.turnOverStr}</CustomText>
-        <CustomText style={styles.totalText}>总上下水: {data?.profitStr}</CustomText>
+        <CustomText style={styles.totalText}>
+          {t('turnoverQuery.result.totalTurnover')}: {data?.turnOverStr}
+        </CustomText>
+        <CustomText style={styles.totalText}>
+          {t('turnoverQuery.result.totalProfit')}: {data?.profitStr}
+        </CustomText>
       </View>
     ),
-    [data],
+    [data, t],
   );
 
   const renderItem = useCallback(
@@ -29,48 +35,55 @@ export const ResultList = React.memo((props: ResultListProps) => {
           <CustomText style={styles.itemDate}>{item.gameDate}</CustomText>
         </View>
         <View style={styles.itemContent}>
-          <View style={styles.statWrapper}>
-            <CustomText style={styles.statLabel}>地址:</CustomText>
-            <CustomText style={styles.statValue}>{item.addressName}</CustomText>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={styles.statWrapper}>
+              <CustomText style={styles.statLabel}>{t('turnoverQuery.result.address')}</CustomText>
+              <CustomText style={styles.statValue}>{item.addressName}</CustomText>
+            </View>
+            <View style={styles.statWrapper}>
+              <CustomText style={styles.statLabel}>{t('turnoverQuery.result.currency')}</CustomText>
+              <CustomText style={styles.statValue}>{item.currency}</CustomText>
+            </View>
           </View>
-
-          <View style={styles.statWrapper}>
-            <CustomText style={styles.statLabel}>转码:</CustomText>
-            <CustomText style={styles.statValue}>{item.turnOverStr}</CustomText>
-          </View>
-          <View style={styles.statWrapper}>
-            <CustomText style={styles.statLabel}>上下水:</CustomText>
-            <CustomText
-              style={[
-                styles.statValue,
-                parseFloat(item.profitStr || '0') > 0
-                  ? styles.positive
-                  : parseFloat(item.profitStr || '0') < 0
-                  ? styles.negative
-                  : {},
-              ]}
-            >
-              {item.profitStr || '0'}
-            </CustomText>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={styles.statWrapper}>
+              <CustomText style={styles.statLabel}>{t('turnoverQuery.result.turnover')}</CustomText>
+              <CustomText style={styles.statValue}>{item.turnOverStr}</CustomText>
+            </View>
+            <View style={styles.statWrapper}>
+              <CustomText style={styles.statLabel}>{t('turnoverQuery.result.profit')}</CustomText>
+              <CustomText
+                style={[
+                  styles.statValue,
+                  parseFloat(item.profitStr || '0') > 0
+                    ? styles.positive
+                    : parseFloat(item.profitStr || '0') < 0
+                    ? styles.negative
+                    : {},
+                ]}
+              >
+                {item.profitStr || '0'}
+              </CustomText>
+            </View>
           </View>
         </View>
       </View>
     ),
-    [],
+    [t],
   );
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={THEME_COLORS.primary} />
-        <CustomText style={styles.loadingText}>正在加载数据...</CustomText>
+        <CustomText style={styles.loadingText}>{t('turnoverQuery.result.loading')}</CustomText>
       </View>
     );
   }
   if (!hasData) {
     return (
       <View style={styles.emptyContainer}>
-        <CustomText style={styles.emptyText}>暂无数据</CustomText>
+        <CustomText style={styles.emptyText}>{t('turnoverQuery.result.noData')}</CustomText>
       </View>
     );
   }

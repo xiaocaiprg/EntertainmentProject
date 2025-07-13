@@ -77,7 +77,7 @@ export const getRacePoolList = (params: QueryParams): Promise<PageDtoRacePoolPag
       return null;
     });
 };
-export const getRacePoolListAll = (isEnabled: number): Promise<RacePoolPageDto[] | null> => {
+export const getRacePoolListAll = (isEnabled?: number): Promise<RacePoolPageDto[] | null> => {
   return post<ApiResponse<RacePoolPageDto[]>>(PATH.RACE_POOL_LIST_ALL, { isEnabled })
     .then((res) => {
       if (res.code === 200) {

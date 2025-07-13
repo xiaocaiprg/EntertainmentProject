@@ -1,7 +1,5 @@
 import { post, get } from '../request';
 import {
-  RecorderList,
-  UserRecordParams,
   ChallengeList,
   ChallengeListParams,
   ChallengeCreateParams,
@@ -11,11 +9,11 @@ import {
   UpdateMatchDocPersonParams,
   GameTurnOverDtoParams,
   GameTurnOverDto,
+  UpdateMatchContributeTypeParams,
 } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
 import { QueryParams } from '../../interface/Common';
 const PATH = {
-  USER_LIST: 'haiyang/business/page',
   ADDRESS_LIST: 'haiyang/addressInfo/page',
   MATCH_DETAIL: 'haiyang/match/',
   CHALLENGE_LIST: 'haiyang/match/page',
@@ -23,21 +21,9 @@ const PATH = {
   MATCH_UPDATE_DOC_PERSON: 'haiyang/match/updataDocPerson',
   MATCH_UPDATE_STATUS: 'haiyang/match/updateStatus',
   MATCH_TURNOVER: 'haiyang/match/turnover',
+  MATCH_UPDATE_CONTRIBUTE_TYPE: 'haiyang/match/updataContributeType',
 };
 
-export const getOperatorList = (params: UserRecordParams): Promise<RecorderList | null> => {
-  return post<ApiResponse<RecorderList>>(PATH.USER_LIST, params)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-};
 export const getChallengeList = (params: ChallengeListParams): Promise<ChallengeList | null> => {
   return post<ApiResponse<ChallengeList>>(PATH.CHALLENGE_LIST, params)
     .then((res) => {
@@ -88,19 +74,6 @@ export const getAddressList = (params: QueryParams): Promise<PageDtoAddressInfo 
     });
 };
 
-export const getRecorderList = (params: UserRecordParams): Promise<RecorderList | null> => {
-  return post<ApiResponse<RecorderList>>(PATH.USER_LIST, params)
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-};
 export const updateMatchDocPerson = (params: UpdateMatchDocPersonParams): Promise<string> => {
   return post<ApiResponse<string>>(PATH.MATCH_UPDATE_DOC_PERSON, params).then((res) => {
     if (res.code === 200) {
@@ -132,4 +105,13 @@ export const getMatchTurnOver = (params: GameTurnOverDtoParams): Promise<GameTur
     .catch(() => {
       return null;
     });
+};
+export const updateMatchContributeType = (params: UpdateMatchContributeTypeParams): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.MATCH_UPDATE_CONTRIBUTE_TYPE, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };
