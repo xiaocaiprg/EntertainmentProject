@@ -18,6 +18,7 @@ export const PATH = {
   TURNOVER_PROCESS: 'haiyang/turnover/process',
   GET_TRANSFER_OUTLOG_LIST: 'haiyang/transfer/outlog/list/',
   TRANSFER_CREDIT_POINT: 'haiyang/transferCreditPoint',
+  PRE_REPAY: 'haiyang/creditAccount/preRepaySystemSecuredLoan',
 };
 
 export const getPointDetail = (params: QueryParams): Promise<PageDtoTransferLogDto | null> => {
@@ -92,6 +93,15 @@ export const getTransferOutlogList = (toType: string): Promise<TransferOutLogDto
 };
 export const transferCreditPoint = (params: TransferCreditPointParams): Promise<string> => {
   return post<ApiResponse<string>>(PATH.TRANSFER_CREDIT_POINT, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
+};
+export const preRepay = (payPassword: string): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.PRE_REPAY, { payPassword }).then((res) => {
     if (res.code === 200) {
       return res.data;
     } else {

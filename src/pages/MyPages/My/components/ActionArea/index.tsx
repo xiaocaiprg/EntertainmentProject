@@ -6,9 +6,10 @@ import CustomText from '../../../../../components/CustomText';
 
 interface ActionAreaProps {
   navigation: any;
+  onRepayPress?: () => void;
 }
 export const ActionArea = React.memo((props: ActionAreaProps) => {
-  const { navigation } = props;
+  const { navigation, onRepayPress } = props;
   const { t } = useTranslation();
 
   const handleTransferPress = useCallback(() => {
@@ -23,6 +24,12 @@ export const ActionArea = React.memo((props: ActionAreaProps) => {
     navigation.navigate('CreditTransfer');
   }, [navigation]);
 
+  const handleRepayPress = useCallback(() => {
+    if (onRepayPress) {
+      onRepayPress();
+    }
+  }, [onRepayPress]);
+
   return (
     <View style={styles.ActionAreaWrapper}>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleTransferPress}>
@@ -32,6 +39,10 @@ export const ActionArea = React.memo((props: ActionAreaProps) => {
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleCreditTransferPress}>
         <Icon name="account-balance" size={24} color="#6c5ce7" />
         <CustomText style={styles.ActionAreaItemLabel}>{t('my.creditTransfer')}</CustomText>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.ActionAreaItem} onPress={handleRepayPress}>
+        <Icon name="account-balance-wallet" size={24} color="#6c5ce7" />
+        <CustomText style={styles.ActionAreaItemLabel}>{t('my.repayCredit')}</CustomText>
       </TouchableOpacity>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleFrozenPointsPress}>
         <Icon name="manage-search" size={24} color="#6c5ce7" />

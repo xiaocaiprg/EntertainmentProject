@@ -11,14 +11,18 @@ import { PointsCard } from './components/PointsCard';
 import { ActionArea } from './components/ActionArea';
 import useFocusRefresh from '../../../hooks/useFocusRefresh';
 import { ConfirmModal } from '../../../components/ConfirmModal';
-import { turnoverProcess } from '../../../api/services/pointService';
+import { turnoverProcess, preRepay } from '../../../api/services/pointService';
 import { useRole } from '../../../hooks/useRole';
+import PayPasswordInput from '../../../bizComponents/PayPasswordInput';
 
 export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
   const { t } = useTranslation();
   const { user, isLoggedIn, logout, checkUserStatus } = useAuth();
   const [showSettlementModal, setShowSettlementModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showRepayModal, setShowRepayModal] = useState(false);
+  const [isRepaying, setIsRepaying] = useState(false);
+  const [payPassword, setPayPassword] = useState('');
   const { isOperationAdmin } = useRole();
 
   const handleLoginPress = useCallback(() => {
@@ -66,6 +70,36 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
 
   const handleSettlementCancel = useCallback(() => {
     setShowSettlementModal(false);
+  }, []);
+
+  const handleRepayPress = useCallback(() => {
+    if (user?.creditAccount?.repayAmount && user?.creditAccount?.repayAmount > 0) {
+      setPayPassword('');
+      setShowRepayModal(true);
+    } else {
+      Alert.alert('提示', t('my.noRepayAmount'));
+    }
+  }, [user?.creditAccount?.repayAmount, t]);
+
+  const handleRepayConfirm = useCallback(async () => {
+    if (payPassword.length !== 6) {
+      return;
+    }
+    setIsRepaying(true);
+    try {
+      const res = await preRepay(payPassword);
+      setShowRepayModal(false);
+      Alert.alert('提示', res || t('my.repaySuccess'));
+      checkUserStatus(); // 刷新用户状态
+    } catch (error: any) {
+      Alert.alert('提示', error.message || t('my.repayFailed'));
+    }
+    setIsRepaying(false);
+  }, [payPassword, t, checkUserStatus]);
+
+  const handleRepayCancel = useCallback(() => {
+    setShowRepayModal(false);
+    setPayPassword('');
   }, []);
 
   // 列表项组件
@@ -128,7 +162,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         <View style={styles.cardContainer}>
           {user && <MemberBenefits user={user} navigation={navigation} />}
           {user && <PointsCard user={user} onPointsPress={(code?: string) => handleMyPoints(code)} />}
-          <ActionArea navigation={navigation} />
+          <ActionArea navigation={navigation} onRepayPress={handleRepayPress} />
           {isOperationAdmin && (
             <View style={styles.settlementContainer}>
               <TouchableOpacity style={styles.settlementButton} onPress={handleOneClickSettlement}>
@@ -157,6 +191,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
       isOperationAdmin,
       handleMyPoints,
       handleOneClickSettlement,
+      handleRepayPress,
     ],
   );
 
@@ -177,6 +212,34 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
         onConfirm={handleSettlementConfirm}
         onCancel={handleSettlementCancel}
         isProcessing={isProcessing}
+      />
+
+      <ConfirmModal
+        visible={showRepayModal}
+        title={t('my.repayConfirmTitle')}
+        message=""
+        cancelText={t('common.cancel')}
+        confirmText={t('common.confirm')}
+        onCancel={handleRepayCancel}
+        onConfirm={handleRepayConfirm}
+        isProcessing={isRepaying}
+        confirmButtonDisabled={payPassword.length !== 6}
+        customContent={
+          <View>
+            <CustomText style={styles.repayMessage}>
+              {t('my.repayConfirmMessage', { amount: user?.creditAccount?.repayAmount?.toLocaleString() || '0' })}
+            </CustomText>
+            <View style={styles.payPasswordContainer}>
+              <CustomText style={styles.payPasswordLabel}>{t('my.payPassword')}</CustomText>
+              <PayPasswordInput value={payPassword} onChangeText={setPayPassword} />
+            </View>
+          </View>
+        }
+        style={{
+          modalMessage: {
+            display: 'none',
+          },
+        }}
       />
     </SafeAreaView>
   );
@@ -313,5 +376,22 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: '#333',
+  },
+  repayMessage: {
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  payPasswordContainer: {
+    marginBottom: 10,
+  },
+  payPasswordLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });

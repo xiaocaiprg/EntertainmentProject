@@ -301,7 +301,7 @@ export const en = {
     loginout: 'Logout',
     memberCenter: 'Member Center',
     points: 'Points',
-    creditPoints: 'CreditPoints',
+    creditPoints: 'Credit',
     repayAmount: 'Repay Amount',
     gameCoins: 'GameCoins',
     transfer: 'Transfer',
@@ -314,6 +314,13 @@ export const en = {
       'Are you sure you want to proceed with one-click settlement? This operation is irreversible.',
     settlementSuccess: 'Settlement successful',
     settlementFailed: 'Settlement failed, please try again',
+    repayCredit: 'Repay Credit',
+    repayConfirmTitle: 'Confirm Credit Repayment',
+    repayConfirmMessage: 'Will deduct {{amount}} points from your available points. Are you sure to continue?',
+    repaySuccess: 'Credit repayment successful',
+    repayFailed: 'Credit repayment failed, please try again',
+    payPassword: 'Please enter payment password',
+    noRepayAmount: 'No credit to repay currently',
   },
 
   // Fixed Deposits Management
