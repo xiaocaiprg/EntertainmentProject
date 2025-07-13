@@ -144,8 +144,9 @@ export const isAgainInitRound = (
  * @returns 更新后的游戏统计数据
  */
 export const updateGameStats = (roundData: GameRoundDto): CBRoundStats => {
+  const baseNumber = roundData.baseNumberList?.[0];
   // 初始化游戏统计数据
-  const stats: CBRoundStats = getCBInitialRoundStats(roundData.baseNumber);
+  const stats: CBRoundStats = getCBInitialRoundStats(baseNumber);
 
   if (!roundData?.gamePointDtoList?.length) {
     return stats;
@@ -195,7 +196,7 @@ export const updateGameStats = (roundData: GameRoundDto): CBRoundStats => {
 
   // 根据轮次判断是否为初始轮
   stats.isFirstRound = lastRound === 1;
-  stats.isFirstRoundAgain = stats.betAmount === roundData.baseNumber && lastRound > 1;
+  stats.isFirstRoundAgain = stats.betAmount === baseNumber && lastRound > 1;
 
   // 设置最大游戏次数
   if (stats.isFirstRound) {

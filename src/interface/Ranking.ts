@@ -1,11 +1,14 @@
 export enum RankingTabType {
   HIT_RATE = 'hit_rate',
   KILL_COUNT = 'kill_count',
+  PERSONAL = 'personal',
+  COMBINATION = 'combination',
 }
 
 export enum RankingTypeEnum {
   COMPANY = 'company',
   PERSONAL = 'personal',
+  ENTERTAINMENT = 'entertainment',
 }
 
 export interface RankCompanySearchParam {
@@ -16,9 +19,10 @@ export interface RankCompanySearchParam {
 export interface RankSearchParam {
   addressId?: number;
   orderParam?: string;
-  pageNum: number;
-  pageSize: number;
+  pageNum?: number;
+  pageSize?: number;
   rankPeriod: number;
+  playType: number;
 }
 
 export interface PageDto<T> {
@@ -29,7 +33,7 @@ export interface PageDto<T> {
   total: number;
 }
 
-export type PageDtoPlayerHitrateRankDto = PageDto<PlayerHitrateRankDto>;
+export type PageDtoPlayerHitrateRankDto = PlayerHitrateRankDto[];
 export type PageDtoPlayerKillrateRankDto = PageDto<PlayerKillrateRankDto>;
 export type PageDtoPlayerCompanyKillrateRankDto = PlayerCompanyKillrateRankDto[];
 export type PageDtoPlayerCompanyHitrateRankDto = PlayerCompanyHitrateRankDto[];
@@ -44,8 +48,8 @@ export interface PlayerHitrateRankDto {
   playerName?: string;
   rankPeriod?: number;
   setDate: string;
-  totalInningCount?: number;
-  winInningCount?: number;
+  totalCount?: number;
+  winCount?: number;
 }
 
 export interface PlayerKillrateRankDto {
@@ -88,8 +92,8 @@ export interface PlayerCompanyHitrateRankDto {
   hitRateStr?: string;
   rankPeriod?: number;
   setDate: string;
-  totalInningCount?: number;
-  winInningCount?: number;
+  totalCount?: number;
+  winCount?: number;
 }
 export interface PeakRecordDto {
   maxInningCountMatch: GameMatchSimpleDto;
@@ -98,7 +102,7 @@ export interface PeakRecordDto {
 export interface GameMatchSimpleDto {
   addressInfoId: number;
   addressName: string;
-  baseNumber: number;
+  baseNumber: string;
   count: number;
   docPersonCode: string;
   docPersonName: string;
@@ -118,4 +122,26 @@ export interface GameMatchSimpleDto {
   raceName: string;
   turnOver: number;
   turnOverStr: string;
+}
+
+export interface AddressKillrateRankDto {
+  addressInfoId?: number;
+  addressInfoName?: string;
+  dealerLoseCount?: number;
+  dealerWinCount?: number;
+  killRate?: number;
+  killRateStr?: string;
+  loseCount?: number;
+  playerLoseCount?: number;
+  playerWinCount?: number;
+  rankPeriod?: number;
+  setDate: string;
+  totalCount?: number;
+  hitRateStr?: string;
+  hitRate?: number;
+  totalProfit?: number;
+  totalProfitStr?: string;
+  totalTurnOver?: number;
+  totalTurnOverStr?: string;
+  winCount?: number;
 }

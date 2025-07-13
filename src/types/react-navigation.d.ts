@@ -13,10 +13,12 @@ declare global {
       };
       NewChallenge: undefined;
       ExistingChallenge: undefined;
-      GameHistory: undefined;
       AllChallenge: undefined;
       ChangeRecorderChallenge: undefined;
       FundraisingChallenge: undefined;
+      InvestmentDetail: {
+        matchId: number;
+      };
       MyGames: undefined;
       TurnoverQuery: undefined;
       ChallengeDetail: {

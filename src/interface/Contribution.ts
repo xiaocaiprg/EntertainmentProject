@@ -11,4 +11,5 @@ export interface ContributionDto {
 export interface ContributionCreateParams {
   matchId: number;
   amount: number;
+  foundSourceType: number; // 1：可用积分，2：额度积分
 }

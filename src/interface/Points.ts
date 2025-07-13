@@ -1,9 +1,18 @@
-export interface TransferPointParams {
+export interface TransferCreateParam {
   toCode: string;
   toType: number;
   amount: number;
   fromCode?: string;
   fromType?: number;
+  description?: string;
+}
+export interface TransferPointParams {
+  transfer: TransferCreateParam;
+  payPassword?: string | null;
+}
+export interface TransferCreditPointParams {
+  transfer: TransferCreateParam;
+  payPassword: string | null;
 }
 export interface PageDtoTransferLogDto {
   current: number;
@@ -26,6 +35,7 @@ export interface TransferLogDto {
   toName?: string;
   toType?: number;
   type?: number;
+  description?: string;
 }
 
 export interface FrozeningDto {
@@ -34,6 +44,7 @@ export interface FrozeningDto {
   id: number;
   name: string;
   currency: string;
+  foundSourceType: number;
   playPersonCode: string;
   playPersonName: string;
   addressName: string;
@@ -56,4 +67,14 @@ export interface ProfitDto {
   name?: string;
   profit: number;
   profitStr: string;
+}
+
+export interface TransferOutLogDto {
+  toCode: string;
+  toName: string;
+}
+export interface PointDetailParams {
+  pageNum: number;
+  pageSize: number;
+  code?: string;
 }

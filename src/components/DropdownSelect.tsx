@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, TextStyle, TouchableOpacity, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTranslation } from '../hooks/useTranslation';
 import { mergeStyles } from '../utils/styles';
@@ -74,6 +74,21 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
     [onSelect],
   );
 
+  // 自定义渲染列表项，确保文字不缩放
+  const renderListItem = useCallback(
+    ({ item, onPress, isSelected }: any) => (
+      <TouchableOpacity
+        style={[mergedStyles.optionItem, isSelected && { backgroundColor: '#f0f0f0' }]}
+        onPress={() => onPress(item)}
+      >
+        <Text style={mergedStyles.optionText} allowFontScaling={false}>
+          {item.label}
+        </Text>
+      </TouchableOpacity>
+    ),
+    [mergedStyles],
+  );
+
   return (
     <View style={[mergedStyles.selectContainer, { zIndex, elevation: zIndex }]}>
       <DropDownPicker
@@ -106,6 +121,10 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = React.memo((props: 
         translation={{
           NOTHING_TO_SHOW: t('common.noData'),
         }}
+        labelProps={{
+          allowFontScaling: false,
+        }}
+        renderListItem={renderListItem}
         itemKey="value"
         dropDownDirection={'BOTTOM'}
         zIndex={zIndex}
@@ -128,7 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   dropdownText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   optionsList: {
@@ -146,7 +165,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f0f0f0',
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   emptyContainer: {

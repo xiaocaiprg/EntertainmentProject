@@ -84,7 +84,6 @@ export const RoundDetailScreen: React.FC<RoundDetailScreenProps> = React.memo(({
       setConfirmModalVisible(false);
       const errorMessage = error instanceof Error ? error.message : t('roundDetail.restartRoundFailed');
       Alert.alert(t('common.error'), errorMessage, [{ text: t('common.ok'), style: 'cancel' }], { cancelable: true });
-      console.log('重启场次失败:', error);
     }
     setProcessing(false);
   }, [selectedRoundId, fetchMatchDetail, t]);

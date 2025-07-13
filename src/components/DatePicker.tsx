@@ -133,14 +133,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: '#333',
-    marginBottom: 8,
+    marginBottom: 2,
   },
   datePicker: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
     backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
     padding: 8,
+    height: 40,
   },
   dateText: {
     fontSize: 14,

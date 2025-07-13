@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { STATUS_BAR_HEIGHT } from '../../../../utils/platform';
 import CustomText from '../../../../components/CustomText';
 
 interface GameHeaderProps {
@@ -31,8 +30,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    height: 20 + STATUS_BAR_HEIGHT,
+    paddingHorizontal: 10,
+    height: 44,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#DDDDDD',

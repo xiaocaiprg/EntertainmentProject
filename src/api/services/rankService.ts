@@ -8,6 +8,7 @@ import {
   PageDtoPlayerCompanyKillrateRankDto,
   PageDtoPlayerCompanyHitrateRankDto,
   PeakRecordDto,
+  AddressKillrateRankDto,
 } from '../../interface/Ranking';
 
 export const PATH = {
@@ -16,6 +17,7 @@ export const PATH = {
   PITCHER_RANK_HITRATE_COMPANY: 'haiyang/statistic/company/play/rank/hitrate',
   PITCHER_RANK_KILLRATE_COMPANY: 'haiyang/statistic/company/play/rank/killrate',
   PITCHER_RANK_PEAK: 'haiyang/statistic/record/peak',
+  PITCHER_RANK_ADDRESS_KILLRATE: 'haiyang/statistic/address/rank/killrate',
 };
 
 export const getPitcherRankingHitRate = (params: RankSearchParam): Promise<PageDtoPlayerHitrateRankDto | null> => {
@@ -87,5 +89,18 @@ export const getRecordPeak = (raceId?: number): Promise<PeakRecordDto | null> =>
     })
     .catch(() => {
       return null;
+    });
+};
+export const getAddressKillRate = (params: RankCompanySearchParam): Promise<AddressKillrateRankDto[] | []> => {
+  return post<ApiResponse<AddressKillrateRankDto[]>>(PATH.PITCHER_RANK_ADDRESS_KILLRATE, params)
+    .then((res) => {
+      if (res.code === 200) {
+        return res.data;
+      } else {
+        throw new Error(res.msg);
+      }
+    })
+    .catch(() => {
+      return [];
     });
 };

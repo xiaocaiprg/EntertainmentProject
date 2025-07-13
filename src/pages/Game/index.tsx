@@ -5,6 +5,7 @@ import { isIOS, STATUS_BAR_HEIGHT } from '../../utils/platform';
 import { GameHeader } from './components/common/GameHeader';
 import { AAGame } from './views/AA';
 import { CBGame } from './views/CB';
+import { DDGame } from './views/DD';
 // 使用导航栈中定义的类型
 type GameScreenProps = RootStackScreenProps<'Game'>;
 
@@ -25,6 +26,8 @@ export const Game: React.FC<GameScreenProps> = React.memo(({ route, navigation }
         return <CBGame {...gameProps} />;
       case 'AA':
         return <AAGame {...gameProps} />;
+      case 'DD':
+        return <DDGame {...gameProps} />;
       default:
         return <CBGame {...gameProps} />;
     }

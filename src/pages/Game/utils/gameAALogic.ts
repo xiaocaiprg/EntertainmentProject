@@ -27,7 +27,8 @@ export const getAAInitialRoundStats = (initialBetAmount: number): AARoundStats =
  */
 export const updateAAGameStats = (roundData: GameRoundDto): AARoundStats => {
   // 初始化游戏统计数据
-  const stats: AARoundStats = getAAInitialRoundStats(roundData.baseNumber);
+  const baseNumber = roundData.baseNumberList?.[0];
+  const stats: AARoundStats = getAAInitialRoundStats(baseNumber);
 
   if (!roundData?.gamePointDtoList?.length) {
     return stats;

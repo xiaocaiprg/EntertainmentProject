@@ -1,22 +1,10 @@
-import { UserResult } from './User';
 import { ContributionDto } from './Contribution';
 import { QueryParams } from './Common';
 
-export interface UserRecordParams extends QueryParams {
-  type?: number;
-  companyCode?: string;
-}
 export interface ChallengeListParams extends QueryParams {
   isEnabledList?: number[];
 }
 
-export interface RecorderList {
-  records: UserResult[];
-  pages: number;
-  total: number;
-  size: number;
-  current: number;
-}
 export interface GameMatchPageDto {
   addressInfoId?: number;
   addressName?: string;
@@ -24,7 +12,8 @@ export interface GameMatchPageDto {
   docPersonName?: string;
   gameDate?: string;
   id: number;
-  baseNumber: number;
+  baseNumber: string;
+  baseNumberList: number[];
   createTime?: string;
   isEnabled: number;
   name?: string;
@@ -40,6 +29,10 @@ export interface GameMatchPageDto {
   raceName?: string;
   turnOver?: number;
   turnOverStr?: string;
+  isInside?: number;
+  contributionType?: number;
+  investPersonCode?: string;
+  investPersonName?: string;
 }
 export interface ChallengeList {
   current: number;
@@ -70,6 +63,8 @@ export interface GameMatchProfitDto {
   docCompanyProfit?: number;
   docCompanyProfitDtoList?: ProfitDto[];
   docCompanyProfitStr?: string;
+  playCompanyProfitStr: string;
+  playCompanyProfit: number;
   investCompanyProfit?: number;
   investCompanyProfitDtoList?: ProfitDto[];
   investCompanyProfitStr?: string;
@@ -78,10 +73,7 @@ export interface GameMatchProfitDto {
   operationCompanyName?: string;
   operationCompanyProfit?: number;
   operationCompanyProfitStr?: string;
-  playCompanyCode?: string;
-  playCompanyName?: string;
-  playCompanyProfit?: number;
-  playCompanyProfitStr?: string;
+  playCompanyProfitDtoList?: ProfitDto[];
   racePoolProfit?: ProfitDto;
 }
 export interface GameMatchStatisticDto {
@@ -121,7 +113,7 @@ export interface GameMatchDto {
   playPersonCode?: string;
   playPersonName?: string;
   currency?: string;
-  baseNumber: number;
+  baseNumber: string;
   playRuleCode?: string;
   principal?: number;
   profit?: number;
@@ -135,7 +127,8 @@ export interface GameMatchDto {
 export interface GameRoundDto {
   addressInfoId?: number;
   addressName?: string;
-  baseNumber: number;
+  baseNumber: string;
+  baseNumberList: number[];
   createTime?: string;
   docPersonCode?: string;
   docPersonName?: string;
@@ -206,10 +199,12 @@ export interface ChallengeCreateParams {
   playPersonCode: string;
   principal: number;
   tableNumber?: string;
-  baseNumber: number;
+  baseNumberList: number[];
   currency?: string;
   playRuleCode?: string;
   raceId?: number;
+  contributionType?: number;
+  investCompanyCodeList?: string[];
 }
 
 export interface RoundCreateParams {
@@ -253,6 +248,10 @@ export interface UpdateMatchDocPersonParams {
   id: number; // 挑战id
   docPersonCode: string;
 }
+export interface UpdateMatchContributeTypeParams {
+  id: number;
+  contributionType: number;
+}
 
 export interface GameTurnOverDtoParams {
   businessCode?: string;
@@ -274,6 +273,7 @@ export interface GameTurnOverItemDto {
   addressName?: string;
   gameDate?: string;
   id?: number;
+  currency: string;
   name?: string;
   profit?: number;
   profitStr?: string;
