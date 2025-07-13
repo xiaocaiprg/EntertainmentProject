@@ -8,9 +8,9 @@ import { FixAccountDto } from '../../../interface/Account';
 interface WithdrawConfirmContentProps {
   selectedDeposit: FixAccountDto | null;
   withdrawAmount: string;
-  onWithdrawAmountChange: (amount: string) => void;
   withdrawAmountError: string;
   payPassword: string;
+  onWithdrawAmountChange: (amount: string) => void;
   onPayPasswordChange: (password: string) => void;
 }
 

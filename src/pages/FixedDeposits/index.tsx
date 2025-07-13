@@ -102,7 +102,9 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
     if (!withdrawAmount.trim()) {
       return false;
     }
-
+    if (withdrawAmount.includes('.')) {
+      return false;
+    }
     const amount = Number(withdrawAmount);
     if (isNaN(amount)) {
       return false;
@@ -122,7 +124,10 @@ const FixedDepositsScreen = React.memo((props: RootStackScreenProps<'FixedDeposi
     if (!withdrawAmount.trim()) {
       return '';
     }
-
+    // 检查是否包含小数点
+    if (withdrawAmount.includes('.')) {
+      return '支取金额不能是小数';
+    }
     const amount = Number(withdrawAmount);
     if (isNaN(amount)) {
       return '请输入有效数字';
