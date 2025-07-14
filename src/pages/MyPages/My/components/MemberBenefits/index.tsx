@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { BusinessDto } from '../../../../../interface/Business';
+import { LoginResultDto } from '../../../../../interface/User';
 import { useTranslation } from '../../../../../hooks/useTranslation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomText from '../../../../../components/CustomText';
 
 interface MemberBenefitsProps {
-  user: BusinessDto;
+  user: LoginResultDto;
   navigation: any;
 }
 
@@ -37,7 +37,7 @@ export const MemberBenefits = React.memo((props: MemberBenefitsProps) => {
                 <Icon name="money" size={16} color="#6c5ce7" />
                 <CustomText style={styles.profitLabel}>{t('my.profit')}</CustomText>
               </View>
-              <CustomText style={styles.profitValue}>{user.profitStr}</CustomText>
+              <CustomText style={styles.profitValue}>{user.todayProfitStr}</CustomText>
             </View>
             <Icon name="chevron-right" size={12} color="#111" />
           </TouchableOpacity>

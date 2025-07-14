@@ -308,7 +308,7 @@ export const zhHant = {
     transfer: '轉積分',
     creditTransfer: '轉額度',
     frozenPoints: '查在途',
-    profit: '盈利',
+    profit: '今日盈利',
     oneClickSettlement: '一鍵結算轉碼',
     settlementConfirmTitle: '確認結算',
     settlementConfirmMessage: '確定要進行一鍵結算轉碼嗎？此操作不可撤銷。',

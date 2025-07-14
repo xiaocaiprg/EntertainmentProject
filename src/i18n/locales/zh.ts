@@ -308,7 +308,7 @@ export const zh = {
     transfer: '转积分',
     creditTransfer: '转额度',
     frozenPoints: '查在途',
-    profit: '盈利',
+    profit: '今日盈利',
     oneClickSettlement: '一键结算转码',
     settlementConfirmTitle: '确认结算',
     settlementConfirmMessage: '确定要进行一键结算转码吗？此操作不可撤销。',

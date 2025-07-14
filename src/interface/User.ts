@@ -27,6 +27,8 @@ export interface LoginResultDto {
   fixedInterestType: number;
   profit: number;
   profitStr: string;
+  todayProfit: number;
+  todayProfitStr: string;
   role: string;
   totalPoints: number;
   creditAccount: CreditAccountDto;

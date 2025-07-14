@@ -1,8 +1,7 @@
 import React, { useState, ReactNode, useEffect } from 'react';
 import { getSetting, getUserStatus, userlogin } from '../api/services/authService';
 import { AuthContext } from './AuthContext';
-import { UserParams } from '../interface/User';
-import { BusinessDto } from '../interface/Business';
+import { UserParams, LoginResultDto } from '../interface/User';
 import { clearTokenSync } from '../utils/storage';
 import { eventEmitter, TOKEN_EXPIRED_EVENT } from '../utils/eventEmitter';
 import { useNavigation } from '@react-navigation/native';
@@ -19,7 +18,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<BusinessDto | null>(null);
+  const [user, setUser] = useState<LoginResultDto | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [initCheckLogin, setInitCheckLogin] = useState<boolean>(true);
   const [isDownloading, setIsDownloading] = useState<boolean>(false);

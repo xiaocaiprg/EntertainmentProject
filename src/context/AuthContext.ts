@@ -1,9 +1,8 @@
 import React from 'react';
-import { UserParams } from '../interface/User';
-import { BusinessDto } from '../interface/Business';
+import { UserParams, LoginResultDto } from '../interface/User';
 
 export interface AuthContextType {
-  user: BusinessDto | null;
+  user: LoginResultDto | null;
   isLoggedIn: boolean;
   initCheckLogin: boolean;
   isDownloading: boolean;

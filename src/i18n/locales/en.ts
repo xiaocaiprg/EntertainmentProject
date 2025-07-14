@@ -307,7 +307,7 @@ export const en = {
     transfer: 'Transfer',
     creditTransfer: 'Credit Transfer',
     frozenPoints: 'Pending Points',
-    profit: 'Profit',
+    profit: 'Today Profit',
     oneClickSettlement: 'One-Click Settlement',
     settlementConfirmTitle: 'Confirm Settlement',
     settlementConfirmMessage:
