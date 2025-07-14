@@ -283,7 +283,6 @@ export const zhHant = {
     loading: '載入中...',
     investSuccess: '出資成功！',
     deleteSuccess: '出資已刪除',
-    deleteError: '刪除出資失敗，請稍後重試',
     invalidAmount: '請輸入有效的出資金額',
     amountExceedsLimit: '出資金額不能超過可出資金額',
     amountMustBeMultiple: '出資金額必須為100的倍數',

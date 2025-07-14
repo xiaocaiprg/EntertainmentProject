@@ -32,16 +32,12 @@ export const getContributionDetail = (matchId: number): Promise<ContributionDto 
     });
 };
 
-export const deleteContribution = (id: number): Promise<number | null> => {
-  return post<ApiResponse<number>>(PATH.CONTRIBUTION_DELETE, { id: id })
-    .then((res) => {
-      if (res.code === 200) {
-        return res.data;
-      } else {
-        throw new Error(res.msg);
-      }
-    })
-    .catch(() => {
-      return null;
-    });
+export const deleteContribution = (id: number): Promise<number> => {
+  return post<ApiResponse<number>>(PATH.CONTRIBUTION_DELETE, { id: id }).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };

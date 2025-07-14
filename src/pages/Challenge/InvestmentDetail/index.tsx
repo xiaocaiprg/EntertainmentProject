@@ -137,15 +137,17 @@ export const InvestmentDetailScreen: React.FC<InvestmentDetailScreenProps> = Rea
       return;
     }
     setSubmitting(true);
-
-    const result = await deleteContribution(myContribution.id);
-    if (result) {
-      fetchChallengeDetail();
-      fetchMyContributionDetail();
-      Alert.alert(t('fundraisingChallenge.success'), t('fundraisingChallenge.deleteSuccess'));
-    } else {
-      Alert.alert(t('fundraisingChallenge.error'), t('fundraisingChallenge.deleteError'));
+    try {
+      const result = await deleteContribution(myContribution.id);
+      if (result) {
+        fetchChallengeDetail();
+        fetchMyContributionDetail();
+        Alert.alert(t('fundraisingChallenge.success'), t('fundraisingChallenge.deleteSuccess'));
+      }
+    } catch (error: any) {
+      Alert.alert(t('fundraisingChallenge.error'), error?.message);
     }
+
     setSubmitting(false);
     setShowDeleteModal(false);
   }, [myContribution?.id, fetchChallengeDetail, fetchMyContributionDetail, t]);

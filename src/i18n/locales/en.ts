@@ -282,7 +282,6 @@ export const en = {
     loading: 'Loading...',
     investSuccess: 'Investment successful!',
     deleteSuccess: 'Investment deleted',
-    deleteError: 'Failed to delete investment, please try again later',
     invalidAmount: 'Please enter a valid investment amount',
     amountExceedsLimit: 'Investment amount cannot exceed available amount',
     amountMustBeMultiple: 'Investment amount must be a multiple of 100',

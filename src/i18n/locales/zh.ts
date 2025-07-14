@@ -283,7 +283,6 @@ export const zh = {
     loading: '加载中...',
     investSuccess: '出资成功！',
     deleteSuccess: '出资已删除',
-    deleteError: '删除出资失败，请稍后重试',
     invalidAmount: '请输入有效的出资金额',
     amountExceedsLimit: '出资金额不能超过可出资金额',
     amountMustBeMultiple: '出资金额必须为100的倍数',
