@@ -11,7 +11,7 @@ import { PaymentSourceType } from '../../../../interface/Common';
  */
 const PAYMENT_OPTIONS = [
   {
-    label: '可用积分',
+    label: '积分',
     value: PaymentSourceType.AVAILABLE_POINTS,
   },
   {

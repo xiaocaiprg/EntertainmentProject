@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { View, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, FlatList, ActivityIndicator } from 'react-native';
 import CustomText from '../../../components/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -6,7 +6,7 @@ import { STATUS_BAR_HEIGHT, isIOS } from '../../../utils/platform';
 import { RootStackScreenProps } from '../../router';
 import { useAuth } from '../../../hooks/useAuth';
 import { getPointDetail } from '../../../api/services/pointService';
-import { TransferLogDto, PointDetailParams } from '../../../interface/Points';
+import { TransferLogDto, PointDetailParams, PageSource } from '../../../interface/Points';
 import { PointCard } from './components/PointCard';
 
 type MyPointsScreenProps = RootStackScreenProps<'MyPoints'>;
@@ -14,7 +14,7 @@ type MyPointsScreenProps = RootStackScreenProps<'MyPoints'>;
 export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) => {
   const { navigation, route } = props;
   const { user } = useAuth();
-  const { code } = route?.params || {};
+  const { code, source } = route?.params || {};
 
   const [pointsList, setPointsList] = useState<TransferLogDto[]>([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,31 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
 
   const pageNum = useRef(1);
   const pageSize = useRef(10);
+
+  // 计算是否为额度页面
+  const isCreditPage = useMemo(() => {
+    return source === PageSource.CREDIT;
+  }, [source]);
+
+  // 计算页面标题
+  const pageTitle = useMemo(() => {
+    return isCreditPage ? '额度明细' : '积分明细';
+  }, [isCreditPage]);
+
+  // 计算展示的可用积分/额度
+  const availableAmount = useMemo(() => {
+    return isCreditPage ? user?.creditAccount?.availablePoints : user?.availablePoints;
+  }, [isCreditPage, user?.creditAccount?.availablePoints, user?.availablePoints]);
+
+  // 计算展示的冻结积分/额度
+  const frozenAmount = useMemo(() => {
+    return isCreditPage ? user?.creditAccount?.frozenPoints : user?.frozenPoints;
+  }, [isCreditPage, user?.creditAccount?.frozenPoints, user?.frozenPoints]);
+
+  // 计算是否显示积分汇总信息
+  const shouldShowSummary = useMemo(() => {
+    return !code || isCreditPage;
+  }, [code, isCreditPage]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -89,18 +114,18 @@ export const MyPointsScreen: React.FC<MyPointsScreenProps> = React.memo((props) 
         <TouchableOpacity onPress={handleGoBack}>
           <Icon name="arrow-back" size={24} color="#111" />
         </TouchableOpacity>
-        <CustomText style={styles.headerTitle}>积分明细</CustomText>
+        <CustomText style={styles.headerTitle}>{pageTitle}</CustomText>
         <View style={{ width: 24, opacity: 0 }} />
       </View>
-      {code ? null : (
+      {shouldShowSummary && (
         <View style={styles.pointsSummary}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
             <CustomText style={styles.availText}>可用:</CustomText>
-            <CustomText style={styles.availablePoints}> {user?.availablePoints.toLocaleString()}</CustomText>
+            <CustomText style={styles.availablePoints}> {availableAmount?.toLocaleString()}</CustomText>
           </View>
           <View style={styles.pointsSummaryItem}>
             <CustomText style={styles.frozenPoints}>在途:</CustomText>
-            <CustomText style={styles.frozenPoints}>{user?.frozenPoints}</CustomText>
+            <CustomText style={styles.frozenPoints}>{frozenAmount}</CustomText>
           </View>
         </View>
       )}

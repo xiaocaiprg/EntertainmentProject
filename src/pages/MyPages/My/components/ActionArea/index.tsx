@@ -37,7 +37,7 @@ export const ActionArea = React.memo((props: ActionAreaProps) => {
         <CustomText style={styles.ActionAreaItemLabel}>{t('my.transfer')}</CustomText>
       </TouchableOpacity>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleCreditTransferPress}>
-        <Icon name="account-balance" size={24} color="#6c5ce7" />
+        <Icon name="compare-arrows" size={24} color="#6c5ce7" />
         <CustomText style={styles.ActionAreaItemLabel}>{t('my.creditTransfer')}</CustomText>
       </TouchableOpacity>
       <TouchableOpacity style={styles.ActionAreaItem} onPress={handleRepayPress}>

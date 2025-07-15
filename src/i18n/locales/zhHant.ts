@@ -315,7 +315,7 @@ export const zhHant = {
     settlementFailed: '結算失敗，請重試',
     repayCredit: '還額度',
     repayConfirmTitle: '確認還額度',
-    repayConfirmMessage: '將從可用積分扣您{{amount}}積分，確定要繼續嗎？',
+    repayConfirmMessage: '將扣您{{amount}}積分，確定要繼續嗎？',
     repaySuccess: '還額度成功',
     repayFailed: '還額度失敗，請重試',
     payPassword: '請輸入支付密碼',
@@ -357,7 +357,7 @@ export const zhHant = {
 
   // 在途積分
   frozenPoints: {
-    title: '在途積分明細',
+    title: '在途積分和額度明細',
     gameDate: '挑戰日期',
     amount: '凍結金額',
     foundSourceType: '資金來源',

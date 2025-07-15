@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
+import { PageSource } from '../interface/Points';
 import { HomeScreen } from './Home/index';
 import { MyScreen } from './MyPages/My/index';
 // import { TournamentScreen } from './Tournament/index';
@@ -67,7 +68,7 @@ export type RootStackParamList = {
   AccountSecurity: undefined;
   PaymentManager: undefined;
   PitcherRanking: undefined;
-  MyPoints: { code?: string };
+  MyPoints: { code?: string; source?: PageSource };
   PointsTransfer: { code?: string; availablePoints?: number; name?: string };
   CreditTransfer: undefined;
   FrozenPoints: undefined;

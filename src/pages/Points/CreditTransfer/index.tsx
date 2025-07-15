@@ -113,7 +113,7 @@ export const CreditTransferScreen: React.FC<CreditTransferScreenProps> = React.m
   const confirmTransferInfo = useMemo(() => {
     if (recipientDetail) {
       return {
-        code: recipientDetail.creditAccount?.code,
+        code: recipientDetail.code,
         name: recipientDetail.name,
         amount,
       };

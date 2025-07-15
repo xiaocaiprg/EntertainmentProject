@@ -14,6 +14,7 @@ import { ConfirmModal } from '../../../components/ConfirmModal';
 import { turnoverProcess, preRepay } from '../../../api/services/pointService';
 import { useRole } from '../../../hooks/useRole';
 import PayPasswordInput from '../../../bizComponents/PayPasswordInput';
+import { PageSource } from '../../../interface/Points';
 
 export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
   const { t } = useTranslation();
@@ -47,7 +48,7 @@ export const MyScreen = React.memo(({ navigation }: { navigation: any }) => {
 
   const handleMyPoints = useCallback(
     (code?: string) => {
-      navigation.navigate('MyPoints', code ? { code } : {});
+      navigation.navigate('MyPoints', code ? { code, source: PageSource.CREDIT } : {});
     },
     [navigation],
   );

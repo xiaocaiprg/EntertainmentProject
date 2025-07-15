@@ -1,3 +1,8 @@
+// 页面来源类型枚举
+export enum PageSource {
+  CREDIT = 1, // 额度来源
+}
+
 export interface TransferCreateParam {
   toCode: string;
   toType: number;

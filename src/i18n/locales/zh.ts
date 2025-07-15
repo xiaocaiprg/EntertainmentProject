@@ -315,7 +315,7 @@ export const zh = {
     settlementFailed: '结算失败，请重试',
     repayCredit: '还额度',
     repayConfirmTitle: '确认还额度',
-    repayConfirmMessage: '将从可用积分扣您{{amount}}积分，确定要继续吗？',
+    repayConfirmMessage: '将扣您{{amount}}积分，确定要继续吗？',
     repaySuccess: '还额度成功',
     repayFailed: '还额度失败，请重试',
     payPassword: '请输入支付密码',
@@ -357,7 +357,7 @@ export const zh = {
 
   // 在途积分
   frozenPoints: {
-    title: '在途积分明细',
+    title: '在途积分和额度明细',
     gameDate: '挑战日期',
     amount: '冻结金额',
     addressName: '地点',

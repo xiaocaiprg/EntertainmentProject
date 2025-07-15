@@ -315,7 +315,7 @@ export const en = {
     settlementFailed: 'Settlement failed, please try again',
     repayCredit: 'Repay Credit',
     repayConfirmTitle: 'Confirm Credit Repayment',
-    repayConfirmMessage: 'Will deduct {{amount}} points from your available points. Are you sure to continue?',
+    repayConfirmMessage: 'Will deduct {{amount}} points. Are you sure to continue?',
     repaySuccess: 'Credit repayment successful',
     repayFailed: 'Credit repayment failed, please try again',
     payPassword: 'Please enter payment password',
@@ -357,7 +357,7 @@ export const en = {
 
   // Frozen Points
   frozenPoints: {
-    title: 'Pending Points Detail',
+    title: 'Points Detail',
     gameDate: 'Challenge Date',
     name: 'Challenge Name',
     foundSourceType: 'Funding Source',
