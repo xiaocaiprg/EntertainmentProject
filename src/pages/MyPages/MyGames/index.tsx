@@ -138,6 +138,12 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
     },
     [navigation],
   );
+  const handleChallengeDetail = useCallback(
+    (item: GameMatchPageDto) => {
+      item?.id && navigation.navigate('ChallengeDetail', { matchId: item.id });
+    },
+    [navigation],
+  );
   const handleCloseProfitModal = useCallback(() => setProfitModalVisible(false), []);
   const handleCloseContributionModal = useCallback(() => setContributionModalVisible(false), []);
 
@@ -250,53 +256,56 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
               <CustomText style={[styles.statusText, { color: status.color }]}>{status.text}</CustomText>
             </View>
           </View>
-          <View style={styles.itemContent}>
-            <View style={styles.itemLine}>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>{t('myGames.challengeTime')}:</CustomText>
-                <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
-              </View>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>{t('myGames.challengeLocation')}:</CustomText>
-                <CustomText style={styles.value}>{item.addressName}</CustomText>
-              </View>
-            </View>
-            <View style={styles.itemLine}>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>{t('myGames.pitcher')}:</CustomText>
-                <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
-              </View>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>{t('myGames.recorder')}:</CustomText>
-                <CustomText style={styles.value}>{item.docPersonName || '-'}</CustomText>
-              </View>
-            </View>
-            <View style={styles.itemLine}>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>{t('myGames.waterProfit')}:</CustomText>
-                <CustomText style={styles.value}>{item.profitStr || '-'}</CustomText>
-              </View>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>{t('myGames.turnover')}:</CustomText>
-                <CustomText style={styles.value}>{item.turnOverStr || '-'}</CustomText>
-              </View>
-            </View>
-
-            <View style={styles.itemLine}>
-              <View style={styles.itemRow}>
-                <CustomText style={styles.label}>{t('myGames.fundraisingType')}:</CustomText>
-                <CustomText style={styles.value}>
-                  {item.contributionType === FundraisingType.PUBLIC ? t('myGames.public') : t('myGames.targeted')}
-                </CustomText>
-              </View>
-              {item.isInside === IsInside.OUTSIDE && (
+          <TouchableOpacity onPress={() => handleChallengeDetail(item)}>
+            <View style={styles.itemContent}>
+              <View style={styles.itemLine}>
                 <View style={styles.itemRow}>
-                  <CustomText style={styles.label}>{t('myGames.isInside')}:</CustomText>
-                  <CustomText style={styles.value}>{t('myGames.outside')}</CustomText>
+                  <CustomText style={styles.label}>{t('myGames.challengeTime')}:</CustomText>
+                  <CustomText style={styles.value}>{item.gameDate || '-'}</CustomText>
                 </View>
-              )}
+                <View style={styles.itemRow}>
+                  <CustomText style={styles.label}>{t('myGames.challengeLocation')}:</CustomText>
+                  <CustomText style={styles.value}>{item.addressName}</CustomText>
+                </View>
+              </View>
+              <View style={styles.itemLine}>
+                <View style={styles.itemRow}>
+                  <CustomText style={styles.label}>{t('myGames.pitcher')}:</CustomText>
+                  <CustomText style={styles.value}>{item.playPersonName || '-'}</CustomText>
+                </View>
+                <View style={styles.itemRow}>
+                  <CustomText style={styles.label}>{t('myGames.recorder')}:</CustomText>
+                  <CustomText style={styles.value}>{item.docPersonName || '-'}</CustomText>
+                </View>
+              </View>
+              <View style={styles.itemLine}>
+                <View style={styles.itemRow}>
+                  <CustomText style={styles.label}>{t('myGames.waterProfit')}:</CustomText>
+                  <CustomText style={styles.value}>{item.profitStr || '-'}</CustomText>
+                </View>
+                <View style={styles.itemRow}>
+                  <CustomText style={styles.label}>{t('myGames.turnover')}:</CustomText>
+                  <CustomText style={styles.value}>{item.turnOverStr || '-'}</CustomText>
+                </View>
+              </View>
+
+              <View style={styles.itemLine}>
+                <View style={styles.itemRow}>
+                  <CustomText style={styles.label}>{t('myGames.fundraisingType')}:</CustomText>
+                  <CustomText style={styles.value}>
+                    {item.contributionType === FundraisingType.PUBLIC ? t('myGames.public') : t('myGames.targeted')}
+                  </CustomText>
+                </View>
+                {item.isInside === IsInside.OUTSIDE && (
+                  <View style={styles.itemRow}>
+                    <CustomText style={styles.label}>{t('myGames.isInside')}:</CustomText>
+                    <CustomText style={styles.value}>{t('myGames.outside')}</CustomText>
+                  </View>
+                )}
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
+
           <View style={styles.buttonContainer}>
             {canConvertToPublic && (
               <TouchableOpacity
@@ -344,6 +353,7 @@ export const MyGamesScreen: React.FC<MyGamesScreenProps> = React.memo((props) =>
       handleViewProfit,
       handleViewContribution,
       handleViewRoundDetail,
+      handleChallengeDetail,
       showEndChallengeConfirm,
       showConvertToPublicConfirm,
       processing,

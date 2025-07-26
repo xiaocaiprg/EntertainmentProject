@@ -9,3 +9,7 @@ export enum ImageType {
   RANK_BANNER = 3, // 排行榜banner
   USER_AVATAR = 4, // 用户头像
 }
+
+export interface UploadParams {
+  file: any;
+}

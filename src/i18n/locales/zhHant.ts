@@ -19,6 +19,9 @@ export const zhHant = {
     saving: '保存中...',
     next: '下一步',
     back: '返回',
+    uploading: '上傳中...',
+    permissionDenied: '權限被拒絕',
+    askMeLater: '稍後再問',
   },
 
   // 導航和標籤
@@ -204,6 +207,7 @@ export const zhHant = {
     investor: '出資人',
     amount: '金額',
     contriRate: '出資比例',
+    uploadedImages: '已上傳圖片',
   },
 
   // 場次詳情
@@ -455,6 +459,10 @@ export const zhHant = {
     restartRoundConfirmation: '確定要重啟該場次嗎？這將刪除最後一把的數據。',
     restartRoundFailed: '重啟場次失敗',
     challengeTime: '時間',
+    uploadImage: '上傳/編輯圖片',
+    fromGallery: '從相冊選擇',
+    takePhoto: '拍照',
+    uploadSuccess: '上傳成功！',
     challengeLocation: '地點',
     pitcher: '投手',
     recorder: '記錄',
@@ -482,6 +490,11 @@ export const zhHant = {
     investPersonProfitDetails: '投資人利潤詳情',
     companyProfitDetails: '記錄公司分配詳情',
     playCompanyProfitDetails: '投手公司利潤詳情',
+    cameraPermissionTitle: '相機權限',
+    cameraPermissionMessage: '應用需要訪問您的相機以拍攝照片。',
+    cameraPermissionDenied: '相機權限被拒絕。',
+    imageUploadInfo: '您可以刪除已有圖片或添加新圖片，提交後將全量更新所有圖片',
+    existing: '已有',
   },
 
   // 獎金池列表

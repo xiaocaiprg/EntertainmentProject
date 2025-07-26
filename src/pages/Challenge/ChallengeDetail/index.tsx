@@ -17,8 +17,11 @@ import CustomText from '../../../components/CustomText';
 import { RoundItem } from './components/RoundItem';
 import { FundraisingInfo } from './components/FundraisingInfo';
 import { StatisticsInfo } from './components/StatisticsInfo';
+import { ImageGallery } from './components/ImageGallery';
 import { RootStackScreenProps } from '../../router';
 import { useTranslation } from '../../../hooks/useTranslation';
+import { useRole } from '../../../hooks/useRole';
+import ImageUploadModal from '../../../components/ImageUploadModal';
 
 // 使用导航堆栈中定义的类型
 type ChallengeDetailScreenProps = RootStackScreenProps<'ChallengeDetail'>;
@@ -28,6 +31,8 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
   const [loading, setLoading] = useState<boolean>(true);
   const [matchDetail, setMatchDetail] = useState<GameMatchDto | null>(null);
   const { t } = useTranslation();
+  const { isRecorder } = useRole();
+  const [imageUploadModalVisible, setImageUploadModalVisible] = useState(false);
 
   const fetchMatchDetail = useCallback(async () => {
     setLoading(true);
@@ -44,6 +49,19 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
   const handleBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const handleOpenImageUpload = useCallback(() => {
+    setImageUploadModalVisible(true);
+  }, []);
+
+  const handleCloseImageUpload = useCallback(() => {
+    setImageUploadModalVisible(false);
+  }, []);
+
+  const handleUpload = useCallback(() => {
+    setImageUploadModalVisible(false);
+    fetchMatchDetail();
+  }, [fetchMatchDetail]);
 
   // 获取状态文本和颜色
   const getStatusInfo = useCallback(
@@ -166,9 +184,20 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
           <CustomText style={styles.sectionTitle}>{t('challengeDetail.roundInfo')}</CustomText>
         ) : null}
         <View style={styles.roundsContainer}>{matchDetail.roundList?.map(renderRound)}</View>
+
+        <ImageGallery fileUrlList={matchDetail.fileUrlList} />
+
+        {isRecorder && (
+          <View style={styles.uploadContainer}>
+            <TouchableOpacity style={styles.uploadButton} onPress={handleOpenImageUpload}>
+              <Icon name="photo-camera" size={20} color="#fff" style={styles.uploadIcon} />
+              <CustomText style={styles.uploadText}>{t('myGames.uploadImage')}</CustomText>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     );
-  }, [matchDetail, statusInfo, renderRound, showFundraisingInfo, t]);
+  }, [matchDetail, statusInfo, renderRound, showFundraisingInfo, t, isRecorder, handleOpenImageUpload]);
 
   const renderContent = useCallback(() => {
     if (loading) {
@@ -201,6 +230,14 @@ export const ChallengeDetail: React.FC<ChallengeDetailScreenProps> = React.memo(
         <View style={styles.headerRight} />
       </View>
       {renderContent()}
+      <ImageUploadModal
+        visible={imageUploadModalVisible}
+        onClose={handleCloseImageUpload}
+        matchId={matchId}
+        onUploadSuccess={handleUpload}
+        onUploadFail={handleUpload}
+        existingImages={matchDetail?.fileUrlList}
+      />
     </SafeAreaView>
   );
 });
@@ -306,7 +343,27 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   roundsContainer: {
+    marginBottom: 10,
+  },
+  uploadContainer: {
     marginBottom: 16,
+  },
+  uploadButton: {
+    backgroundColor: '#5a9e6f',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  uploadIcon: {
+    marginRight: 8,
+  },
+  uploadText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 

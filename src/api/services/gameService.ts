@@ -10,6 +10,7 @@ import {
   GameTurnOverDtoParams,
   GameTurnOverDto,
   UpdateMatchContributeTypeParams,
+  UploadMatchFileParams,
 } from '../../interface/Game';
 import { ApiResponse } from '../../interface/IModuleProps';
 import { QueryParams } from '../../interface/Common';
@@ -22,6 +23,17 @@ const PATH = {
   MATCH_UPDATE_STATUS: 'haiyang/match/updateStatus',
   MATCH_TURNOVER: 'haiyang/match/turnover',
   MATCH_UPDATE_CONTRIBUTE_TYPE: 'haiyang/match/updataContributeType',
+  MATCH_UPLOAD_FILE: 'haiyang/match/uploadFile',
+};
+
+export const uploadMatchFile = (params: UploadMatchFileParams): Promise<string> => {
+  return post<ApiResponse<string>>(PATH.MATCH_UPLOAD_FILE, params).then((res) => {
+    if (res.code === 200) {
+      return res.data;
+    } else {
+      throw new Error(res.msg);
+    }
+  });
 };
 
 export const getChallengeList = (params: ChallengeListParams): Promise<ChallengeList | null> => {

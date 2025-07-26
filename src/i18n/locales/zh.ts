@@ -19,6 +19,9 @@ export const zh = {
     saving: '保存中...',
     next: '下一步',
     back: '返回',
+    uploading: '上传中...',
+    permissionDenied: '权限被拒绝',
+    askMeLater: '稍后再问',
   },
 
   // 导航和标签
@@ -204,6 +207,7 @@ export const zh = {
     investor: '出资人',
     amount: '金额',
     contriRate: '出资比例',
+    uploadedImages: '已上传图片',
   },
 
   // 场次详情
@@ -455,6 +459,10 @@ export const zh = {
     restartRoundConfirmation: '确定要重启该场次吗？这将删除最后一把的数据。',
     restartRoundFailed: '重启场次失败',
     challengeTime: '时间',
+    uploadImage: '上传/编辑图片',
+    fromGallery: '从相册选择',
+    takePhoto: '拍照',
+    uploadSuccess: '上传成功！',
     challengeLocation: '地点',
     pitcher: '投手',
     recorder: '记录',
@@ -482,6 +490,11 @@ export const zh = {
     investPersonProfitDetails: '投资人利润详情',
     companyProfitDetails: '记录公司分配详情',
     playCompanyProfitDetails: '投手公司利润详情',
+    cameraPermissionTitle: '相机权限',
+    cameraPermissionMessage: '应用需要访问您的相机以拍摄照片。',
+    cameraPermissionDenied: '相机权限被拒绝。',
+    imageUploadInfo: '您可以删除已有图片或添加新图片，提交后将全量更新所有图片',
+    existing: '已有',
   },
 
   // 奖金池列表

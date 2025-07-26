@@ -122,6 +122,9 @@ export interface GameMatchDto {
   turnOver?: number;
   turnOverStr?: string;
   gameMatchStatisticDto?: GameMatchStatisticDto;
+  fileUrlList: string[];
+  pkTeamId: number;
+  pkId: number;
 }
 
 export interface GameRoundDto {
@@ -279,4 +282,8 @@ export interface GameTurnOverItemDto {
   profitStr?: string;
   turnOver?: number;
   turnOverStr?: string;
+}
+export interface UploadMatchFileParams {
+  id: number;
+  fileUrlList: string[];
 }

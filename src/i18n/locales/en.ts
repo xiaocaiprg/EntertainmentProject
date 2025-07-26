@@ -19,6 +19,9 @@ export const en = {
     saving: 'Saving...',
     next: 'Next',
     back: 'Back',
+    uploading: 'Uploading...',
+    permissionDenied: 'Permission Denied',
+    askMeLater: 'Ask Me Later',
   },
 
   // Navigation and Tabs
@@ -203,6 +206,7 @@ export const en = {
     investor: 'Investor',
     amount: 'Amount',
     contriRate: 'ContributionRate',
+    uploadedImages: 'Uploaded Images',
   },
 
   // Round Detail
@@ -454,6 +458,10 @@ export const en = {
     restartRoundConfirmation: 'Are you sure you want to restart this round? This will delete the last innings.',
     restartRoundFailed: 'Failed to restart round',
     challengeTime: 'Challenge Time',
+    uploadImage: 'Upload/Edit',
+    fromGallery: 'Gallery',
+    takePhoto: 'Camera',
+    uploadSuccess: 'Upload Success!',
     challengeLocation: 'Challenge Location',
     pitcher: 'Pitcher',
     recorder: 'Recorder',
@@ -482,6 +490,11 @@ export const en = {
     investPersonProfitDetails: 'Investor Profit Details',
     companyProfitDetails: 'Record Company Profit Details',
     playCompanyProfitDetails: 'Player Company Profit Details',
+    cameraPermissionTitle: 'Camera Permission',
+    cameraPermissionMessage: 'App needs access to your camera to take photos.',
+    cameraPermissionDenied: 'Camera permission denied.',
+    imageUploadInfo: 'You can delete existing images or add new ones. All images will be updated when submitted.',
+    existing: 'Existing',
   },
 
   // Prize Pool List
